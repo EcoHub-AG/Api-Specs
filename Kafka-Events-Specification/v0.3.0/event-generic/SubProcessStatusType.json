@@ -1,0 +1,14 @@
+{
+  "type": "string",
+  "enum": [
+    "Created",
+    "Received",
+    "InProgress",
+    "Responsed",
+    "Updated",
+    "Error",
+    "Inquiry",
+    "Inquiry_Answer",
+    "Closed"
+  ]
+}

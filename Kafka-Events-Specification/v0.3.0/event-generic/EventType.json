@@ -1,0 +1,11 @@
+{
+  "description": "Defines the type of event / data, inquiry, standard-error or saf-error",
+  "minLength": 1,
+  "type": "string",
+  "enum": [
+    "data",
+    "inquiry",
+    "standard-error",
+    "saf-error"
+  ]
+}

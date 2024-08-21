@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Offer NLPI Event JSON schema definition",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "CloudEventsType.json#/definitions/iddef"
+    },
+    "source": {
+      "$ref": "CloudEventsType.json#/definitions/sourcedef"
+    },
+    "specversion": {
+      "$ref": "CloudEventsType.json#/definitions/specversiondef"
+    },
+    "type": {
+      "$ref": "event-generic/EventType.json"
+    },
+    "datacontenttype": {
+      "$ref": "CloudEventsType.json#/definitions/datacontenttypedef"
+    },
+    "dataschema": {
+      "$ref": "CloudEventsType.json#/definitions/dataschemadef"
+    },
+    "subject": {
+      "$ref": "CloudEventsType.json#/definitions/subjectdef"
+    },
+    "time": {
+      "$ref": "CloudEventsType.json#/definitions/timedef"
+    },
+    "licenceKey": {
+      "$ref": "event-generic/LicenseKeyType.json"
+    },
+    "userAgent": {
+      "$ref": "event-generic/UserAgentType.json"
+    },
+    "eventReceiver": {
+      "$ref": "event-generic/SenderReceiverType.json"
+    },
+    "eventSender": {
+      "$ref": "event-generic/SenderReceiverType.json"
+    },
+    "data": {
+      "$ref": "event-generic/EventMessageDataType.json"
+    },
+    "processId": {
+      "$ref": "event-generic/ProcessIdType.json"
+    },
+    "processName": {
+      "$ref": "event-generic/ProcessNameType.json"
+    },
+    "processStatus": {
+      "$ref": "event-generic/ProcessStatusType.json"
+    },
+    "subProcessName": {
+      "$ref": "event-generic/SubProcessNameType.json"
+    },
+    "subProcessStatus": {
+      "$ref": "event-generic/SubProcessStatusType.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "source",
+    "specversion",
+    "type",
+    "processId",
+    "processName",
+    "subProcessName",
+    "processStatus",
+    "subProcessStatus",
+    "eventReceiver",
+    "eventSender",
+    "userAgent",
+    "licenceKey"
+  ]
+}

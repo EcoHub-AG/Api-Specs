@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "type": "object",
+  "description": "Offer NLPI Event JSON schema definition",
+  "properties": {
+    "id": {
+      "$ref": "CloudEventsType.json#/definitions/iddef",
+      "description": "Identifies the event.",
+      "examples": [
+        "A234-1234-1234"
+      ]
+    },
+    "source": {
+      "$ref": "CloudEventsType.json#/definitions/sourcedef",
+      "description": "Identifies the context in which an event happened.",
+      "examples": [
+        "http://www.igb2b.ch/offer/nlpi/0.2.0"
+      ]
+    },
+    "specversion": {
+      "$ref": "CloudEventsType.json#/definitions/specversiondef",
+      "description": "The version of the CloudEvents specification which the event uses.",
+      "examples": [
+        "1.0"
+      ]
+    },
+    "type": {
+      "$ref": "event-generic/EventType.json"
+    },
+    "datacontenttype": {
+      "$ref": "CloudEventsType.json#/definitions/datacontenttypedef",
+      "description": "Content type of the data value. Must adhere to RFC 2046 format.",
+      "examples": [
+        "text/xml",
+        "application/json",
+        "image/png",
+        "multipart/form-data"
+      ]
+    },
+    "dataschema": {
+      "$ref": "CloudEventsType.json#/definitions/dataschemadef",
+      "description": "Identifies the schema that data adheres to."
+    },
+    "subject": {
+      "$ref": "CloudEventsType.json#/definitions/subjectdef",
+      "description": "Describes the subject of the event in the context of the event producer (identified by source).",
+      "examples": [
+        "request"
+      ]
+    },
+    "time": {
+      "$ref": "CloudEventsType.json#/definitions/timedef",
+      "description": "Timestamp of when the occurrence happened. Must adhere to RFC 3339.",
+      "examples": [
+        "2018-04-05T17:31:00Z"
+      ]
+    },
+    "licenceKey": {
+      "$ref": "event-generic/LicenseKeyType.json"
+    },
+    "userAgent": {
+      "$ref": "event-generic/UserAgentType.json"
+    },
+    "data": {
+      "$ref": "event-generic/ErrorDataType.json"
+    },
+    "eventReceiver": {
+      "$ref": "event-generic/SenderReceiverType.json"
+    },
+    "eventSender": {
+      "$ref": "event-generic/SenderReceiverType.json"
+    },
+    "processId": {
+      "$ref": "event-generic/ProcessIdType.json"
+    },
+    "processName": {
+      "$ref": "event-generic/ProcessNameType.json"
+    },
+    "processStatus": {
+      "$ref": "event-generic/ProcessStatusType.json"
+    },
+    "subProcessName": {
+      "$ref": "event-generic/SubProcessNameType.json"
+    },
+    "subProcessStatus": {
+      "$ref": "event-generic/SubProcessStatusType.json"
+    }
+  },
+  "required": [
+    "id",
+    "source",
+    "specversion",
+    "type",
+    "processId",
+    "processName",
+    "subProcessName",
+    "processStatus",
+    "subProcessStatus",
+    "eventReceiver",
+    "eventSender",
+    "userAgent",
+    "licenceKey"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "description": "The event payload.",
+  "type": "object",
+  "properties": {
+    "payload": {
+      "description": "The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload ",
+      "minLength": 3,
+      "type": "string"
+    },
+    "payLoadSignature": {
+      "description": "The md5 hash of the byte content of the encrypted data",
+      "minLength": 3,
+      "type": "string"
+    },
+    "links": {
+      "items": {
+        "properties": {
+          "description": {
+            "description": "Description of the purpose of the link",
+            "type": "string"
+          },
+          "href": {
+            "description": "the- encrypted URL that should be called, to receive additional encrypted unstructured data, such as pdf, pictures, etc.",
+            "example": "https://services.test-myecohub.ch/offer/nlpi/{offerId}/{attachmentId} (unencrypted example)",
+            "minLength": 3,
+            "type": "string"
+          },
+          "rel": {
+            "description": "The IG B2B Standard the links belongs to.",
+            "example": "offer-nlpi",
+            "minLength": 3,
+            "type": "string"
+          }
+        },
+        "required": [
+          "href",
+          "rel"
+        ]
+      },
+      "type": "array"
+    },
+    "encryptionKey": {
+      "description": "The with the public key of the receiver encrypted symmetric key to decrypt the data (KEK)",
+      "minLength": 3,
+      "type": "string"
+    },
+    "publicKeyVersion": {
+      "description": "The version of the public key used to encrypt the encryptionKey (DEK)",
+      "minLength": 3,
+      "type": "string"
+    },
+    "signatureKeyVersion": {
+      "description": "The version of the signature key, that was used to sign ",
+      "minLength": 3,
+      "type": "string"
+    }
+  },
+  "required": [
+    "payload",
+    "encryptionKey",
+    "publicKeyVersion"
+  ]
+}

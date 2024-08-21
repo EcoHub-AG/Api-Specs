@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "Name of the application",
+      "example": "Client software XYZ",
+      "maxLength": 100,
+      "minLength": 3,
+      "type": "string"
+    },
+    "version": {
+      "description": "Used version of the application",
+      "example": "Version 1.0",
+      "maxLength": 30,
+      "minLength": 3,
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "version"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "description": "The license key for the requesting SC application.",
+  "type": "string",
+  "maxLength": 200,
+  "minLength": 3,
+  "examples": [
+    "fdsaf346t54grthe65euz467jhz7r"
+  ]
+}

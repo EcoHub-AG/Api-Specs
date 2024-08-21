@@ -1,0 +1,31 @@
+{
+  "description": "The event payload.",
+  "type": "object",
+  "properties": {
+    "encryptionKey": {
+      "description": "The with the public key of the receiver encrypted symmetric key to decrypt the data (KEK)",
+      "minLength": 3,
+      "type": "string"
+    },
+    "md5MessageHash": {
+      "description": "The md5 hash of the byte content of the encrypted data",
+      "minLength": 3,
+      "type": "string"
+    },
+    "message": {
+      "description": "The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload ",
+      "minLength": 3,
+      "type": "string"
+    },
+    "publicKeyVersion": {
+      "description": "The version of the public key used to encrypt the DEK",
+      "minLength": 3,
+      "type": "string"
+    }
+  },
+  "required": [
+    "message",
+    "encryptionKey",
+    "publicKeyVersion"
+  ]
+}

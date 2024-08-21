@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "category": {
+      "description": "The category of organisation",
+      "enum": [
+        "broker",
+        "insurer",
+        "serviceprovider"
+      ],
+      "example": "broker",
+      "type": "string"
+    },
+    "id": {
+      "description": "Depending on the type either the brokerRegNo/IDPNumber or the insurerCode needs to be set",
+      "examples": [
+        "IDP1239856",
+        "CHE-IGB2B-12345",
+        "SP-ins1"
+      ],
+      "minLength": 3,
+      "type": "string"
+    }
+  },
+  "required": [
+    "category",
+    "id"
+  ]
+}

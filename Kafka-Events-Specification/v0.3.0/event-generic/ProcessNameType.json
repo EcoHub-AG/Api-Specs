@@ -1,0 +1,7 @@
+{
+  "description": "Comment describing your JSON Schema",
+  "type": "string",
+  "enum": [
+    "offer.nlpi"
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "type": "object",
+  "description": "The error event payload.",
+  "properties": {
+    "errorCode": {
+      "description": "The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload ",
+      "enum": [
+        "licenseKey-not-valid",
+        "sa-not-found",
+        "receiver-not-found",
+        "event-not-valid",
+        "pk-version-not-found",
+        "data-content-invalid",
+        "data-schema-invalid",
+        "data-not-readable",
+        "data-decryption-failed",
+        "data-decompression-failed",
+        "other"
+      ],
+      "minLength": 3,
+      "type": "string"
+    },
+    "errorDateTime": {
+      "description": "",
+      "format": "date-time",
+      "type": "string"
+    },
+    "errorMessage": {
+      "description": "",
+      "minLength": 3,
+      "type": "string"
+    }
+  },
+  "required": [
+    "errorCode",
+    "errorMessage",
+    "errorDateTime"
+  ]
+}

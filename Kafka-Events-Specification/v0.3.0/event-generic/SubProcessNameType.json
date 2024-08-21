@@ -1,0 +1,10 @@
+{
+  "description": "Comment describing your JSON Schema",
+  "type": "string",
+  "enum": [
+    "request",
+    "offer",
+    "feedback",
+    "conclusionDecision"
+  ]
+}
