@@ -1,0 +1,853 @@
+openapi: 3.0.1
+info:
+  title: 'Standard API Framwork: Kafka REST Proxy API'
+  contact:
+    email: support@myecohub.ch
+    name: EcoHub AG
+    url: 'https://www.myecohub.ch'
+  description: >
+    The SAF Kafka REST Proxy provides a RESTful interface to the Kafka cluster, making it easy to produce and consume 
+    messages.
+    
+    ## Changelog
+
+    ### Version 0.3.0 (20.08.2024)
+    - Initial public release
+  version: v0.3.0
+servers:
+  - url: 'https://services.test-myecohub.ch/eh/saf'
+  - url: 'https://services.myecohub.ch/eh/saf'
+paths:
+  /in:
+    post:
+      tags:
+        - Offer NLPI
+      summary: Post an offer NLPI event to the SAF Message Broker
+      description: Post an offer NLPI event to the SAF Message Broker
+      operationId: post-eh-saf-in
+      parameters:
+        - name: schemaVersionId
+          in: header
+          description: The id of the schema which is used to serialize the event value
+          schema:
+            type: integer
+            enum: [100019]
+          required: true
+        - name: keySchemaVersionId
+          in: header
+          description: The id of the schema which is used to serialize the event key
+          schema:
+            type: integer
+            enum: [100020]
+          required: true
+        - name: Content-Type
+          in: header
+          required: true
+          schema:
+            enum:
+              - application/vnd.kafka'schema.v2+json
+            type: string
+            default: application/vnd.kafka'schema.v2+json
+      requestBody:
+        description: Offer NLPI event to SAF Message Broker.
+        content:
+          application/vnd.kafka'schema.v2':
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/SAFEventType'
+                - $ref: '#/components/schemas/SAFInquiryEventType'
+            example:
+              id: b7d7cfd3-791e-430d-8791-e883d9b
+              source: http://www.myecohub.ch/ecohub-demo-java-app
+              specversion: 0.3.0
+              type: data
+              datacontenttype: application/json
+              dataschema: http://www.myecohub.ch/ib2b/offer/nlpi/v0.3.0
+              subject: offer.nlpi.request
+              time: '2023-10-20T13:38:27.792Z'
+              licenceKey: jdskafÃj
+              userAgent:
+                name: EcoHub-Demo-APP
+                version: '1.0'
+              eventReceiver:
+                category: broker
+                id: IDP6262821
+              eventSender:
+                category: insurer
+                id: IDP7911656
+              data:
+                payload: d6zTmALOr2i
+                payloadSignature: "[B@363f6148"
+                links:
+                  - href: http://www.ecohub.ch
+                    rel: Rel
+                    description: TEST
+                encryptionKey: Bbksn2ME0noh3nLe/SreygWZyAg=
+                publicKeyVersion: vu-cert-1.1
+              processId: 58991282-3789-4441-94ef-e2d7d005d2e1
+              processName: offer.nlpi
+              processStatus: active
+              subProcessName: request
+              subProcessStatus: Created
+      responses:
+        '200':
+          description: Returns EventResponseType
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponseType'
+        '400':
+          description: Bad request. Input data is not valid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseType'
+              example:
+                error_code: 400
+                message: 'Bad Request: #: #: 0 subschemas matched instead of one'
+        '401':
+          description: Not authorized
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseType'
+              example:
+                error_code: 400
+                message: 'Resource not found'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponseType'
+              example:
+                statusCode: 500
+                message: 'Internal server error'
+                activityId: 'e4ab80c8-1fdf-4ee8-8a74-68d114cbcbed'
+  '/{ecohubId}/offer/nlpi/out':
+    get:
+      tags:
+        - Offer NLPI
+      summary: Retrieve an offer NLPI event from the SAF Message Broker
+      description: Retrieve an offer NLPI event from the SAF Message Broker
+      operationId: get-eh-saf-ecohubid-offer-nlpi-out
+      parameters:
+        - name: ecohubId
+          in: path
+          description: >-
+            The EcoHubId can be looked up in EcoHub on the Standard API
+            Framework configuration page.
+          required: true
+          schema:
+            type: string
+        - name: auto.offset.reset
+          in: header
+          description: The auto offset that should be used to retrieve records
+          required: true
+          schema:
+            enum:
+              - earliest
+              - latest
+            type: string
+      responses:
+        '200':
+          description: "Returns all message which haven't been consumed yet by the techUser"
+          content:
+            application/vnd.kafka.jsonschema.v2+json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    topic:
+                      type: string
+                    key:
+                      type: string
+                    value:
+                      type: object
+                      oneOf:
+                        - $ref: '#/components/schemas/SAFEventType'
+                        - $ref: '#/components/schemas/SAFInquiryEventType'
+                        - $ref: '#/components/schemas/SAFErrorEventType'
+                        - $ref: '#/components/schemas/OfferNLPIErrorEventType'
+                    partition:
+                      type: integer
+                    offset:
+                      type: integer
+                  required:
+                    - topic
+                    - key
+                    - value
+                    - partition
+                    - offset
+              example:
+                - topic: eh.saf.329050.offer.nlpi.out
+                  key: processId5899128-3779-4446-94ef-e2d7d005d2e1
+                  value:
+                    id: b7d7cfd3-791e-430d-8791-e883d9b
+                    source: http://www.myecohub.ch/ck-postman
+                    specversion: 0.3.0
+                    type: data
+                    datacontenttype: application/json
+                    dataschema: http://www.myecohub.ch/ib2b/offer/nlpi/v0.2.0
+                    subject: offer.nlpi.request
+                    time: '2023-10-20T13:38:27.792Z'
+                    data:
+                      payload: d6zTmALOr2ixkHPAzN3MgjqhsFewZWA
+                      md5PayloadHash: "[B@363f6148"
+                      links:
+                        - href: http://www.ecohub.ch
+                          rel: Rel
+                          description: TEST
+                      encryptionKey: p8FKTCD1tD8KKGCP9oyPs2HI5mIB
+                      publicKeyVersion: vu-cert-1.1
+                    licenceKey: rivmf/342)*fj
+                    userAgent:
+                      name: EcoHub-Demo-APP
+                      version: '1.0'
+                    eventReceiver:
+                      category: insurer
+                      id: IDP1483565
+                    eventSender:
+                      category: broker
+                      id: IDP2178630
+                    processId: 5899128-3779-4446-94ef-e2d7d005d2e1
+                    processStatus: active
+                    subProcessName: request
+                    subProcessStatus: Created
+                  partition: 1
+                  offset: 4
+        '401':
+          description: Not authorized
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                "$ref": '#/components/schemas/ErrorResponseType'
+              example:
+                error_code: 40301
+                message: 'Not authorized to access topics: [eh.saf.329050.offer.nlpi.out]'
+components:
+  schemas:
+    SAFEventType:
+      description: Standard API Event JSON schema definition
+      type: object
+      properties:
+        id:
+          "$ref": '#/components/schemas/iddef'
+        source:
+          "$ref": '#/components/schemas/sourcedef'
+        specversion:
+          "$ref": '#/components/schemas/specversiondef'
+        type:
+          "$ref": '#/components/schemas/EventType'
+        datacontenttype:
+          "$ref": '#/components/schemas/datacontenttypedef'
+        dataschema:
+          "$ref": '#/components/schemas/dataschemadef'
+        subject:
+          "$ref": '#/components/schemas/subjectdef'
+        time:
+          "$ref": '#/components/schemas/timedef'
+        licenceKey:
+          "$ref": '#/components/schemas/LicenseKeyType'
+        userAgent:
+          "$ref": '#/components/schemas/UserAgentType'
+        eventReceiver:
+          "$ref": '#/components/schemas/SenderReceiverType'
+        eventSender:
+          "$ref": '#/components/schemas/SenderReceiverType'
+        data:
+          "$ref": '#/components/schemas/EventDataType'
+        processId:
+          "$ref": '#/components/schemas/ProcessIdType'
+        processName:
+          "$ref": '#/components/schemas/ProcessNameType'
+        processStatus:
+          "$ref": '#/components/schemas/ProcessStatusType'
+        subProcessName:
+          "$ref": '#/components/schemas/SubProcessNameType'
+        subProcessStatus:
+          "$ref": '#/components/schemas/SubProcessStatusType'
+      additionalProperties: false
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - processId
+        - processName
+        - subProcessName
+        - processStatus
+        - subProcessStatus
+        - eventReceiver
+        - eventSender
+        - userAgent
+        - licenceKey
+    SAFInquiryEventType:
+      description: Offer NLPI Event JSON schema definition
+      type: object
+      properties:
+        id:
+          "$ref": '#/components/schemas/iddef'
+        source:
+          "$ref": '#/components/schemas/sourcedef'
+        specversion:
+          "$ref": '#/components/schemas/specversiondef'
+        type:
+          "$ref": '#/components/schemas/EventType'
+        datacontenttype:
+          "$ref": '#/components/schemas/datacontenttypedef'
+        dataschema:
+          "$ref": '#/components/schemas/dataschemadef'
+        subject:
+          "$ref": '#/components/schemas/subjectdef'
+        time:
+          "$ref": '#/components/schemas/timedef'
+        licenceKey:
+          "$ref": '#/components/schemas/LicenseKeyType'
+        userAgent:
+          "$ref": '#/components/schemas/UserAgentType'
+        eventReceiver:
+          "$ref": '#/components/schemas/SenderReceiverType'
+        eventSender:
+          "$ref": '#/components/schemas/SenderReceiverType'
+        data:
+          "$ref": '#/components/schemas/EventMessageDataType'
+        processId:
+          "$ref": '#/components/schemas/ProcessIdType'
+        processName:
+          "$ref": '#/components/schemas/ProcessNameType'
+        processStatus:
+          "$ref": '#/components/schemas/ProcessStatusType'
+        subProcessName:
+          "$ref": '#/components/schemas/SubProcessNameType'
+        subProcessStatus:
+          "$ref": '#/components/schemas/SubProcessStatusType'
+      additionalProperties: false
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - processId
+        - processName
+        - subProcessName
+        - processStatus
+        - subProcessStatus
+        - eventReceiver
+        - eventSender
+        - userAgent
+        - licenceKey
+    iddef:
+      description: Identifies the event.
+      example: A234-1234-1234
+      minLength: 1
+      type: string
+    sourcedef:
+      description: Identifies the context in which an event happened.
+      example: http://www.igb2b.ch/offer/nlpi/0.2.0
+      format: uri-reference
+      minLength: 1
+      type: string
+    specversiondef:
+      description: The version of the CloudEvents specification which the event uses.
+      example: '1.0'
+      minLength: 1
+      type: string
+    typedef:
+      minLength: 1
+      type: string
+    datacontenttypedef:
+      description: Content type of the data value. Must adhere to RFC 2046 format.
+      example: text/xml, application/json
+      minLength: 1
+      type: string
+      nullable: true
+    dataschemadef:
+      description: Identifies the schema that data adheres to.
+      format: uri
+      minLength: 1
+      type: string
+    subjectdef:
+      description: Describes the subject of the event in the context of the event producer
+        (identified by source).
+      example: request
+      minLength: 1
+      type: string
+      nullable: true
+    timedef:
+      description: Timestamp of when the occurrence happened. Must adhere to RFC 3339.
+      example: '2018-04-05T17:31:00Z'
+      format: date-time
+      minLength: 1
+      type: string
+      nullable: true
+    EventDataType:
+      description: The event payload.
+      type: object
+      properties:
+        payload:
+          description: 'The payload needs to be first encrypted and afterwards gzipped.
+            the base64 repesentation of gezipped bytes will be added as payload '
+          minLength: 3
+          type: string
+        payLoadSignature:
+          description: The md5 hash of the byte content of the encrypted data
+          minLength: 3
+          type: string
+        links:
+          items:
+            properties:
+              description:
+                description: Description of the purpose of the link
+                type: string
+              href:
+                description: the- encrypted URL that should be called, to receive additional
+                  encrypted unstructured data, such as pdf, pictures, etc.
+                example: https://services.test-myecohub.ch/offer/nlpi/{offerId}/{attachmentId}
+                  (unencrypted example)
+                minLength: 3
+                type: string
+              rel:
+                description: The IG B2B Standard the links belongs to.
+                example: offer-nlpi
+                minLength: 3
+                type: string
+            required:
+              - href
+              - rel
+          type: array
+        encryptionKey:
+          description: The with the public key of the receiver encrypted symmetric key to
+            decrypt the data (KEK)
+          minLength: 3
+          type: string
+        publicKeyVersion:
+          description: The version of the public key used to encrypt the encryptionKey (DEK)
+          minLength: 3
+          type: string
+        signatureKeyVersion:
+          description: 'The version of the signature key, that was used to sign '
+          minLength: 3
+          type: string
+      required:
+        - payload
+        - encryptionKey
+        - publicKeyVersion
+    EventType:
+      description: Defines the type of event / data, inquiry, standard-error or saf-error
+      minLength: 1
+      type: string
+      enum:
+        - data
+        - inquiry
+        - standard-error
+        - saf-error
+    LicenseKeyType:
+      description: The license key for the requesting SC application.
+      type: string
+      maxLength: 200
+      minLength: 3
+      example: fdsaf346t54grthe65euz467jhz7r
+    ProcessIdType:
+      description: UUID, that won't change during the offer processes. The UUID is set by
+        the party, that starts the process.
+      type: string
+      format: uuid
+    ProcessNameType:
+      description: Comment describing your JSON Schema
+      type: string
+      enum:
+        - offer.nlpi
+    ProcessStatusType:
+      description: Defines status of the overall process.
+      type: string
+      enum:
+        - active
+        - closed
+    SenderReceiverType:
+      type: object
+      additionalProperties: false
+      properties:
+        category:
+          description: The category of organisation
+          enum:
+            - broker
+            - insurer
+            - serviceprovider
+          example: broker
+          type: string
+        id:
+          description: Depending on the type either the brokerRegNo/IDPNumber or the insurerCode
+            needs to be set
+          example: IDP1239856, CHE-IGB2B-12345, SP-ins1
+          minLength: 3
+          type: string
+      required:
+        - category
+        - id
+    SubProcessNameType:
+      description: Comment describing your JSON Schema
+      type: string
+      enum:
+        - request
+        - offer
+        - feedback
+        - conclusionDecision
+    SubProcessStatusType:
+      type: string
+      enum:
+        - Created
+        - Received
+        - InProgress
+        - Responsed
+        - Updated
+        - Error
+        - Inquiry
+        - Inquiry_Answer
+        - Closed
+    UserAgentType:
+      type: object
+      properties:
+        name:
+          description: Name of the application
+          example: Client software XYZ
+          maxLength: 100
+          minLength: 3
+          type: string
+        version:
+          description: Used version of the application
+          example: Version 1.0
+          maxLength: 30
+          minLength: 3
+          type: string
+      required:
+        - name
+        - version
+    EventResponseType:
+      type: object
+      properties:
+        key_schema_id:
+          type: integer
+          description:  The ID for the schema used to produce keys, or null if keys were not used
+        value_schema_id:
+          type: integer
+          description:  The ID for the schema used to produce keys, or null if keys were not used
+        offsets:
+          type: array
+          description: List of partitions and offsets the messages were published to
+          items:
+            type: object
+            properties:
+              partition:
+                type: integer
+                description: Partition the message was published to, or null if publishing the message failed
+              offset:
+                type: integer
+                description: Offset of the message, or null if publishing the message failed
+              error_code:
+                type: integer
+                description: An error code classifying the reason the operation failed, or null if it succeeded
+                enum:
+                  - 1
+                  - 2
+              error:
+                type: string
+                description: An error message describing why the operation failed, or null if it succeeded
+    ErrorResponseType:
+      type: object
+      properties:
+        error_code:
+          type: integer
+          description: HTTP status of the request
+        message:
+          type: string
+          description: message describing the error
+    GeneralErrorResponseType:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: HTTP status of the request
+        message:
+          type: string
+          description: message describing the error
+        activityId:
+          type: string
+          description: Unique ID for the provided error message
+          format: uuid
+      additionalProperties: false
+    EventMessageDataType:
+      description: The event payload.
+      type: object
+      properties:
+        message:
+          description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
+          type: string
+          minLength: 3
+        md5MessageHash:
+          description: The md5 hash of the byte content of the encrypted data
+          type: string
+          minLength: 3
+        encryptionKey:
+          description: The with the public key of the receiver encrypted symmetric key to decrypt the data (KEK)
+          type: string
+          minLength: 3
+        publicKeyVersion:
+          description: The version of the public key used to encrypt the DEK
+          type: string
+          minLength: 3
+      required:
+        - message
+        - encryptionKey
+        - publicKeyVersion
+    SAFErrorEventType:
+      type: object
+      description: Offer NLPI Event JSON schema definition
+      properties:
+        id:
+          "$ref": '#/components/schemas/iddef'
+          description: Identifies the event.
+          examples:
+            - A234-1234-1234
+        source:
+          "$ref": '#/components/schemas/sourcedef'
+          description: Identifies the context in which an event happened.
+          examples:
+            - http://www.igb2b.ch/offer/nlpi/0.2.0
+        specversion:
+          "$ref": '#/components/schemas/specversiondef'
+          description: The version of the CloudEvents specification which the event uses.
+          examples:
+            - '1.0'
+        type:
+          "$ref": '#/components/schemas/EventType'
+        datacontenttype:
+          "$ref": '#/components/schemas/datacontenttypedef'
+          description: Content type of the data value. Must adhere to RFC 2046 format.
+          examples:
+            - text/xml
+            - application/json
+            - image/png
+            - multipart/form-data
+        dataschema:
+          "$ref": '#/components/schemas/dataschemadef'
+          description: Identifies the schema that data adheres to.
+        subject:
+          "$ref": '#/components/schemas/subjectdef'
+          description: Describes the subject of the event in the context of the event producer
+            (identified by source).
+          examples:
+            - request
+        time:
+          "$ref": '#/components/schemas/timedef'
+          description: Timestamp of when the occurrence happened. Must adhere to RFC 3339.
+          examples:
+            - '2018-04-05T17:31:00Z'
+        licenceKey:
+          "$ref": '#/components/schemas/LicenseKeyType'
+        userAgent:
+          "$ref": '#/components/schemas/UserAgentType'
+        data:
+          "$ref": '#/components/schemas/ErrorDataType'
+        eventReceiver:
+          "$ref": '#/components/schemas/SenderReceiverType'
+        eventSender:
+          "$ref": '#/components/schemas/SenderReceiverType'
+        processId:
+          "$ref": '#/components/schemas/ProcessIdType'
+        processName:
+          "$ref": '#/components/schemas/ProcessNameType'
+        processStatus:
+          "$ref": '#/components/schemas/ProcessStatusType'
+        subProcessName:
+          "$ref": '#/components/schemas/SubProcessNameType'
+        subProcessStatus:
+          "$ref": '#/components/schemas/SubProcessStatusType'
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - processId
+        - processName
+        - subProcessName
+        - processStatus
+        - subProcessStatus
+        - eventReceiver
+        - eventSender
+        - userAgent
+        - licenceKey
+    ErrorDataType:
+      description: The error event payload.
+      type: object
+      properties:
+        errorCode:
+          description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
+          type: string
+          minLength: 3
+          enum:
+            - licenseKey-not-valid
+            - sa-not-found
+            - receiver-not-found
+            - event-not-valid
+            - pk-version-not-found
+            - data-content-invalid
+            - data-schema-invalid
+            - data-not-readable
+            - data-decryption-failed
+            - data-decompression-failed
+            - other
+        errorMessage:
+          description: ""
+          type: string
+          minLength: 3
+        errorDateTime:
+          description: ""
+          type: string
+          format: date-time
+      required:
+        - errorCode
+        - errorMessage
+        - errorDateTime
+    OfferNLPIErrorEventType:
+      description: Offer NLPI Event JSON schema definition
+      type: object
+      properties:
+        id:
+          "$ref": '#/components/schemas/iddef'
+          description: Identifies the event.
+          examples:
+            - A234-1234-1234
+        source:
+          "$ref": '#/components/schemas/sourcedef'
+          description: Identifies the context in which an event happened.
+          examples:
+            - http://www.igb2b.ch/offer/nlpi/0.2.0
+        specversion:
+          "$ref": '#/components/schemas/specversiondef'
+          description: The version of the CloudEvents specification which the event uses.
+          examples:
+            - '1.0'
+        type:
+          "$ref": '#/components/schemas/EventType'
+        datacontenttype:
+          "$ref": '#/components/schemas/datacontenttypedef'
+          description: Content type of the data value. Must adhere to RFC 2046 format.
+          examples:
+            - text/xml
+            - application/json
+            - image/png
+            - multipart/form-data
+        dataschema:
+          "$ref": '#/components/schemas/dataschemadef'
+          description: Identifies the schema that data adheres to.
+        subject:
+          "$ref": '#/components/schemas/subjectdef'
+          description: Describes the subject of the event in the context of the event producer
+            (identified by source).
+          examples:
+            - request
+        time:
+          "$ref": '#/components/schemas/timedef'
+          description: Timestamp of when the occurrence happened. Must adhere to RFC 3339.
+          examples:
+            - '2018-04-05T17:31:00Z'
+        licenceKey:
+          "$ref": '#/components/schemas/LicenseKeyType'
+        userAgent:
+          "$ref": '#/components/schemas/UserAgentType'
+        data:
+          "$ref": "#/components/schemas/OfferNLPIErrorType"
+        eventReceiver:
+          "$ref": '#/components/schemas/SenderReceiverType'
+        eventSender:
+          "$ref": '#/components/schemas/SenderReceiverType'
+        processId:
+          "$ref": '#/components/schemas/ProcessIdType'
+        processName:
+          "$ref": '#/components/schemas/ProcessNameType'
+        processStatus:
+          "$ref": '#/components/schemas/ProcessStatusType'
+        subProcessName:
+          "$ref": '#/components/schemas/SubProcessNameType'
+        subProcessStatus:
+          "$ref": '#/components/schemas/SubProcessStatusType'
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - processId
+        - processName
+        - subProcessName
+        - processStatus
+        - subProcessStatus
+        - eventReceiver
+        - eventSender
+        - userAgent
+        - licenceKey
+    OfferNLPIErrorType:
+      type: object
+      properties:
+        errorCode:
+          description: 'The payload needs to be first encrypted and afterwards gzipped.
+            the base64 repesentation of gezipped bytes will be added as payload '
+          minLength: 3
+          type: string
+          enum:
+            - offer-missing-informations
+            - offer-incorrect-informations
+            - offer-date-expired
+            - offer-missing-claims-expierence
+            - offer-requested-several-times
+            - offer-already-issued
+            - offer-missing-documents
+            - offer-incorrect-attachment
+            - offer-other-error
+            - mandate-missing
+            - mandate-expired
+            - mandate-terminated
+            - mandate-invalid
+            - mandate-other-error
+            - cooperationagreement-missing
+            - cooperationagreement-expired-terminated
+            - cooperationagreement-other-error
+            - customer-data-referenceno-mismatch
+            - customer-data-incomplete
+            - customer-data-incorrect
+            - customer-not-identified
+            - customer-other-error
+            - claims-expierence-date-range-invalid
+            - claims-expierence-data-incorrect
+            - claims-expierence-contract-incorrect
+            - claims-expierence-customer-incorrect
+            - claims-expierence-other-error
+        errorMessage:
+          description: Error message
+          minLength: 3
+          type: string
+        incorrectDataList:
+          description: List of JSON paths, where wrong information has been entered
+          items:
+            type: string
+          minItems: 1
+          type: array
+        errorDateTime:
+          description: Date and time of the error
+          format: date-time
+          type: string
+        missingDataList:
+          description: List of JSON paths, where information is missing
+          items:
+            type: string
+          minItems: 1
+          type: array
+      required:
+        - errorCode
+        - errorMessage
+        - errorDateTime
