@@ -10,14 +10,10 @@ info:
     messages.
     
     ## Changelog
-    
-    ### Version 0.3.1 (20.08.2024)
-        - Fixing inquiry message data schema
-        - Fixing content type definitions
 
     ### Version 0.3.0 (20.08.2024)
     - Initial public release
-  version: v0.3.1
+  version: v0.3.0
 servers:
   - url: 'https://services.test-myecohub.ch/eh/saf'
   - url: 'https://services.myecohub.ch/eh/saf'
@@ -49,13 +45,13 @@ paths:
           required: true
           schema:
             enum:
-              - application/json
+              - application/vnd.kafka'schema.v2+json
             type: string
-            default: application/json
+            default: application/vnd.kafka'schema.v2+json
       requestBody:
         description: Offer NLPI event to SAF Message Broker.
         content:
-          application/json:
+          application/vnd.kafka'schema.v2':
             schema:
               oneOf:
                 - $ref: '#/components/schemas/SAFEventType'
@@ -159,7 +155,7 @@ paths:
         '200':
           description: "Returns all message which haven't been consumed yet by the techUser"
           content:
-            application/json:
+            application/vnd.kafka.jsonschema.v2+json:
               schema:
                 type: array
                 items:
@@ -400,7 +396,7 @@ components:
           minLength: 3
           type: string
         payLoadSignature:
-          description: signature key of the signed payload, to verify by whom the encrypted message has been created
+          description: The md5 hash of the byte content of the encrypted data
           minLength: 3
           type: string
         links:
@@ -593,10 +589,10 @@ components:
           description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
           type: string
           minLength: 3
-        messageSignature:
-          description: signature key of the signed message, to verify by whom the encrypted message has been created
-          minLength: 3
+        md5MessageHash:
+          description: The md5 hash of the byte content of the encrypted data
           type: string
+          minLength: 3
         encryptionKey:
           description: The with the public key of the receiver encrypted symmetric key to decrypt the data (KEK)
           type: string
@@ -605,10 +601,6 @@ components:
           description: The version of the public key used to encrypt the DEK
           type: string
           minLength: 3
-        signatureKeyVersion:
-          description: 'The version of the signature key, that was used to sign '
-          minLength: 3
-          type: string
       required:
         - message
         - encryptionKey
