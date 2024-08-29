@@ -34,5 +34,11 @@ jobs:
         run: npm install -g @asyncapi/cli
 
       # Runs a single command using the runners shell
-      - name: Create async api docu
+      - name: Generate async api docu
         run: asyncapi generate fromTemplate docs/Kafka-Events-Specification/asyncAPI-v0.3.0.yaml @asyncapi/html-template -o docs/Kafka-Events-Specification/asyncDocs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/Kafka-Events-Specification/asyncDocs
