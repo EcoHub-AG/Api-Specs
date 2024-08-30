@@ -47,15 +47,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: ls -la
-        run: | 
-          ls -la
-          cd Kafka-Events-Specification
-          ls -la
-
       # Runs a single command using the runners shell
       - name: Generate async api docu
         run: asyncapi generate fromTemplate ./Kafka-Events-Specification/asyncAPI-v0.3.0.yaml @asyncapi/html-template -o docs/Kafka-Events-Specification
+
+      - name: ls -la
+        run: | 
+          ls -la
+          cd docs/Kafka-Events-Specification
+          ls -la
 
       # Commit all changed files back to the repository
       - name: Commit generated asyncapi html output
