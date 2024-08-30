@@ -38,6 +38,9 @@ jobs:
       - name: Run a setup asyncapi generator cli
         run: npm install -g @asyncapi/cli
 
+      - name: PWD
+        run: PWD
+
       # Runs a single command using the runners shell
       - name: Generate async api docu
         run: asyncapi generate fromTemplate Kafka-Events-Specification/asyncAPI-v0.3.0.yaml @asyncapi/html-template -o docs/Kafka-Events-Specification
