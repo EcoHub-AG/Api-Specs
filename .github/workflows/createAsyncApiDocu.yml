@@ -29,17 +29,28 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
+      
       - name: Set up Node.js (if using Node.js)
         uses: actions/setup-node@v3
         with:
           node-version: '18'  # Specify the version you need
+      
+      - name: Cache Node.js modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      
 
       - name: Run a setup asyncapi generator cli
         run: npm install -g @asyncapi/cli
 
       - name: PWD
-        run: PWD
+        run: pwd
 
       # Runs a single command using the runners shell
       - name: Generate async api docu
