@@ -35,6 +35,9 @@ jobs:
         with:
           node-version: '18'  # Specify the version you need
       
+      - name: Run a setup asyncapi generator cli
+        run: npm install -g @asyncapi/cli
+
       - name: Cache Node.js modules
         id: cache-node-modules
         uses: actions/cache@v3
@@ -43,11 +46,6 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
-      
-
-      - name: Run a setup asyncapi generator cli
-        run: npm install -g @asyncapi/cli
 
       - name: ls -la
         run: | 
