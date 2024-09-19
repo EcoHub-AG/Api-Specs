@@ -1,0 +1,63 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Create docu for open api specs
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "saf-rest-docs" ]
+    paths:
+      - 'SAF-Kafka-REST-Proxy-API/*.yaml'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js (if using Node.js)
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Specify the version you need
+
+      - name: Setup redoc-cli
+        run: npm install -g redoc-cli
+
+      - name: Cache Node.js modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Runs a single command using the runners shell
+      - name: Generate OpenApi spec docu
+        run: redoc-cli bundle -o docs/SAF-Kafka-REST-Proxy-API/index.html ./SAF-Kafka-REST-Proxy-API/OAS3.0-SAF-Kafka-REST-Proxy-v0.3.0.yaml
+
+      - name: ls -la
+        run: |
+          ls -la
+          cd docs/SAF-Kafka-REST-Proxy-API
+          ls -la
+          git add . -f
+
+      # Commit all changed files back to the repository
+      - name: Commit generated OpenApi spec html output
+        uses: stefanzweifel/git-auto-commit-action@v5
