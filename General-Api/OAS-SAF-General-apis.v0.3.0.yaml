@@ -1,0 +1,327 @@
+openapi: 3.0.3
+info:
+  title: "Standard API Framework"
+  version: 0.3.0
+  description: >
+    ## Changelog
+
+    ### Version 0.3.0 (10.07.2024)
+    
+    Initial public release
+servers:
+  - url: https://services.test-myecohub.ch/general
+    variables: {}
+    description: EcoHub IAT Environment
+  - url: https://services.myecohub.ch/general
+    variables: {}
+    description: EcoHub PROD Environment
+paths:
+  /saf-receivers:
+    post:
+      tags:
+        - "General APIs"
+      summary: Performs action in EcoHub SAF to receive a list of all available receivers for this techUser, i.e. all
+        all receivers this TechUser has an active SA with.
+      operationId: SafReceivers
+      requestBody:
+        description: saf-receiver request, to retrieve a list of available receivers for the authenticated tech user
+        content:
+          application/json:
+            schema:
+              title: SAF receiver request
+              $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              title: SAF receiver request
+              $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              title: SAF receiver request
+              $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns a list of available receivers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SAFReceiverResponse'
+        '400':
+          description: If saf-receiver operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SAFErrorResponse'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponse'
+  /saf-insurers:
+    post:
+      tags:
+        - "General APIs"
+      summary: Performs action in EcoHub to receive a list of all insurers available on SAF. This caller does not
+        need to have an active service agreement with the insurers.
+      operationId: SafInsurers
+      requestBody:
+        description: saf-insurers request, to retrieve a list of all insurers connected to the Standard API Framework and which Standards are supported.
+        content:
+          application/json:
+            schema:
+              title: SAF insurers request
+              $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              title: SAF insurers request
+              $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              title: SAF insurers request
+              $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns a list of all connected insurers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SAFInsurersResponse'
+        '400':
+          description: If saf-insurers operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SAFErrorResponse'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponse'
+  /techUserEnrolment:
+    post:
+      tags:
+        - "TechUser Enrollment"
+      summary: Performs TechUserEnrolment action.
+      operationId: EnrolTechUser
+      requestBody:
+        description: TechUserEnrolmentRequest.
+        content:
+          application/json:
+            schema:
+              title: TechUserEnrolmentRequest
+              allOf:
+                - $ref: '#/components/schemas/TechUserEnrolmentRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              title: TechUserEnrolmentRequest
+              allOf:
+                - $ref: '#/components/schemas/TechUserEnrolmentRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              title: TechUserEnrolmentRequest
+              allOf:
+                - $ref: '#/components/schemas/TechUserEnrolmentRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+
+      responses:
+        '200':
+          description: Returns DXPInsurerService.Models.TechUserEnrolmentResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TechUserEnrolmentResponse'
+        '400':
+          description: If TechUserEnrolment operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SAFErrorResponse'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponse'
+components:
+  schemas:
+    GeneralRequestData:
+      type: object
+      properties:
+        licenceKey:
+          type: string
+          description: The license key for the requesting SC application.
+          example: fdsaf346t54grthe65euz467jhz7r
+          maxLength: 200
+        password:
+          type: string
+          description: The TechUser password.
+          example: password
+          maxLength: 100
+        requestId:
+          type: string
+          example: 486ebf73-8306-4dd2-96bf-82ce4b15444f
+          description: Unique request ID. This is created by the broker or DXP-GUI and passed on to the VU and should be logged there to help with troubleshooting.
+        requestTime:
+          type: string
+          description: Time of the request at the client as timestamp (date and time, each UTC without corresponding specification). YYYY-MM-DDTHH:MM:SS RFC 3339 formatted datetime.
+          format: date-time
+        userAgent:
+          $ref: '#/components/schemas/UserAgent'
+      additionalProperties: false
+    GeneralErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/GeneralErrorReturnCode'
+        errorMessageId:
+          type: string
+          format: uuid
+          description: "Unique ID for the provided error message"
+        errorMessage:
+          type: string
+          description: "Error message in english, that belongs to the errorMessageId"
+          example: "The requested resource is not available"
+      required:
+        - errorCode
+        - errorMessageId
+        - errorMessage
+      additionalProperties: false
+    GeneralErrorReturnCode:
+      enum:
+        - ERROR
+      type: string
+      example: ERROR
+    SAFInsurersResponse:
+      type : array
+      items:
+        properties:
+          companyName:
+            type: string
+            description: name of the insurer
+            example: EcoHub Insurance Simulator
+          safSupportedStandards:
+            $ref: '#/components/schemas/SAFSupportedStandardsType'
+      additionalProperties: false
+    SAFErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/SAFErrorReturnCode'
+        errorMessage:
+          type: string
+          example: The given license key or password is invalid.
+      additionalProperties: false
+    SAFErrorReturnCode:
+      enum:
+        - LICENCE_KEY_OR_PASSWORD_INVALID
+        - AUTH_FAILED
+        - ERROR
+      type: string
+      example: LICENCE_KEY_OR_PASSWORD_INVALID
+    SAFReceiverResponse:
+      type : array
+      items:
+        properties:
+          idp:
+            type: array
+            description: The IDP numbers of the receiver. When sending an event to this receiver, any of the
+              returned IDP numbers can be used.
+            items:
+              type: string
+              example: IDP234213
+          companyName:
+            type: string
+            description: name of the company
+            example: EcoHub Insurance Simulator
+          memberType:
+            description: Type of the receiver
+            type: string
+            example: Insurer
+            enum:
+              - Broker
+              - Insurer
+              - ServiceProvider
+          safSupportedStandards:
+            $ref: '#/components/schemas/SAFSupportedStandardsType'
+      additionalProperties: false
+    SAFSupportedStandardsType:
+      description: The supported Standards by the receiver.
+      type: array
+      items:
+        type: object
+        properties:
+          standard:
+            type: string
+            enum: ["offer.nlpi"]
+          version:
+            type: string
+            enum: ["0.3.0"]
+    TechUserEnrolmentRequest:
+      type: object
+      properties:
+        iak:
+          type: string
+          maxLength: 100
+          description: The activation code from EcoHub
+          example: 654321
+          nullable: false
+        idpUserId:
+          type: string
+          maxLength: 10
+          description: The IDP_UserID of the TechUser.
+          example: IDP9873467
+      additionalProperties: false
+    TechUserEnrolmentResponse:
+      type: object
+      properties:
+        techUserCert:
+          description: "Base64 encoded .p12 certificate"
+          type: string
+          format: byte
+        oAuth2:
+          type: object
+          properties:
+            clientId:
+              type: string
+              description: OAuth2 clientId of the techUser
+            clientSecret:
+              type: string
+              description: OAuth2 clientSecret of the techUser
+            openIdConfigurationEndpoint:
+              type: string
+              description: well-known OpenID configuration URL
+              format: url
+      additionalProperties: false
+    UserAgent:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Client software XYZ
+          maxLength: 100
+        version:
+          type: string
+          example: Version 1.0
+          maxLength: 30
+      additionalProperties: false
