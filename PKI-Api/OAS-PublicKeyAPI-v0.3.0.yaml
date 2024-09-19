@@ -1,0 +1,571 @@
+openapi: 3.0.1
+info:
+  title: Public Key Store
+  version: 0.3.0
+  description: >
+    ## Changelog
+
+    ### Version 0.3.0 (11.07.2024)
+    
+    - Initial public release of the public key store api, that is needed to retrieve the receivers public key and to manage your own public key.
+    
+    - The API is secured and can only be acessed with a valid tech user client certificate.
+servers:
+  - url: 'https://services.test-myecohub.ch/publickeystore'
+    description: EcoHub IAT Enviroment
+  - url: 'https://services.myecohub.ch/publickeystore'
+    description: EcoHub PROD Enviroment
+paths:
+  /keys:
+    post:
+      tags:
+        - PublicKeyApi
+      summary: Upload a new public key for your membership.
+      operationId: UploadKey
+      requestBody:
+        description: Request.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PublicKeyUploadRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKeyUploadRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PublicKeyUploadRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PublicKeyUploadRequest'
+      responses:
+        '200':
+          description: Public key has been uploaded with success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - PublicKeyApi
+      summary: Get all keys for my membership.
+      operationId: GetKeys
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicKeyResponse'
+        '401':
+          description: Authorization (mTLS) missing
+  /keys/{keyId}/verify:
+    get:
+      tags:
+        - PublicKeyApi
+      summary: Get encrypted content to verify public key.
+      operationId: GetEncryptedContent
+      parameters:
+        - name: keyId
+          in: path
+          description: keyId.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyVerifyChallenge'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - PublicKeyApi
+      summary: Submit decrypted content to verify public key.
+      operationId: VerifyPublicKeyByDecryptedContent
+      parameters:
+        - name: keyId
+          in: path
+          description: keyId.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Verify Request.
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PublicKeyVerifyRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKeyVerifyRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PublicKeyVerifyRequest'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PublicKeyVerifyRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyVerifyResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /keys/{keyId}:
+    get:
+      tags:
+        - PublicKeyApi
+      summary: Get details of any specific key of my membership.
+      operationId: GetKeyById
+      parameters:
+        - name: keyId
+          in: path
+          description: keyId.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - PublicKeyApi
+      summary: Delete inactive public key by member admin.
+      operationId: Delete
+      parameters:
+        - name: keyId
+          in: path
+          description: KeyId.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /brokers/{brokerRegNo}/key:
+    get:
+      tags:
+        - PublicKeyApi
+      summary: >-
+        Get the active public key of a broker with whome my membership has a
+        Service Agreement.
+      operationId: GetActivePublicKeyOfBroker
+      parameters:
+        - name: brokerRegNo
+          in: path
+          required: true
+          schema:
+            type: string
+            maxLength: 15
+            pattern: "^(CHE\\-(FINMA|IGB\\dB)\\-\\d{5}|(FINMA)\\-F\\d{8}|LIE\\-FMA\\-\\d{5})$"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyResponse'
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /insurers/{insurerId}/key:
+    get:
+      tags:
+        - PublicKeyApi
+      summary: >-
+        Get the active public key of an insurer with whome my membership has a
+        Service Agreement.
+      operationId: GetActivePublicKeyOfInsurer
+      parameters:
+        - name: insurerId
+          in: path
+          description: InsurerId.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyResponse'
+        '204':
+          description: No content
+        '401':
+          description: Authorization (mTLS) missing
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /keys/{keyId}/activate:
+    post:
+      tags:
+        - PublicKeyApi
+      summary: Activate a specific key for my membership.
+      operationId: Activate
+      parameters:
+        - name: keyId
+          in: path
+          description: KeyId.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /keys/{keyId}/deactivate:
+    post:
+      tags:
+        - PublicKeyApi
+      summary: Deactivate a specific key for my membership.
+      operationId: Deactivate
+      parameters:
+        - name: keyId
+          in: path
+          description: KeyId.
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /members/{idpNumber}/key:
+    get:
+      tags:
+        - PublicKeyApi
+      summary: Get the active public key of a member by idp-number with whom my membership has a Service Agreement.
+      description: Get the active public key of a member by idp-number with whom my membership has a Service Agreement.
+      operationId: GetActivePublicKeyOfMemberByIdpNumber
+      parameters:
+        - name: idpNumber
+          in: path
+          description: IdpNumber.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyResponse'
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    PublicKeyResponse:
+      type: object
+      properties:
+        keyId:
+          $ref: "#/components/schemas/PublicKeyIdType"
+        membershipId:
+          $ref: "#/components/schemas/MembershipIdType"
+        version:
+          $ref: "#/components/schemas/PublicKeyVersionType"
+        key:
+          $ref: "#/components/schemas/PublicKeyDataType"
+        createdAt:
+          $ref: "#/components/schemas/CreatedAtType"
+        lastUpdatedAt:
+          $ref: "#/components/schemas/LastUpdatedAtType"
+        activatedAt:
+          $ref: "#/components/schemas/ActivatedAtType"
+        expiryDate:
+          $ref: "#/components/schemas/ExpiryDateType"
+        ecoHubStatus:
+          $ref: "#/components/schemas/PublicKeyStatusType"
+      additionalProperties: false
+    PublicKeyUploadRequest:
+      required:
+        - expireInDays
+        - key
+        - version
+      type: object
+      properties:
+        version:
+          $ref: "#/components/schemas/PublicKeyVersionType"
+        key:
+          $ref: "#/components/schemas/PublicKeyDataType"
+        expireInDays:
+          $ref: "#/components/schemas/ExpireInDaysType"
+      additionalProperties: false
+    PublicKeyVerifyRequest:
+      type: object
+      properties:
+        decryptedContent:
+          type: string
+          description: The decrypted String from the PublicKeyVerifyChallenge encryptedContent
+          nullable: true
+      additionalProperties: false
+    PublicKeyVerifyChallenge:
+      type: object
+      properties:
+        keyId:
+          $ref: "#/components/schemas/PublicKeyIdType"
+        encryptedContent:
+          type: string
+          description: Random base64 encoded content, which has been encrypted with the
+            public key. Needs to be decoded and decrypted, so that it can be used as 
+            input for the verify API call.
+          nullable: true
+      additionalProperties: false
+    PublicKeyDataType:
+      minLength: 1
+      description: Base64-encoded representation of the public key portion of an RSA key pair in PEM format
+      type: string
+      nullable: false
+      example: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L
+iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww
+Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/
+KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4
+24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO
+0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt
+tQIDAQAB"
+    PublicKeyVersionType:
+      type: string
+      description: Version of the public key
+      nullable: false
+    PublicKeyIdType:
+      description: Unique identifier of the public key stored in EcoHub
+      type: string
+      format: uuid
+      nullable: false
+    MembershipIdType:
+      description: Membership id the public key belongs to
+      type: string
+      format: uuid
+      nullable: false
+    CreatedAtType:
+      description: Timestamp when the public key has been created
+      type: string
+      format: date-time
+      nullable: false
+    LastUpdatedAtType:
+      description: Timestamp when the public key data has been updated the last time
+      type: string
+      format: date-time
+      nullable: false
+    ActivatedAtType:
+      description: Timestamp when the public key has been activated
+      type: string
+      format: date-time
+      nullable: false
+    ExpiryDateType:
+      description: Timestamp when the public key will expire
+      type: string
+      format: date-time
+      nullable: false
+    ExpireInDaysType:
+      type: string
+      enum: ["7", "14", "30", "90", "180", "365"]
+      description: The expiration time, that defines the expiration date of the public key in EcoHub
+      nullable: false
+    PublicKeyStatusType:
+      description: EcoHub status of the public key
+      type: string
+      enum: ["Created", "Verified", "Activated", "Deactivated"]
+      nullable: false
+    PublicKeyVerifyResponse:
+      type: object
+      properties:
+        verificationStatus:
+          type: string
+          enum: ["Success", "Fail"]
+          description: Status of the verification check
+          nullable: false
+          example: Success/Fail
+      additionalProperties: false
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          enum: ["KEY_VERSION_EXISTS", "KEY_INVALID", "REQUEST_INVALID",
+                 "KEY_ID_INVALID", "KEY_NOT_FOUND", "VERIFICATION_NOT_STARTED",
+                  "UNAUTHORIZED", "NO_SERVICE_AGREEMENT", "KEY_IS_ACTIVE", "ERROR"]
+          description: Code identifying the type of error
+          example: "KEY_VERSION_EXISTS"
+        errorMessage:
+          type: string
+          description: Message detailing the error
+          example: "Key version already exists for this membership"
