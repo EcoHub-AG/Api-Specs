@@ -1,9 +1,18 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 0.3.0
+  version: 0.3.2
   description: >
     ## Changelog
+    
+    ### Version 0.3.2 (03.09.2024)
+    
+    - Removing unused paths for insurers and brokers
+    
+    ### Version 0.3.1 (15.07.2024)
+    
+    - Introducing new property keyType, to support the digital signature public keys
+    - Changed paths, to support the keyType on verification, activation, deactivation and deleting
 
     ### Version 0.3.0 (11.07.2024)
     
@@ -74,7 +83,7 @@ paths:
                   $ref: '#/components/schemas/PublicKeyResponse'
         '401':
           description: Authorization (mTLS) missing
-  /keys/{keyId}/verify:
+  /keys/{keyType}/{keyId}/verify:
     get:
       tags:
         - PublicKeyApi
@@ -86,8 +95,13 @@ paths:
           description: keyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
+        - name: keyType
+          in: path
+          description: keyType.
+          required: true
+          schema:
+            $ref: '#/components/schemas/PublicKeyTypeType'
       responses:
         '200':
           description: Success
@@ -120,8 +134,13 @@ paths:
           description: keyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
+        - name: keyType
+          in: path
+          description: keyType.
+          required: true
+          schema:
+            $ref: '#/components/schemas/PublicKeyTypeType'
       requestBody:
         description: Verify Request.
         content:
@@ -235,89 +254,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /brokers/{brokerRegNo}/key:
-    get:
-      tags:
-        - PublicKeyApi
-      summary: >-
-        Get the active public key of a broker with whome my membership has a
-        Service Agreement.
-      operationId: GetActivePublicKeyOfBroker
-      parameters:
-        - name: brokerRegNo
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 15
-            pattern: "^(CHE\\-(FINMA|IGB\\dB)\\-\\d{5}|(FINMA)\\-F\\d{8}|LIE\\-FMA\\-\\d{5})$"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicKeyResponse'
-        '204':
-          description: No content
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authorization (mTLS) missing
-        '404':
-          description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /insurers/{insurerId}/key:
-    get:
-      tags:
-        - PublicKeyApi
-      summary: >-
-        Get the active public key of an insurer with whome my membership has a
-        Service Agreement.
-      operationId: GetActivePublicKeyOfInsurer
-      parameters:
-        - name: insurerId
-          in: path
-          description: InsurerId.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicKeyResponse'
-        '204':
-          description: No content
-        '401':
-          description: Authorization (mTLS) missing
-        '404':
-          description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
   /keys/{keyId}/activate:
     post:
       tags:
@@ -392,8 +328,8 @@ paths:
     get:
       tags:
         - PublicKeyApi
-      summary: Get the active public key of a member by idp-number with whom my membership has a Service Agreement.
-      description: Get the active public key of a member by idp-number with whom my membership has a Service Agreement.
+      summary: Returns a list of active public keys, for encryption and signing, of a member by idp-number with whom my membership has a Service Agreement.
+      description: Get the active public keys, for encryption and signing, of a member by idp-number with whom my membership has a Service Agreement.
       operationId: GetActivePublicKeyOfMemberByIdpNumber
       parameters:
         - name: idpNumber
@@ -402,6 +338,54 @@ paths:
           required: true
           schema:
             type: string
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyListResponse'
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /members/{idpNumber}/key/{keyType}:
+    get:
+      tags:
+        - PublicKeyApi
+      summary: Get the active public key of a member by idp-number and keyType with whom my membership has a Service Agreement.
+      description: Get the active public key of a member by idp-number and keyType with whom my membership has a Service Agreement.
+      operationId: GetActivePublicKeyOfMemberByOperationAndIdpNumber
+      parameters:
+        - name: idpNumber
+          in: path
+          description: IdpNumber.
+          required: true
+          schema:
+            type: string
+        - name: keyType
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/PublicKeyTypeType"
       responses:
         '200':
           description: Success.
@@ -433,6 +417,31 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    PublicKeyListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/PublicKeyResponse'
+      example:
+        - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
+          version: "string"
+          operation: "encryption"
+          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          createdAt: "2024-09-03T09:16:37.327Z"
+          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
+          activatedAt: "2024-09-03T09:16:37.327Z"
+          expiryDate: "2024-09-03T09:16:37.327Z"
+          ecoHubStatus: "Created"
+        - keyId: "0e84035f-d211-4fbd-9ce0-ecc259d7814dÃ¥"
+          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
+          version: "string"
+          operation: "signature"
+          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          createdAt: "2024-09-03T09:16:37.327Z"
+          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
+          activatedAt: "2024-09-03T09:16:37.327Z"
+          expiryDate: "2024-09-03T09:16:37.327Z"
+          ecoHubStatus: "Created"
     PublicKeyResponse:
       type: object
       properties:
@@ -442,6 +451,8 @@ components:
           $ref: "#/components/schemas/MembershipIdType"
         version:
           $ref: "#/components/schemas/PublicKeyVersionType"
+        keyType:
+          $ref: "#/components/schemas/PublicKeyTypeType"
         key:
           $ref: "#/components/schemas/PublicKeyDataType"
         createdAt:
@@ -455,24 +466,42 @@ components:
         ecoHubStatus:
           $ref: "#/components/schemas/PublicKeyStatusType"
       additionalProperties: false
+      example:
+        - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
+          version: "string"
+          operation: "encryption"
+          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          createdAt: "2024-09-03T09:16:37.327Z"
+          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
+          activatedAt: "2024-09-03T09:16:37.327Z"
+          expiryDate: "2024-09-03T09:16:37.327Z"
+          ecoHubStatus: "Created"
     PublicKeyUploadRequest:
-      required:
-        - expireInDays
-        - key
-        - version
-      type: object
-      properties:
-        version:
-          $ref: "#/components/schemas/PublicKeyVersionType"
-        key:
-          $ref: "#/components/schemas/PublicKeyDataType"
-        expireInDays:
-          $ref: "#/components/schemas/ExpireInDaysType"
-      additionalProperties: false
+      type: array
+      items:
+        type: object
+        properties:
+          version:
+            $ref: "#/components/schemas/PublicKeyVersionType"
+          keyType:
+            $ref: "#/components/schemas/PublicKeyTypeType"
+          key:
+            $ref: "#/components/schemas/PublicKeyDataType"
+          expireInDays:
+            $ref: "#/components/schemas/ExpireInDaysType"
+        required:
+          - expireInDays
+          - key
+          - version
+        additionalProperties: false
+      minItems: 1
     PublicKeyVerifyRequest:
       type: object
       properties:
-        decryptedContent:
+        keyType:
+          $ref: "#/components/schemas/PublicKeyTypeType"
+        verifiedContent:
           type: string
           description: The decrypted String from the PublicKeyVerifyChallenge encryptedContent
           nullable: true
@@ -482,11 +511,11 @@ components:
       properties:
         keyId:
           $ref: "#/components/schemas/PublicKeyIdType"
-        encryptedContent:
+        keyType:
+          $ref: "#/components/schemas/PublicKeyTypeType"
+        verificationContent:
           type: string
-          description: Random base64 encoded content, which has been encrypted with the
-            public key. Needs to be decoded and decrypted, so that it can be used as 
-            input for the verify API call.
+          description: Random base64 encoded content. Content is depending on the keyType, either encrypted and needs to be decrypted or it is plain string that should be used to create the signature, so that it can be used as input for the verify API call.
           nullable: true
       additionalProperties: false
     PublicKeyDataType:
@@ -545,6 +574,11 @@ tQIDAQAB"
       type: string
       enum: ["Created", "Verified", "Activated", "Deactivated"]
       nullable: false
+    PublicKeyTypeType:
+      description: Specifies the type of operation for which the public key will be used. The following operations are supported
+      type: string
+      enum: ["encryption", "signature"]
+      default: "encryption"
     PublicKeyVerifyResponse:
       type: object
       properties:
@@ -562,7 +596,7 @@ tQIDAQAB"
           type: string
           enum: ["KEY_VERSION_EXISTS", "KEY_INVALID", "REQUEST_INVALID",
                  "KEY_ID_INVALID", "KEY_NOT_FOUND", "VERIFICATION_NOT_STARTED",
-                  "UNAUTHORIZED", "NO_SERVICE_AGREEMENT", "KEY_IS_ACTIVE", "ERROR"]
+                 "UNAUTHORIZED", "NO_SERVICE_AGREEMENT", "KEY_IS_ACTIVE", "ERROR"]
           description: Code identifying the type of error
           example: "KEY_VERSION_EXISTS"
         errorMessage:
