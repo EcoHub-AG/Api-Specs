@@ -49,7 +49,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Generate async api docu
-        run: asyncapi generate fromTemplate ./SAF-Message-Broker/asyncAPI-v0.2.4.yaml @asyncapi/html-template -o docs/SAF-Message-Broker
+        run: asyncapi generate fromTemplate ./SAF-Message-Broker/asyncApi-saf-message-broker.yaml @asyncapi/html-template -o docs/SAF-Message-Broker
 
       - name: ls -la
         run: |
