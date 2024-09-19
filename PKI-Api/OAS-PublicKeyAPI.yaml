@@ -1,9 +1,13 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 0.3.0
+  version: 0.4.0
   description: >
     ## Changelog
+
+    ### Version 0.4.0 (26.12.2024)
+
+    - Removing unused paths for insurers and brokers
 
     ### Version 0.3.0 (11.07.2024)
     
@@ -86,8 +90,7 @@ paths:
           description: keyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       responses:
         '200':
           description: Success
@@ -120,8 +123,7 @@ paths:
           description: keyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       requestBody:
         description: Verify Request.
         content:
@@ -235,89 +237,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /brokers/{brokerRegNo}/key:
-    get:
-      tags:
-        - PublicKeyApi
-      summary: >-
-        Get the active public key of a broker with whom my membership has a
-        Service Agreement.
-      operationId: GetActivePublicKeyOfBroker
-      parameters:
-        - name: brokerRegNo
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 15
-            pattern: "^(CHE\\-(FINMA|IGB\\dB)\\-\\d{5}|(FINMA)\\-F\\d{8}|LIE\\-FMA\\-\\d{5})$"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicKeyResponse'
-        '204':
-          description: No content
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authorization (mTLS) missing
-        '404':
-          description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /insurers/{insurerId}/key:
-    get:
-      tags:
-        - PublicKeyApi
-      summary: >-
-        Get the active public key of an insurer with whom my membership has a
-        Service Agreement.
-      operationId: GetActivePublicKeyOfInsurer
-      parameters:
-        - name: insurerId
-          in: path
-          description: InsurerId.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicKeyResponse'
-        '204':
-          description: No content
-        '401':
-          description: Authorization (mTLS) missing
-        '404':
-          description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
   /keys/{keyId}/activate:
     post:
       tags:
@@ -330,8 +249,7 @@ paths:
           description: KeyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       responses:
         '200':
           description: Success
@@ -365,8 +283,7 @@ paths:
           description: KeyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       responses:
         '200':
           description: Success
@@ -562,7 +479,7 @@ tQIDAQAB"
           type: string
           enum: ["KEY_VERSION_EXISTS", "KEY_INVALID", "REQUEST_INVALID",
                  "KEY_ID_INVALID", "KEY_NOT_FOUND", "VERIFICATION_NOT_STARTED",
-                  "UNAUTHORIZED", "NO_SERVICE_AGREEMENT", "KEY_IS_ACTIVE", "ERROR"]
+                 "UNAUTHORIZED", "NO_SERVICE_AGREEMENT", "KEY_IS_ACTIVE", "ERROR"]
           description: Code identifying the type of error
           example: "KEY_VERSION_EXISTS"
         errorMessage:
