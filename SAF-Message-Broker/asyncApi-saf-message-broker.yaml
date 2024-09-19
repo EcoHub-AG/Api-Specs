@@ -2,7 +2,7 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framwork: Message Broker System'
-  version: 0.2.4
+  version: 0.3.0
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -10,6 +10,8 @@ info:
   description: >
     ## Changelog
     
+    ### Version 0.3.0 (20.08.2024) - Initial public release
+
     ### Version 0.2.4 (05.06.2024)
 
     - Renamed the current events OfferNLPIEventType and OfferNLPIInquiryEventType to SAFEventType and SAFInquiryEventType
@@ -29,9 +31,8 @@ info:
     - Added new property processname to all events, this property contains the type of process, e.g. offer nlpi, billing, ...
 
     - Changed the EventDataType, the md5payloadHash has been replaced by a payloadSignature property, apart from that a signaturePublicKeyVersion has been added. This allows the sender to not only encrypt the data, so that only the receiver can decrypt it, but also to proof that the data has been encrypted by the sender.
-
     
-
+    
     ### Version 0.2.3 (12.01.2024)
     
     - Updating asyncapi version from 2.6.0 to 3.0.0
@@ -90,7 +91,7 @@ channels:
         partitions: 9
         replicas: 2
         topicConfiguration:
-          cleanup.policy: ["delete"]
+          cleanup.policy: [ "delete" ]
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
@@ -109,7 +110,7 @@ channels:
         partitions: 3
         replicas: 2
         topicConfiguration:
-          cleanup.policy: ["delete"]
+          cleanup.policy: [ "delete" ]
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
@@ -165,45 +166,46 @@ components:
       description: Provide the techuser certificate for authentication
   schemas:
     SAFEventType:
-      $id: SAFEventType
+      description: Standard API Event JSON schema definition
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/cloudEvents/iddef'
+          "$ref": '#/components/schemas/cloudEvents/iddef'
         source:
-          $ref: '#/components/schemas/cloudEvents/sourcedef'
+          "$ref": '#/components/schemas/cloudEvents/sourcedef'
         specversion:
-          $ref: '#/components/schemas/cloudEvents/specversiondef'
-        datacontenttype:
-          $ref: '#/components/schemas/cloudEvents/datacontenttypedef'
-        dataschema:
-          $ref: '#/components/schemas/cloudEvents/dataschemadef'
-        subject:
-          $ref: '#/components/schemas/cloudEvents/subjectdef'
-        time:
-          $ref: '#/components/schemas/cloudEvents/timedef'
-        licenceKey:
-          $ref: '#/components/schemas/licenceKeyType'
-        userAgent:
-          $ref: '#/components/schemas/userAgentType'
+          "$ref": '#/components/schemas/cloudEvents/specversiondef'
         type:
-          $ref: '#/components/schemas/eventType'
-        data:
-          $ref: '#/components/schemas/dataType'
+          "$ref": '#/components/schemas/eventType'
+        datacontenttype:
+          "$ref": '#/components/schemas/cloudEvents/datacontenttypedef'
+        dataschema:
+          "$ref": '#/components/schemas/cloudEvents/dataschemadef'
+        subject:
+          "$ref": '#/components/schemas/cloudEvents/subjectdef'
+        time:
+          "$ref": '#/components/schemas/cloudEvents/timedef'
+        licenceKey:
+          "$ref": '#/components/schemas/licenseKeyType'
+        userAgent:
+          "$ref": '#/components/schemas/userAgentType'
         eventReceiver:
-          $ref: "#/components/schemas/senderReceiverType"
+          "$ref": '#/components/schemas/senderReceiverType'
         eventSender:
-          $ref: "#/components/schemas/senderReceiverType"
+          "$ref": '#/components/schemas/senderReceiverType'
+        data:
+          "$ref": '#/components/schemas/eventDataType'
         processId:
-          $ref: "#/components/schemas/processIdType"
+          "$ref": '#/components/schemas/processIdType'
         processName:
-          $ref: "#/components/schemas/processNameType"        
+          "$ref": '#/components/schemas/processNameType'
         processStatus:
-          $ref: "#/components/schemas/processStatusType"
+          "$ref": '#/components/schemas/processStatusType'
         subProcessName:
-          $ref: "#/components/schemas/subProcessNameType"
+          "$ref": '#/components/schemas/subProcessNameType'
         subProcessStatus:
-          $ref: "#/components/schemas/subProcessStatusType"
+          "$ref": '#/components/schemas/subProcessStatusType'
+      additionalProperties: false
       required:
         - id
         - source
@@ -332,7 +334,7 @@ components:
       type: object
       properties:
         id:
-         $ref: '#/components/schemas/cloudEvents/iddef'
+          $ref: '#/components/schemas/cloudEvents/iddef'
         source:
           $ref: '#/components/schemas/cloudEvents/sourcedef'
         specversion:
@@ -496,7 +498,7 @@ components:
       enum:
         - offer.nlpi
       example: offer.nlpi
-      
+
     eventType:
       type: string
       minLength: 1
@@ -596,7 +598,7 @@ components:
       properties:
         message:
           type: string
-          
+
           description: >-
             Zipped and encrypted base64 representation of the messageArrayType
             JSON defined in the AsyncAPI
@@ -605,24 +607,30 @@ components:
           description: The md5 hash of the byte content of the encrypted data
         encryptionKey:
           type: string
-          
+
           description: >-
             The with the public key of the receiver encrypted symmetric key to
             decrypt the data (KEK)
         publicKeyVersion:
           type: string
-          
+
           description: The version of the public key used to encrypt the DEK
       required:
         - message
         - encryptionKey
         - publicKeyVersion
+    licenseKeyType:
+      description: The license key for the requesting SC application.
+      type: string
+      maxLength: 200
+      minLength: 3
+      example: fdsaf346t54grthe65euz467jhz7r
     processStatusType:
       type: string
       enum:
         - active
         - closed
-      description: Defines status of the overall process. 
+      description: Defines status of the overall process.
     processIdType:
       type: string
       format: UUID
@@ -636,14 +644,14 @@ components:
             - broker
             - insurer
             - serviceprovider
-          
+
           example: broker
           description: The category of organisation
         id:
           type: string
-          
+
           minLength: 3
-          examples: 
+          examples:
             - IDP1239865
             - CHE-IGB2B-12345
             - CHE-FINMA-F012345678
@@ -653,55 +661,54 @@ components:
         - category
         - id
       additionalProperties: false
-    dataType:
+    eventDataType:
+      description: The event payload.
       type: object
       properties:
         payload:
+          description: 'The payload needs to be first encrypted and afterwards gzipped.
+            the base64 repesentation of gezipped bytes will be added as payload '
+          minLength: 3
           type: string
-          
-          description: >-
-            Zipped and encrypted base64 representation of the IG B2B JSON
-            structured data
-        md5PayloadHash:
-          type: string
+        payLoadSignature:
           description: The md5 hash of the byte content of the encrypted data
+          minLength: 3
+          type: string
         links:
-          type: array
-          
           items:
             properties:
+              description:
+                description: Description of the purpose of the link
+                type: string
               href:
-                type: string
-                
-                example: >-
-                  https://services.test-myecohub.ch/offer/nlpi/{offerId}/{attachmentId}
+                description: the- encrypted URL that should be called, to receive additional
+                  encrypted unstructured data, such as pdf, pictures, etc.
+                example: https://services.test-myecohub.ch/offer/nlpi/{offerId}/{attachmentId}
                   (unencrypted example)
-                description: >-
-                  the- encrypted URL that should be called, to receive
-                  additional encrypted unstructured data, such as pdf, pictures,
-                  etc.
-              rel:
+                minLength: 3
                 type: string
-                
+              rel:
                 description: The IG B2B Standard the links belongs to.
                 example: offer-nlpi
-              description:
+                minLength: 3
                 type: string
-                
-                description: Description of the purpose of the link
             required:
               - href
               - rel
+          type: array
         encryptionKey:
-          type: string
-          
-          description: >-
-            The with the public key of the receiver encrypted symmetric key to
+          description: The with the public key of the receiver encrypted symmetric key to
             decrypt the data (KEK)
-        publicKeyVersion:
+          minLength: 3
           type: string
-          
-          description: The version of the public key used to encrypt the DEK
+        publicKeyVersion:
+          description: The version of the public key used to encrypt the encryptionKey (DEK)
+          minLength: 3
+          type: string
+        signatureKeyVersion:
+          description: 'The version of the signature key, that was used to sign '
+          minLength: 3
+          type: string
       required:
         - payload
         - encryptionKey
@@ -742,7 +749,7 @@ components:
       description: The license key for the requesting SC application.
       example: fdsaf346t54grthe65euz467jhz7r
       maxLength: 200
-      
+
     messageArrayType:
       id: messageArrayType
       type: array
@@ -777,13 +784,13 @@ components:
           example: Client software XYZ
           description: "Name of the application"
           maxLength: 100
-          
+
         version:
           type: string
           example: Version 1.0
           maxLength: 30
           description: "Used version of the application"
-          
+
       required:
         - name
         - version
@@ -803,7 +810,7 @@ components:
         kafka:
           clientId:
             type: string
-            description: The id of the specific client 
+            description: The id of the specific client
   messages:
     safEvent:
       name: safEvent
@@ -816,7 +823,7 @@ components:
       bindings:
         kafka:
           key:
-            $ref:  '#/components/schemas/processIdType'
+            $ref: '#/components/schemas/processIdType'
           schemaIdLocation: 'payload'
           schemaIdPayloadEncoding: '17'
           bindingVersion: '0.4.0'
@@ -1083,7 +1090,7 @@ components:
       bindings:
         kafka:
           key:
-            $ref:  '#/components/schemas/processIdType'
+            $ref: '#/components/schemas/processIdType'
           schemaIdLocation: 'payload'
           schemaIdPayloadEncoding: '17'
           bindingVersion: '0.4.0'
