@@ -6,9 +6,9 @@ name: Create async api docu
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "rest-0.3.1" ]
+    branches: [ "async-api" ]
     paths:
-      - 'docs/Kafka-Events-Specification/**'
+      - 'SAF-Message-Broker/*.yaml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -19,6 +19,11 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -33,6 +38,26 @@ jobs:
       - name: Run a setup asyncapi generator cli
         run: npm install -g @asyncapi/cli
 
+      - name: Cache Node.js modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       # Runs a single command using the runners shell
-      - name: Create async api docu
-        run: asyncapi generate fromTemplate docs/Kafka-Events-Specification/asyncAPI-v0.3.0.yaml @asyncapi/html-template -o docs/Kafka-Events-Specification/asyncDocs
+      - name: Generate async api docu
+        run: asyncapi generate fromTemplate ./SAF-Message-Broker/asyncAPI-v0.2.4.yaml @asyncapi/html-template -o docs/SAF-Message-Broker
+
+      - name: ls -la
+        run: |
+          ls -la
+          cd docs/SAF-Message-Broker
+          ls -la
+          git add . -f
+
+      # Commit all changed files back to the repository
+      - name: Commit generated asyncapi html output
+        uses: stefanzweifel/git-auto-commit-action@v5
