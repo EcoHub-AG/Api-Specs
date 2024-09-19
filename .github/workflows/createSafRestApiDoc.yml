@@ -49,7 +49,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Generate OpenApi spec docu
-        run: redoc-cli bundle -o docs/SAF-Kafka-REST-Proxy-API/index.html ./SAF-Kafka-REST-Proxy-API/OAS3.0-SAF-Kafka-REST-Proxy-v0.3.0.yaml
+        run: redoc-cli bundle -o docs/SAF-Kafka-REST-Proxy-API/index.html ./SAF-Kafka-REST-Proxy-API/OAS3.0-SAF-Kafka-REST-Proxy.yaml
 
       - name: ls -la
         run: |

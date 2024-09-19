@@ -49,7 +49,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Generate OpenApi spec docu
-        run: redoc-cli bundle -o docs/PKI-Api/index.html ./PKI-Api/OAS-PublicKeyAPI-v0.3.0.yaml
+        run: redoc-cli bundle -o docs/PKI-Api/index.html ./PKI-Api/OAS-PublicKeyAPI.yaml
 
       - name: ls -la
         run: |

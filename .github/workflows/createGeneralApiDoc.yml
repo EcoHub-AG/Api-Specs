@@ -49,7 +49,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Generate OpenApi spec docu
-        run: redoc-cli bundle -o docs/General-Api/index.html ./General-Api/OAS-SAF-General-apis.v0.3.0.yaml
+        run: redoc-cli bundle -o docs/General-Api/index.html ./General-Api/OAS-SAF-General-apis.yaml
 
       - name: ls -la
         run: |
