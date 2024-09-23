@@ -11,9 +11,13 @@ info:
     
     ## Changelog
     
-    ### Version 0.3.1 (20.08.2024)
-        - Fixing inquiry message data schema
-        - Fixing content type definitions
+    ### Version 0.4.0 (20.08.2024)
+      - Changed format of the EventType to reverse-dns
+      - Fixing content type definitions
+      - Updated documentation (descriptions and examples). 
+      - EventMessageDataType
+        - Removed property "md5MessageHash"
+        - Added properties "messageSignature" and "signatureKeyVersion"        
 
     ### Version 0.3.0 (20.08.2024)
     - Initial public release
@@ -347,49 +351,71 @@ components:
         - userAgent
         - licenceKey
     iddef:
-      description: Identifies the event.
-      example: A234-1234-1234
+      description: Identifies the event. Producers MUST ensure that source + id is unique
+        for each distinct event. If a duplicate event is re-sent (e.g. due to a network
+        error) it MAY have the same id. Consumers MAY assume that Events with identical
+        source and id are duplicates.
+      examples:
+        - A234-1234-1234
       minLength: 1
       type: string
     sourcedef:
-      description: Identifies the context in which an event happened.
-      example: http://www.igb2b.ch/offer/nlpi/0.2.0
+      description: Uniquely identifies the producer of the event. Must be globally unique,
+        including across environments.
+      examples:
+        - http://www.myecohub.ch/iat/ecohub-processes
+        - http://www.myecohub.ch/prod/ecohub-processes
+        - http://www.myecohub.ch/ck/postman
       format: uri-reference
       minLength: 1
       type: string
     specversiondef:
-      description: The version of the CloudEvents specification which the event uses.
-      example: '1.0'
+      description: The version of the CloudEvents specification which the event uses. MUST
+        be set to 1.0
+      examples:
+        - '1.0'
       minLength: 1
       type: string
     typedef:
-      minLength: 1
       type: string
+      minLength: 1
     datacontenttypedef:
       description: Content type of the data value. Must adhere to RFC 2046 format.
-      example: text/xml, application/json
+      examples:
+        - text/xml
+        - application/json
       minLength: 1
-      type: string
-      nullable: true
+      type:
+        - 'null'
+        - string
     dataschemadef:
-      description: Identifies the schema that data adheres to.
+      description: Identifies the schema that data adheres to. Must point to the respective
+        schema in the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).
       format: uri
       minLength: 1
       type: string
+      examples:
+        - https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json
+        - https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json
     subjectdef:
-      description: Describes the subject of the event in the context of the event producer
-        (identified by source).
-      example: request
+      description: Describes the subject of the event to provide additional context about
+        the event.
+      examples:
+        - Billing november 2024
+        - MF offer company A
       minLength: 1
-      type: string
-      nullable: true
+      type:
+        - 'null'
+        - string
     timedef:
       description: Timestamp of when the occurrence happened. Must adhere to RFC 3339.
-      example: '2018-04-05T17:31:00Z'
+      examples:
+        - '2018-04-05T17:31:00Z'
       format: date-time
       minLength: 1
-      type: string
-      nullable: true
+      type:
+        - 'null'
+        - string
     EventDataType:
       description: The event payload.
       type: object
@@ -443,14 +469,15 @@ components:
         - encryptionKey
         - publicKeyVersion
     EventType:
-      description: Defines the type of event / data, inquiry, standard-error or saf-error
+      description: 'Reverse DNS entry to defines the type of event: data, inquiry, standard-error
+        or saf-error'
       minLength: 1
       type: string
       enum:
-        - data
-        - inquiry
-        - standard-error
-        - saf-error
+        - ch.ecohub.saf.data
+        - ch.ecohub.saf.inquiry
+        - ch.ecohub.saf.standard-error
+        - ch.ecohub.saf.saf-error
     LicenseKeyType:
       description: The license key for the requesting SC application.
       type: string
@@ -508,7 +535,7 @@ components:
         - Created
         - Received
         - InProgress
-        - Responsed
+        - Responded
         - Updated
         - Error
         - Inquiry
@@ -516,6 +543,7 @@ components:
         - Closed
     UserAgentType:
       type: object
+      description: Identifies the software that was used to produce the event
       properties:
         name:
           description: Name of the application

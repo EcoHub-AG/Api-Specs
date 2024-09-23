@@ -4,7 +4,7 @@
   "type": "object",
   "definitions": {
     "iddef": {
-      "description": "Identifies the event.",
+      "description": "Identifies the event. Producers MUST ensure that source + id is unique for each distinct event. If a duplicate event is re-sent (e.g. due to a network error) it MAY have the same id. Consumers MAY assume that Events with identical source and id are duplicates.",
       "examples": [
         "A234-1234-1234"
       ],
@@ -12,16 +12,18 @@
       "type": "string"
     },
     "sourcedef": {
-      "description": "Identifies the context in which an event happened.",
+      "description": "Uniquely identifies the producer of the event. Must be globally unique, including across environments.",
       "examples": [
-        "http://www.igb2b.ch/offer/nlpi/0.2.0"
+        "http://www.myecohub.ch/iat/ecohub-processes",
+        "http://www.myecohub.ch/prod/ecohub-processes",
+        "http://www.myecohub.ch/ck/postman"
       ],
       "format": "uri-reference",
       "minLength": 1,
       "type": "string"
     },
     "specversiondef": {
-      "description": "The version of the CloudEvents specification which the event uses.",
+      "description": "The version of the CloudEvents specification which the event uses. MUST be set to 1.0",
       "examples": [
         "1.0"
       ],
@@ -45,17 +47,20 @@
       ]
     },
     "dataschemadef": {
-      "description": "Identifies the schema that data adheres to.",
+      "description": "Identifies the schema that data adheres to. Must point to the respective schema in the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).",
       "format": "uri",
       "minLength": 1,
-      "type": [
-        "string"
+      "type": "string",
+      "examples": [
+        "https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json",
+        "https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json"
       ]
     },
     "subjectdef": {
-      "description": "Describes the subject of the event in the context of the event producer (identified by source).",
+      "description": "Describes the subject of the event to provide additional context about the event.",
       "examples": [
-        "request"
+        "Billing november 2024",
+        "MF offer company A"
       ],
       "minLength": 1,
       "type": [

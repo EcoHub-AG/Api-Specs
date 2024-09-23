@@ -8,7 +8,7 @@
       "type": "string"
     },
     "payLoadSignature": {
-      "description": "The md5 hash of the byte content of the encrypted data",
+      "description": "Signature key of the signed payload, to verify by whom the encrypted message has been created",
       "minLength": 3,
       "type": "string"
     },
