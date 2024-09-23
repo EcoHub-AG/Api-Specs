@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "message": {
-      "description": "The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload ",
+      "description": "The payload needs to be first gzipped and afterwards encrypted. The base64 representation of encrypted bytes will be added as payload",
       "type": "string",
       "minLength": 3
     },
@@ -32,5 +32,6 @@
     "message",
     "encryptionKey",
     "publicKeyVersion"
-  ]
+  ],
+  "additionalProperties": false
 }
