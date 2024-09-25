@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: 'Standard API Framwork: Kafka REST Proxy API'
+  title: 'Standard API Framework: Kafka REST Proxy API'
   contact:
     email: support@myecohub.ch
     name: EcoHub AG

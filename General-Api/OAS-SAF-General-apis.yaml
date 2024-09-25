@@ -20,11 +20,11 @@ paths:
     post:
       tags:
         - "General APIs"
-      summary: Performs action in EcoHub SAF to receive a list of all available receivers for this techUser, i.e. all
-        all receivers this TechUser has an active SA with.
+      summary: Performs action in EcoHub SAF to receive a list of all available receivers for this techUser,
+        i.e. all receivers this TechUser has an active SA with.
       operationId: SafReceivers
       requestBody:
-        description: saf-receiver request, to retrieve a list of available receivers for the authenticated tech user
+        description: saf-receivers request, to retrieve a list of available receivers for the authenticated tech user
         content:
           application/json:
             schema:
@@ -67,7 +67,7 @@ paths:
     post:
       tags:
         - "General APIs"
-      summary: Performs action in EcoHub to receive a list of all insurers available on SAF. This caller does not
+      summary: Performs action in EcoHub SAF to receive a list of all insurers available on SAF. This caller does not
         need to have an active service agreement with the insurers.
       operationId: SafInsurers
       requestBody:
