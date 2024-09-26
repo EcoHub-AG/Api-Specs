@@ -14,6 +14,7 @@ info:
     ### Version 0.4.0 (20.08.2024)
       - Changed format of the EventType to reverse-dns
       - Fixing content type definitions
+      - Added SAFErrorEventType and OfferNLPIErrorEventType as valid types to POST to /in
       - Updated documentation (descriptions and examples). 
       - EventDataType
             - Prohibit additional properties
@@ -75,6 +76,8 @@ paths:
               oneOf:
                 - $ref: '#/components/schemas/SAFEventType'
                 - $ref: '#/components/schemas/SAFInquiryEventType'
+                - $ref: '#/components/schemas/SAFErrorEventType'
+                - $ref: '#/components/schemas/OfferNLPIErrorEventType'
             examples:
               offerRequestExample:
                 summary: Example of an offerRequest event, initiated by an broker

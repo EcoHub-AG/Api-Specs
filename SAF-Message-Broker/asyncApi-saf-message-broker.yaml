@@ -13,6 +13,7 @@ info:
     ### Version 0.4.0 (23.09.2024)
     - Changed format of the EventType to reverse-dns
     - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
+    - Added SafErrorEvent and OfferNLPIErrorEvent as valid messages for all operations.
     - Updated documentation (descriptions and examples).
     - EventDataType
       - Prohibit additional properties
@@ -75,6 +76,10 @@ channels:
         $ref: '#/components/messages/safEvent'
       produceSAFInquiryEvent:
         $ref: '#/components/messages/safInquiryEvent'
+      safErrorEvent:
+        $ref: '#/components/messages/safErrorEvent'
+      offerNlpiErrorEvent:
+        $ref: '#/components/messages/offerNlpiErrorEvent'
   eh.saf.offer.out:
     address: eh.saf.{ecohubId}.offer.nlpi.out
     bindings:
@@ -97,20 +102,16 @@ channels:
         $ref: '#/components/messages/safEvent'
       consumeSAFInquiryEvent:
         $ref: '#/components/messages/safInquiryEvent'
+      safErrorEvent:
+        $ref: '#/components/messages/safErrorEvent'
+      offerNlpiErrorEvent:
+        $ref: '#/components/messages/offerNlpiErrorEvent'
 operations:
   produceSAFEvent:
     action: send
     channel:
       $ref: "#/channels/eh.saf.in"
-    messages:
-      - $ref: '#/channels/eh.saf.in/messages/produceSAFEvent'
-  produceSAFInquiryEvent:
-    action: send
-    channel:
-      $ref: "#/channels/eh.saf.in"
-    messages:
-      - $ref: '#/channels/eh.saf.in/messages/produceSAFInquiryEvent'
-  consumeSAFEvent:
+  consumeOfferEvent:
     action: receive
     bindings:
       kafka:
@@ -123,23 +124,6 @@ operations:
         bindingVersion: '0.4.0'
     channel:
       $ref: "#/channels/eh.saf.offer.out"
-    messages:
-      - $ref: '#/channels/eh.saf.offer.out/messages/consumeSAFEvent'
-  consumeSAFInquiryEvent:
-    action: receive
-    bindings:
-      kafka:
-        groupId:
-          type: string
-          pattern: ^CG-(\d{5,6})-IDP(\d{6})$
-        clientId:
-          type: string
-          format: uuid
-        bindingVersion: '0.4.0'
-    channel:
-      $ref: "#/channels/eh.saf.offer.out"
-    messages:
-      - $ref: '#/channels/eh.saf.offer.out/messages/consumeSAFInquiryEvent'
 components:
   securitySchemes:
     X509:
@@ -764,14 +748,13 @@ components:
       title: None life personal insurance offer
       summary: Events that are used to request an offer, receive a offer, send feedback and accept a offer
       payload:
-        schemaFormat: "application/vnd.kafka.jsonschema;schemaId=17"
         $ref: '#/components/schemas/SAFEventType'
       bindings:
         kafka:
           key:
             $ref: '#/components/schemas/processIdType'
           schemaIdLocation: 'payload'
-          schemaIdPayloadEncoding: '17'
+          schemaIdPayloadEncoding: 'confluent'
           bindingVersion: '0.4.0'
       examples:
         - name: offerRequestExample
@@ -1020,10 +1003,9 @@ components:
           key:
             $ref: '#/components/schemas/processIdType'
           schemaIdLocation: 'payload'
-          schemaIdPayloadEncoding: '17'
+          schemaIdPayloadEncoding: 'confluent'
           bindingVersion: '0.4.0'
       payload:
-        schemaFormat: "application/vnd.kafka.jsonschema;schemaId="
         $ref: '#/components/schemas/SAFInquiryEventType'
       examples:
         - name: nlpiOfferInquiryEvent
@@ -1164,4 +1146,30 @@ components:
             eventSender:
               category: broker
               id: broker1
+    safErrorEvent:
+      name: safErrorEvent
+      title: Technical saf error
+      summary: Events that are used to send technical saf errors, i.e. errors that are unrelated to the transmitted business data.
+      payload:
+        $ref: '#/components/schemas/SAFErrorEventType'
+      bindings:
+        kafka:
+          key:
+            $ref: '#/components/schemas/processIdType'
+          schemaIdLocation: 'payload'
+          schemaIdPayloadEncoding: 'confluent'
+          bindingVersion: '0.4.0'
+    offerNlpiErrorEvent:
+      name: offerNlpiErrorEvent
+      title: Offer NLPI business error
+      summary: Events that are used to send business errors, i.e. errors that are related to the transmitted business data.
+      payload:
+        $ref: '#/components/schemas/OfferNLPIErrorEventType'
+      bindings:
+        kafka:
+          key:
+            $ref: '#/components/schemas/processIdType'
+          schemaIdLocation: 'payload'
+          schemaIdPayloadEncoding: 'confluent'
+          bindingVersion: '0.4.0'
   
