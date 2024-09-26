@@ -26,7 +26,9 @@ info:
     OfferNLPIErrorEventType
       - Prohibit additional properties
     SAFErrorEventType
-          - Prohibit additional properties
+      - Prohibit additional properties
+    OfferNLPIErrorEventType
+      - Restructured the type and renamed error codes
     UserAgentType
       - Prohibit additional properties
     
@@ -353,114 +355,105 @@ components:
         - licenceKey
       additionalProperties: false
     offerNLPIErrorType:
-      type: object
-      properties:
-        errorCode:
-          description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
-          type: string
-          minLength: 3
-          enum:
-            - offer-missing-informations
-            - offer-incorrect-informations
-            - offer-date-expired
-            - offer-missing-claims-expierence
-            - offer-requested-several-times
-            - offer-already-issued
-            - offer-missing-documents
-            - offer-incorrect-attachment
-            - offer-other-error
-            - mandate-missing
-            - mandate-expired
-            - mandate-terminated
-            - mandate-invalid
-            - mandate-other-error
-            - cooperationagreement-missing
-            - cooperationagreement-expired-terminated
-            - cooperationagreement-other-error
-            - customer-data-referenceno-mismatch
-            - customer-data-incomplete
-            - customer-data-incorrect
-            - customer-not-identified
-            - customer-other-error
-            - claims-expierence-date-range-invalid
-            - claims-expierence-data-incorrect
-            - claims-expierence-contract-incorrect
-            - claims-expierence-customer-incorrect
-            - claims-expierence-other-error
-        errorMessage:
-          description: Error message
-          type: string
-          minLength: 3
-        missingDataList:
-          description: List of JSON paths, where information is missing
-          type: array
-          minItems: 1
-          items:
+      type: array
+      minItems: 1
+      items:
+        type: object
+        properties:
+          errorCode:
+            description: Type of error
+            minLength: 3
             type: string
-        incorrectDataList:
-          description: List of JSON paths, where wrong information has been entered
-          type: array
-          minItems: 1
-          items:
+            enum:
+              - offer-missing-information
+              - offer-incorrect-information
+              - offer-date-expired
+              - offer-missing-claims-experience
+              - offer-requested-several-times
+              - offer-already-issued
+              - offer-missing-documents
+              - offer-incorrect-attachment
+              - offer-other-error
+              - mandate-missing
+              - mandate-expired
+              - mandate-terminated
+              - mandate-invalid
+              - mandate-other-error
+              - cooperationagreement-missing
+              - cooperationagreement-expired-terminated
+              - cooperationagreement-other-error
+              - customer-data-referenceno-mismatch
+              - customer-data-incomplete
+              - customer-data-incorrect
+              - customer-not-identified
+              - customer-other-error
+              - claims-experience-date-range-invalid
+              - claims-experience-data-incorrect
+              - claims-experience-contract-incorrect
+              - claims-experience-customer-incorrect
+              - claims-experience-other-error
+          errorMessage:
+            description: Error message
+            minLength: 3
             type: string
-        errorDateTime:
-          description: Date and time of the error
-          type: string
-          format: date-time
-      allOf:
-        - if:
-            properties:
-              errorCode:
-                const: offer-missing-informations
-          then:
-            required:
-              - missingDataList
-        - if:
-            properties:
-              errorCode:
-                const: offer-incorrect-informations
-          then:
-            required:
-              - incorrectDataList
-        - if:
-            properties:
-              errorCode:
-                const: offer-missing-claims-expierence
-          then:
-            required:
-              - missingDataList
-        - if:
-            properties:
-              errorCode:
-                const: offer-missing-documents
-          then:
-            required:
-              - missingDataList
-        - if:
-            properties:
-              errorCode:
-                const: offer-incorrect-attachment
-          then:
-            required:
-              - incorrectDataList
-        - if:
-            properties:
-              errorCode:
-                const: customer-data-incomplete
-          then:
-            required:
-              - missingDataList
-        - if:
-            properties:
-              errorCode:
-                const: customer-data-incorrect
-          then:
-            required:
-              - incorrectDataList
-      required:
-        - errorCode
-        - errorMessage
-        - errorDateTime
+          path:
+            description: xPath or JsonPath to the property where the error occurred.
+            type: string
+        additionalProperties: false
+        required:
+          - errorCode
+          - errorMessage
+        allOf:
+          - if:
+              properties:
+                errorCode:
+                  const: offer-missing-information
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: offer-incorrect-information
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: offer-missing-claims-experience
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: offer-missing-documents
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: offer-incorrect-attachment
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: customer-data-incomplete
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: customer-data-incorrect
+            then:
+              required:
+                - path
+
     processNameType:
       description: Comment describing your JSON Schema
       type: string

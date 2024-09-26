@@ -17,19 +17,21 @@ info:
       - Added SAFErrorEventType and OfferNLPIErrorEventType as valid types to POST to /in
       - Updated documentation (descriptions and examples). 
       - EventDataType
-            - Prohibit additional properties
-          - EventMessageDataType
-            - Removed property "md5MessageHash"
-            - Added properties "messageSignature" and "signatureKeyVersion"
-            - Prohibit additional properties
-          LicenseKeyType
-            - Renamed to "LicenceKeyType"
-          OfferNLPIErrorEventType
-            - Prohibit additional properties
-          SAFErrorEventType
-                - Prohibit additional properties
-          UserAgentType
-            - Prohibit additional properties       
+        - Prohibit additional properties
+      - EventMessageDataType
+        - Removed property "md5MessageHash"
+        - Added properties "messageSignature" and "signatureKeyVersion"
+        - Prohibit additional properties
+      LicenseKeyType
+        - Renamed to "LicenceKeyType"
+      OfferNLPIErrorEventType
+        - Prohibit additional properties
+      SAFErrorEventType
+        - Prohibit additional properties
+      OfferNLPIErrorEventType
+        - Restructured the type and renamed error codes
+      UserAgentType
+        - Prohibit additional properties       
 
     ### Version 0.3.0 (20.08.2024)
     - Initial public release
@@ -1027,62 +1029,51 @@ components:
         - licenceKey
       additionalProperties: false
     OfferNLPIErrorType:
-      type: object
-      properties:
-        errorCode:
-          description: 'The payload needs to be first encrypted and afterwards gzipped.
-            the base64 repesentation of gezipped bytes will be added as payload '
-          minLength: 3
-          type: string
-          enum:
-            - offer-missing-informations
-            - offer-incorrect-informations
-            - offer-date-expired
-            - offer-missing-claims-expierence
-            - offer-requested-several-times
-            - offer-already-issued
-            - offer-missing-documents
-            - offer-incorrect-attachment
-            - offer-other-error
-            - mandate-missing
-            - mandate-expired
-            - mandate-terminated
-            - mandate-invalid
-            - mandate-other-error
-            - cooperationagreement-missing
-            - cooperationagreement-expired-terminated
-            - cooperationagreement-other-error
-            - customer-data-referenceno-mismatch
-            - customer-data-incomplete
-            - customer-data-incorrect
-            - customer-not-identified
-            - customer-other-error
-            - claims-expierence-date-range-invalid
-            - claims-expierence-data-incorrect
-            - claims-expierence-contract-incorrect
-            - claims-expierence-customer-incorrect
-            - claims-expierence-other-error
-        errorMessage:
-          description: Error message
-          minLength: 3
-          type: string
-        incorrectDataList:
-          description: List of JSON paths, where wrong information has been entered
-          items:
+      type: array
+      minItems: 1
+      items:
+        type: object
+        properties:
+          errorCode:
+            description: Type of error
+            minLength: 3
             type: string
-          minItems: 1
-          type: array
-        errorDateTime:
-          description: Date and time of the error
-          format: date-time
-          type: string
-        missingDataList:
-          description: List of JSON paths, where information is missing
-          items:
+            enum:
+              - offer-missing-information
+              - offer-incorrect-information
+              - offer-date-expired
+              - offer-missing-claims-experience
+              - offer-requested-several-times
+              - offer-already-issued
+              - offer-missing-documents
+              - offer-incorrect-attachment
+              - offer-other-error
+              - mandate-missing
+              - mandate-expired
+              - mandate-terminated
+              - mandate-invalid
+              - mandate-other-error
+              - cooperationagreement-missing
+              - cooperationagreement-expired-terminated
+              - cooperationagreement-other-error
+              - customer-data-referenceno-mismatch
+              - customer-data-incomplete
+              - customer-data-incorrect
+              - customer-not-identified
+              - customer-other-error
+              - claims-experience-date-range-invalid
+              - claims-experience-data-incorrect
+              - claims-experience-contract-incorrect
+              - claims-experience-customer-incorrect
+              - claims-experience-other-error
+          errorMessage:
+            description: Error message
+            minLength: 3
             type: string
-          minItems: 1
-          type: array
-      required:
-        - errorCode
-        - errorMessage
-        - errorDateTime
+          path:
+            description: xPath or JsonPath to the property where the error occurred.
+            type: string
+        additionalProperties: false
+        required:
+          - errorCode
+          - errorMessage
