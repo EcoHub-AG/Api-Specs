@@ -1,9 +1,19 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework"
-  version: 0.3.0
+  version: 0.3.1
   description: >
+    ## Security
+    
+    All endpoints except the techUserEnrolment are protected and a TechUser certificate (mTLS) or 
+    bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
+    the /techUserEnrolment endpoint.
+    
     ## Changelog
+    
+    ### Version 0.3.1 (01.10.2024)
+    
+    Enhanced documentation
 
     ### Version 0.3.0 (10.07.2024)
     
