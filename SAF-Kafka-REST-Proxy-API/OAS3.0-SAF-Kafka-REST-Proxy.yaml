@@ -9,6 +9,12 @@ info:
     The SAF Kafka REST Proxy provides a RESTful interface to the Kafka cluster, making it easy to produce and consume 
     messages.
     
+    ## Security
+
+    All endpoints are protected and a TechUser certificate (mTLS) or 
+    bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
+    the /techUserEnrolment endpoint of the general api.
+    
     ## Changelog
     
     ### Version 0.4.0 (20.08.2024)
