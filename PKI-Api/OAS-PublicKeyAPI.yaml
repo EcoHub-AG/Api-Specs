@@ -3,16 +3,20 @@ info:
   title: Public Key Store
   version: 0.3.2
   description: >
+    ## Security
+
+    All endpoints are protected and a TechUser certificate (mTLS) or 
+    bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
+    the /techUserEnrolment endpoint of the general API.
+    
     ## Changelog
     
-    ### Version 0.3.2 (03.09.2024)
-    
-    - Removing unused paths for insurers and brokers
-    
-    ### Version 0.3.1 (15.07.2024)
+    ### Version 0.4.0
     
     - Introducing new property keyType, to support the digital signature public keys
     - Changed paths, to support the keyType on verification, activation, deactivation and deleting
+    - Removing unused paths for insurers and brokers
+    - Enhanced documentation
 
     ### Version 0.3.0 (11.07.2024)
     
@@ -60,7 +64,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '409':
           description: Conflict
           content:
@@ -82,7 +86,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/PublicKeyResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
   /keys/{keyType}/{keyId}/verify:
     get:
       tags:
@@ -116,7 +120,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -170,7 +174,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -211,7 +215,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -241,7 +245,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '403':
           description: Forbidden
           content:
@@ -354,7 +358,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -402,7 +406,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
