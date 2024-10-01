@@ -3,17 +3,22 @@ info:
   title: Public Key Store
   version: 0.4.0
   description: >
+    ## Security
+
+    All endpoints are protected and a TechUser certificate (mTLS) or 
+    bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
+    the /techUserEnrolment endpoint of the general API.
+    
     ## Changelog
 
     ### Version 0.4.0 (26.12.2024)
 
     - Removing unused paths for insurers and brokers
+    - Enhanced documentation
 
     ### Version 0.3.0 (11.07.2024)
     
     - Initial public release of the public key store api, that is needed to retrieve the receivers public key and to manage your own public key.
-    
-    - The API is secured and can only be acessed with a valid tech user client certificate.
 servers:
   - url: 'https://services.test-myecohub.ch/publickeystore'
     description: EcoHub IAT Enviroment
@@ -55,7 +60,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '409':
           description: Conflict
           content:
@@ -77,7 +82,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/PublicKeyResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
   /keys/{keyId}/verify:
     get:
       tags:
@@ -105,7 +110,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -153,7 +158,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -194,7 +199,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -224,7 +229,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '403':
           description: Forbidden
           content:
@@ -335,7 +340,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
