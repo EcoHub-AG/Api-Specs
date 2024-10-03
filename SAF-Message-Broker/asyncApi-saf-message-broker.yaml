@@ -2,7 +2,7 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framwork: Message Broker System'
-  version: 0.3.0
+  version: 0.4.0
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -137,41 +137,41 @@ components:
       type: object
       properties:
         id:
-          "$ref": '#/components/schemas/cloudEvents/iddef'
+          $ref: '#/components/schemas/cloudEvents/iddef'
         source:
-          "$ref": '#/components/schemas/cloudEvents/sourcedef'
+          $ref: '#/components/schemas/cloudEvents/sourcedef'
         specversion:
-          "$ref": '#/components/schemas/cloudEvents/specversiondef'
+          $ref: '#/components/schemas/cloudEvents/specversiondef'
         type:
-          "$ref": '#/components/schemas/eventType'
+          $ref: '#/components/schemas/eventType'
         datacontenttype:
-          "$ref": '#/components/schemas/cloudEvents/datacontenttypedef'
+          $ref: '#/components/schemas/cloudEvents/datacontenttypedef'
         dataschema:
-          "$ref": '#/components/schemas/cloudEvents/dataschemadef'
+          $ref: '#/components/schemas/cloudEvents/dataschemadef'
         subject:
-          "$ref": '#/components/schemas/cloudEvents/subjectdef'
+          $ref: '#/components/schemas/cloudEvents/subjectdef'
         time:
-          "$ref": '#/components/schemas/cloudEvents/timedef'
+          $ref: '#/components/schemas/cloudEvents/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/licenceKeyType'
+          $ref: '#/components/schemas/licenceKeyType'
         userAgent:
-          "$ref": '#/components/schemas/userAgentType'
+          $ref: '#/components/schemas/userAgentType'
         eventReceiver:
-          "$ref": '#/components/schemas/senderReceiverType'
+          $ref: '#/components/schemas/senderReceiverType'
         eventSender:
-          "$ref": '#/components/schemas/senderReceiverType'
+          $ref: '#/components/schemas/senderReceiverType'
         data:
-          "$ref": '#/components/schemas/eventDataType'
+          $ref: '#/components/schemas/eventDataType'
         processId:
-          "$ref": '#/components/schemas/processIdType'
+          $ref: '#/components/schemas/processIdType'
         processName:
-          "$ref": '#/components/schemas/processNameType'
+          $ref: '#/components/schemas/processNameType'
         processStatus:
-          "$ref": '#/components/schemas/processStatusType'
+          $ref: '#/components/schemas/processStatusType'
         subProcessName:
-          "$ref": '#/components/schemas/subProcessNameType'
+          $ref: '#/components/schemas/subProcessNameType'
         subProcessStatus:
-          "$ref": '#/components/schemas/subProcessStatusType'
+          $ref: '#/components/schemas/subProcessStatusType'
       additionalProperties: false
       required:
         - id

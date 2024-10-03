@@ -1,6 +1,7 @@
 openapi: 3.0.1
 info:
   title: 'Standard API Framwork: Kafka REST Proxy API'
+  version: v0.4.0
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -41,7 +42,6 @@ info:
 
     ### Version 0.3.0 (20.08.2024)
     - Initial public release
-  version: v0.3.1
 servers:
   - url: 'https://services.test-myecohub.ch/eh/saf'
   - url: 'https://services.myecohub.ch/eh/saf'
@@ -451,7 +451,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": '#/components/schemas/ErrorResponseType'
+                $ref: '#/components/schemas/ErrorResponseType'
               example:
                 error_code: 40301
                 message: 'Not authorized to access topics: [eh.saf.329050.offer.nlpi.out]'
@@ -462,41 +462,41 @@ components:
       type: object
       properties:
         id:
-          "$ref": '#/components/schemas/iddef'
+          $ref: '#/components/schemas/iddef'
         source:
-          "$ref": '#/components/schemas/sourcedef'
+          $ref: '#/components/schemas/sourcedef'
         specversion:
-          "$ref": '#/components/schemas/specversiondef'
+          $ref: '#/components/schemas/specversiondef'
         type:
-          "$ref": '#/components/schemas/EventType'
+          $ref: '#/components/schemas/EventType'
         datacontenttype:
-          "$ref": '#/components/schemas/datacontenttypedef'
+          $ref: '#/components/schemas/datacontenttypedef'
         dataschema:
-          "$ref": '#/components/schemas/dataschemadef'
+          $ref: '#/components/schemas/dataschemadef'
         subject:
-          "$ref": '#/components/schemas/subjectdef'
+          $ref: '#/components/schemas/subjectdef'
         time:
-          "$ref": '#/components/schemas/timedef'
+          $ref: '#/components/schemas/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/LicenceKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
-          "$ref": '#/components/schemas/UserAgentType'
+          $ref: '#/components/schemas/UserAgentType'
         eventReceiver:
-          "$ref": '#/components/schemas/SenderReceiverType'
+          $ref: '#/components/schemas/SenderReceiverType'
         eventSender:
-          "$ref": '#/components/schemas/SenderReceiverType'
+          $ref: '#/components/schemas/SenderReceiverType'
         data:
-          "$ref": '#/components/schemas/EventDataType'
+          $ref: '#/components/schemas/EventDataType'
         processId:
-          "$ref": '#/components/schemas/ProcessIdType'
+          $ref: '#/components/schemas/ProcessIdType'
         processName:
-          "$ref": '#/components/schemas/ProcessNameType'
+          $ref: '#/components/schemas/ProcessNameType'
         processStatus:
-          "$ref": '#/components/schemas/ProcessStatusType'
+          $ref: '#/components/schemas/ProcessStatusType'
         subProcessName:
-          "$ref": '#/components/schemas/SubProcessNameType'
+          $ref: '#/components/schemas/SubProcessNameType'
         subProcessStatus:
-          "$ref": '#/components/schemas/SubProcessStatusType'
+          $ref: '#/components/schemas/SubProcessStatusType'
       additionalProperties: false
       required:
         - id
@@ -517,41 +517,41 @@ components:
       type: object
       properties:
         id:
-          "$ref": '#/components/schemas/iddef'
+          $ref: '#/components/schemas/iddef'
         source:
-          "$ref": '#/components/schemas/sourcedef'
+          $ref: '#/components/schemas/sourcedef'
         specversion:
-          "$ref": '#/components/schemas/specversiondef'
+          $ref: '#/components/schemas/specversiondef'
         type:
-          "$ref": '#/components/schemas/EventType'
+          $ref: '#/components/schemas/EventType'
         datacontenttype:
-          "$ref": '#/components/schemas/datacontenttypedef'
+          $ref: '#/components/schemas/datacontenttypedef'
         dataschema:
-          "$ref": '#/components/schemas/dataschemadef'
+          $ref: '#/components/schemas/dataschemadef'
         subject:
-          "$ref": '#/components/schemas/subjectdef'
+          $ref: '#/components/schemas/subjectdef'
         time:
-          "$ref": '#/components/schemas/timedef'
+          $ref: '#/components/schemas/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/LicenceKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
-          "$ref": '#/components/schemas/UserAgentType'
+          $ref: '#/components/schemas/UserAgentType'
         eventReceiver:
-          "$ref": '#/components/schemas/SenderReceiverType'
+          $ref: '#/components/schemas/SenderReceiverType'
         eventSender:
-          "$ref": '#/components/schemas/SenderReceiverType'
+          $ref: '#/components/schemas/SenderReceiverType'
         data:
-          "$ref": '#/components/schemas/EventMessageDataType'
+          $ref: '#/components/schemas/EventMessageDataType'
         processId:
-          "$ref": '#/components/schemas/ProcessIdType'
+          $ref: '#/components/schemas/ProcessIdType'
         processName:
-          "$ref": '#/components/schemas/ProcessNameType'
+          $ref: '#/components/schemas/ProcessNameType'
         processStatus:
-          "$ref": '#/components/schemas/ProcessStatusType'
+          $ref: '#/components/schemas/ProcessStatusType'
         subProcessName:
-          "$ref": '#/components/schemas/SubProcessNameType'
+          $ref: '#/components/schemas/SubProcessNameType'
         subProcessStatus:
-          "$ref": '#/components/schemas/SubProcessStatusType'
+          $ref: '#/components/schemas/SubProcessStatusType'
       additionalProperties: false
       required:
         - id
@@ -847,28 +847,28 @@ components:
         - publicKeyVersion
       additionalProperties: false
     SAFErrorEventType:
-      type: object
       description: SAF error event, i.e. an event for errors which are unrelated to the event payload.
+      type: object
       properties:
         id:
-          "$ref": '#/components/schemas/iddef'
+          $ref: '#/components/schemas/iddef'
           description: Identifies the event.
           examples:
             - A234-1234-1234
         source:
-          "$ref": '#/components/schemas/sourcedef'
+          $ref: '#/components/schemas/sourcedef'
           description: Identifies the context in which an event happened.
           examples:
             - http://www.igb2b.ch/offer/nlpi/0.2.0
         specversion:
-          "$ref": '#/components/schemas/specversiondef'
+          $ref: '#/components/schemas/specversiondef'
           description: The version of the CloudEvents specification which the event uses.
           examples:
             - '1.0'
         type:
-          "$ref": '#/components/schemas/EventType'
+          $ref: '#/components/schemas/EventType'
         datacontenttype:
-          "$ref": '#/components/schemas/datacontenttypedef'
+          $ref: '#/components/schemas/datacontenttypedef'
           description: Content type of the data value. Must adhere to RFC 2046 format.
           examples:
             - text/xml
@@ -876,39 +876,39 @@ components:
             - image/png
             - multipart/form-data
         dataschema:
-          "$ref": '#/components/schemas/dataschemadef'
+          $ref: '#/components/schemas/dataschemadef'
           description: Identifies the schema that data adheres to.
         subject:
-          "$ref": '#/components/schemas/subjectdef'
+          $ref: '#/components/schemas/subjectdef'
           description: Describes the subject of the event in the context of the event producer
             (identified by source).
           examples:
             - request
         time:
-          "$ref": '#/components/schemas/timedef'
+          $ref: '#/components/schemas/timedef'
           description: Timestamp of when the occurrence happened. Must adhere to RFC 3339.
           examples:
             - '2018-04-05T17:31:00Z'
         licenceKey:
-          "$ref": '#/components/schemas/LicenceKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
-          "$ref": '#/components/schemas/UserAgentType'
+          $ref: '#/components/schemas/UserAgentType'
         data:
-          "$ref": '#/components/schemas/ErrorDataType'
+          $ref: '#/components/schemas/ErrorDataType'
         eventReceiver:
-          "$ref": '#/components/schemas/SenderReceiverType'
+          $ref: '#/components/schemas/SenderReceiverType'
         eventSender:
-          "$ref": '#/components/schemas/SenderReceiverType'
+          $ref: '#/components/schemas/SenderReceiverType'
         processId:
-          "$ref": '#/components/schemas/ProcessIdType'
+          $ref: '#/components/schemas/ProcessIdType'
         processName:
-          "$ref": '#/components/schemas/ProcessNameType'
+          $ref: '#/components/schemas/ProcessNameType'
         processStatus:
-          "$ref": '#/components/schemas/ProcessStatusType'
+          $ref: '#/components/schemas/ProcessStatusType'
         subProcessName:
-          "$ref": '#/components/schemas/SubProcessNameType'
+          $ref: '#/components/schemas/SubProcessNameType'
         subProcessStatus:
-          "$ref": '#/components/schemas/SubProcessStatusType'
+          $ref: '#/components/schemas/SubProcessStatusType'
       required:
         - id
         - source
@@ -961,24 +961,24 @@ components:
       type: object
       properties:
         id:
-          "$ref": '#/components/schemas/iddef'
+          $ref: '#/components/schemas/iddef'
           description: Identifies the event.
           examples:
             - A234-1234-1234
         source:
-          "$ref": '#/components/schemas/sourcedef'
+          $ref: '#/components/schemas/sourcedef'
           description: Identifies the context in which an event happened.
           examples:
             - http://www.igb2b.ch/offer/nlpi/0.2.0
         specversion:
-          "$ref": '#/components/schemas/specversiondef'
+          $ref: '#/components/schemas/specversiondef'
           description: The version of the CloudEvents specification which the event uses.
           examples:
             - '1.0'
         type:
-          "$ref": '#/components/schemas/EventType'
+          $ref: '#/components/schemas/EventType'
         datacontenttype:
-          "$ref": '#/components/schemas/datacontenttypedef'
+          $ref: '#/components/schemas/datacontenttypedef'
           description: Content type of the data value. Must adhere to RFC 2046 format.
           examples:
             - text/xml
@@ -986,39 +986,39 @@ components:
             - image/png
             - multipart/form-data
         dataschema:
-          "$ref": '#/components/schemas/dataschemadef'
+          $ref: '#/components/schemas/dataschemadef'
           description: Identifies the schema that data adheres to.
         subject:
-          "$ref": '#/components/schemas/subjectdef'
+          $ref: '#/components/schemas/subjectdef'
           description: Describes the subject of the event in the context of the event producer
             (identified by source).
           examples:
             - request
         time:
-          "$ref": '#/components/schemas/timedef'
+          $ref: '#/components/schemas/timedef'
           description: Timestamp of when the occurrence happened. Must adhere to RFC 3339.
           examples:
             - '2018-04-05T17:31:00Z'
         licenceKey:
-          "$ref": '#/components/schemas/LicenceKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
-          "$ref": '#/components/schemas/UserAgentType'
+          $ref: '#/components/schemas/UserAgentType'
         data:
-          "$ref": "#/components/schemas/OfferNLPIErrorType"
+          $ref: "#/components/schemas/OfferNLPIErrorType"
         eventReceiver:
-          "$ref": '#/components/schemas/SenderReceiverType'
+          $ref: '#/components/schemas/SenderReceiverType'
         eventSender:
-          "$ref": '#/components/schemas/SenderReceiverType'
+          $ref: '#/components/schemas/SenderReceiverType'
         processId:
-          "$ref": '#/components/schemas/ProcessIdType'
+          $ref: '#/components/schemas/ProcessIdType'
         processName:
-          "$ref": '#/components/schemas/ProcessNameType'
+          $ref: '#/components/schemas/ProcessNameType'
         processStatus:
-          "$ref": '#/components/schemas/ProcessStatusType'
+          $ref: '#/components/schemas/ProcessStatusType'
         subProcessName:
-          "$ref": '#/components/schemas/SubProcessNameType'
+          $ref: '#/components/schemas/SubProcessNameType'
         subProcessStatus:
-          "$ref": '#/components/schemas/SubProcessStatusType'
+          $ref: '#/components/schemas/SubProcessStatusType'
       required:
         - id
         - source
