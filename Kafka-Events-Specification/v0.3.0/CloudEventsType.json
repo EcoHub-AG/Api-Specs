@@ -47,13 +47,13 @@
       ]
     },
     "dataschemadef": {
-      "description": "Identifies the schema that data adheres to. Must point to the respective schema in the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).",
+      "description": "Identifies the schema that data adheres to. Must point to the respective raw schema in the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).",
       "format": "uri",
       "minLength": 1,
       "type": "string",
       "examples": [
-        "https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json",
-        "https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json"
+        "https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json",
+        "https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json"
       ]
     },
     "subjectdef": {

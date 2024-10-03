@@ -682,14 +682,14 @@ components:
           - 'null'
           - string
       dataschemadef:
-        description: Identifies the schema that data adheres to. Must point to the respective
-          schema in the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).
+        description: Identifies the schema that data adheres to. Must point to the respective raw schema in 
+          the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).
         format: uri
         minLength: 1
         type: string
         examples:
-          - https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json
-          - https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json
+          - https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json
+          - https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json
       subjectdef:
         description: Describes the subject of the event to provide additional context about
           the event.
@@ -758,7 +758,7 @@ components:
             specversion: '1.0'
             type: ch.ecohub.saf.data
             datacontenttype: application/json
-            dataschema: https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json
+            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json
             subject: offer nlpi request
             time: '2023-08-17T14:15:22.000Z'
             licenceKey: mvikeporivmf/342)*fjdskaföj
@@ -818,7 +818,7 @@ components:
             specversion: '1.0'
             type: ch.ecohub.saf.data
             datacontenttype: application/json
-            dataschema: https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json
+            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json
             subject: offer
             time: '2023-08-17T14:15:22.000Z'
             licenceKey: 8985+9403*jgfksld94&%fjd
@@ -878,7 +878,7 @@ components:
             specversion: '1.0'
             type: ch.ecohub.saf.data
             datacontenttype: application/json
-            dataschema: https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiFeedbackDataType.json
+            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiFeedbackDataType.json
             subject: offer feedback
             time: '2023-08-17T14:15:22.000Z'
             licenceKey: mvikeporivmf/342)*fjdskaföj
@@ -939,7 +939,7 @@ components:
             specversion: '1.0'
             type: ch.ecohub.saf.data
             datacontenttype: application/json
-            dataschema: https://github.com/EcoHub-AG/Standards/blob/main/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiConclusionDecisionDataType.json
+            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiConclusionDecisionDataType.json
             subject: offer conclusion decision
             time: '2023-08-17T14:15:22.000Z'
             licenceKey: 8985+9403*jgfksld94&%fjd
