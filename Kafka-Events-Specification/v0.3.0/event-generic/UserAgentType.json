@@ -1,5 +1,6 @@
 {
   "type": "object",
+  "description": "Identifies the software that was used to produce the event",
   "properties": {
     "name": {
       "description": "Name of the application",
@@ -19,5 +20,6 @@
   "required": [
     "name",
     "version"
-  ]
+  ],
+  "additionalProperties": false
 }

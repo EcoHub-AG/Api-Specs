@@ -1,11 +1,11 @@
 {
-  "description": "Defines the type of event / data, inquiry, standard-error or saf-error",
+  "description": "Reverse DNS entry to defines the type of event: data, inquiry, standard-error or saf-error",
   "minLength": 1,
   "type": "string",
   "enum": [
-    "data",
-    "inquiry",
-    "standard-error",
-    "saf-error"
+    "ch.ecohub.saf.data",
+    "ch.ecohub.saf.inquiry",
+    "ch.ecohub.saf.standard-error",
+    "ch.ecohub.saf.saf-error"
   ]
 }
