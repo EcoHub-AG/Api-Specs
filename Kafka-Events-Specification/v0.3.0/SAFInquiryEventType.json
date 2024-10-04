@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "SAF inquiry event, i.e. an event containing a generic message.",
+  "description": "Offer NLPI Event JSON schema definition",
   "type": "object",
   "properties": {
     "id": {
@@ -28,7 +28,7 @@
       "$ref": "CloudEventsType.json#/definitions/timedef"
     },
     "licenceKey": {
-      "$ref": "event-generic/LicenceKeyType.json"
+      "$ref": "event-generic/LicenseKeyType.json"
     },
     "userAgent": {
       "$ref": "event-generic/UserAgentType.json"

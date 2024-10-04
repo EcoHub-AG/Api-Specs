@@ -4,7 +4,7 @@
   "type": "object",
   "definitions": {
     "iddef": {
-      "description": "Identifies the event. Producers MUST ensure that source + id is unique for each distinct event. If a duplicate event is re-sent (e.g. due to a network error) it MAY have the same id. Consumers MAY assume that Events with identical source and id are duplicates.",
+      "description": "Identifies the event.",
       "examples": [
         "A234-1234-1234"
       ],
@@ -12,18 +12,16 @@
       "type": "string"
     },
     "sourcedef": {
-      "description": "Uniquely identifies the producer of the event. Must be globally unique, including across environments.",
+      "description": "Identifies the context in which an event happened.",
       "examples": [
-        "http://www.myecohub.ch/iat/ecohub-processes",
-        "http://www.myecohub.ch/prod/ecohub-processes",
-        "http://www.myecohub.ch/ck/postman"
+        "http://www.igb2b.ch/offer/nlpi/0.2.0"
       ],
       "format": "uri-reference",
       "minLength": 1,
       "type": "string"
     },
     "specversiondef": {
-      "description": "The version of the CloudEvents specification which the event uses. MUST be set to 1.0",
+      "description": "The version of the CloudEvents specification which the event uses.",
       "examples": [
         "1.0"
       ],
@@ -47,20 +45,17 @@
       ]
     },
     "dataschemadef": {
-      "description": "Identifies the schema that data adheres to. Must point to the respective raw schema in the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).",
+      "description": "Identifies the schema that data adheres to.",
       "format": "uri",
       "minLength": 1,
-      "type": "string",
-      "examples": [
-        "https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json",
-        "https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json"
+      "type": [
+        "string"
       ]
     },
     "subjectdef": {
-      "description": "Describes the subject of the event to provide additional context about the event.",
+      "description": "Describes the subject of the event in the context of the event producer (identified by source).",
       "examples": [
-        "Billing november 2024",
-        "MF offer company A"
+        "request"
       ],
       "minLength": 1,
       "type": [

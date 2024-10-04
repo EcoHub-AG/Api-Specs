@@ -2,7 +2,7 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framwork: Message Broker System'
-  version: 0.4.0
+  version: 0.2.4
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -10,29 +10,52 @@ info:
   description: >
     ## Changelog
     
-    ### Version 0.4.0 (23.09.2024)
-    - Changed format of the EventType to reverse-dns
-    - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
-    - Added SafErrorEvent and OfferNLPIErrorEvent as valid messages for all operations.
-    - Updated documentation (descriptions and examples).
-    - EventDataType
-      - Prohibit additional properties
-    - EventMessageDataType
-      - Removed property "md5MessageHash"
-      - Added properties "messageSignature" and "signatureKeyVersion"
-      - Prohibit additional properties
-    LicenseKeyType
-      - Renamed to "LicenceKeyType"
-    OfferNLPIErrorEventType
-      - Prohibit additional properties
-    SAFErrorEventType
-      - Prohibit additional properties
-    OfferNLPIErrorEventType
-      - Restructured the type and renamed error codes
-    UserAgentType
-      - Prohibit additional properties
+    ### Version 0.2.4 (05.06.2024)
+
+    - Renamed the current events OfferNLPIEventType and OfferNLPIInquiryEventType to SAFEventType and SAFInquiryEventType
     
-    ### Version 0.3.0 (20.08.2024) - Initial public release
+    - Added 5 new types: SAFErrorEventType, OfferNLPIErrorEventType, ErrorDataType, ProcessNameType and SubProcessNameType,  
+    
+    - Removed datadef and data_base64def from the CloudEventsType
+    
+    - Removed "nullable: false" definitions for all types
+    
+    - Added new SubProcessStatus to enumeration: Error, Inquiry, Inquiry_Answer
+    
+    - Changed the SenderReceiverType, to support SoftwareProviderAgreement flows
+    
+    - Changed the EventType, to reflect more the type of event, e.g. data, inquiry, standard-error, saf-error
+
+    - Added new property processname to all events, this property contains the type of process, e.g. offer nlpi, billing, ...
+
+    - Changed the EventDataType, the md5payloadHash has been replaced by a payloadSignature property, apart from that a signaturePublicKeyVersion has been added. This allows the sender to not only encrypt the data, so that only the receiver can decrypt it, but also to proof that the data has been encrypted by the sender.
+
+    
+
+    ### Version 0.2.3 (12.01.2024)
+    
+    - Updating asyncapi version from 2.6.0 to 3.0.0
+
+    - Incooperated the cloud events definitions and eliminated the allOf property
+
+    - Added the schemaFormat for the channels, which also contains the current used schemaId
+
+    - Refactored the components schemas and types. The structure and informations required in the events are the same as in the previous version 0.2.3
+
+    ### Version 0.2.2 (25.08.2023)
+
+    - New asyncAPI version has been created, incoorperating the cloudevents.io
+    standard. 
+
+
+    - Removed the NotificationService as it isn't part of the architecture
+    anymore
+
+
+    - Added examples events for offer nlpi process steps (offer request, offer,
+    offer feedback and offer conclusion decision)
+
+    - Added examples events for the inquiry process steps
   license:
     name: EcoHub AG
     url: 'https://www.license.com/'
@@ -67,7 +90,7 @@ channels:
         partitions: 9
         replicas: 2
         topicConfiguration:
-          cleanup.policy: [ "delete" ]
+          cleanup.policy: ["delete"]
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
@@ -78,10 +101,6 @@ channels:
         $ref: '#/components/messages/safEvent'
       produceSAFInquiryEvent:
         $ref: '#/components/messages/safInquiryEvent'
-      safErrorEvent:
-        $ref: '#/components/messages/safErrorEvent'
-      offerNlpiErrorEvent:
-        $ref: '#/components/messages/offerNlpiErrorEvent'
   eh.saf.offer.out:
     address: eh.saf.{ecohubId}.offer.nlpi.out
     bindings:
@@ -90,7 +109,7 @@ channels:
         partitions: 3
         replicas: 2
         topicConfiguration:
-          cleanup.policy: [ "delete" ]
+          cleanup.policy: ["delete"]
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
@@ -104,16 +123,29 @@ channels:
         $ref: '#/components/messages/safEvent'
       consumeSAFInquiryEvent:
         $ref: '#/components/messages/safInquiryEvent'
-      safErrorEvent:
-        $ref: '#/components/messages/safErrorEvent'
-      offerNlpiErrorEvent:
-        $ref: '#/components/messages/offerNlpiErrorEvent'
 operations:
   produceSAFEvent:
     action: send
     channel:
       $ref: "#/channels/eh.saf.in"
-  consumeOfferEvent:
+  produceSAFInquiryEvent:
+    action: send
+    channel:
+      $ref: "#/channels/eh.saf.in"
+  consumeSAFEvent:
+    action: receive
+    bindings:
+      kafka:
+        groupId:
+          type: string
+          pattern: ^CG-(\d{5,6})-IDP(\d{6})$
+        clientId:
+          type: string
+          format: uuid
+        bindingVersion: '0.4.0'
+    channel:
+      $ref: "#/channels/eh.saf.offer.out"
+  consumeSAFInquiryEvent:
     action: receive
     bindings:
       kafka:
@@ -133,7 +165,7 @@ components:
       description: Provide the techuser certificate for authentication
   schemas:
     SAFEventType:
-      description: 'SAF data event, i.e. an event containing data according to a specific standard'
+      $id: SAFEventType
       type: object
       properties:
         id:
@@ -142,8 +174,6 @@ components:
           $ref: '#/components/schemas/cloudEvents/sourcedef'
         specversion:
           $ref: '#/components/schemas/cloudEvents/specversiondef'
-        type:
-          $ref: '#/components/schemas/eventType'
         datacontenttype:
           $ref: '#/components/schemas/cloudEvents/datacontenttypedef'
         dataschema:
@@ -156,23 +186,24 @@ components:
           $ref: '#/components/schemas/licenceKeyType'
         userAgent:
           $ref: '#/components/schemas/userAgentType'
-        eventReceiver:
-          $ref: '#/components/schemas/senderReceiverType'
-        eventSender:
-          $ref: '#/components/schemas/senderReceiverType'
+        type:
+          $ref: '#/components/schemas/eventType'
         data:
-          $ref: '#/components/schemas/eventDataType'
+          $ref: '#/components/schemas/dataType'
+        eventReceiver:
+          $ref: "#/components/schemas/senderReceiverType"
+        eventSender:
+          $ref: "#/components/schemas/senderReceiverType"
         processId:
-          $ref: '#/components/schemas/processIdType'
+          $ref: "#/components/schemas/processIdType"
         processName:
-          $ref: '#/components/schemas/processNameType'
+          $ref: "#/components/schemas/processNameType"        
         processStatus:
-          $ref: '#/components/schemas/processStatusType'
+          $ref: "#/components/schemas/processStatusType"
         subProcessName:
-          $ref: '#/components/schemas/subProcessNameType'
+          $ref: "#/components/schemas/subProcessNameType"
         subProcessStatus:
-          $ref: '#/components/schemas/subProcessStatusType'
-      additionalProperties: false
+          $ref: "#/components/schemas/subProcessStatusType"
       required:
         - id
         - source
@@ -189,7 +220,6 @@ components:
         - licenceKey
     SAFInquiryEventType:
       $id: SAFInquiryEventType
-      description: 'SAF inquiry event, i.e. an event containing a generic message.'
       type: object
       properties:
         id:
@@ -228,7 +258,6 @@ components:
           $ref: "#/components/schemas/subProcessNameType"
         subProcessStatus:
           $ref: "#/components/schemas/subProcessStatusType"
-      additionalProperties: false
       required:
         - id
         - source
@@ -244,8 +273,8 @@ components:
         - userAgent
         - licenceKey
     SAFErrorEventType:
-      $id: SAFErrorEventType
-      description: SAF error event, i.e. an event for errors which are unrelated to the event payload.
+      $id: SAFInquiryEventType
+      description: Offer NLPI Event JSON schema definition
       type: object
       properties:
         id:
@@ -298,13 +327,12 @@ components:
         - eventSender
         - userAgent
         - licenceKey
-      additionalProperties: false
     OfferNLPIErrorEventType:
-      description: Offer NLPI error event, i.e. an event for errors which related to the event payload.
+      description: Offer NLPI Event JSON schema definition
       type: object
       properties:
         id:
-          $ref: '#/components/schemas/cloudEvents/iddef'
+         $ref: '#/components/schemas/cloudEvents/iddef'
         source:
           $ref: '#/components/schemas/cloudEvents/sourcedef'
         specversion:
@@ -353,135 +381,151 @@ components:
         - eventSender
         - userAgent
         - licenceKey
-      additionalProperties: false
     offerNLPIErrorType:
-      type: array
-      minItems: 1
-      items:
-        type: object
-        properties:
-          errorCode:
-            description: Type of error
-            minLength: 3
+      type: object
+      properties:
+        errorCode:
+          description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
+          type: string
+          minLength: 3
+          enum:
+            - offer-missing-informations
+            - offer-incorrect-informations
+            - offer-date-expired
+            - offer-missing-claims-expierence
+            - offer-requested-several-times
+            - offer-already-issued
+            - offer-missing-documents
+            - offer-incorrect-attachment
+            - offer-other-error
+            - mandate-missing
+            - mandate-expired
+            - mandate-terminated
+            - mandate-invalid
+            - mandate-other-error
+            - cooperationagreement-missing
+            - cooperationagreement-expired-terminated
+            - cooperationagreement-other-error
+            - customer-data-referenceno-mismatch
+            - customer-data-incomplete
+            - customer-data-incorrect
+            - customer-not-identified
+            - customer-other-error
+            - claims-expierence-date-range-invalid
+            - claims-expierence-data-incorrect
+            - claims-expierence-contract-incorrect
+            - claims-expierence-customer-incorrect
+            - claims-expierence-other-error
+        errorMessage:
+          description: Error message
+          type: string
+          minLength: 3
+        missingDataList:
+          description: List of JSON paths, where information is missing
+          type: array
+          minItems: 1
+          items:
             type: string
-            enum:
-              - offer-missing-information
-              - offer-incorrect-information
-              - offer-date-expired
-              - offer-missing-claims-experience
-              - offer-requested-several-times
-              - offer-already-issued
-              - offer-missing-documents
-              - offer-incorrect-attachment
-              - offer-other-error
-              - mandate-missing
-              - mandate-expired
-              - mandate-terminated
-              - mandate-invalid
-              - mandate-other-error
-              - cooperationagreement-missing
-              - cooperationagreement-expired-terminated
-              - cooperationagreement-other-error
-              - customer-data-referenceno-mismatch
-              - customer-data-incomplete
-              - customer-data-incorrect
-              - customer-not-identified
-              - customer-other-error
-              - claims-experience-date-range-invalid
-              - claims-experience-data-incorrect
-              - claims-experience-contract-incorrect
-              - claims-experience-customer-incorrect
-              - claims-experience-other-error
-          errorMessage:
-            description: Error message
-            minLength: 3
+        incorrectDataList:
+          description: List of JSON paths, where wrong information has been entered
+          type: array
+          minItems: 1
+          items:
             type: string
-          path:
-            description: xPath or JsonPath to the property where the error occurred.
-            type: string
-        additionalProperties: false
-        required:
-          - errorCode
-          - errorMessage
-        allOf:
-          - if:
-              properties:
-                errorCode:
-                  const: offer-missing-information
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: offer-incorrect-information
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: offer-missing-claims-experience
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: offer-missing-documents
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: offer-incorrect-attachment
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: customer-data-incomplete
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: customer-data-incorrect
-            then:
-              required:
-                - path
-
+        errorDateTime:
+          description: Date and time of the error
+          type: string
+          format: date-time
+      allOf:
+        - if:
+            properties:
+              errorCode:
+                const: offer-missing-informations
+          then:
+            required:
+              - missingDataList
+        - if:
+            properties:
+              errorCode:
+                const: offer-incorrect-informations
+          then:
+            required:
+              - incorrectDataList
+        - if:
+            properties:
+              errorCode:
+                const: offer-missing-claims-expierence
+          then:
+            required:
+              - missingDataList
+        - if:
+            properties:
+              errorCode:
+                const: offer-missing-documents
+          then:
+            required:
+              - missingDataList
+        - if:
+            properties:
+              errorCode:
+                const: offer-incorrect-attachment
+          then:
+            required:
+              - incorrectDataList
+        - if:
+            properties:
+              errorCode:
+                const: customer-data-incomplete
+          then:
+            required:
+              - missingDataList
+        - if:
+            properties:
+              errorCode:
+                const: customer-data-incorrect
+          then:
+            required:
+              - incorrectDataList
+      required:
+        - errorCode
+        - errorMessage
+        - errorDateTime
     processNameType:
       description: Comment describing your JSON Schema
       type: string
       enum:
         - offer.nlpi
       example: offer.nlpi
+      
     eventType:
-      description: 'Reverse DNS entry to defines the type of event: data, inquiry, standard-error
-        or saf-error'
-      minLength: 1
       type: string
+      minLength: 1
       enum:
-        - ch.ecohub.saf.data
-        - ch.ecohub.saf.inquiry
-        - ch.ecohub.saf.standard-error
-        - ch.ecohub.saf.saf-error
+        - data
+        - inquiry
+        - standard-error
+        - saf-error
+      description: Defines the type of event / data, inquiry, standard-error or saf-error
     eventMessageDataType:
       description: The event payload.
-      type: object
+      type:
+        - boolean
+        - "null"
+        - object
+        - array
+        - string
+        - number
+      examples:
+        - <much wow="xml"/>
       properties:
         message:
-          description: 'The payload needs to be first gzipped and afterwards encrypted. The base64 representation of encrypted bytes will be added as payload'
+          description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
           type: string
           minLength: 3
-        messageSignature:
-          description: signature key of the signed message, to verify by whom the encrypted message has been created
-          minLength: 3
+        md5MessageHash:
+          description: The md5 hash of the byte content of the encrypted data
           type: string
+          minLength: 3
         encryptionKey:
           description: The with the public key of the receiver encrypted symmetric key to decrypt the data (KEK)
           type: string
@@ -490,21 +534,16 @@ components:
           description: The version of the public key used to encrypt the DEK
           type: string
           minLength: 3
-        signatureKeyVersion:
-          description: 'The version of the signature key, that was used to sign '
-          minLength: 3
-          type: string
       required:
         - message
         - encryptionKey
         - publicKeyVersion
-      additionalProperties: false
     errorDataType:
       description: The error event payload.
       type: object
       properties:
         errorCode:
-          description: 'Categorizes the type of error'
+          description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
           type: string
           minLength: 3
           enum:
@@ -546,18 +585,44 @@ components:
         - Created
         - Received
         - InProgress
-        - Responded
+        - Responsed
         - Updated
         - Error
         - Inquiry
         - Inquiry_Answer
         - Closed
+    conversationType:
+      type: object
+      properties:
+        message:
+          type: string
+          
+          description: >-
+            Zipped and encrypted base64 representation of the messageArrayType
+            JSON defined in the AsyncAPI
+        md5MessageHash:
+          type: string
+          description: The md5 hash of the byte content of the encrypted data
+        encryptionKey:
+          type: string
+          
+          description: >-
+            The with the public key of the receiver encrypted symmetric key to
+            decrypt the data (KEK)
+        publicKeyVersion:
+          type: string
+          
+          description: The version of the public key used to encrypt the DEK
+      required:
+        - message
+        - encryptionKey
+        - publicKeyVersion
     processStatusType:
       type: string
       enum:
         - active
         - closed
-      description: Defines status of the overall process.
+      description: Defines status of the overall process. 
     processIdType:
       type: string
       format: UUID
@@ -571,14 +636,14 @@ components:
             - broker
             - insurer
             - serviceprovider
-
+          
           example: broker
           description: The category of organisation
         id:
           type: string
-
+          
           minLength: 3
-          examples:
+          examples: 
             - IDP1239865
             - CHE-IGB2B-12345
             - CHE-FINMA-F012345678
@@ -588,405 +653,429 @@ components:
         - category
         - id
       additionalProperties: false
-    eventDataType:
-      description: The event payload.
+    dataType:
       type: object
       properties:
         payload:
-          description: 'The payload needs to be first gzipped and afterwards encrypted. The base64 representation of encrypted bytes will be added as payload'
-          minLength: 3
           type: string
-        payLoadSignature:
-          description: Signature key of the signed payload, to verify by whom the encrypted message has been created
-          minLength: 3
+          
+          description: >-
+            Zipped and encrypted base64 representation of the IG B2B JSON
+            structured data
+        md5PayloadHash:
           type: string
+          description: The md5 hash of the byte content of the encrypted data
         links:
+          type: array
+          
           items:
-            type: object
             properties:
-              description:
-                description: Description of the purpose of the link
-                type: string
               href:
-                description: the- encrypted URL that should be called, to receive additional
-                  encrypted unstructured data, such as pdf, pictures, etc.
-                example: https://services.test-myecohub.ch/offer/nlpi/{offerId}/{attachmentId}
-                  (unencrypted example)
-                minLength: 3
                 type: string
+                
+                example: >-
+                  https://services.test-myecohub.ch/offer/nlpi/{offerId}/{attachmentId}
+                  (unencrypted example)
+                description: >-
+                  the- encrypted URL that should be called, to receive
+                  additional encrypted unstructured data, such as pdf, pictures,
+                  etc.
               rel:
+                type: string
+                
                 description: The IG B2B Standard the links belongs to.
                 example: offer-nlpi
-                minLength: 3
+              description:
                 type: string
+                
+                description: Description of the purpose of the link
             required:
               - href
               - rel
-            additionalProperties: false
-          type: array
         encryptionKey:
-          description: The with the public key of the receiver encrypted symmetric key to
+          type: string
+          
+          description: >-
+            The with the public key of the receiver encrypted symmetric key to
             decrypt the data (KEK)
-          minLength: 3
-          type: string
         publicKeyVersion:
-          description: The version of the public key used to encrypt the encryptionKey (DEK)
-          minLength: 3
           type: string
-        signatureKeyVersion:
-          description: 'The version of the signature key, that was used to sign '
-          minLength: 3
-          type: string
+          
+          description: The version of the public key used to encrypt the DEK
       required:
         - payload
         - encryptionKey
         - publicKeyVersion
-      additionalProperties: false
     cloudEvents:
       iddef:
-        description: Identifies the event. Producers MUST ensure that source + id is unique
-          for each distinct event. If a duplicate event is re-sent (e.g. due to a network
-          error) it MAY have the same id. Consumers MAY assume that Events with identical
-          source and id are duplicates.
-        examples:
-          - A234-1234-1234
-        minLength: 1
+        description: Identifies the event.
         type: string
+        minLength: 1
       sourcedef:
-        description: Uniquely identifies the producer of the event. Must be globally unique,
-          including across environments.
-        examples:
-          - http://www.myecohub.ch/iat/ecohub-processes
-          - http://www.myecohub.ch/prod/ecohub-processes
-          - http://www.myecohub.ch/ck/postman
+        type: string
+        minLength: 1
         format: uri-reference
-        minLength: 1
-        type: string
       specversiondef:
-        description: The version of the CloudEvents specification which the event uses. MUST
-          be set to 1.0
-        examples:
-          - '1.0'
-        minLength: 1
         type: string
+        minLength: 1
       typedef:
         type: string
         minLength: 1
       datacontenttypedef:
-        description: Content type of the data value. Must adhere to RFC 2046 format.
-        examples:
-          - text/xml
-          - application/json
-        minLength: 1
-        type:
-          - 'null'
-          - string
-      dataschemadef:
-        description: Identifies the schema that data adheres to. Must point to the respective raw schema in 
-          the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).
-        format: uri
-        minLength: 1
         type: string
-        examples:
-          - https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json
-          - https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json
+        minLength: 1
+      dataschemadef:
+        type: string
+        minLength: 1
+        format: uri
       subjectdef:
-        description: Describes the subject of the event to provide additional context about
-          the event.
-        examples:
-          - Billing november 2024
-          - MF offer company A
+        type: string
         minLength: 1
-        type:
-          - 'null'
-          - string
       timedef:
-        description: Timestamp of when the occurrence happened. Must adhere to RFC 3339.
-        examples:
-          - '2018-04-05T17:31:00Z'
+        type: string
         format: date-time
-        minLength: 1
-        type:
-          - 'null'
-          - string
+      data_base64def:
+        type: string
+        contentEncoding: base64
     licenceKeyType:
-      description: The license key for the requesting SC application.
       type: string
-      maxLength: 200
-      minLength: 3
+      description: The license key for the requesting SC application.
       example: fdsaf346t54grthe65euz467jhz7r
+      maxLength: 200
+      
+    messageArrayType:
+      id: messageArrayType
+      type: array
+      minItems: 1
+      maxItems: 4
+      items:
+        $ref: '#/components/schemas/messageType'
+    messageType:
+      id: messageType
+      properties:
+        messageLocale:
+          type: string
+          
+          maxLength: 2
+          format: '[a-z]{2}'
+          example: de
+          description: '2 digit language iso code of the message, following ISO 639-1'
+        message:
+          type: string
+          
+          maxLength: 500
+          description: the localized message
+      required:
+        - message
+        - messageLocale
+      additionalProperties: false
     userAgentType:
       type: object
-      description: Identifies the software that was used to produce the event
       properties:
         name:
-          description: Name of the application
-          example: Client software XYZ
-          maxLength: 100
-          minLength: 3
           type: string
+          example: Client software XYZ
+          description: "Name of the application"
+          maxLength: 100
+          
         version:
-          description: Used version of the application
+          type: string
           example: Version 1.0
           maxLength: 30
-          minLength: 3
-          type: string
+          description: "Used version of the application"
+          
       required:
         - name
         - version
-      additionalProperties: false
+
+  messageTraits:
+    commonHeaders:
+      headers:
+        type: object
+        properties:
+          ehag-saf-app-header:
+            type: integer
+            minimum: 0
+            maximum: 100
+  operationTraits:
+    kafka:
+      bindings:
+        kafka:
+          clientId:
+            type: string
+            description: The id of the specific client 
   messages:
     safEvent:
       name: safEvent
       title: None life personal insurance offer
-      summary: Events that are used to request an offer, receive a offer, send feedback and accept a offer
+      summary: Events that are used to request an offer, receive a offer and accept a offer
       payload:
+        schemaFormat: "application/vnd.kafka.jsonschema;schemaId=17"
         $ref: '#/components/schemas/SAFEventType'
+      
       bindings:
         kafka:
           key:
-            $ref: '#/components/schemas/processIdType'
+            $ref:  '#/components/schemas/processIdType'
           schemaIdLocation: 'payload'
-          schemaIdPayloadEncoding: 'confluent'
+          schemaIdPayloadEncoding: '17'
           bindingVersion: '0.4.0'
       examples:
         - name: offerRequestExample
-          summary: Example of an offerRequest event, initiated by an broker
+          summary: 'Example of an offerRequest event, initiated by an broker'
           payload:
             id: 044d2e50-12d6-43e4-bb1b-7b54841c9c82
-            source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
-            specversion: '1.0'
-            type: ch.ecohub.saf.data
-            datacontenttype: application/json
-            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json
-            subject: offer nlpi request
-            time: '2023-08-17T14:15:22.000Z'
-            licenceKey: mvikeporivmf/342)*fjdskaföj
+            source: 'http://www.myecohub.ch/ecoHub-mock-broker'
+            specversion: 0.2.2
+            licenceKey: 'mvikeporivmf/342)*fjdskaföj'
             userAgent:
-              name: BS1
-              version: '1.0'
+              name: "BS1"
+              version: "1.0"
+            type: offer.nlpi.ktg
+            datacontenttype: application/json
+            dataschema: 'http://www.myecohub.ch/ib2b/offer/nlpi/v5.4'
+            subject: offer nlpi request
+            time: 2023-08-17T14:15:22.000Z
+            data_base64: SGVsbG8gd29ybGQh
+            processId: ff9275bf-5b35-492e-bdd2-c217e151d335
+            processName: offer.nlpi
+            subProcessName: request
+            processStatus: active
+            subProcessStatus: Created
+            data:
+              payload: SGVsbG8gd29ybGQh
+              links:
+                - href: >-
+                    https://services.test-myecohub.ch/offer/nlpi/{ecohubId}/{attachmentId}
+                  rel: offer-nlpi
+                  description: >-
+                    Pdf file that contains additional informations for the
+                    offer.
+              encryptionKey: jgfisogjeioüwgj
+              publicKeyVersion: '1.1'
             eventReceiver:
               category: insurer
               id: insurer1
             eventSender:
               category: broker
               id: broker1
-            data:
-              payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
-              payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
-              links:
-                - href: 7F8C+RQDyYAIhAIjt+X0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ
-                  rel: offer-nlpi
-                  description: Pdf file that contains additional informations for the offer.
-              encryptionKey: jgfisogjeioüwgj
-              publicKeyVersion: '1.1'
-              signatureKeyVersion: '1.3'
-            processId: ff9275bf-5b35-492e-bdd2-c217e151d335
-            processName: offer.nlpi
-            processStatus: active
-            subProcessName: request
-            subProcessStatus: Created
         - name: offerRequestReceivedExample
-          summary: Example of an offerRequest received event, sent by the insurer
+          summary: 'Example of an offerRequest received event, sent by the insurer'
           payload:
             id: 3e921406-ee31-42e9-9a17-14c9e42cae21
-            source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
-            specversion: '1.0'
-            type: ch.ecohub.saf.data
-            subject: offer nlpi request received
-            time: '2023-08-17T14:15:22.000Z'
-            licenceKey: 8985+9403*jgfksld94&%fjd
+            source: 'http://www.myecohub.ch/ecoHub-mock-insurer'
+            specversion: 0.2.2
+            licenceKey: '8985+9403*jgfksld94&%fjd'
             userAgent:
-              name: Insurer backoffice system 1
-              version: '1.0'
-            eventReceiver:
-              category: broker
-              id: broker1
-            eventSender:
-              category: insurer
-              id: insurer1
+              name: "Insurer backoffice system 1"
+              version: "1.0"
+            type: offer.nlpi.ktg
+            datacontenttype: application/json
+            dataschema: 'http://www.myecohub.ch'
+            subject: offer nlpi request received
+            time: 2023-08-17T14:15:22.000Z
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
             subProcessName: request
             processStatus: active
             subProcessStatus: Received
+            eventReceiver:
+              category: broker
+              id: broker1
+            eventSender:
+              category: insurer
+              id: insurer1
         - name: offerExample
-          summary: Example of an offer event, sent by the insurer to the broker
+          summary: 'Example of an offer event, sent by the insurer to the broker'
           payload:
             id: d1ebd951-e44e-4464-939e-bd6f4c8d1d8e
-            source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
-            specversion: '1.0'
-            type: ch.ecohub.saf.data
-            datacontenttype: application/json
-            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json
-            subject: offer
-            time: '2023-08-17T14:15:22.000Z'
-            licenceKey: 8985+9403*jgfksld94&%fjd
+            source: 'http://www.myecohub.ch/ecoHub-mock-insurer'
+            specversion: 0.2.2
+            licenceKey: '8985+9403*jgfksld94&%fjd'
             userAgent:
-              name: Insurer backoffice system 1
-              version: '1.0'
-            eventSender:
-              category: insurer
-              id: insurer1
-            eventReceiver:
-              category: broker
-              id: broker1
-            data:
-              payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
-              payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
-              links:
-                - href: 0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ
-                  rel: offer-nlpi
-                  description: Pdf file that contains additional informations for the offer.
-              encryptionKey: mfkaclou7z84z
-              publicKeyVersion: '1.0'
-              signatureKeyVersion: '1.1'
+              name: "Insurer backoffice system 1"
+              version: "1.0"
+            type: offer.nlpi.ktg
+            datacontenttype: application/json
+            dataschema: 'http://www.myecohub.ch'
+            subject: offer
+            time: 2023-08-17T14:15:22.000Z
+            data_base64: SGVsbG8gd29ybGQh
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
             subProcessName: offer
             processStatus: active
             subProcessStatus: Created
-        - name: offerReceivedExample
-          summary: Example of an offer received event, sent by the broker
-          payload:
-            id: 1aa99947-59ee-4b75-86b2-33618d34dd32
-            source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
-            specversion: '1.0'
-            type: ch.ecohub.saf.data
-            subject: offer nlpi offer received
-            time: '2023-08-17T14:15:22.000Z'
-            licenceKey: mvikeporivmf/342)*fjdskaföj
-            userAgent:
-              name: BS1
-              version: '1.0'
+            data:
+              payload: SGVsbG8gd29ybGQh
+              links:
+                - href: >-
+                    https://services.test-myecohub.ch/offer/nlpi/{ecohubId}/{attachmentId}
+                  rel: offer-nlpi
+                  description: >-
+                    Pdf file that contains additional informations for the
+                    offer.
+              encryptionKey: mfkaclou7z84z
+              publicKeyVersion: '1.1'
             eventReceiver:
               category: insurer
               id: insurer1
             eventSender:
               category: broker
               id: broker1
+        - name: offerReceivedExample
+          summary: 'Example of an offer received event, sent by the broker'
+          payload:
+            id: 1aa99947-59ee-4b75-86b2-33618d34dd32
+            source: 'http://www.myecohub.ch/ecoHub-mock-broker'
+            specversion: 0.2.2
+            licenceKey: 'mvikeporivmf/342)*fjdskaföj'
+            userAgent:
+              name: "BS1"
+              version: "1.0"
+            type: offer.nlpi.ktg
+            datacontenttype: application/json
+            dataschema: 'http://www.myecohub.ch'
+            subject: offer nlpi offer received
+            time: 2023-08-17T14:15:22.000Z
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
-            processStatus: active
             subProcessName: offer
+            processStatus: active
             subProcessStatus: Received
-        - name: offerFeedbackExample
-          summary: Example of an offer feedback event, sent by the broker to the insurer
-          payload:
-            id: 1aa99947-59ee-4b75-86b2-33618d34dd32
-            source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
-            specversion: '1.0'
-            type: ch.ecohub.saf.data
-            datacontenttype: application/json
-            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiFeedbackDataType.json
-            subject: offer feedback
-            time: '2023-08-17T14:15:22.000Z'
-            licenceKey: mvikeporivmf/342)*fjdskaföj
-            userAgent:
-              name: BS1
-              version: '1.0'
             eventReceiver:
-              category: insurer
-              id: insurer1
-            eventSender:
               category: broker
               id: broker1
+            eventSender:
+              category: insurer
+              id: insurer1
+        - name: offerFeedbackExample
+          summary: >-
+            Example of an offer feedback event, sent by the broker to the
+            insurer
+          payload:
+            id: 1aa99947-59ee-4b75-86b2-33618d34dd32
+            source: 'http://www.myecohub.ch/ecoHub-mock-broker'
+            specversion: 0.2.2
+            licenceKey: 'mvikeporivmf/342)*fjdskaföj'
+            userAgent:
+              name: "BS1"
+              version: "1.0"
+            type: offer.nlpi.ktg
+            datacontenttype: application/json
+            dataschema: 'http://www.myecohub.ch'
+            subject: offer feedback
+            time: 2023-08-17T14:15:22.000Z
+            data_base64: SGVsbG8gd29ybGQh
+            processId: ff9275bf-5b35-492e-bdd2-c217e151d335
+            processName: offer.nlpi
+            subProcessName: feedback
+            processStatus: active
+            subProcessStatus: Created
             data:
-              payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
-              payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
+              payload: SGVsbG8gd29ybGQh
               links:
-                - href: 7F8C+RQDyYAIhAIjt+X0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ
+                - href: >-
+                    https://services.test-myecohub.ch/offer/nlpi/{ecohubId}/{attachmentId}
                   rel: offer-nlpi
-                  description: Pdf file that contains additional informations for the offer.
+                  description: >-
+                    Pdf file that contains additional informations for the
+                    offer.
               encryptionKey: jgfisogjeioüwgj
               publicKeyVersion: '1.1'
-              signatureKeyVersion: '1.3'
-            processId: ff9275bf-5b35-492e-bdd2-c217e151d335
-            processName: offer.nlpi
-            processStatus: active
-            subProcessName: feedback
-            subProcessStatus: Created
+            eventReceiver:
+              category: insurer
+              id: insurer1
+            eventSender:
+              category: broker
+              id: broker1
         - name: offerFeedbackReceivedExample
-          summary: Example of an offer feedback received event, sent by the insurer
+          summary: 'Example of an offer feedback received event, sent by the insurer'
           payload:
             id: 5df58bad-960c-4752-81f7-3a2721493b2c
-            source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
-            specversion: '1.0'
-            type: ch.ecohub.saf.data
-            subject: offer nlpi feedback received
-            time: '2023-08-17T14:15:22.000Z'
-            licenceKey: 8985+9403*jgfksld94&%fjd
+            source: 'http://www.myecohub.ch/ecoHub-mock-insurer'
+            specversion: 0.2.2
+            licenceKey: '8985+9403*jgfksld94&%fjd'
             userAgent:
-              name: Insurer backoffice system 1
-              version: '1.0'
-            eventReceiver:
-              category: broker
-              id: broker1
-            eventSender:
-              category: insurer
-              id: insurer1
+              name: "Insurer backoffice system 1"
+              version: "1.0"
+            type: offer.nlpi.ktg
+            datacontenttype: application/json
+            dataschema: 'http://www.myecohub.ch'
+            subject: offer nlpi feedback received
+            time: 2023-08-17T14:15:22.000Z
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
             subProcessName: feedback
             processStatus: active
             subProcessStatus: Received
-        - name: offerConclusionDecisionExample
-          summary: Example of an offer conclusion decision event, sent by the insurer to the
-            broker
-          payload:
-            id: 53198975-f2ed-48d7-ae5d-0ba5f8b1e95e
-            source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
-            specversion: '1.0'
-            type: ch.ecohub.saf.data
-            datacontenttype: application/json
-            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiConclusionDecisionDataType.json
-            subject: offer conclusion decision
-            time: '2023-08-17T14:15:22.000Z'
-            licenceKey: 8985+9403*jgfksld94&%fjd
-            userAgent:
-              name: Insurer backoffice system 1
-              version: '1.0'
-            eventSender:
-              category: insurer
-              id: insurer1
             eventReceiver:
               category: broker
               id: broker1
-            data:
-              payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
-              payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
-              encryptionKey: mfkaclou7z84z
-              publicKeyVersion: '1.0'
-              signatureKeyVersion: '1.1'
+            eventSender:
+              category: insurer
+              id: insurer1
+        - name: offerConclusionDecisionExample
+          summary: >-
+            Example of an offer conclusion decision event, sent by the insurer
+            to the broker
+          payload:
+            id: 53198975-f2ed-48d7-ae5d-0ba5f8b1e95e
+            source: 'http://www.myecohub.ch/ecoHub-mock-insurer'
+            specversion: 0.2.2
+            licenceKey: '8985+9403*jgfksld94&%fjd'
+            userAgent:
+              name: "Insurer backoffice system 1"
+              version: "1.0"
+            type: offer.nlpi.ktg
+            datacontenttype: application/json
+            dataschema: 'http://www.myecohub.ch'
+            subject: offer conclusion decision
+            time: 2023-08-17T14:15:22.000Z
+            data_base64: SGVsbG8gd29ybGQh
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
             subProcessName: conclusionDecision
             processStatus: active
             subProcessStatus: Created
+            data:
+              payload: SGVsbG8gd29ybGQh
+              encryptionKey: mfkaclou7z84z
+              publicKeyVersion: '1.1'
+            eventReceiver:
+              category: broker
+              id: broker1
+            eventSender:
+              category: insurer
+              id: insurer1
         - name: offerConclusionDecisionReceivedExample
-          summary: Example of an offer conclusion decision received event, sent by the broker
+          summary: >-
+            Example of an offer conclusion decision received event, sent by the
+            broker
           payload:
             id: 1607aa76-4de4-417f-9e88-88bbb4b62f34
-            source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
-            specversion: '1.0'
-            type: ch.ecohub.saf.data
-            subject: offer nlpi conclusionDecision received
-            time: '2023-08-17T14:15:22.000Z'
-            licenceKey: mvikeporivmf/342)*fjdskaföj
+            source: 'http://www.myecohub.ch/ecoHub-mock-broker'
+            specversion: 0.2.2
+            licenceKey: 'mvikeporivmf/342)*fjdskaföj'
             userAgent:
-              name: BS1
-              version: '1.0'
+              name: "BS1"
+              version: "1.0"
+            type: offer.nlpi.ktg
+            datacontenttype: application/json
+            dataschema: 'http://www.myecohub.ch'
+            subject: offer nlpi conclusionDecision received
+            time: 2023-08-17T14:15:22.000Z
+            processId: ff9275bf-5b35-492e-bdd2-c217e151d335
+            processName: offer.nlpi
+            subProcessName: conclusionDecision
+            processStatus: closed
+            subProcessStatus: Received
             eventReceiver:
               category: insurer
               id: insurer1
             eventSender:
               category: broker
               id: broker1
-            processId: ff9275bf-5b35-492e-bdd2-c217e151d335
-            processName: offer.nlpi
-            processStatus: closed
-            subProcessName: conclusionDecision
-            subProcessStatus: Received
     safInquiryEvent:
       name: safInquiryEvent
       title: None life personal insurance offer inquiry
@@ -994,11 +1083,12 @@ components:
       bindings:
         kafka:
           key:
-            $ref: '#/components/schemas/processIdType'
+            $ref:  '#/components/schemas/processIdType'
           schemaIdLocation: 'payload'
-          schemaIdPayloadEncoding: 'confluent'
+          schemaIdPayloadEncoding: '17'
           bindingVersion: '0.4.0'
       payload:
+        schemaFormat: "application/vnd.kafka.jsonschema;schemaId="
         $ref: '#/components/schemas/SAFInquiryEventType'
       examples:
         - name: nlpiOfferInquiryEvent
@@ -1139,30 +1229,4 @@ components:
             eventSender:
               category: broker
               id: broker1
-    safErrorEvent:
-      name: safErrorEvent
-      title: Technical saf error
-      summary: Events that are used to send technical saf errors, i.e. errors that are unrelated to the transmitted business data.
-      payload:
-        $ref: '#/components/schemas/SAFErrorEventType'
-      bindings:
-        kafka:
-          key:
-            $ref: '#/components/schemas/processIdType'
-          schemaIdLocation: 'payload'
-          schemaIdPayloadEncoding: 'confluent'
-          bindingVersion: '0.4.0'
-    offerNlpiErrorEvent:
-      name: offerNlpiErrorEvent
-      title: Offer NLPI business error
-      summary: Events that are used to send business errors, i.e. errors that are related to the transmitted business data.
-      payload:
-        $ref: '#/components/schemas/OfferNLPIErrorEventType'
-      bindings:
-        kafka:
-          key:
-            $ref: '#/components/schemas/processIdType'
-          schemaIdLocation: 'payload'
-          schemaIdPayloadEncoding: 'confluent'
-          bindingVersion: '0.4.0'
   
