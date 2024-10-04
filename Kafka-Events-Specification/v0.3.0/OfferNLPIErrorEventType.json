@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "Offer NLPI error event, i.e. an event for errors which related to the event payload.",
+  "description": "Offer NLPI Event JSON schema definition",
   "type": "object",
   "properties": {
     "id": {
@@ -57,7 +57,7 @@
       ]
     },
     "licenceKey": {
-      "$ref": "event-generic/LicenceKeyType.json"
+      "$ref": "event-generic/LicenseKeyType.json"
     },
     "userAgent": {
       "$ref": "event-generic/UserAgentType.json"
@@ -89,161 +89,174 @@
   },
   "definitions": {
     "offerNLPIErrorType": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "object",
-        "properties": {
-          "errorCode": {
-            "description": "Type of error",
-            "minLength": 3,
-            "type": "string",
-            "enum": [
-              "offer-missing-information",
-              "offer-incorrect-information",
-              "offer-date-expired",
-              "offer-missing-claims-experience",
-              "offer-requested-several-times",
-              "offer-already-issued",
-              "offer-missing-documents",
-              "offer-incorrect-attachment",
-              "offer-other-error",
-              "mandate-missing",
-              "mandate-expired",
-              "mandate-terminated",
-              "mandate-invalid",
-              "mandate-other-error",
-              "cooperationagreement-missing",
-              "cooperationagreement-expired-terminated",
-              "cooperationagreement-other-error",
-              "customer-data-referenceno-mismatch",
-              "customer-data-incomplete",
-              "customer-data-incorrect",
-              "customer-not-identified",
-              "customer-other-error",
-              "claims-experience-date-range-invalid",
-              "claims-experience-data-incorrect",
-              "claims-experience-contract-incorrect",
-              "claims-experience-customer-incorrect",
-              "claims-experience-other-error"
+      "type": "object",
+      "properties": {
+        "errorCode": {
+          "description": "The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload ",
+          "minLength": 3,
+          "type": "string",
+          "enum": [
+            "offer-missing-informations",
+            "offer-incorrect-informations",
+            "offer-date-expired",
+            "offer-missing-claims-expierence",
+            "offer-requested-several-times",
+            "offer-already-issued",
+            "offer-missing-documents",
+            "offer-incorrect-attachment",
+            "offer-other-error",
+            "mandate-missing",
+            "mandate-expired",
+            "mandate-terminated",
+            "mandate-invalid",
+            "mandate-other-error",
+            "cooperationagreement-missing",
+            "cooperationagreement-expired-terminated",
+            "cooperationagreement-other-error",
+            "customer-data-referenceno-mismatch",
+            "customer-data-incomplete",
+            "customer-data-incorrect",
+            "customer-not-identified",
+            "customer-other-error",
+            "claims-expierence-date-range-invalid",
+            "claims-expierence-data-incorrect",
+            "claims-expierence-contract-incorrect",
+            "claims-expierence-customer-incorrect",
+            "claims-expierence-other-error"
+          ]
+        },
+        "errorMessage": {
+          "description": "Error message",
+          "minLength": 3,
+          "type": "string"
+        },
+        "incorrectDataList": {
+          "description": "List of JSON paths, where wrong information has been entered",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "errorDateTime": {
+          "description": "Date and time of the error",
+          "format": "date-time",
+          "type": "string"
+        },
+        "missingDataList": {
+          "description": "List of JSON paths, where information is missing",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "errorCode",
+        "errorMessage",
+        "errorDateTime"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "errorCode": {
+                "const": "offer-missing-informations"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "missingDataList"
             ]
-          },
-          "errorMessage": {
-            "description": "Error message",
-            "minLength": 3,
-            "type": "string"
-          },
-          "path": {
-            "description": "xPath or JsonPath to the property where the error occurred.",
-            "type": "string"
           }
         },
-        "additionalProperties": false,
-        "required": [
-          "errorCode",
-          "errorMessage"
-        ],
-        "allOf": [
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "offer-missing-information"
-                }
+        {
+          "if": {
+            "properties": {
+              "errorCode": {
+                "const": "offer-incorrect-informations"
               }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
             }
           },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "offer-incorrect-information"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "offer-missing-claims-experience"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "offer-missing-documents"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "offer-incorrect-attachment"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "customer-data-incomplete"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "customer-data-incorrect"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
+          "then": {
+            "required": [
+              "incorrectDataList"
+            ]
           }
-        ]
-      }
+        },
+        {
+          "if": {
+            "properties": {
+              "errorCode": {
+                "const": "offer-missing-claims-expierence"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "missingDataList"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "errorCode": {
+                "const": "offer-missing-documents"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "missingDataList"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "errorCode": {
+                "const": "offer-incorrect-attachment"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "incorrectDataList"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "errorCode": {
+                "const": "customer-data-incomplete"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "missingDataList"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "errorCode": {
+                "const": "customer-data-incorrect"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "incorrectDataList"
+            ]
+          }
+        }
+      ]
     }
   },
   "required": [
@@ -251,7 +264,6 @@
     "source",
     "specversion",
     "type",
-    "data",
     "processId",
     "processName",
     "subProcessName",
@@ -261,6 +273,5 @@
     "eventSender",
     "userAgent",
     "licenceKey"
-  ],
-  "additionalProperties": false
+  ]
 }
