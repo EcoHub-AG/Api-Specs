@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 0.3.2
+  version: 0.4.0
   description: >
     ## Security
 
@@ -14,8 +14,13 @@ info:
     ### Version 0.4.0
     
     - Introducing new property keyType, to support the digital signature public keys
-    - Changed paths, to support the keyType on verification, activation, deactivation and deleting
+    
+    - GET /keys returns a list of keys instead of a single object
+    
     - Removing unused paths for insurers and brokers
+    
+    - Only allow application/json as content type
+    
     - Enhanced documentation
 
     ### Version 0.3.0 (11.07.2024)
@@ -38,16 +43,7 @@ paths:
       requestBody:
         description: Request.
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyUploadRequest'
           application/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyUploadRequest'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyUploadRequest'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/PublicKeyUploadRequest'
       responses:
@@ -56,7 +52,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublicKeyResponse'
+                $ref: '#/components/schemas/PublicKeyListResponse'
         '400':
           description: Bad request
           content:
@@ -82,16 +78,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PublicKeyResponse'
+                $ref: '#/components/schemas/PublicKeyListResponse'
         '401':
           description: Authorization (mTLS or JWT) missing
-  /keys/{keyType}/{keyId}/verify:
+  /keys/{keyId}/verify:
     get:
       tags:
         - PublicKeyApi
-      summary: Get encrypted content to verify public key.
+      summary: Get content to verify public key.
       operationId: GetEncryptedContent
       parameters:
         - name: keyId
@@ -100,12 +94,6 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/PublicKeyIdType'
-        - name: keyType
-          in: path
-          description: keyType.
-          required: true
-          schema:
-            $ref: '#/components/schemas/PublicKeyTypeType'
       responses:
         '200':
           description: Success
@@ -130,7 +118,7 @@ paths:
     post:
       tags:
         - PublicKeyApi
-      summary: Submit decrypted content to verify public key.
+      summary: Submit content to verify public key.
       operationId: VerifyPublicKeyByDecryptedContent
       parameters:
         - name: keyId
@@ -139,25 +127,10 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/PublicKeyIdType'
-        - name: keyType
-          in: path
-          description: keyType.
-          required: true
-          schema:
-            $ref: '#/components/schemas/PublicKeyTypeType'
       requestBody:
         description: Verify Request.
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyVerifyRequest'
           application/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyVerifyRequest'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyVerifyRequest'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/PublicKeyVerifyRequest'
       responses:
@@ -233,8 +206,7 @@ paths:
           description: KeyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       responses:
         '200':
           description: Success
@@ -332,7 +304,7 @@ paths:
     get:
       tags:
         - PublicKeyApi
-      summary: Returns a list of active public keys, for encryption and signing, of a member by idp-number with whom my membership has a Service Agreement.
+      summary: Get the public keys of the receiving party
       description: Get the active public keys, for encryption and signing, of a member by idp-number with whom my membership has a Service Agreement.
       operationId: GetActivePublicKeyOfMemberByIdpNumber
       parameters:
@@ -375,8 +347,8 @@ paths:
     get:
       tags:
         - PublicKeyApi
-      summary: Get the active public key of a member by idp-number and keyType with whom my membership has a Service Agreement.
-      description: Get the active public key of a member by idp-number and keyType with whom my membership has a Service Agreement.
+      summary: Get the encryption or signing public key of the receiving party
+      description: Get the active encryption or signing public key of a member by idp-number and keyType with whom my membership has a Service Agreement.
       operationId: GetActivePublicKeyOfMemberByOperationAndIdpNumber
       parameters:
         - name: idpNumber
@@ -429,7 +401,7 @@ components:
         - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
           membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
           version: "string"
-          operation: "encryption"
+          keyType: "encryption"
           key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
           createdAt: "2024-09-03T09:16:37.327Z"
           lastUpdatedAt: "2024-09-03T09:16:37.327Z"
@@ -439,7 +411,7 @@ components:
         - keyId: "0e84035f-d211-4fbd-9ce0-ecc259d7814dÃ¥"
           membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
           version: "string"
-          operation: "signature"
+          keyType: "signature"
           key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
           createdAt: "2024-09-03T09:16:37.327Z"
           lastUpdatedAt: "2024-09-03T09:16:37.327Z"
@@ -474,7 +446,7 @@ components:
         - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
           membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
           version: "string"
-          operation: "encryption"
+          keyType: "encryption"
           key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
           createdAt: "2024-09-03T09:16:37.327Z"
           lastUpdatedAt: "2024-09-03T09:16:37.327Z"
@@ -503,12 +475,9 @@ components:
     PublicKeyVerifyRequest:
       type: object
       properties:
-        keyType:
-          $ref: "#/components/schemas/PublicKeyTypeType"
         verifiedContent:
           type: string
-          description: The decrypted String from the PublicKeyVerifyChallenge encryptedContent
-          nullable: true
+          description: Depending on the keyType, the decrypted or signed string from the PublicKeyVerifyChallenge
       additionalProperties: false
     PublicKeyVerifyChallenge:
       type: object
@@ -520,7 +489,6 @@ components:
         verificationContent:
           type: string
           description: Random base64 encoded content. Content is depending on the keyType, either encrypted and needs to be decrypted or it is plain string that should be used to create the signature, so that it can be used as input for the verify API call.
-          nullable: true
       additionalProperties: false
     PublicKeyDataType:
       minLength: 1
