@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework"
-  version: 0.3.1
+  version: 0.4.0
   description: >
     ## Security
     
@@ -10,6 +10,11 @@ info:
     the /techUserEnrolment endpoint.
     
     ## Changelog
+    
+    ### Version 0.4.0 (01.10.2024)
+      - SAFSupportedStandards
+        - Renamed and restructured type to align with processName and processVersion in SAF events
+      - Enhanced documentation
     
     ### Version 0.3.1 (12.12.2024)
     
@@ -230,8 +235,8 @@ components:
             type: string
             description: name of the insurer
             example: EcoHub Insurance Simulator
-          safSupportedStandards:
-            $ref: '#/components/schemas/SAFSupportedStandardsType'
+          supportedProcesses:
+            $ref: '#/components/schemas/SupportedProcessesType'
       additionalProperties: false
     SAFErrorResponse:
       type: object
@@ -272,21 +277,24 @@ components:
               - Broker
               - Insurer
               - ServiceProvider
-          safSupportedStandards:
-            $ref: '#/components/schemas/SAFSupportedStandardsType'
+          supportedProcesses:
+            $ref: '#/components/schemas/SupportedProcessesType'
       additionalProperties: false
-    SAFSupportedStandardsType:
+    SupportedProcessesType:
       description: The supported Standards by the receiver.
       type: array
       items:
         type: object
         properties:
-          standard:
+          processName:
+            description: The identifier of the core process
             type: string
-            enum: ["offer.nlpi"]
-          version:
+            enum:
+              - offer.nlpi
+          processVersion:
+            description: Version of the used core process
             type: string
-            enum: ["0.3.0"]
+            pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
     TechUserEnrolmentRequest:
       type: object
       properties:
