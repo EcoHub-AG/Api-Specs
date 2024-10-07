@@ -275,7 +275,7 @@ components:
           supportedProcesses:
             $ref: '#/components/schemas/SupportedProcessesType'
       additionalProperties: false
-    SAFSupportedStandardsType:
+    SupportedProcessesType:
       description: The supported Standards by the receiver.
       type: array
       items:
