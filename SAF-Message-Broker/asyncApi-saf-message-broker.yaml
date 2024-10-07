@@ -2,7 +2,7 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framework: Message Broker System'
-  version: 0.4.0
+  version: 0.5.0
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -10,42 +10,32 @@ info:
   description: >
     ## Changelog
     
-    ### Version 0.4.0
+    ### Version 0.5.0
+    - Added property 'processVersion' to all events.
     
-        - Changed format of the EventType to reverse-dns
-    
-        - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
-    
-        - EventMessageDataType
-          - Removed property "md5MessageHash"
-          - Added properties "messageSignature" and "signatureKeyVersion"
-          - Prohibit additional properties
-    
-        - LicenseKeyType
-          - Renamed to "LicenceKeyType"
-    
-        - OfferNLPIErrorEventType
-          - Prohibit additional properties
-    
-        - OfferNLPIErrorEventType
-          - Restructured the type and renamed error codes
-    
-    ### Version 0.3.1
-    
+    ### Version 0.4.0 (23.09.2024)
+    - Changed format of the EventType to reverse-dns
+    - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
     - Added SafErrorEvent and OfferNLPIErrorEvent as valid messages for all operations.
-    
     - Updated documentation (descriptions and examples).
-    
     - EventDataType
       - Prohibit additional properties
-    
-    - SAFErrorEventType
+    - EventMessageDataType
+      - Removed property "md5MessageHash"
+      - Added properties "messageSignature" and "signatureKeyVersion"
+      - Prohibit additional properties
+    LicenseKeyType
+      - Renamed to "LicenceKeyType"
+    OfferNLPIErrorEventType
+      - Prohibit additional properties
+    SAFErrorEventType
+      - Prohibit additional properties
+    OfferNLPIErrorEventType
+      - Restructured the type and renamed error codes
+    UserAgentType
       - Prohibit additional properties
     
-    - UserAgentType
-      - Prohibit additional properties
-    
-    ### Version 0.2.4 (20.08.2024) - Initial public release
+    ### Version 0.3.0 (20.08.2024) - Initial public release
   license:
     name: EcoHub AG
     url: 'https://www.license.com/'
@@ -179,6 +169,8 @@ components:
           $ref: '#/components/schemas/processIdType'
         processName:
           $ref: '#/components/schemas/processNameType'
+        processVersion:
+          $ref: '#/components/schemas/processVersionType'
         processStatus:
           $ref: '#/components/schemas/processStatusType'
         subProcessName:
@@ -193,6 +185,7 @@ components:
         - type
         - processId
         - processName
+        - processVersion
         - subProcessName
         - processStatus
         - subProcessStatus
@@ -235,6 +228,8 @@ components:
           $ref: "#/components/schemas/processIdType"
         processName:
           $ref: "#/components/schemas/processNameType"
+        processVersion:
+          $ref: '#/components/schemas/processVersionType'
         processStatus:
           $ref: "#/components/schemas/processStatusType"
         subProcessName:
@@ -249,6 +244,7 @@ components:
         - type
         - processId
         - processName
+        - processVersion
         - subProcessName
         - processStatus
         - subProcessStatus
@@ -291,6 +287,8 @@ components:
           $ref: "#/components/schemas/processIdType"
         processName:
           $ref: "#/components/schemas/processNameType"
+        processVersion:
+          $ref: '#/components/schemas/processVersionType'
         processStatus:
           $ref: "#/components/schemas/processStatusType"
         subProcessName:
@@ -304,6 +302,7 @@ components:
         - type
         - processId
         - processName
+        - processVersion
         - subProcessName
         - processStatus
         - subProcessStatus
@@ -346,6 +345,8 @@ components:
           $ref: "#/components/schemas/processIdType"
         processName:
           $ref: "#/components/schemas/processNameType"
+        processVersion:
+          $ref: '#/components/schemas/processVersionType'
         processStatus:
           $ref: "#/components/schemas/processStatusType"
         subProcessName:
@@ -359,6 +360,7 @@ components:
         - type
         - processId
         - processName
+        - processVersion
         - subProcessName
         - processStatus
         - subProcessStatus
@@ -466,13 +468,16 @@ components:
             then:
               required:
                 - path
-
     processNameType:
       description: Comment describing your JSON Schema
       type: string
       enum:
         - offer.nlpi
       example: offer.nlpi
+    processVersionType:
+      description: Version of the used core process
+      type: string
+      pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
     eventType:
       description: 'Reverse DNS entry to defines the type of event: data, inquiry, standard-error
         or saf-error'
@@ -795,6 +800,7 @@ components:
               signatureKeyVersion: '1.3'
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             processStatus: active
             subProcessName: request
             subProcessStatus: Created
@@ -819,6 +825,7 @@ components:
               id: insurer1
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             subProcessName: request
             processStatus: active
             subProcessStatus: Received
@@ -855,6 +862,7 @@ components:
               signatureKeyVersion: '1.1'
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             subProcessName: offer
             processStatus: active
             subProcessStatus: Created
@@ -879,6 +887,7 @@ components:
               id: broker1
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             processStatus: active
             subProcessName: offer
             subProcessStatus: Received
@@ -915,6 +924,7 @@ components:
               signatureKeyVersion: '1.3'
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             processStatus: active
             subProcessName: feedback
             subProcessStatus: Created
@@ -939,6 +949,7 @@ components:
               id: insurer1
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             subProcessName: feedback
             processStatus: active
             subProcessStatus: Received
@@ -972,6 +983,7 @@ components:
               signatureKeyVersion: '1.1'
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             subProcessName: conclusionDecision
             processStatus: active
             subProcessStatus: Created
@@ -996,6 +1008,7 @@ components:
               id: broker1
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             processStatus: closed
             subProcessName: conclusionDecision
             subProcessStatus: Received
@@ -1030,6 +1043,7 @@ components:
             time: 2023-08-17T14:15:22.000Z
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             subProcessName: offer.inquiry
             processStatus: active
             subProcessStatus: Created
@@ -1060,6 +1074,7 @@ components:
             time: 2023-08-17T14:15:22.000Z
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             subProcessName: offer.inquiry
             processStatus: active
             subProcessStatus: Received
@@ -1086,6 +1101,7 @@ components:
             time: 2023-08-17T14:15:22.000Z
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             subProcessName: offer.inquiry
             processStatus: active
             subProcessStatus: Responsed
@@ -1116,6 +1132,7 @@ components:
             time: 2023-08-17T14:15:22.000Z
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             subProcessName: offer.inquiry
             processStatus: active
             subProcessStatus: Received
@@ -1142,6 +1159,7 @@ components:
             time: 2023-08-17T14:15:22.000Z
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
+            processVersion: 0.3.0
             subProcessName: offer.inquiry
             processStatus: active
             subProcessStatus: Closed

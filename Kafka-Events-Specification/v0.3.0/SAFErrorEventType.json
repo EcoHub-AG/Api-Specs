@@ -76,6 +76,9 @@
     "processName": {
       "$ref": "event-generic/ProcessNameType.json"
     },
+    "processVersion": {
+      "$ref": "event-generic/ProcessVersionType.json"
+    },
     "processStatus": {
       "$ref": "event-generic/ProcessStatusType.json"
     },
@@ -93,6 +96,7 @@
     "type",
     "processId",
     "processName",
+    "processVersion",
     "subProcessName",
     "processStatus",
     "subProcessStatus",
