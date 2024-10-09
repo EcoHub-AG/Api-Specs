@@ -21,7 +21,7 @@ info:
     
     1. SAF Proxy Key API: This API can be used by all members, to upload their own private key, in case the receiver, wants to receive DATA in both Frameworks: SAF and DXP
     
-    2. Internal APIs, that are used by the SAF Event Processing Module, to receive the proxy private key, to either decrypt or encrypt the payload data. Apart from that the API are used, to perform validation checks, to ensure that the upload private key works with the active publickey of the receiver
+    2. Internal APIs, that are used by the SAF Event Processing Module, to receive the proxy private key, to either decrypt or encrypt the payload data.
     
 servers:
   - url: 'https://services.test-myecohub.ch/privatekeystore'
@@ -34,6 +34,7 @@ paths:
       tags:
         - SAFProxyKeyAPI
       summary: Upload a new private key for your membership.
+      description: Upload the matching private key for one of your existing public keys.
       operationId: UploadKey
       requestBody:
         description: Request.
@@ -43,7 +44,7 @@ paths:
               $ref: '#/components/schemas/ProxyPrivateKeyUploadRequest'
       responses:
         '200':
-          description: Public key has been uploaded with success
+          description: Private key has been uploaded with success
           content:
             application/json:
               schema:
@@ -55,9 +56,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '409':
-          description: Private key does not match the uploaded public key
+          description: Private key does not match the uploaded public key with the specified version
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '424':
+          description: The matching public key with the specified version does not exist
           content:
             application/json:
               schema:
@@ -175,6 +182,8 @@ components:
           $ref: "#/components/schemas/ProxyPrivateKeyIdType"
         membershipId:
           $ref: "#/components/schemas/MembershipIdType"
+        version:
+          $ref: "#/components/schemas/ProxyPrivateKeyVersionType"
         keyType:
           $ref: "#/components/schemas/ProxyPrivateKeyTypeType"
         key:
@@ -198,14 +207,13 @@ components:
     ProxyPrivateKeyUploadRequest:
       type: object
       properties:
+        version:
+          $ref: "#/components/schemas/ProxyPrivateKeyVersionType"
         keyType:
           $ref: "#/components/schemas/ProxyPrivateKeyTypeType"
         key:
           $ref: "#/components/schemas/ProxyPrivateKeyDataType"
-        expireInDays:
-          $ref: "#/components/schemas/ExpireInDaysType"
       required:
-        - expireInDays
         - key
         - version
       additionalProperties: false
@@ -222,17 +230,21 @@ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4
 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt
 tQIDAQAB"
     ProxyPrivateKeyIdType:
-      description: Unique identifier of the public key stored in EcoHub
+      description: Unique identifier of the private key stored in EcoHub
       type: string
       format: uuid
       nullable: false
+    ProxyPrivateKeyVersionType:
+      type: string
+      description: Version of the already uploaded public key that matches this private key
+      nullable: false
     MembershipIdType:
-      description: Membership id the public key belongs to
+      description: Membership id the private key belongs to
       type: string
       format: uuid
       nullable: false
     CreatedAtType:
-      description: Timestamp when the public key has been created
+      description: Timestamp when the private key has been created
       type: string
       format: date-time
       nullable: false
@@ -240,11 +252,6 @@ tQIDAQAB"
       description: Timestamp when the public key will expire
       type: string
       format: date-time
-      nullable: false
-    ExpireInDaysType:
-      type: string
-      enum: ["7", "14", "30", "90", "180", "365"]
-      description: The expiration time, that defines the expiration date of the key in EcoHub
       nullable: false
     ProxyPrivateKeyTypeType:
       description: Specifies the type of operation for which the private key will be used. The following operations are supported
@@ -257,12 +264,11 @@ tQIDAQAB"
         errorCode:
           type: string
           enum: ["KEY_INVALID", "REQUEST_INVALID",
-                 "PUBLIC_KEY_MISMATCH",
-                 "KEY_ID_INVALID", "KEY_NOT_FOUND",
+                 "KEY_MISMATCH", "KEY_NOT_FOUND",
                   "UNAUTHORIZED", "ERROR"]
           description: Code identifying the type of error
-          example: "KEY_VERSION_EXISTS"
+          example: "KEY_NOT_FOUND"
         errorMessage:
           type: string
           description: Message detailing the error
-          example: "Key version already exists for this membership"
+          example: "The public key with the specified version does not exist"
