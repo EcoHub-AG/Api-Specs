@@ -1,0 +1,268 @@
+openapi: 3.0.3
+info:
+  title: SAF Proxy Key Store
+  version: 0.1.0
+  description: >
+    ## Security
+    
+    All endpoints are protected and a TechUser certificate (mTLS) or 
+    bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
+    the /techUserEnrolment endpoint of the general API.
+    
+    
+    ## Changelog
+    
+    ### Version 0.1.0 (03.09.2024)
+    
+    - Initial public release of the saf proxy key store api, that is needed to upload the private encryption and signature keys that EcoHub uses to Proxy data from SAF to DXP and vice versa.
+    
+    
+    There are two groups of APIs in this OAS:
+    
+    1. SAF Proxy Key API: This API can be used by all members, to upload their own private key, in case the receiver, wants to receive DATA in both Frameworks: SAF and DXP
+    
+    2. Internal APIs, that are used by the SAF Event Processing Module, to receive the proxy private key, to either decrypt or encrypt the payload data. Apart from that the API are used, to perform validation checks, to ensure that the upload private key works with the active publickey of the receiver
+    
+servers:
+  - url: 'https://services.test-myecohub.ch/privatekeystore'
+    description: EcoHub IAT Enviroment
+  - url: 'https://services.myecohub.ch/privatekeystore'
+    description: EcoHub PROD Enviroment
+paths:
+  /keys:
+    post:
+      tags:
+        - SAFProxyKeyAPI
+      summary: Upload a new private key for your membership.
+      operationId: UploadKey
+      requestBody:
+        description: Request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProxyPrivateKeyUploadRequest'
+      responses:
+        '200':
+          description: Public key has been uploaded with success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProxyPrivateKeyResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '409':
+          description: Private key does not match the uploaded public key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /members/{idpNumber}/key:
+    get:
+      tags:
+        - Internal SAF Proxy Key API (only usable by EcoHub service account)
+      summary: Get the private keys for a member.
+      description: Get the private keys, for encryption and signing, of a member by idp-number.
+      operationId: GetActiveProxyPrivateKeyOfMemberByIdpNumber
+      parameters:
+        - name: idpNumber
+          in: path
+          description: IdpNumber.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProxyPrivateKeyListResponse'
+        '204':
+          description: No private keys are uploaded.
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '404':
+          description: IDP number does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /members/{idpNumber}/key/{keyType}:
+    get:
+      tags:
+        - Internal SAF Proxy Key API (only usable by EcoHub service account)
+      summary: Get the private encryption or signature key of a member.
+      description: Get the private key of a member by idp-number and keyType.
+      operationId: GetActiveProxyPrivateKeyOfMemberByOperationAndIdpNumber
+      parameters:
+        - name: idpNumber
+          in: path
+          description: IdpNumber.
+          required: true
+          schema:
+            type: string
+        - name: keyType
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/ProxyPrivateKeyTypeType"
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProxyPrivateKeyResponse'
+        '204':
+          description: No private key uploaded
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS) missing
+        '404':
+          description: IDP number does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ProxyPrivateKeyListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProxyPrivateKeyResponse'
+      example:
+        - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
+          version: "string"
+          operation: "encryption"
+          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          createdAt: "2024-09-03T09:16:37.327Z"
+          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
+          activatedAt: "2024-09-03T09:16:37.327Z"
+          expiryDate: "2024-09-03T09:16:37.327Z"
+          ecoHubStatus: "Created"
+        - keyId: "0e84035f-d211-4fbd-9ce0-ecc259d7814då"
+          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
+          version: "string"
+          operation: "signature"
+          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          createdAt: "2024-09-03T09:16:37.327Z"
+          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
+          activatedAt: "2024-09-03T09:16:37.327Z"
+          expiryDate: "2024-09-03T09:16:37.327Z"
+          ecoHubStatus: "Created"
+    ProxyPrivateKeyResponse:
+      type: object
+      properties:
+        keyId:
+          $ref: "#/components/schemas/ProxyPrivateKeyIdType"
+        membershipId:
+          $ref: "#/components/schemas/MembershipIdType"
+        keyType:
+          $ref: "#/components/schemas/ProxyPrivateKeyTypeType"
+        key:
+          $ref: "#/components/schemas/ProxyPrivateKeyDataType"
+        createdAt:
+          $ref: "#/components/schemas/CreatedAtType"
+        expiryDate:
+          $ref: "#/components/schemas/ExpiryDateType"
+      additionalProperties: false
+      example:
+        - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
+          version: "string"
+          operation: "encryption"
+          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          createdAt: "2024-09-03T09:16:37.327Z"
+          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
+          activatedAt: "2024-09-03T09:16:37.327Z"
+          expiryDate: "2024-09-03T09:16:37.327Z"
+          ecoHubStatus: "Created"
+    ProxyPrivateKeyUploadRequest:
+      type: object
+      properties:
+        keyType:
+          $ref: "#/components/schemas/ProxyPrivateKeyTypeType"
+        key:
+          $ref: "#/components/schemas/ProxyPrivateKeyDataType"
+        expireInDays:
+          $ref: "#/components/schemas/ExpireInDaysType"
+      required:
+        - expireInDays
+        - key
+        - version
+      additionalProperties: false
+    ProxyPrivateKeyDataType:
+      minLength: 1
+      description: Base64-encoded representation of the private key portion of an RSA key pair in PEM format
+      type: string
+      nullable: false
+      example: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L
+iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww
+Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/
+KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4
+24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO
+0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt
+tQIDAQAB"
+    ProxyPrivateKeyIdType:
+      description: Unique identifier of the public key stored in EcoHub
+      type: string
+      format: uuid
+      nullable: false
+    MembershipIdType:
+      description: Membership id the public key belongs to
+      type: string
+      format: uuid
+      nullable: false
+    CreatedAtType:
+      description: Timestamp when the public key has been created
+      type: string
+      format: date-time
+      nullable: false
+    ExpiryDateType:
+      description: Timestamp when the public key will expire
+      type: string
+      format: date-time
+      nullable: false
+    ExpireInDaysType:
+      type: string
+      enum: ["7", "14", "30", "90", "180", "365"]
+      description: The expiration time, that defines the expiration date of the key in EcoHub
+      nullable: false
+    ProxyPrivateKeyTypeType:
+      description: Specifies the type of operation for which the private key will be used. The following operations are supported
+      type: string
+      enum: ["encryption", "signature"]
+      default: "encryption"
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          enum: ["KEY_INVALID", "REQUEST_INVALID",
+                 "PUBLIC_KEY_MISMATCH",
+                 "KEY_ID_INVALID", "KEY_NOT_FOUND",
+                  "UNAUTHORIZED", "ERROR"]
+          description: Code identifying the type of error
+          example: "KEY_VERSION_EXISTS"
+        errorMessage:
+          type: string
+          description: Message detailing the error
+          example: "Key version already exists for this membership"
