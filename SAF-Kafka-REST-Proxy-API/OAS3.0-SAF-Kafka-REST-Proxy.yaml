@@ -32,8 +32,8 @@ info:
     ### Version 0.3.0 (20.08.2024)
     - Initial public release
 servers:
-  - url: 'https://services.test-myecohub.ch/eh/saf'
-  - url: 'https://services.myecohub.ch/eh/saf'
+  - url: 'https://services.test-myecohub.ch/saf'
+  - url: 'https://services.myecohub.ch/saf'
 paths:
   /in:
     post:
