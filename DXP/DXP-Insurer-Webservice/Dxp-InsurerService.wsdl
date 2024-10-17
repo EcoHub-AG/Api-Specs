@@ -34,10 +34,10 @@
 
 			<xsd:import
 				namespace="http://www.igb2b.ch/dxpInsurerServiceSchema-v1.3/"
-				schemaLocation="schemas/dxpInsurerServiceV1.3.xsd" />
+				schemaLocation="./schemas/dxpInsurerServiceV1.3.xsd" />
 			<xsd:import
 				namespace="http://www.igb2b.ch/dxpServiceSchema-v1.3/"
-				schemaLocation="schemas/dxpServiceV1.3.xsd" />
+				schemaLocation="./schemas/dxpServiceV1.3.xsd" />
 
 		    <!--  Wrapped elements for version 1.3 types-->
 		    <xsd:element name="commonInputType" type="v1_3:commonInputType"/>
