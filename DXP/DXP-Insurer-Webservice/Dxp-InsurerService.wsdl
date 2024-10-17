@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Note the missing '/' in 'XMLSchema' - it doesn't work with it!-->
+<wsdl:definitions 
+	name="dxpInsurerService-v1.3" 
+	targetNamespace="http://www.igb2b.ch/dxpInsurerService-v1.3/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:tns="http://www.igb2b.ch/dxpInsurerService-v1.3/" 
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:tin="http://www.igb2b.ch/dxpInsurerServiceSchema-v1.3/"
+	xmlns:v1_3="http://www.igb2b.ch/dxpInsurerServiceSchemaTypes-v1.3/"
+	>
+  
+	<wsdl:documentation>
+		This file, along with the included XSD file, define the WSDL
+		It's written in WSDL1.1 to provide as much compliance as possible.
+		Additionally, it adheres to the WS-I standards. It has been validated
+		with the WS-I validator of SOAPUI 5.0.0.
+	</wsdl:documentation>
+  
+	<!-- **************************************************************** -->
+	<!-- Changelog -->
+	<!-- **************************************************************** -->
+	
+	<!-- **************************************************************** -->
+	<!-- Types -->
+	<!-- **************************************************************** -->
+	<wsdl:types>
+	    <xsd:schema 
+	    	targetNamespace="http://www.igb2b.ch/dxpInsurerServiceSchemaTypes-v1.3/"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			xmlns:cv1_3="http://www.igb2b.ch/dxpServiceSchema-v1.3/"
+			xmlns:v1_3="http://www.igb2b.ch/dxpInsurerServiceSchema-v1.3/">
+
+			<xsd:import
+				namespace="http://www.igb2b.ch/dxpInsurerServiceSchema-v1.3/"
+				schemaLocation="schemas/dxpInsurerServiceV1.3.xsd" />
+			<xsd:import
+				namespace="http://www.igb2b.ch/dxpServiceSchema-v1.3/"
+				schemaLocation="schemas/dxpServiceV1.3.xsd" />
+
+		    <!--  Wrapped elements for version 1.3 types-->
+		    <xsd:element name="commonInputType" type="v1_3:commonInputType"/>
+			<xsd:element name="commonReturnType" type="cv1_3:commonReturnType"/>
+			<xsd:element name="serviceFaultType" type="cv1_3:serviceFaultType"/>
+
+            <xsd:element name="getFileList" type="v1_3:getFileListType"></xsd:element>
+            <xsd:element name="getFileListResponse" type="cv1_3:getFileListReturnType"></xsd:element>
+            <xsd:element name="getFileListFault" type="cv1_3:serviceFaultType"></xsd:element>
+            
+            <xsd:element name="getFile" type="v1_3:getFileType"></xsd:element>
+            <xsd:element name="getFileResponse" type="cv1_3:getFileReturnType"></xsd:element>
+            <xsd:element name="getFileFault" type="cv1_3:serviceFaultType"></xsd:element>
+            
+            <xsd:element name="ackFile" type="v1_3:ackFileType"></xsd:element>
+            <xsd:element name="ackFileResponse" type="cv1_3:commonReturnType"></xsd:element>
+            <xsd:element name="ackFileFault" type="cv1_3:serviceFaultType"></xsd:element>
+            
+            <xsd:element name="putFile" type="v1_3:putFileType"></xsd:element>
+            <xsd:element name="putFileResponse" type="cv1_3:putFileReturnType"></xsd:element>
+            <xsd:element name="putFileFault" type="cv1_3:serviceFaultType"></xsd:element>
+	    </xsd:schema>
+	</wsdl:types>
+  	
+  	<!-- **************************************************************** -->
+	<!-- Messages -->
+	<!-- **************************************************************** -->
+	<!-- Requests / Responses-->
+	<wsdl:message name="getFileListRequest">
+		<wsdl:part name="fileListRequest" element="v1_3:getFileList"/>
+	</wsdl:message>
+	<wsdl:message name="getFileListResponse">
+		<wsdl:part name="fileList" element="v1_3:getFileListResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getFileListFault">
+		<wsdl:part name="message" element="v1_3:serviceFaultType"/>
+	</wsdl:message>
+	
+	<wsdl:message name="getFileRequest">
+		<wsdl:part name="getFileRequest" element="v1_3:getFile"/>
+	</wsdl:message>
+	<wsdl:message name="getFileResponse">
+		<wsdl:part name="getFileResponse" element="v1_3:getFileResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getFileFault">
+		<wsdl:part name="message" element="v1_3:serviceFaultType"/>
+	</wsdl:message>
+	
+	<wsdl:message name="ackFileRequest">
+		<wsdl:part name="ackFileRequest" element="v1_3:ackFile"/>
+	</wsdl:message>
+	<wsdl:message name="ackFileResponse">
+		<wsdl:part name="ackFileResponse" element="v1_3:ackFileResponse"/>
+	</wsdl:message>
+	<wsdl:message name="ackFileFault">
+		<wsdl:part name="message" element="v1_3:serviceFaultType"/>
+	</wsdl:message>
+  
+	<wsdl:message name="putFileRequest">
+		<wsdl:part name="putFileRequest" element="v1_3:putFile"/>
+	</wsdl:message>
+	<wsdl:message name="putFileResponse">
+		<wsdl:part name="putFileResponse" element="v1_3:putFileResponse"/>
+	</wsdl:message>
+	<wsdl:message name="putFileFault">
+		<wsdl:part name="message" element="v1_3:serviceFaultType"/>
+	</wsdl:message>
+  
+  	<!-- **************************************************************** -->
+	<!-- Port -->
+	<!-- **************************************************************** -->
+	<wsdl:portType name="dxpInsurerService-v1_3">
+    	<wsdl:operation name="getFileList">
+    		<wsdl:input message="tns:getFileListRequest"/>
+    		<wsdl:output message="tns:getFileListResponse"/>
+            <wsdl:fault name="ServiceFault" message="tns:getFileListFault"/>
+        </wsdl:operation>
+    	<wsdl:operation name="getFile">
+    		<wsdl:input message="tns:getFileRequest"/>
+    		<wsdl:output message="tns:getFileResponse"/>
+            <wsdl:fault name="ServiceFault" message="tns:getFileFault"/>
+        </wsdl:operation>
+    	<wsdl:operation name="ackFile">
+    		<wsdl:input message="tns:ackFileRequest"/>
+    		<wsdl:output message="tns:ackFileResponse"/>
+            <wsdl:fault name="ServiceFault" message="tns:ackFileFault"/>
+        </wsdl:operation>
+    	<wsdl:operation name="putFile">
+    		<wsdl:input message="tns:putFileRequest"/>
+    		<wsdl:output message="tns:putFileResponse"/>
+            <wsdl:fault name="ServiceFault" message="tns:putFileFault"/>
+        </wsdl:operation>
+	</wsdl:portType>
+
+
+	<!-- **************************************************************** -->
+	<!-- Binding and operations -->
+	<!-- **************************************************************** -->
+	<wsdl:binding name="dxpInsurerServicePortBinding-v1_3.SOAPoHTTP" type="tns:dxpInsurerService-v1_3">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+	    <wsdl:operation name="getFileList">
+	    	<soap:operation soapAction="" style="document"/>
+	      	<wsdl:input>
+	        	<soap:body use="literal"/>
+	      	</wsdl:input>
+	      	<wsdl:output>
+	        	<soap:body use="literal"/>
+	      	</wsdl:output>
+			<wsdl:fault name="ServiceFault">
+				<soap:fault name="ServiceFault" use="literal" />
+			</wsdl:fault>	      	
+	    </wsdl:operation>
+	    <wsdl:operation name="getFile">
+	    	<wsdl:documentation>Returns the file uniquely identified by the file id.</wsdl:documentation>
+	    	<soap:operation soapAction="" style="document"/>
+	      	<wsdl:input>
+	        	<soap:body use="literal"/>
+	      	</wsdl:input>
+	      	<wsdl:output>
+	        	<soap:body use="literal"/>
+	      	</wsdl:output>
+			<wsdl:fault name="ServiceFault">
+				<soap:fault name="ServiceFault" use="literal" />
+			</wsdl:fault>	      	
+	    </wsdl:operation>
+	    <wsdl:operation name="ackFile">
+	    	<wsdl:documentation>Confirms, that the file has been received at the broker</wsdl:documentation>
+	    	<soap:operation soapAction="" style="document"/>
+	      	<wsdl:input>
+	        	<soap:body use="literal"/>
+	      	</wsdl:input>
+	      	<wsdl:output>
+	        	<soap:body use="literal"/>
+	      	</wsdl:output>
+			<wsdl:fault name="ServiceFault">
+				<soap:fault name="ServiceFault" use="literal" />
+			</wsdl:fault>	      	
+	    </wsdl:operation>
+	    <wsdl:operation name="putFile">
+	    	<wsdl:documentation>Transfers a file to the specified insurer.</wsdl:documentation>
+	    	<soap:operation soapAction="" style="document"/>
+	      	<wsdl:input>
+	        	<soap:body use="literal"/>
+	      	</wsdl:input>
+	      	<wsdl:output>
+	        	<soap:body use="literal"/>
+	      	</wsdl:output>
+			<wsdl:fault name="ServiceFault">
+				<soap:fault name="ServiceFault" use="literal" />
+			</wsdl:fault>	      	
+	    </wsdl:operation>
+	</wsdl:binding>
+  
+  
+	<!-- **************************************************************** -->
+	<!-- Service -->
+	<!-- **************************************************************** -->
+	<wsdl:service name="dxpInsurerService-v1_3">
+    	<wsdl:port binding="tns:dxpInsurerServicePortBinding-v1_3.SOAPoHTTP" name="dxpInsurerServicePort-v1_3.SOAPoHTTP">
+      		<soap:address location="http://www.igb2b.ch/dxpService/dxpService/"/>
+    	</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

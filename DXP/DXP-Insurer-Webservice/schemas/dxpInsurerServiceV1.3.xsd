@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+	targetNamespace="http://www.igb2b.ch/dxpInsurerServiceSchema-v1.3/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:cns="http://www.igb2b.ch/dxpServiceSchema-v1.3/"
+	xmlns:tns="http://www.igb2b.ch/dxpInsurerServiceSchema-v1.3/">
+
+
+	<!-- - Note about timestamps: According to http://www.w3.org/TR/xmlschema-2/#dateTime, 
+		all timestamps are UTC (Coordinated Universal Time, aka GMT = Greenwich Mean 
+		Time). There is the possibility of 'local' or untimezoned times, but they 
+		are presumed to be the time in the timezone of some unspecified locality. 
+		Example: 2002-10-10T12:00:00.498-05:00 (noon on 10 October 2002, Central 
+		Daylight Savings Time as well as Eastern Standard Time in the U.S.) is 2002-10-10T17:00:00.498Z, 
+		five hours later than 2002-10-10T12:00:00.498Z. - Note about minOccurs, maxOccurs 
+		and nillable: We use nillable="true" in favor of minOccurs=0 because that 
+		way, the element in question is always visible in the transferred XML file, 
+		even when holding a null value. For further explanations, see e.g. http://www.dimuthu.org/blog/2008/08/18/xml-schema-nillabletrue-vs-minoccurs0/comment-page-1/ 
+		-->
+
+	<!-- **************************************************************** -->
+	<!-- Changelog -->
+	<!-- **************************************************************** -->
+	
+	<!--  import types common to insurer- and broker service. -->
+	<xsd:import
+		namespace="http://www.igb2b.ch/dxpServiceSchema-v1.3/"
+		schemaLocation="dxpServiceV1.3.xsd" />
+	
+	<xsd:complexType name="commonInputType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">(Base) input structure for all operations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="requestId" type="cns:string10" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>unique id. This id will be forwarded to insurer.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="requestTime" type="xsd:dateTime" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Timestamp of time at the broker. Will be forwarded to insurer.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="extendedCommonInputType">
+		<xsd:complexContent>
+			<xsd:extension base="tns:commonInputType">
+				<xsd:sequence>
+					<xsd:element name="idpUserId" type="cns:string10" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>
+								The unique id of the insurer this
+								request is addressed to.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="brokerRegNo" type="cns:string24" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>sample: CHE_FINMA_10000</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="fileExtendedCommonInputType">
+		<xsd:complexContent>
+			<xsd:extension base="tns:extendedCommonInputType">
+				<xsd:sequence>
+				<xsd:element name="insurerId" type="cns:string30" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>The unique id of the insurer this request is addressed to.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="fileId" type="cns:string50" maxOccurs="1" minOccurs="1">
+                        <xsd:annotation>
+                        	<xsd:documentation>The unique file id.</xsd:documentation>
+                        </xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="getFileListType">
+        <xsd:annotation>
+        	<xsd:documentation>A list of all document types, that shall be returned.</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+			<xsd:extension base="tns:extendedCommonInputType">
+				<xsd:sequence>
+					<xsd:element name="insurerId" type="cns:string30" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>The unique id of the insurer this request is addressed to.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="from" type="xsd:dateTime" maxOccurs="1" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>
+								Earliest time stamp of documents, that
+								should be included in the list.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="to" type="xsd:dateTime" maxOccurs="1" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>
+								Latest time stamp of documents, that
+								should be included in the list.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="documentTypes" type="cns:DocumentType" maxOccurs="unbounded" minOccurs="0">
+                        <xsd:annotation>
+                        	<xsd:documentation>
+                        		A list of all document types, that are desired. 
+                        		An empty list indicates no restriction, i.e. all 
+                        		documents independent of the document type.
+                        	</xsd:documentation>
+                        </xsd:annotation>
+					</xsd:element>
+					<xsd:element name="newOnly" type="xsd:boolean" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>
+								if true, only return documents, that are
+								marked as "unread" at the insurer. if
+								set to false, all documents (independent
+								of the unread-flag) will be returned.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="getFileType">
+		<xsd:complexContent>
+			<xsd:extension base="tns:fileExtendedCommonInputType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="putFileType">
+		<xsd:complexContent>
+			<xsd:extension base="tns:extendedCommonInputType">
+				<xsd:sequence>
+					<xsd:element name="insurerId" type="cns:string30" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>The unique id of the insurer this request is addressed to.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="fileInfoUpload" type="cns:FileInfoUpload" maxOccurs="1" minOccurs="1">
+                        <xsd:annotation>
+                        	<xsd:documentation>the info on this file</xsd:documentation>
+                        </xsd:annotation>
+					</xsd:element>
+					<xsd:element name="data" type="xsd:base64Binary" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>The file to transmit.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="fingerprint" type="cns:string24" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>the base-64 encoded MD5 hash value.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ackFileType">
+		<xsd:complexContent>
+			<xsd:extension base="tns:fileExtendedCommonInputType"/>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

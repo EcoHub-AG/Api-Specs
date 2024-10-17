@@ -1,0 +1,490 @@
+openapi: 3.0.1
+info:
+  title: DxpInsurerService
+  version: "1.3"
+  description: The webservice providing this REST api needs to be implemented by the insurer and will be called by EcoHub.
+paths:
+  /ackFile:
+    post:
+      tags:
+        - Insurer
+      summary: Performs ackFile action.
+      requestBody:
+        description: AckFile request.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns DXPInsurerService.InsurerModels.AckFileResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AckFileResponse'
+        '400':
+          description: If Ack operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AckFileErrorResponse'
+  /getFile:
+    post:
+      tags:
+        - Insurer
+      summary: Performs getFile action.
+      requestBody:
+        description: GetFile request.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns DXPInsurerService.InsurerModels.GetFileResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileResponse'
+        '400':
+          description: If getFile operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileErrorResponse'
+  /putFile:
+    post:
+      tags:
+        - Insurer
+      summary: Performs putFile action.
+      requestBody:
+        description: PutFile request.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/PutFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/PutFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/PutFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns DXPInsurerService.InsurerModels.PutFileResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutFileResponse'
+        '400':
+          description: If PutFile operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutFileErrorResponse'
+  /getFileList:
+    post:
+      tags:
+        - Insurer
+      summary: Performs getFileList action.
+      requestBody:
+        description: GetFileListRequest.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileListRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileListRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileListRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns DXPInsurerService.InsurerModels.GetFileListResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileListResponse'
+        '400':
+          description: If GetFileList operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileListErrorResponse'
+components:
+  schemas:
+    GeneralRequestData:
+      type: object
+      properties:
+        idpUserId:
+          type: string
+          maxLength: 10
+          example: IDP1234567
+          description: The unique identification of the requesting technical IDP user (e.g. IDP1234567).
+          nullable: false
+        brokerRegNo:
+          type: string
+          maxLength: 24
+          example: CHE-IGB2B-90212
+          description: The registration number of the requesting broker.
+          nullable: false
+        insurerId:
+          type: string
+          maxLength: 30
+          example: insurer1
+          description: The id of the insurer
+          nullable: false
+        requestId:
+          type: string
+          example: 18554be7-dad0-42ce-abcd-d5a8f4c8dba9
+          maxLength: 10
+          description: Unique request ID. This is created by the broker or DXP-GUI and passed on to the VU and should be logged there to help with troubleshooting.
+          nullable: false
+        requestTime:
+          type: string
+          description: Time of the request at the client as timestamp (date and time, each UTC without corresponding specification). YYYY-MM-DDTHH:MM:SS RFC 3339 formatted datetime. 
+          format: date-time
+      additionalProperties: false
+    AckFileRequest:
+      type: object
+      properties:
+        action:
+          type: string
+          example: ackFile
+          description: value should be ackFile
+          nullable: false
+        fileId:
+          type: string
+          example: f28377b8-9ffc-4012-9089-35da1e3db09b
+          maxLength: 50
+          description: The (over time) unique identification of the file at the VU. This corresponds to an entry in the list of FileIds return values of the getFileList method.
+          nullable: false
+      additionalProperties: false
+    AckFileResponse:
+      type: object
+      properties:
+         returnCode:
+          enum:
+            - OK
+          type: string
+      nullable: false
+      additionalProperties: false
+    AckFileErrorResponse:
+      type: object
+      properties:
+        returnCode:
+          $ref: '#/components/schemas/AckFileErrorReturnCode'
+        errorMessage:
+          type: string
+          nullable: true
+          example: The file you tried to ackknowledge couldn't be found
+      additionalProperties: false
+    AckFileErrorReturnCode:
+      enum:
+        - FILE_NOT_FOUND
+        - IDP_USER_NOT_FOUND
+        - ERROR
+      type: string
+      example: FILE_NOT_FOUND
+      nullable: false
+    GetFileRequest:
+      type: object
+      properties:
+        action:
+          type: string
+          description: value should be getFile
+          example: getFile
+          nullable: false
+        fileId:
+          type: string
+          example: f28377b8-9ffc-4012-9089-35da1e3db09b
+          maxLength: 50
+          description: The (over time) unique identification of the file at the VU. This corresponds to an entry in the list of FileIds return values of the getFileList method.
+          nullable: false
+      additionalProperties: false
+    GetFileResponse:
+      type: object
+      properties:
+        fileInfoDownload:
+          $ref: '#/components/schemas/FileInfoDownload'
+        data:
+          type: string
+          format: byte
+          example: PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxiaWxsaW5nIHhtbG5zPSJodHRwOi8vd3d3LklHQjJCLmNoL1hNTFNjaGVtYSIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeHNpOnNjaGVtYUxvY2F0aW9uPSJodHRwOi8vd3d3LklHQjJCLmNoL1hNTFNjaGVtYSBiaWxsaW5nX1Y1LjMueHNkIj4NCgk8aGVhZGVyPg0KCQk8aWRlbnRpZmljYXRpb25Obz42ODQ5MDAwMC0wMDAwLTIwMDAtODAwMC0wMDAwMDAwMDU2NDg8L2lkZW50aWZpY2F0aW9uTm8+DQoJCTxkYXRlVGltZUNyZWF0aW9uPjIwMDEtMTItMTdUMTA6MzA6NTBaPC9kYXRlVGltZUNyZWF0aW9uPg0KCQk8c2VuZGVyPg0KCQkJPGluc3VyZXI+DQoJCQkJPGluc3VyZXJDb2RlPlNaOTk5PC9pbnN1cmVyQ29kZT4NCgkJCQk8Y29tcGFueU5hbWU+VGVzdCBJbnN1cmVyPC9jb21wYW55TmFtZT4NCgkJCTwvaW5zdXJlcj4NCgkJPC9zZW5kZXI+DQoJCTxyZWNpcGllbnQ+DQoJCQk8YnJva2VyPg0KCQkJCTxicm9rZXJSZWdpc3Rlck5vPkNIRS1GSU5NQS0xMDAwMTwvYnJva2VyUmVnaXN0ZXJObz4NCgkJCQk8Y29tcGFueU5hbWU+VGVzdCBCcm9rZXI8L2NvbXBhbnlOYW1lPg0KCQkJPC9icm9rZXI+DQoJCTwvcmVjaXBpZW50Pg0KCQk8dHlwZVJlYz4wMDE8L3R5cGVSZWM+DQoJCTxzdWJUeXBlUmVjPjAwMTwvc3ViVHlwZVJlYz4NCgkJPHZlcnNpb25SZWM+NS4zPC92ZXJzaW9uUmVjPg0KCTwvaGVhZGVyPg0KCTxJQ0J1c2luZXNzPg0KCQk8Y29tcGFueU5hbWU+TWlncm9zIEJhbmsgQUc8L2NvbXBhbnlOYW1lPg0KCTwvSUNCdXNpbmVzcz4NCgk8Y29udHJhY3RObz40NTY4MjQzODU8L2NvbnRyYWN0Tm8+DQoJPGludm9pY2U+DQoJCTxpbnZvaWNlVG90YWw+DQoJCQk8cHJlbWl1bVBlcmlvZEZyb21EYXRlPjIwMjAtMTItMDE8L3ByZW1pdW1QZXJpb2RGcm9tRGF0ZT4NCgkJCTxwcmVtaXVtUGVyaW9kVG9EYXRlPjIwMjEtMTEtMzA8L3ByZW1pdW1QZXJpb2RUb0RhdGU+DQoJCQk8a2luZFByZW1pdW0+MTE8L2tpbmRQcmVtaXVtPg0KCQkJPHR5cGVQcmVtaXVtPjAxPC90eXBlUHJlbWl1bT4NCgkJCTxsb2JJRz4zODAwMDwvbG9iSUc+DQoJCQk8Y3VycmVuY3k+Q0hGPC9jdXJyZW5jeT4NCgkJCTx0YXJpZmZQcmVtaXVtPjI1MDAwLjAwPC90YXJpZmZQcmVtaXVtPg0KCQkJPGluc3RhbG1lbnRTdXJjaGFyZ2U+MjUwLjAwPC9pbnN0YWxtZW50U3VyY2hhcmdlPg0KCQkJPHRheGVzU3RhdHV0b3J5Q2hhcmdlcz42NS4wMDwvdGF4ZXNTdGF0dXRvcnlDaGFyZ2VzPg0KCQkJPGludm9pY2VBbW91bnQ+MjUwMDAuMDA8L2ludm9pY2VBbW91bnQ+DQoJCTwvaW52b2ljZVRvdGFsPg0KCTwvaW52b2ljZT4NCgk8YmlsbGluZ0RvY3VtZW50Pg0KCQk8YXR0YWNobWVudD5VakJzUjA5RWJHaGpaMGRUUVV4TlFVRkJVVU5CUlUxdFExcDBkVTFHVVhoRVV6aGk8L2F0dGFjaG1lbnQ+DQoJCTxtaW1lLXR5cGU+YXBwbGljYXRpb24vcGRmPC9taW1lLXR5cGU+DQoJPC9iaWxsaW5nRG9jdW1lbnQ+DQoJPGJpbGxpbmdEb2N1bWVudD4NCgkJPGF0dGFjaG1lbnQ+RXpmUFIwOUViR2hqWjBkVFFVeE5RVUZCVVVOQlJVMXRRMXAwZFV6dTl0cmRoZmhmPC9hdHRhY2htZW50Pg0KCQk8bWltZS10eXBlPmFwcGxpY2F0aW9uL3ZuZC5vcGVueG1sZm9ybWF0cy1vZmZpY2Vkb2N1bWVudC5zcHJlYWRzaGVldG1sLnNoZWV0PC9taW1lLXR5cGU+DQoJPC9iaWxsaW5nRG9jdW1lbnQ+DQo8L2JpbGxpbmc+DQo
+          description: The requested file.
+          nullable: false
+        fingerprint:
+          type: string
+          maxLength: 24
+          example: MDc3RDVDQ0Q0QkRDQTI1RkQxNjZCMDM0NEI5MzQ0QjA
+          description: The base64-encoded MD5 hash value of the file.
+          nullable: false
+        returnCode: 
+          type: string
+          enum:
+            - OK
+      additionalProperties: false
+    GetFileErrorResponse:
+      type: object
+      properties:
+        returnCode:
+          $ref: '#/components/schemas/GetFileErrorReturnCode'
+        errorMessage:
+          type: string
+          nullable: true
+          example: The file you tried to receive couldn't be found.
+      additionalProperties: false
+    GetFileErrorReturnCode:
+      enum:
+        - FILE_NOT_FOUND
+        - IDP_USER_NOT_FOUND
+        - ERROR
+      type: string
+      example: FILE_NOT_FOUND
+      nullable: false
+    PutFileRequest:
+      type: object
+      properties:
+        action:
+          type: string
+          example: putFile
+          description: value should be putFile
+          nullable: false
+        fileInfoUpload:
+          $ref: '#/components/schemas/FileInfoUpload'
+        data:
+          type: string
+          format: byte
+          description: The file to be transmitted.
+          nullable: false
+        fingerprint:
+          type: string
+          maxLength: 24
+          description: The base64-encoded MD5 hash value of the file.
+          nullable: false
+      additionalProperties: false
+    PutFileResponse:
+      type: object
+      properties:
+        fileInfoDownload:
+          $ref: '#/components/schemas/FileInfoDownload'
+        returnCode: 
+          type: string
+          enum:
+            - OK
+      additionalProperties: false
+    PutFileErrorResponse:
+      type: object
+      properties:
+        returnCode:
+          $ref: '#/components/schemas/PutFileErrorReturnCode'
+        errorMessage:
+          type: string
+          nullable: true
+          example: The provided document type is not support.
+      additionalProperties: false
+    PutFileErrorReturnCode:
+      enum:
+        - NOK
+        - DOCUMENT_TYPE_NOT_FOUND
+        - DOCUMENT_TYPE_NOT_SUPPORTED
+        - IDP_USER_NOT_FOUND
+        - ERROR
+      type: string
+      example: DOCUMENT_TYPE_NOT_FOUND
+      nullable: false
+    GetFileListRequest:
+      type: object
+      properties:
+        action:
+          type: string
+          example: getFileList
+          description: value should be getFileList
+          nullable: false
+        newOnly:
+          type: boolean
+          example: true
+          description: If set to 1, return only documents that are marked as unread at VU. If newOnly is set to 0, the documents will be returned regardless of whether they are set to unread.
+          nullable: false
+        from:
+          type: string
+          format: date-time
+          description: Earliest time (fileCreationDate) of the documents to be included in the list; inclusive i.e. from <= fileCreationDate (date and time, each UTC without corresponding specification). YYYY-MM-DDTHH:MM:SS RFC 3339 formatted datetime. 
+          nullable: true
+        fromSpecified:
+          type: boolean
+          description: d
+          nullable: true
+        to:
+          type: string
+          format: date-time
+          description: Latest date (fileCreationDate) of the documents to be included in the list; exclusive i.e. fileCreationDate < to (date and time, each UTC without corresponding specification). YYYY-MM-DDTHH:MM:SS RFC 3339 formatted datetime. 
+          nullable: true
+        toSpecified:
+          type: boolean
+          description: If set to true, the "to" parameter will be taken into consideration, if set to false, the to parameter will be ignored.
+          nullable: true
+        documentTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentType'
+          example:
+            - identifier: BILLING
+              version: 5.3
+            - identifier: COMMISSION
+              version: 5.3
+          description: List of document types whose documents are to be returned. The valid document types are defined outside the web service so that new types can be added without having to introduce a new interface version.
+          nullable: true
+      additionalProperties: false
+    GetFileListResponse:
+      type: object
+      properties:
+        fileList:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/FileInfoDownload'
+          example:
+            - fileId: f28377b8-9ffc-4012-9089-35da1e3db09b
+              fileCreationDate: 2022-09-14T12:24:28.455Z
+              ackState: false
+              fileName: f28377b8-9ffc-4012-9089-35da1e3db09b.xml
+              mimeType: text/xml
+              documentType:
+                identifier: BILLING
+                version: 5.3
+            - fileId: a5329506-639a-4343-b6f3-5dd75b85ad2f
+              fileCreationDate: 2022-09-14T12:24:28.455Z
+              ackState: false
+              fileName: a5329506-639a-4343-b6f3-5dd75b85ad2f.xml
+              mimeType: text/xml
+              documentType:
+                identifier: COMMISSION
+                version: 5.3
+        resultTruncated:
+          type: boolean
+          nullable: false
+        returnCode: 
+          type: string
+          nullable: false
+          enum:
+            - OK
+      additionalProperties: false
+    GetFileListErrorResponse:
+      type: object
+      properties:
+        returnCode:
+          $ref: '#/components/schemas/GetFileListErrorReturnCode'
+        errorMessage:
+          type: string
+          nullable: true
+          example: The requested document type couldn't be found.
+      additionalProperties: false
+    GetFileListErrorReturnCode:
+      enum:
+        - DOCUMENT_TYPE_NOT_FOUND
+        - IDP_USER_NOT_FOUND
+        - ERROR
+      type: string
+      example: DOCUMENT_TYPE_NOT_FOUND
+      nullable: false
+    FileInfoDownload:
+      type: object
+      description: Metadata about the transferred file.
+      properties:
+        fileId:
+          type: string
+          maxLength: 50
+          example: f28377b8-9ffc-4012-9089-35da1e3db09b
+          nullable: true
+        fileCreationDate:
+          type: string
+          format: date-time
+        ackState:
+          type: boolean
+          example: false
+        fileName:
+          type: string
+          maxLength: 150
+          example: f28377b8-9ffc-4012-9089-35da1e3db09b.xml
+          nullable: true
+        mimeType:
+          type: string
+          maxLength: 100
+          example: text/xml
+          nullable: true
+        myProperty:
+          type: integer
+          format: int32
+        documentType:
+          $ref: '#/components/schemas/DocumentType'
+      additionalProperties: false
+    FileInfoUpload:
+      type: object
+      description: Metadata about the transferred file. Details about the FileInfoUpload data type are described above.
+      properties:
+        documentType:
+          $ref: '#/components/schemas/DocumentType'
+        fileName:
+          type: string
+          maxLength: 150
+          example: file-f28377b8-9ffc-4012-9089-35da1e3db09b.xml
+          nullable: false
+        mimeType:
+          type: string
+          maxLength: 100
+          example: text/xml
+          nullable: false
+      additionalProperties: false
+    DocumentType:
+      type: object
+      properties:
+        identifier:
+          type: string
+          maxLength: 50
+          nullable: false
+        version:
+          type: string
+          maxLength: 10
+          nullable: false
+      example:
+        identifier: BILLING
+        version: 5.3
+      additionalProperties: false
