@@ -4,119 +4,12 @@ info:
   version: "1.3"
   description: The webservice providing this REST api needs to be implemented by the insurer and will be called by EcoHub.
 paths:
-  /ackFile:
-    post:
-      tags:
-        - Insurer
-      summary: Performs ackFile action.
-      requestBody:
-        description: AckFile request.
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/AckFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          text/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/AckFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          application/*+json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/AckFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-      responses:
-        '200':
-          description: Returns DXPInsurerService.InsurerModels.AckFileResponse
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AckFileResponse'
-        '400':
-          description: If Ack operation is unsuccessful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AckFileErrorResponse'
-  /getFile:
-    post:
-      tags:
-        - Insurer
-      summary: Performs getFile action.
-      requestBody:
-        description: GetFile request.
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/GetFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          text/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/GetFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          application/*+json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/GetFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-      responses:
-        '200':
-          description: Returns DXPInsurerService.InsurerModels.GetFileResponse
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetFileResponse'
-        '400':
-          description: If getFile operation is unsuccessful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetFileErrorResponse'
-  /putFile:
-    post:
-      tags:
-        - Insurer
-      summary: Performs putFile action.
-      requestBody:
-        description: PutFile request.
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/PutFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          text/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/PutFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          application/*+json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/PutFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-      responses:
-        '200':
-          description: Returns DXPInsurerService.InsurerModels.PutFileResponse
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PutFileResponse'
-        '400':
-          description: If PutFile operation is unsuccessful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PutFileErrorResponse'
   /getFileList:
     post:
       tags:
         - Insurer
       summary: Performs getFileList action.
+      description: Allows to query all files matching certain criteria (to be passed as parameter). The return value is a list with metadata of these files.
       requestBody:
         description: GetFileListRequest.
         content:
@@ -148,6 +41,117 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetFileListErrorResponse'
+  /getFile:
+    post:
+      tags:
+        - Insurer
+      summary: Performs getFile action.
+      description: Returns the file determined by the unique identifier.
+      requestBody:
+        description: GetFile request.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns DXPInsurerService.InsurerModels.GetFileResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileResponse'
+        '400':
+          description: If getFile operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileErrorResponse'
+  /ackFile:
+    post:
+      tags:
+        - Insurer
+      summary: Performs ackFile action.
+      description: Confirmation that a file has arrived at the IDP user. Merchant can mark the corresponding file as "not new".
+      requestBody:
+        description: AckFile request.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns DXPInsurerService.InsurerModels.AckFileResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AckFileResponse'
+        '400':
+          description: If Ack operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AckFileErrorResponse'
+  /putFile:
+    post:
+      tags:
+        - Insurer
+      summary: Performs putFile action.
+      description: A file is transmitted to a specific CC. Only XMLs from the defined core processes of IG B2B are allowed.
+      requestBody:
+        description: PutFile request.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/PutFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/PutFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/PutFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns DXPInsurerService.InsurerModels.PutFileResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutFileResponse'
+        '400':
+          description: If PutFile operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutFileErrorResponse'
 components:
   schemas:
     GeneralRequestData:
@@ -169,7 +173,7 @@ components:
           type: string
           maxLength: 30
           example: insurer1
-          description: The id of the insurer
+          description: The unique identification of the Merchant. This corresponds to one of the return values of /getAvailableInsurers.
           nullable: false
         requestId:
           type: string
@@ -272,6 +276,9 @@ components:
           example: The file you tried to receive couldn't be found.
       additionalProperties: false
     GetFileErrorReturnCode:
+      description: |
+        * FILE_NOT_FOUND: The document with ID fileId could not be found.
+        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
         - FILE_NOT_FOUND
         - IDP_USER_NOT_FOUND
@@ -321,6 +328,11 @@ components:
           example: The provided document type is not support.
       additionalProperties: false
     PutFileErrorReturnCode:
+      description: |
+        * NOK: The file was not transmitted to the Merchant.
+        * DOCUMENT_TYPE_NOT_FOUND: The specified document type is unknown.
+        * DOCUMENT_TYPE_NOT_SUPPORTED: The specified document type is not supported by the Merchant.
+        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
         - NOK
         - DOCUMENT_TYPE_NOT_FOUND
@@ -377,6 +389,7 @@ components:
       type: object
       properties:
         fileList:
+          description: List of meta-information about the available files that match the selection criteria of the request.
           type: array
           nullable: true
           items:
@@ -399,6 +412,7 @@ components:
                 identifier: COMMISSION
                 version: 5.3
         resultTruncated:
+          description: Indicates whether the number of elements in the "fileList" parameter was limited or not. The value 1 means that there would have been more results.
           type: boolean
           nullable: false
         returnCode: 
@@ -414,10 +428,14 @@ components:
           $ref: '#/components/schemas/GetFileListErrorReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The requested document type couldn't be found.
       additionalProperties: false
     GetFileListErrorReturnCode:
+      description: |
+        * DOCUMENT_TYPE_NOT_FOUND: One of the specified document types is unknown.
+        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
         - DOCUMENT_TYPE_NOT_FOUND
         - IDP_USER_NOT_FOUND
