@@ -11,155 +11,50 @@ servers:
     variables: {}
     description: EcoHub PROD Environment
 paths:
-  /ackFile:
+  /techUserEnrollment/techUserEnrollment:
     post:
       tags:
         - BrokerService
-      summary: Performs ackFile action.
+      summary: Enroll TechUser
+      description: Checks a one-time activation code ("IAK") in addition to IDP number and password and returns the TechUser credentials for the SC application.
       requestBody:
-        description: AckFile request.
+        description: TechUserEnrollmentRequest.
         content:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/TechUserEnrollmentRequest'
                 - $ref: '#/components/schemas/GeneralRequestData'
           text/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/TechUserEnrollmentRequest'
                 - $ref: '#/components/schemas/GeneralRequestData'
           application/*+json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/TechUserEnrollmentRequest'
                 - $ref: '#/components/schemas/GeneralRequestData'
+
       responses:
         '200':
-          description: Returns DXPInsurerService.Models.AckFileResponse
+          description: Returns DXPInsurerService.Models.TechUserEnrollmentResponse
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AckFileResponse'
+                $ref: '#/components/schemas/TechUserEnrollmentResponse'
         '400':
-          description: If Ack operation is unsuccessful
+          description: If TechUserEnrollment operation is unsuccessful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AckFileErrorResponse'
-  /getFile:
-    post:
-      tags:
-        - BrokerService
-      summary: Performs getFile action.
-      requestBody:
-        description: GetFile request.
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/GetFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          text/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/GetFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          application/*+json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/GetFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-      responses:
-        '200':
-          description: Returns DXPInsurerService.Models.AckFileResponse
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetFileResponse'
-        '400':
-          description: If getFile operation is unsuccessful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetFileErrorResponse'
-  /putFile:
-    post:
-      tags:
-        - BrokerService
-      summary: Performs putFile action.
-      requestBody:
-        description: PutFile request.
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/PutFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          text/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/PutFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          application/*+json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/PutFileRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-      responses:
-        '200':
-          description: Returns DXPInsurerService.Models.PutFileResponse
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PutFileResponse'
-        '400':
-          description: If PutFile operation is unsuccessful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PutFileErrorResponse'
-  /getFileList:
-    post:
-      tags:
-        - BrokerService
-      summary: Performs getFileList action.
-      requestBody:
-        description: GetFileListRequest.
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/GetFileListRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          text/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/GetFileListRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          application/*+json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/GetFileListRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-      responses:
-        '200':
-          description: Returns DXPInsurerService.Models.GetFileListResponse
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetFileListResponse'
-        '400':
-          description: If GetFileList operation is unsuccessful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetFileListErrorResponse'
+                $ref: '#/components/schemas/TechUserEnrollmentErrorResponse'
   /getAvailableInsurers:
     post:
       tags:
         - BrokerService
       summary: Performs GetAvailableInsurers action.
+      description: Returns a list of all SP identifiers that have the DXP activated.
       requestBody:
         description: GetAvailableInsurersRequest request.
         content:
@@ -196,6 +91,13 @@ paths:
       tags:
         - BrokerService
       summary: Performs GetRealAvailableInsurers action.
+      description: |
+        Allows the process handling platform to receive a list of SP identifiers for all SPs that have the 
+        DXP activated and have an active agreement with the SC. A SP appears on this list when:
+          * The insurer has implemented the file transfer SP web service.
+          * The insurer has an active agreement with the SC
+          * The insurer has assigned the IG role "TechUser-Download" respectively "TechUser-Upload" to the SC
+        The response is idependent of the current availability (reachability) of the SP
       requestBody:
         description: GetRealAvailableInsurersRequest.
         content:
@@ -227,43 +129,156 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetRealAvailableInsurersErrorResponse'
-  /techUserEnrollment/techUserEnrollment:
+  /getFileList:
     post:
       tags:
         - BrokerService
-      summary: Performs TechUserEnrollment action.
+      summary: Performs getFileList action.
+      description: Allows to query all files matching certain criteria (to be passed as parameter). The return value 
+        is a list with meta information about the available files.
       requestBody:
-        description: TechUserEnrollmentRequest.
+        description: GetFileListRequest.
         content:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/TechUserEnrollmentRequest'
+                - $ref: '#/components/schemas/GetFileListRequest'
                 - $ref: '#/components/schemas/GeneralRequestData'
           text/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/TechUserEnrollmentRequest'
+                - $ref: '#/components/schemas/GetFileListRequest'
                 - $ref: '#/components/schemas/GeneralRequestData'
           application/*+json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/TechUserEnrollmentRequest'
+                - $ref: '#/components/schemas/GetFileListRequest'
                 - $ref: '#/components/schemas/GeneralRequestData'
-                
       responses:
         '200':
-          description: Returns DXPInsurerService.Models.TechUserEnrollmentResponse
+          description: Returns DXPInsurerService.Models.GetFileListResponse
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TechUserEnrollmentResponse'
+                $ref: '#/components/schemas/GetFileListResponse'
         '400':
-          description: If TechUserEnrollment operation is unsuccessful
+          description: If GetFileList operation is unsuccessful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TechUserEnrollmentErrorResponse'
+                $ref: '#/components/schemas/GetFileListErrorResponse'
+  /getFile:
+    post:
+      tags:
+        - BrokerService
+      summary: Performs getFile action.
+      description: Returns the file based on a unique identifier.
+      requestBody:
+        description: GetFile request.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/GetFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns DXPInsurerService.Models.AckFileResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileResponse'
+        '400':
+          description: If getFile operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFileErrorResponse'
+  /ackFile:
+    post:
+      tags:
+        - BrokerService
+      summary: Performs ackFile action.
+      description: Confirmation that a file has arrived at the SC application. The file can thus be marked as "not new" 
+        or "picked up" by the SP.
+      requestBody:
+        description: AckFile request.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/AckFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns DXPInsurerService.Models.AckFileResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AckFileResponse'
+        '400':
+          description: If Ack operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AckFileErrorResponse'
+  /putFile:
+    post:
+      tags:
+        - BrokerService
+      summary: Performs putFile action.
+      description: A file is transmitted to a specific SP. Only XMLs from the defined core processes of IG B2B are allowed.
+      requestBody:
+        description: PutFile request.
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/PutFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          text/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/PutFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+          application/*+json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/PutFileRequest'
+                - $ref: '#/components/schemas/GeneralRequestData'
+      responses:
+        '200':
+          description: Returns DXPInsurerService.Models.PutFileResponse
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutFileResponse'
+        '400':
+          description: If PutFile operation is unsuccessful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PutFileErrorResponse'
 components:
   schemas:
     GeneralRequestData:
@@ -293,16 +308,10 @@ components:
           format: date-time
         userAgent:
           $ref: '#/components/schemas/UserAgent'
-        protocol:
-          type: string
-          description: currently only one protocol type is support.
-          enum:
-           - DXP
-          default: DXP
-          nullable: false
       additionalProperties: false
     UserAgent:
       type: object
+      description: Information about the SC application used.
       properties:
         name:
           type: string
@@ -333,7 +342,7 @@ components:
           type: string
           example: insurer1
           maxLength: 30
-          description: The id of the insurer
+          description: The unique identification of the SP. This identification corresponds to the return values of /getAvailableInsurers.
           nullable: false
       additionalProperties: false
     AckFileResponse:
@@ -382,7 +391,7 @@ components:
           type: string
           example: insurer1
           maxLength: 30
-          description: The id of the insurer
+          description: The unique identification of the SP. This corresponds to the return values of /getAvailableInsurers
           nullable: false
       additionalProperties: false
     GetFileResponse:
@@ -399,7 +408,7 @@ components:
         fingerprint:
           type: string
           maxLength: 24
-          example: MDc3RDVDQ0Q0QkRDQTI1RkQxNjZCMDM0NEI5MzQ0QjA
+          example: yzadd1YYFAn88Z2j0t+0Vg==
           description: The base64-encoded MD5 hash value of the file.
           nullable: false
         returnCode: 
@@ -437,7 +446,7 @@ components:
           type: string
           maxLength: 30
           example: insurer1
-          description: The id of the insurer
+          description: The unique identification of the SP. This corresponds to the return values of /getAvailableInsurers.
           nullable: false
         fileInfoUpload:
           $ref: '#/components/schemas/FileInfoUpload'
@@ -475,6 +484,11 @@ components:
           example: The provided document type is not support.
       additionalProperties: false
     PutFileErrorReturnCode:
+      description: |
+        * NOK: The file was not transmitted to the Merchant.
+        * DOCUMENT_TYPE_NOT_FOUND: The specified document type is unknown.
+        * DOCUMENT_TYPE_NOT_SUPPORTED: The specified document type is not supported by the Merchant.
+        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
         - NOK
         - DOCUMENT_TYPE_NOT_FOUND
@@ -537,6 +551,8 @@ components:
       type: object
       properties:
         fileList:
+          description: A list of meta information about the available files that match the selection criteria of 
+            the request.
           type: array
           nullable: true
           items:
@@ -559,6 +575,8 @@ components:
                 identifier: COMMISSION
                 version: 5.3
         resultTruncated:
+          description: Indicates whether the number of elements in the "fileList" parameter was limited or not. If 1 
+            is returned it means that there would have been more results.
           type: boolean
           nullable: false
         returnCode: 
@@ -571,20 +589,16 @@ components:
       type: object
       properties:
         returnCode:
-          $ref: '#/components/schemas/GetFileListErrorReturnCode'
+          enum:
+            - ERROR
+          type: string
+          example: ERROR
+          nullable: false
         errorMessage:
           type: string
           nullable: true
           example: The requested document type couldn't be found.
       additionalProperties: false
-    GetFileListErrorReturnCode:
-      enum:
-        - DOCUMENT_TYPE_NOT_FOUND
-        - IDP_USER_NOT_FOUND
-        - ERROR
-      type: string
-      example: DOCUMENT_TYPE_NOT_FOUND
-      nullable: false
     GetAvailableInsurersRequest:
       type: object
       properties:
@@ -598,12 +612,14 @@ components:
       type: object
       properties:
         insurerIdDownload:
+          description: A list with all SP identifiers. These identifiers can be used as input parameter insurerId for further methods.
           type: array
           items:
             type: string
             example: [Insurer 1, Insurer 2]
           nullable: true
         insurerIdUpload:
+          description: A list with all SP identifiers. These identifiers can be used as input parameter insurerId for further methods.
           type: array
           items:
             type: string
@@ -614,24 +630,22 @@ components:
           nullable: false
           enum:
             - OK
+          example: OK
       additionalProperties: false
     GetAvailableInsurersErrorResponse:
       type: object
       properties:
         returnCode:
-          $ref: '#/components/schemas/GetAvailableInsurersErrorReturnCode'
+          enum:
+            - ERROR
+          type: string
+          example: ERROR
+          nullable: false
         errorMessage:
           type: string
           nullable: true
           example: The given license key is invalid.
       additionalProperties: false
-    GetAvailableInsurersErrorReturnCode:
-      enum:
-        - LICENCE_KEY_NOT_VALID
-        - ERROR
-      type: string
-      example: LICENCE_KEY_NOT_VALID
-      nullable: false
     GetRealAvailableInsurersRequest:
       type: object
       properties:
@@ -645,12 +659,16 @@ components:
       type: object
       properties:
         insurerIdDownload:
+          description: A list with all SP identifiers. These identifiers can be used as input parameter 
+            insurerId for further methods.
           type: array
           items:
             type: string
             example: [Insurer 1, Insurer 2]
           nullable: true
         insurerIdUpload:
+          description: A list with all SP identifiers. These identifiers can be used as input parameter
+            insurerId for further methods.
           type: array
           items:
             type: string
@@ -661,24 +679,22 @@ components:
           nullable: false
           enum:
             - OK
+          example: OK
       additionalProperties: false
     GetRealAvailableInsurersErrorResponse:
       type: object
       properties:
         returnCode:
-          $ref: '#/components/schemas/GetRealAvailableInsurersErrorReturnCode'
+          enum:
+            - ERROR
+          type: string
+          example: ERROR
+          nullable: false
         errorMessage:
           type: string
           nullable: true
           example: The given license key is invalid.
       additionalProperties: false
-    GetRealAvailableInsurersErrorReturnCode:
-      enum:
-        - LICENCE_KEY_NOT_VALID
-        - ERROR
-      type: string
-      example: LICENCE_KEY_NOT_VALID
-      nullable: false
     TechUserEnrollmentRequest:
       type: object
       properties:
@@ -704,26 +720,27 @@ components:
       type: object
       properties:
         techUserCert:
+          description: Base-64 encoded PKCS#12 keystore with client certificate and private key for the 
+            DXP proxy web service client in the SC application. The keystore is protected with the
+            password of the TechUser.
           type: string
-          nullable: true
       additionalProperties: false
     TechUserEnrollmentErrorResponse:
       type: object
       properties:
         returnCode:
-          $ref: '#/components/schemas/TechUserEnrollmentErrorReturnCode'
+          enum:
+            - ERROR
+          type: string
+          example: ERROR
+          nullable: false
         errorMessage:
+          description: Optional information in case of error. Should facilitate finding the cause of the error and 
+            contains textual (not further structured) data.
           type: string
           nullable: true
           example: The given license key is invalid.
       additionalProperties: false
-    TechUserEnrollmentErrorReturnCode:
-      enum:
-        - LICENCE_KEY_NOT_VALID
-        - ERROR
-      type: string
-      example: LICENCE_KEY_NOT_VALID
-      nullable: false
     FileInfoDownload:
       type: object
       description: Metadata about the transferred file.
