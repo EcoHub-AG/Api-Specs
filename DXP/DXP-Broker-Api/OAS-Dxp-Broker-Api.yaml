@@ -339,11 +339,7 @@ components:
           description: The (over time) unique identification of the file at the VU. This corresponds to an entry in the list of FileIds return values of the getFileList method.
           nullable: false
         insurerId:
-          type: string
-          example: insurer1
-          maxLength: 30
-          description: The unique identification of the SP. This identification corresponds to the return values of /getAvailableInsurers.
-          nullable: false
+          $ref: '#/components/schemas/InsurerIdType'
       additionalProperties: false
     AckFileResponse:
       type: object
@@ -388,11 +384,7 @@ components:
           description: The (over time) unique identification of the file at the VU. This corresponds to an entry in the list of FileIds return values of the getFileList method.
           nullable: false
         insurerId:
-          type: string
-          example: insurer1
-          maxLength: 30
-          description: The unique identification of the SP. This corresponds to the return values of /getAvailableInsurers
-          nullable: false
+          $ref: '#/components/schemas/InsurerIdType'
       additionalProperties: false
     GetFileResponse:
       type: object
@@ -443,11 +435,7 @@ components:
           example: putFile
           nullable: true
         insurerId:
-          type: string
-          maxLength: 30
-          example: insurer1
-          description: The unique identification of the SP. This corresponds to the return values of /getAvailableInsurers.
-          nullable: false
+          $ref: '#/components/schemas/InsurerIdType'
         fileInfoUpload:
           $ref: '#/components/schemas/FileInfoUpload'
         data:
@@ -460,7 +448,7 @@ components:
           type: string
           maxLength: 24
           description: The base64-encoded MD5 hash value of the file.
-          example: MDc3RDVDQ0Q0QkRDQTI1RkQxNjZCMDM0NEI5MzQ0QjA
+          example: yzadd1YYFAn88Z2j0t+0Vg==
           nullable: false
       additionalProperties: false
     PutFileResponse:
@@ -507,11 +495,7 @@ components:
           example: getFileList
           nullable: true
         insurerId:
-          type: string
-          maxLength: 30
-          example: insurer1
-          description: The id of the insurer
-          nullable: false
+          $ref: '#/components/schemas/InsurerIdType'
         newOnly:
           type: boolean
           example: true
@@ -615,15 +599,15 @@ components:
           description: A list with all SP identifiers. These identifiers can be used as input parameter insurerId for further methods.
           type: array
           items:
-            type: string
-            example: [Insurer 1, Insurer 2]
+            $ref: '#/components/schemas/InsurerIdType'
           nullable: true
+          example: [Insurer 1, Insurer 2]
         insurerIdUpload:
           description: A list with all SP identifiers. These identifiers can be used as input parameter insurerId for further methods.
           type: array
           items:
-            type: string
-            example: [Insurer 1, Insurer 2]
+            $ref: '#/components/schemas/InsurerIdType'
+          example: [Insurer 1, Insurer 2]
           nullable: true
         returnCode: 
           type: string
@@ -663,16 +647,16 @@ components:
             insurerId for further methods.
           type: array
           items:
-            type: string
-            example: [Insurer 1, Insurer 2]
+            $ref: '#/components/schemas/InsurerIdType'
+          example: [Insurer 1, Insurer 2]
           nullable: true
         insurerIdUpload:
           description: A list with all SP identifiers. These identifiers can be used as input parameter
             insurerId for further methods.
           type: array
           items:
-            type: string
-            example: [Insurer 1, Insurer 2]
+            $ref: '#/components/schemas/InsurerIdType'
+          example: [Insurer 1, Insurer 2]
           nullable: true
         returnCode: 
           type: string
@@ -804,3 +788,10 @@ components:
         identifier: BILLING
         version: 5.3
       additionalProperties: false
+    InsurerIdType:
+      type: string
+      maxLength: 30
+      example: insurer1
+      description: The unique identification of the service provider. The insurerId is independent and different from
+        the insurer code assigned to each insurer by IGB2B. Allowed values can be retrieved using the /getAvailableInsurers
+        and /getRealAvailableInsurers endpoints.

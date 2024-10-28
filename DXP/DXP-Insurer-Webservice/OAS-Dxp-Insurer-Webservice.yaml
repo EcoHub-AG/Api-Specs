@@ -173,7 +173,9 @@ components:
           type: string
           maxLength: 30
           example: insurer1
-          description: The unique identification of the Merchant. This corresponds to one of the return values of /getAvailableInsurers.
+          description: The unique identification of the service provider. The insurerId is independent and different from
+            the insurer code assigned to each insurer by IGB2B. Allowed values can be retrieved using the /getAvailableInsurers
+            and /getRealAvailableInsurers endpoints of the broker webservice.
           nullable: false
         requestId:
           type: string
@@ -257,7 +259,7 @@ components:
         fingerprint:
           type: string
           maxLength: 24
-          example: MDc3RDVDQ0Q0QkRDQTI1RkQxNjZCMDM0NEI5MzQ0QjA
+          example: yzadd1YYFAn88Z2j0t+0Vg==
           description: The base64-encoded MD5 hash value of the file.
           nullable: false
         returnCode: 
