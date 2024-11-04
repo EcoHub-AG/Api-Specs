@@ -14,6 +14,7 @@ info:
     ### Version 0.4.0 (26.12.2024)
 
     - Removing unused paths for insurers and brokers
+    - Only allow application/json as content type
     - Enhanced documentation
 
     ### Version 0.3.0 (11.07.2024)
@@ -34,16 +35,7 @@ paths:
       requestBody:
         description: Request.
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyUploadRequest'
           application/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyUploadRequest'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyUploadRequest'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/PublicKeyUploadRequest'
       responses:
@@ -132,16 +124,7 @@ paths:
       requestBody:
         description: Verify Request.
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyVerifyRequest'
           application/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyVerifyRequest'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyVerifyRequest'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/PublicKeyVerifyRequest'
       responses:
@@ -217,8 +200,7 @@ paths:
           description: KeyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       responses:
         '200':
           description: Success
