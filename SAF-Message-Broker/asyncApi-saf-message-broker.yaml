@@ -2,13 +2,33 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framework: Message Broker System'
-  version: 0.3.1
+  version: 0.4.0
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
     url: 'https://www.myecohub.ch'
   description: >
     ## Changelog
+    
+    ### Version 0.4.0
+    
+        - Changed format of the EventType to reverse-dns
+    
+        - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
+    
+        - EventMessageDataType
+          - Removed property "md5MessageHash"
+          - Added properties "messageSignature" and "signatureKeyVersion"
+          - Prohibit additional properties
+    
+        - LicenseKeyType
+          - Renamed to "LicenceKeyType"
+    
+        - OfferNLPIErrorEventType
+          - Prohibit additional properties
+    
+        - OfferNLPIErrorEventType
+          - Restructured the type and renamed error codes
     
     ### Version 0.3.1
     
@@ -348,114 +368,105 @@ components:
         - licenceKey
       additionalProperties: false
     offerNLPIErrorType:
-      type: object
-      properties:
-        errorCode:
-          description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
-          type: string
-          minLength: 3
-          enum:
-            - offer-missing-informations
-            - offer-incorrect-informations
-            - offer-date-expired
-            - offer-missing-claims-expierence
-            - offer-requested-several-times
-            - offer-already-issued
-            - offer-missing-documents
-            - offer-incorrect-attachment
-            - offer-other-error
-            - mandate-missing
-            - mandate-expired
-            - mandate-terminated
-            - mandate-invalid
-            - mandate-other-error
-            - cooperationagreement-missing
-            - cooperationagreement-expired-terminated
-            - cooperationagreement-other-error
-            - customer-data-referenceno-mismatch
-            - customer-data-incomplete
-            - customer-data-incorrect
-            - customer-not-identified
-            - customer-other-error
-            - claims-expierence-date-range-invalid
-            - claims-expierence-data-incorrect
-            - claims-expierence-contract-incorrect
-            - claims-expierence-customer-incorrect
-            - claims-expierence-other-error
-        errorMessage:
-          description: Error message
-          type: string
-          minLength: 3
-        missingDataList:
-          description: List of JSON paths, where information is missing
-          type: array
-          minItems: 1
-          items:
+      type: array
+      minItems: 1
+      items:
+        type: object
+        properties:
+          errorCode:
+            description: Type of error
+            minLength: 3
             type: string
-        incorrectDataList:
-          description: List of JSON paths, where wrong information has been entered
-          type: array
-          minItems: 1
-          items:
+            enum:
+              - offer-missing-information
+              - offer-incorrect-information
+              - offer-date-expired
+              - offer-missing-claims-experience
+              - offer-requested-several-times
+              - offer-already-issued
+              - offer-missing-documents
+              - offer-incorrect-attachment
+              - offer-other-error
+              - mandate-missing
+              - mandate-expired
+              - mandate-terminated
+              - mandate-invalid
+              - mandate-other-error
+              - cooperationagreement-missing
+              - cooperationagreement-expired-terminated
+              - cooperationagreement-other-error
+              - customer-data-referenceno-mismatch
+              - customer-data-incomplete
+              - customer-data-incorrect
+              - customer-not-identified
+              - customer-other-error
+              - claims-experience-date-range-invalid
+              - claims-experience-data-incorrect
+              - claims-experience-contract-incorrect
+              - claims-experience-customer-incorrect
+              - claims-experience-other-error
+          errorMessage:
+            description: Error message
+            minLength: 3
             type: string
-        errorDateTime:
-          description: Date and time of the error
-          type: string
-          format: date-time
-      allOf:
-        - if:
-            properties:
-              errorCode:
-                const: offer-missing-informations
-          then:
-            required:
-              - missingDataList
-        - if:
-            properties:
-              errorCode:
-                const: offer-incorrect-informations
-          then:
-            required:
-              - incorrectDataList
-        - if:
-            properties:
-              errorCode:
-                const: offer-missing-claims-expierence
-          then:
-            required:
-              - missingDataList
-        - if:
-            properties:
-              errorCode:
-                const: offer-missing-documents
-          then:
-            required:
-              - missingDataList
-        - if:
-            properties:
-              errorCode:
-                const: offer-incorrect-attachment
-          then:
-            required:
-              - incorrectDataList
-        - if:
-            properties:
-              errorCode:
-                const: customer-data-incomplete
-          then:
-            required:
-              - missingDataList
-        - if:
-            properties:
-              errorCode:
-                const: customer-data-incorrect
-          then:
-            required:
-              - incorrectDataList
-      required:
-        - errorCode
-        - errorMessage
-        - errorDateTime
+          path:
+            description: xPath or JsonPath to the property where the error occurred.
+            type: string
+        additionalProperties: false
+        required:
+          - errorCode
+          - errorMessage
+        allOf:
+          - if:
+              properties:
+                errorCode:
+                  const: offer-missing-information
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: offer-incorrect-information
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: offer-missing-claims-experience
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: offer-missing-documents
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: offer-incorrect-attachment
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: customer-data-incomplete
+            then:
+              required:
+                - path
+          - if:
+              properties:
+                errorCode:
+                  const: customer-data-incorrect
+            then:
+              required:
+                - path
+
     processNameType:
       description: Comment describing your JSON Schema
       type: string
@@ -463,26 +474,27 @@ components:
         - offer.nlpi
       example: offer.nlpi
     eventType:
-      type: string
+      description: 'Reverse DNS entry to defines the type of event: data, inquiry, standard-error
+        or saf-error'
       minLength: 1
+      type: string
       enum:
-        - data
-        - inquiry
-        - standard-error
-        - saf-error
-      description: Defines the type of event / data, inquiry, standard-error or saf-error
+        - ch.ecohub.saf.data
+        - ch.ecohub.saf.inquiry
+        - ch.ecohub.saf.standard-error
+        - ch.ecohub.saf.saf-error
     eventMessageDataType:
       description: The event payload.
       type: object
       properties:
         message:
-          description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
+          description: 'The payload needs to be first gzipped and afterwards encrypted. The base64 representation of encrypted bytes will be added as payload'
           type: string
           minLength: 3
-        md5MessageHash:
-          description: The md5 hash of the byte content of the encrypted data
-          type: string
+        messageSignature:
+          description: signature key of the signed message, to verify by whom the encrypted message has been created
           minLength: 3
+          type: string
         encryptionKey:
           description: The with the public key of the receiver encrypted symmetric key to decrypt the data (KEK)
           type: string
@@ -491,10 +503,15 @@ components:
           description: The version of the public key used to encrypt the DEK
           type: string
           minLength: 3
+        signatureKeyVersion:
+          description: 'The version of the signature key, that was used to sign '
+          minLength: 3
+          type: string
       required:
         - message
         - encryptionKey
         - publicKeyVersion
+      additionalProperties: false
     errorDataType:
       description: The error event payload.
       type: object
@@ -542,7 +559,7 @@ components:
         - Created
         - Received
         - InProgress
-        - Responsed
+        - Responded
         - Updated
         - Error
         - Inquiry
@@ -1160,4 +1177,3 @@ components:
           schemaIdLocation: 'payload'
           schemaIdPayloadEncoding: 'confluent'
           bindingVersion: '0.4.0'
-  
