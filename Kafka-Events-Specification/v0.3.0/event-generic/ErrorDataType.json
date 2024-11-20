@@ -4,7 +4,7 @@
   "description": "The error event payload.",
   "properties": {
     "errorCode": {
-      "description": "The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload ",
+      "description": "Categorizes the type of error",
       "enum": [
         "licenseKey-not-valid",
         "sa-not-found",

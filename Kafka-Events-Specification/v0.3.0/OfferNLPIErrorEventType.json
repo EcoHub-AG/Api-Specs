@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "Offer NLPI Event JSON schema definition",
+  "description": "Offer NLPI error event, i.e. an event for errors which related to the event payload.",
   "type": "object",
   "properties": {
     "id": {
