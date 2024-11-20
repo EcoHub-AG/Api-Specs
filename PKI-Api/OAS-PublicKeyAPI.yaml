@@ -240,7 +240,7 @@ paths:
       tags:
         - PublicKeyApi
       summary: >-
-        Get the active public key of a broker with whome my membership has a
+        Get the active public key of a broker with whom my membership has a
         Service Agreement.
       operationId: GetActivePublicKeyOfBroker
       parameters:
@@ -285,7 +285,7 @@ paths:
       tags:
         - PublicKeyApi
       summary: >-
-        Get the active public key of an insurer with whome my membership has a
+        Get the active public key of an insurer with whom my membership has a
         Service Agreement.
       operationId: GetActivePublicKeyOfInsurer
       parameters:
