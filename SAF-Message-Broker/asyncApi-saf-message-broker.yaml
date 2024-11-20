@@ -11,13 +11,18 @@ info:
     ## Changelog
     
     ### Version 0.3.1
+    
     - Added SafErrorEvent and OfferNLPIErrorEvent as valid messages for all operations.
+    
     - Updated documentation (descriptions and examples).
+    
     - EventDataType
       - Prohibit additional properties
-    SAFErrorEventType
+    
+    - SAFErrorEventType
       - Prohibit additional properties
-    UserAgentType
+    
+    - UserAgentType
       - Prohibit additional properties
     
     ### Version 0.2.4 (20.08.2024) - Initial public release
