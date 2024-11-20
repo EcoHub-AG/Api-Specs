@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema 
+targetNamespace="http://www.igb2b.ch/dxpServiceSchema-v1.3/" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns:tns="http://www.igb2b.ch/dxpServiceSchema-v1.3/">
+
+	<!-- - Note about timestamps: According to http://www.w3.org/TR/xmlschema-2/#dateTime, 
+		all timestamps are UTC (Coordinated Universal Time, aka GMT = Greenwich Mean 
+		Time). There is the possibility of 'local' or untimezoned times, but they 
+		are presumed to be the time in the timezone of some unspecified locality. 
+		Example: 2002-10-10T12:00:00.498-05:00 (noon on 10 October 2002, Central 
+		Daylight Savings Time as well as Eastern Standard Time in the U.S.) is 2002-10-10T17:00:00.498Z, 
+		five hours later than 2002-10-10T12:00:00.498Z. - Note about minOccurs, maxOccurs 
+		and nillable: We use nillable="true" in favor of minOccurs=0 because that 
+		way, the element in question is always visible in the transferred XML file, 
+		even when holding a null value. For further explanations, see e.g. http://www.dimuthu.org/blog/2008/08/18/xml-schema-nillabletrue-vs-minoccurs0/comment-page-1/ 
+		-->
+
+	<!-- Contains types common in insurer- and broker service.  -->
+	<!-- **************************************************************** -->
+	<!-- Changelog -->
+	<!-- **************************************************************** -->
+
+	<!-- Primitive types -->
+	<xsd:simpleType name="string10">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=10.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="string24">
+        <xsd:annotation>
+        	<xsd:documentation>a string of maximum length 24</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+			<xsd:maxLength value="24"></xsd:maxLength>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="string30">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=30.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="30" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="string50">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=50.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="50" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="string100">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=100.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="100" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="string150">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=150.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="150" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="string200">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=200.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="200" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+
+	<!-- Enums -->
+	<xsd:simpleType name="returnCode">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				All possible return codes for all operations.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="OK">
+				<xsd:annotation>
+					<xsd:documentation>
+						Operation succeeded (synchronous process).
+						Valid for all operations.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="DOCUMENT_TYPE_NOT_FOUND">
+				<xsd:annotation>
+					<xsd:documentation>
+						The given document type is unknown.
+						The request is not processed any further.
+						Valid for getFileList and putFile.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="DOCUMENT_TYPE_NOT_SUPPORTED">
+				<xsd:annotation>
+					<xsd:documentation>
+						The given document type is unknown.
+						The request is not processed any further.
+						Valid for getFileList and putFile.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="FILE_NOT_FOUND">
+				<xsd:annotation>
+					<xsd:documentation>
+						The file with the given fileId has not been found.
+						The request is not processed any further.
+						Valid for getFile and getFileList.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="NOK">
+				<xsd:annotation>
+					<xsd:documentation>
+						The file has not been transmitted to the insurer.
+						Valid for putFile.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="IDP_USER_NOT_FOUND">
+				<xsd:annotation>
+					<xsd:documentation>
+						The insurer does not know the specified IDP user or the user does not have permission
+						to execute the transaction. 
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="ERROR">
+				<xsd:annotation>
+					<xsd:documentation>
+						An error has occurred and the error is not reported as
+						SoapFault. The erroMessage attribute contains a stack
+						trace. The request is not processed any further.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- Complex types -->
+	<xsd:complexType name="commonReturnType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">(Base) return structure for all operations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="returnCode" type="tns:returnCode" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Describes if a request was successful.</xsd:documentation>
+				</xsd:annotation></xsd:element>
+			<xsd:element name="errorMessage" type="xsd:string"	minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional error message in case of error.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="DocumentType">
+		<xsd:sequence>
+			<xsd:element name="identifier" type="tns:string50" maxOccurs="1" minOccurs="1">
+                <xsd:annotation>
+                	<xsd:documentation>unique identifier of the document type.</xsd:documentation>
+                </xsd:annotation>
+			</xsd:element>
+			<xsd:element name="version" type="tns:string10" maxOccurs="1" minOccurs="1">
+                <xsd:annotation>
+                	<xsd:documentation>the version of the type</xsd:documentation>
+                </xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="FileInfoUpload">
+		<xsd:sequence>
+			<xsd:element name="documentType" type="tns:DocumentType" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						DocumentType of the file.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="fileName" type="tns:string150" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						The name of the file.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="mimeType" type="tns:string100" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						The MIME-Type of the file (according to
+						MIME-specification). e.g "application/pdf",
+						"text/xml"
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="FileInfoDownload">
+		<xsd:complexContent>
+			<xsd:extension base="tns:FileInfoUpload">
+				<xsd:sequence>
+					<xsd:element name="fileId" type="tns:string50" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>
+								Unique Identifier (over time) .
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="fileCreationDate" type="xsd:dateTime" minOccurs="1" maxOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>
+								Timestamp of file creation. (Date and time in
+								miliseconds, timezone independent)
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="ackState" type="xsd:boolean" maxOccurs="1" minOccurs="1"></xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="getFileListReturnType">
+		<xsd:complexContent>
+			<xsd:extension base="tns:commonReturnType">
+				<xsd:sequence>
+					<xsd:element name="fileList" type="tns:FileInfoDownload" maxOccurs="unbounded" minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>A list with all files that matched the request.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="resultTruncated" type="xsd:boolean" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>true, if the result has been truncated, i.e. there would be more results</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="getFileReturnType">
+		<xsd:complexContent>
+			<xsd:extension base="tns:commonReturnType">
+				<xsd:sequence>
+					<xsd:element name="fileInfoDownload" type="tns:FileInfoDownload"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+					<xsd:element name="data" type="xsd:base64Binary" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>The requested file.</xsd:documentation>
+						</xsd:annotation></xsd:element>
+					<xsd:element name="fingerprint" type="tns:string24" maxOccurs="1" minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation>the base-64 encoded MD5 hash value.</xsd:documentation>
+						</xsd:annotation></xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="putFileReturnType">
+		<xsd:complexContent>
+			<xsd:extension base="tns:commonReturnType">
+				<xsd:sequence>
+					<xsd:element name="fileInfoDownload" type="tns:FileInfoDownload"
+						maxOccurs="1" minOccurs="1">
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<!-- **************************************************************** -->
+	<!-- Faults -->
+	<!-- **************************************************************** -->
+	<xsd:simpleType name="faultCodeEnum">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				All possible fault types.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Validation" />
+			<xsd:enumeration value="BackendUnreachable" />
+			<xsd:enumeration value="InsufficientPermissions" />
+			<xsd:enumeration value="Unspecified" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="serviceFaultType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				Fault returned by the user provising web service.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="message" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="code" type="tns:faultCodeEnum" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

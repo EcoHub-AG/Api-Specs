@@ -3,17 +3,18 @@
   "type": "object",
   "properties": {
     "payload": {
-      "description": "The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload ",
+      "description": "The payload needs to be first gzipped and afterwards encrypted. The base64 representation of encrypted bytes will be added as payload",
       "minLength": 3,
       "type": "string"
     },
     "payLoadSignature": {
-      "description": "The md5 hash of the byte content of the encrypted data",
+      "description": "Signature key of the signed payload, to verify by whom the encrypted message has been created",
       "minLength": 3,
       "type": "string"
     },
     "links": {
       "items": {
+        "type": "object",
         "properties": {
           "description": {
             "description": "Description of the purpose of the link",
@@ -35,7 +36,8 @@
         "required": [
           "href",
           "rel"
-        ]
+        ],
+        "additionalProperties": false
       },
       "type": "array"
     },
@@ -59,5 +61,6 @@
     "payload",
     "encryptionKey",
     "publicKeyVersion"
-  ]
+  ],
+  "additionalProperties": false
 }

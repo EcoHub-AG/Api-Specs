@@ -1,0 +1,112 @@
+name: Generate documentation
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on new tags following the naming pattern
+  push:
+    tags:
+      - 'saf-rest-proxy-api-v*'
+      - 'saf-message-broker-v*'
+      - 'saf-general-api-v*'
+      - 'pki-api-v*'
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all tags and branches
+
+      - name: Only continue if tag is on main branch
+        run: |
+          if ! git branch -r --contains ${{ github.ref }} | grep -q "origin/main"; then
+            echo "Tag is not on main branch. Exiting."
+            exit 0  # Exit with success code to stop the workflow without failing
+          fi
+          echo "Tag is on main branch. Proceeding with the workflow."
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Setup node packages
+        run: |
+          npm install -g @asyncapi/cli
+          npm install -g redoc-cli
+
+      - name: Cache Node.js modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Determine API and version
+        id: api_info
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          if [[ $TAG_NAME == saf-rest-proxy-api-v* ]]; then
+            echo "safRest=true" >> $GITHUB_OUTPUT
+            echo "API_NAME=SAF-Kafka-REST-Proxy-API" >> $GITHUB_OUTPUT
+            echo "API_VERSION=${TAG_NAME#saf-rest-proxy-api-v}" >> $GITHUB_OUTPUT
+          elif [[ $TAG_NAME == saf-message-broker-v* ]]; then
+            echo "asyncApi=true" >> $GITHUB_OUTPUT
+            echo "API_NAME=SAF-Message-Broker" >> $GITHUB_OUTPUT
+            echo "API_VERSION=${TAG_NAME#saf-message-broker-v}" >> $GITHUB_OUTPUT
+          elif [[ $TAG_NAME == saf-general-api-v* ]]; then
+            echo "generalApi=true" >> $GITHUB_OUTPUT
+            echo "API_NAME=General-Api" >> $GITHUB_OUTPUT
+            echo "API_VERSION=${TAG_NAME#saf-general-api-v}" >> $GITHUB_OUTPUT
+          elif [[ $TAG_NAME == pki-api-v* ]]; then
+            echo "pkiApi=true" >> $GITHUB_OUTPUT
+            echo "API_NAME=PKI-Api" >> $GITHUB_OUTPUT
+            echo "API_VERSION=${TAG_NAME#pki-api-v}" >> $GITHUB_OUTPUT
+          else
+            echo "Unknown API tag format"
+            exit 1
+          fi
+
+      # AsyncAPI documentation generation
+      - name: Generate AsyncAPI documentation
+        if: steps.api_info.outputs.asyncApi == 'true'
+        run: |
+          API_VERSION=${{ steps.api_info.outputs.API_VERSION }}
+          asyncapi generate fromTemplate ./SAF-Message-Broker/asyncApi-saf-message-broker.yaml @asyncapi/html-template@2.3.14 -o docs/SAF-Message-Broker/$API_VERSION
+
+      # OpenAPI documentation generation
+      - name: Generate OpenAPI documentation
+        if: steps.api_info.outputs.generalApi == 'true'
+        run: |
+          API_VERSION=${{ steps.api_info.outputs.API_VERSION }}
+          redoc-cli bundle -o docs/General-Api/$API_VERSION/index.html ./General-Api/OAS-SAF-General-apis.yaml
+
+      # PKI API documentation generation
+      - name: Generate PKI API documentation
+        if: steps.api_info.outputs.pkiApi == 'true'
+        run: |
+          API_VERSION=${{ steps.api_info.outputs.API_VERSION }}
+          redoc-cli bundle -o docs/PKI-Api/$API_VERSION/index.html ./PKI-Api/OAS-PublicKeyAPI.yaml
+
+      # SAF Rest API documentation generation
+      - name: Generate SAF Rest API documentation
+        if: steps.api_info.outputs.safRest == 'true'
+        run: |
+          API_VERSION=${{ steps.api_info.outputs.API_VERSION }}
+          redoc-cli bundle -o docs/SAF-Kafka-REST-Proxy-API/$API_VERSION/index.html ./SAF-Kafka-REST-Proxy-API/OAS3.0-SAF-Kafka-REST-Proxy.yaml
+
+      # Commit all changed files back to the repository
+      - name: Commit generated OpenApi spec html output
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: main

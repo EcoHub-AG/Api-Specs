@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "Offer NLPI Event JSON schema definition",
+  "description": "SAF inquiry event, i.e. an event containing a generic message.",
   "type": "object",
   "properties": {
     "id": {
