@@ -96,7 +96,7 @@ paths:
                   id: 044d2e50-12d6-43e4-bb1b-7b54841c9c82
                   source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   datacontenttype: application/json
                   dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json
                   subject: offer nlpi request
@@ -132,7 +132,7 @@ paths:
                   id: 3e921406-ee31-42e9-9a17-14c9e42cae21
                   source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   subject: offer nlpi request received
                   time: '2023-08-17T14:15:22.000Z'
                   licenceKey: 8985+9403*jgfksld94&%fjd
@@ -156,7 +156,7 @@ paths:
                   id: d1ebd951-e44e-4464-939e-bd6f4c8d1d8e
                   source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   datacontenttype: application/json
                   dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json
                   subject: offer
@@ -192,7 +192,7 @@ paths:
                   id: 1aa99947-59ee-4b75-86b2-33618d34dd32
                   source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   subject: offer nlpi offer received
                   time: '2023-08-17T14:15:22.000Z'
                   licenceKey: mvikeporivmf/342)*fjdskaföj
@@ -216,7 +216,7 @@ paths:
                   id: 1aa99947-59ee-4b75-86b2-33618d34dd32
                   source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   datacontenttype: application/json
                   dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiFeedbackDataType.json
                   subject: offer feedback
@@ -252,7 +252,7 @@ paths:
                   id: 5df58bad-960c-4752-81f7-3a2721493b2c
                   source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   subject: offer nlpi feedback received
                   time: '2023-08-17T14:15:22.000Z'
                   licenceKey: 8985+9403*jgfksld94&%fjd
@@ -277,7 +277,7 @@ paths:
                   id: 53198975-f2ed-48d7-ae5d-0ba5f8b1e95e
                   source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   datacontenttype: application/json
                   dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiConclusionDecisionDataType.json
                   subject: offer conclusion decision
@@ -309,7 +309,7 @@ paths:
                   id: 1607aa76-4de4-417f-9e88-88bbb4b62f34
                   source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   subject: offer nlpi conclusionDecision received
                   time: '2023-08-17T14:15:22.000Z'
                   licenceKey: mvikeporivmf/342)*fjdskaföj
@@ -427,7 +427,7 @@ paths:
                     id: 3e921406-ee31-42e9-9a17-14c9e42cae21
                     source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
                     specversion: '1.0'
-                    type: data
+                    type: ch.ecohub.saf.data
                     subject: offer nlpi request received
                     time: '2023-08-17T14:15:22.000Z'
                     licenceKey: 8985+9403*jgfksld94&%fjd
