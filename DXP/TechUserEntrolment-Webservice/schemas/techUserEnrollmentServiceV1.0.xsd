@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: userProvisioningServiceV3.0.xsd,v 1.5 2010/11/02 10:12:05 mbutikof 
+	Exp $ -->
+<xsd:schema
+	targetNamespace="http://www.igb2b.ch/techUserEnrollmentServiceSchema-v1.0/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:cns="http://www.igb2b.ch/igb2bServiceSchema-v1.0/"
+	xmlns:tns="http://www.igb2b.ch/techUserEnrollmentServiceSchema-v1.0/">
+
+
+<!-- - Note about timestamps: According to http://www.w3.org/TR/xmlschema-2/#dateTime, 
+		all timestamps are UTC (Coordinated Universal Time, aka GMT = Greenwich Mean 
+		Time). There is the possibility of 'local' or untimezoned times, but they 
+		are presumed to be the time in the timezone of some unspecified locality. 
+		Example: 2002-10-10T12:00:00.498-05:00 (noon on 10 October 2002, Central 
+		Daylight Savings Time as well as Eastern Standard Time in the U.S.) is 2002-10-10T17:00:00.498Z, 
+		five hours later than 2002-10-10T12:00:00.498Z. - Note about minOccurs, maxOccurs 
+		and nillable: We use nillable="true" in favor of minOccurs=0 because that 
+		way, the element in question is always visible in the transferred XML file, 
+		even when holding a null value. For further explanations, see e.g. http://www.dimuthu.org/blog/2008/08/18/xml-schema-nillabletrue-vs-minoccurs0/comment-page-1/ 
+		 -->
+	
+	<!-- **************************************************************** -->
+	<!-- Changelog -->
+	<!-- **************************************************************** -->
+	
+	<!--  import types common to insurer- and broker service. -->
+	<xsd:import
+				namespace="http://www.igb2b.ch/igb2bServiceSchema-v1.0/"
+				schemaLocation="igb2bServiceV1.0.xsd" />
+	
+	<xsd:complexType name="commonInputType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">(Base) input structure for all operations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="requestId" type="cns:string10" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>unique id. This id will be forwarded to insurer.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="requestTime" type="xsd:dateTime" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Timestamp of time at the broker. Will be forwarded to insurer.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="idpUserId" type="cns:string10" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>
+						The unique id of the insurer this
+						request is addressed to.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="licenceKey" type="cns:string200" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>software key</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+			<xsd:element name="password" type="cns:string100" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>password</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+			<xsd:element name="iak" type="cns:string100" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>password</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="userAgent" type="cns:userAgentType" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>broker client software information</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:complexType name="commonReturnType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">(Base) return structure for all operations.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="returnCode" type="cns:returnCode" maxOccurs="1" minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Describes if a request was successful.</xsd:documentation>
+				</xsd:annotation></xsd:element>
+			<xsd:element name="errorMessage" type="xsd:string"	minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional error message in case of error.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element name="techUserCert" type="cns:string36000"	minOccurs="0" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Optional error message in case of error.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>			
+		</xsd:sequence>
+	</xsd:complexType>
+	
+</xsd:schema>

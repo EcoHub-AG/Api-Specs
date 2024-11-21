@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: userProvisioningServiceV3.0.xsd,v 1.5 2010/11/02 10:12:05 mbutikof 
+	Exp $ -->
+<xsd:schema 
+targetNamespace="http://www.igb2b.ch/igb2bServiceSchema-v1.0/" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns:tns="http://www.igb2b.ch/igb2bServiceSchema-v1.0/">
+
+	<!-- - Note about timestamps: According to http://www.w3.org/TR/xmlschema-2/#dateTime, 
+		all timestamps are UTC (Coordinated Universal Time, aka GMT = Greenwich Mean 
+		Time). There is the possibility of 'local' or untimezoned times, but they 
+		are presumed to be the time in the timezone of some unspecified locality. 
+		Example: 2002-10-10T12:00:00.498-05:00 (noon on 10 October 2002, Central 
+		Daylight Savings Time as well as Eastern Standard Time in the U.S.) is 2002-10-10T17:00:00.498Z, 
+		five hours later than 2002-10-10T12:00:00.498Z. - Note about minOccurs, maxOccurs 
+		and nillable: We use nillable="true" in favor of minOccurs=0 because that 
+		way, the element in question is always visible in the transferred XML file, 
+		even when holding a null value. For further explanations, see e.g. http://www.dimuthu.org/blog/2008/08/18/xml-schema-nillabletrue-vs-minoccurs0/comment-page-1/ 
+		-->
+
+	<!-- Contains types common in insurer- and broker service.  -->
+	<!-- **************************************************************** -->
+	<!-- Changelog -->
+	<!-- **************************************************************** -->
+
+	<!-- Primitive types -->
+	<xsd:simpleType name="string10">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=10.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="10" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="string24">
+        <xsd:annotation>
+        	<xsd:documentation>a string of maximum length 24</xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+			<xsd:maxLength value="24"></xsd:maxLength>
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="string30">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=30.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="30" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="string50">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=50.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="50" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="string100">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=100.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="100" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="string150">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=150.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="150" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:simpleType name="string200">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=200.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="200" />
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<xsd:simpleType name="string36000">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				A string of length &lt;=36000.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="36000" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+
+	<!-- Enums -->
+	<xsd:simpleType name="returnCode">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				All possible return codes for all operations.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="OK">
+				<xsd:annotation>
+					<xsd:documentation>
+						Operation succeeded (synchronous process).
+						Valid for all operations.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="LICENCE_KEY_NOT_VALID">
+				<xsd:annotation>
+					<xsd:documentation>
+						The licence key is not valid.
+						The request is not processed any further.
+						Valid for all operations.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="ERROR">
+				<xsd:annotation>
+					<xsd:documentation>
+						An error has occurred and the error is not reported as
+						SoapFault. The request is not processed any further.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>
+			<xsd:enumeration value="USER_NOT_FOUND">
+				<xsd:annotation>
+					<xsd:documentation>
+						User name not found. 
+						The request is not processed any further.
+						Valid for all operations.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>		
+			<xsd:enumeration value="AUTH_FAILED">
+				<xsd:annotation>
+					<xsd:documentation>
+						Incorrect password. 
+						The request is not processed any further.
+						Valid for all operations.
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:enumeration>					
+		</xsd:restriction>
+	</xsd:simpleType>
+	
+	<!-- Complex types -->
+	<xsd:complexType name="userAgentType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">Broker software client information.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="name" type="tns:string100" minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>Broker software client name</xsd:documentation>
+				</xsd:annotation></xsd:element>
+			<xsd:element name="version" type="tns:string30"	minOccurs="1" maxOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation xml:lang="en">Broker software client version</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<!-- **************************************************************** -->
+	<!-- Faults -->
+	<!-- **************************************************************** -->
+	<xsd:simpleType name="faultCodeEnum">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				All possible fault types.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="Validation" />
+			<xsd:enumeration value="BackendUnreachable" />
+			<xsd:enumeration value="InsufficientPermissions" />
+			<xsd:enumeration value="Unspecified" />
+		</xsd:restriction>
+	</xsd:simpleType>
+
+	<xsd:complexType name="serviceFaultType">
+		<xsd:annotation>
+			<xsd:documentation xml:lang="en">
+				Fault returned by the user provising web service.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element name="message" type="xsd:string" minOccurs="1" maxOccurs="1" />
+			<xsd:element name="code"    type="tns:faultCodeEnum" minOccurs="1" maxOccurs="1" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

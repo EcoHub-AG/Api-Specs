@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Note the missing '/' in 'XMLSchema' - it doesn't work with it!-->
+<wsdl:definitions
+        name="techUser-v1.0"
+        targetNamespace="http://www.igb2b.ch/techUserEnrollmentService-v1.0/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:tns="http://www.igb2b.ch/techUserEnrollmentService-v1.0/"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:tin="http://www.igb2b.ch/techUserEnrollmentServiceSchema-v1.0/"
+        xmlns:v1_0="http://www.igb2b.ch/techUserEnrollmentServiceSchemaTypes-v1.0/"
+>
+
+    <wsdl:documentation>
+        This file, along with the included XSD file, define the WSDL
+        It's written in WSDL1.1 to provide as much compliance as possible.
+        Additionally, it adheres to the WS-I standards. It has been validated
+        with the validator built-in into Eclipse 3 Indigo SP 1-Webtools 3.3.0 and SOAPUI 2.6.1.
+    </wsdl:documentation>
+
+    <!-- ******************************************************************	-->
+    <!-- Types																-->
+    <!-- ******************************************************************	-->
+    <wsdl:types>
+        <xsd:schema
+                targetNamespace="http://www.igb2b.ch/techUserEnrollmentServiceSchemaTypes-v1.0/"
+                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:cv1_0="http://www.igb2b.ch/igb2bServiceSchema-v1.0/"
+                xmlns:v1_0="http://www.igb2b.ch/techUserEnrollmentServiceSchema-v1.0/">
+
+            <xsd:import
+                    namespace="http://www.igb2b.ch/techUserEnrollmentServiceSchema-v1.0/"
+                    schemaLocation="./schemas/techUserEnrollmentServiceV1.0.xsd"/>
+            <xsd:import
+                    namespace="http://www.igb2b.ch/igb2bServiceSchema-v1.0/"
+                    schemaLocation="./schemas/igb2bServiceV1.0.xsd"/>
+
+            <!--  Wrapped elements for version 1.0 types-->
+            <xsd:element name="commonReturnType" type="v1_0:commonReturnType"/>
+            <xsd:element name="commonInputType" type="v1_0:commonInputType"/>
+            <xsd:element name="serviceFaultType" type="cv1_0:serviceFaultType"/>
+        </xsd:schema>
+    </wsdl:types>
+
+    <!-- ******************************************************************	-->
+    <!-- Messages 															-->
+    <!-- ******************************************************************	-->
+    <wsdl:message name="enrollTechUserRequest">
+        <wsdl:part name="enrollTechUserRequest" element="v1_0:commonInputType"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="enrollTechUserResponse">
+        <wsdl:part name="enrollTechUserResponse" element="v1_0:commonReturnType"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="enrollTechUserFault">
+        <wsdl:part name="message" element="v1_0:serviceFaultType"></wsdl:part>
+    </wsdl:message>
+
+    <!-- ******************************************************************	-->
+    <!-- Port 																-->
+    <!-- ******************************************************************	-->
+    <wsdl:portType name="techUserEnrollmentService-v1_0">
+        <wsdl:operation name="enrollTechUser">
+            <wsdl:input message="tns:enrollTechUserRequest"></wsdl:input>
+            <wsdl:output message="tns:enrollTechUserResponse"></wsdl:output>
+            <wsdl:fault name="ServiceFault" message="tns:enrollTechUserFault"></wsdl:fault>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <!-- ******************************************************************	-->
+    <!-- Binding and operations												-->
+    <!-- ******************************************************************	-->
+    <wsdl:binding name="techUserEnrollmentServicePortBinding-v1_0.SOAPoHTTP" type="tns:techUserEnrollmentService-v1_0">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="enrollTechUser">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="ServiceFault">
+                <soap:fault name="ServiceFault" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <!-- ******************************************************************	-->
+    <!-- Service 															-->
+    <!-- ******************************************************************	-->
+    <wsdl:service name="techUserEnrollmentService-v1_0">
+        <wsdl:port binding="tns:techUserEnrollmentServicePortBinding-v1_0.SOAPoHTTP"
+                   name="techUserEnrollmentServicePort-v1_0.SOAPoHTTP">
+            <soap:address location="http://www.igb2b.ch/techuserenrollmentservice/techUserEnrollmentService/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
