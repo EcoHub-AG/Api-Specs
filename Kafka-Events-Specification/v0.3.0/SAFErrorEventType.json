@@ -56,7 +56,7 @@
       ]
     },
     "licenceKey": {
-      "$ref": "event-generic/LicenseKeyType.json"
+      "$ref": "event-generic/LicenceKeyType.json"
     },
     "userAgent": {
       "$ref": "event-generic/UserAgentType.json"
