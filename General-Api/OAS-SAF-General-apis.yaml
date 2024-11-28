@@ -297,7 +297,7 @@ components:
           type: string
           maxLength: 100
           description: The activation code from EcoHub
-          example: 654321
+          example: "004321"
           nullable: false
         idpUserId:
           type: string
