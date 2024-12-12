@@ -1,13 +1,23 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework"
-  version: 0.3.0
+  version: 0.3.1
   description: >
+    ## Security
+    
+    All endpoints except the techUserEnrolment are protected and a TechUser certificate (mTLS) or 
+    bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
+    the /techUserEnrolment endpoint.
+    
     ## Changelog
+    
+    ### Version 0.3.1 (12.12.2024)
+    
+      - Enhanced documentation
 
     ### Version 0.3.0 (10.07.2024)
     
-    Initial public release
+      - Initial public release
 servers:
   - url: https://services.test-myecohub.ch/general
     variables: {}
@@ -284,7 +294,7 @@ components:
           type: string
           maxLength: 100
           description: The activation code from EcoHub
-          example: 654321
+          example: "004321"
           nullable: false
         idpUserId:
           type: string
