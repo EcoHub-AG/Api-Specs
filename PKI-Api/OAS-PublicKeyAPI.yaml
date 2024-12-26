@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 0.4.1
+  version: 0.5.0
   description: >
     ## Security
 
@@ -11,9 +11,13 @@ info:
     
     ## Changelog
     
+    ### Version 0.5.0
+      - Introducing new property keyType, to support the digital signature public keys
+      - GET /keys returns a list of keys instead of a single object
+    
     ### Version 0.4.1 (30.01.2025)
       - Enhanced documentation
-
+    
     ### Version 0.4.0 (26.12.2024)
 
       - Removing unused paths for insurers and brokers
@@ -47,7 +51,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublicKeyResponse'
+                $ref: '#/components/schemas/PublicKeyListResponse'
         '400':
           description: Bad request
           content:
@@ -73,16 +77,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PublicKeyResponse'
+                $ref: '#/components/schemas/PublicKeyListResponse'
         '401':
           description: Authorization (mTLS or JWT) missing
   /keys/{keyId}/verify:
     get:
       tags:
         - PublicKeyApi
-      summary: Get encrypted content to verify public key.
+      summary: Get content to verify public key.
       operationId: GetEncryptedContent
       parameters:
         - name: keyId
@@ -115,7 +117,7 @@ paths:
     post:
       tags:
         - PublicKeyApi
-      summary: Submit decrypted content to verify public key.
+      summary: Submit content to verify public key.
       operationId: VerifyPublicKeyByDecryptedContent
       parameters:
         - name: keyId
@@ -299,8 +301,8 @@ paths:
     get:
       tags:
         - PublicKeyApi
-      summary: Get the active public key of a member by idp-number with whom my membership has a Service Agreement.
-      description: Get the active public key of a member by idp-number with whom my membership has a Service Agreement.
+      summary: Get the active public keys of the receiving party
+      description: Get the active public keys, for encryption and signing, of a member by idp-number with whom my membership has a Service Agreement.
       operationId: GetActivePublicKeyOfMemberByIdpNumber
       parameters:
         - name: idpNumber
@@ -309,6 +311,54 @@ paths:
           required: true
           schema:
             type: string
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyListResponse'
+        '204':
+          description: No content
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS or JWT) missing
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /members/{idpNumber}/key/{keyType}:
+    get:
+      tags:
+        - PublicKeyApi
+      summary: Get the active encryption or signing public key of the receiving party
+      description: Get the active encryption or signing public key of a member by idp-number and keyType with whom my membership has a Service Agreement.
+      operationId: GetActivePublicKeyOfMemberByOperationAndIdpNumber
+      parameters:
+        - name: idpNumber
+          in: path
+          description: IdpNumber.
+          required: true
+          schema:
+            type: string
+        - name: keyType
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/PublicKeyTypeType"
       responses:
         '200':
           description: Success.
@@ -340,6 +390,31 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    PublicKeyListResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/PublicKeyResponse'
+      example:
+        - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
+          version: "string"
+          keyType: "encryption"
+          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          createdAt: "2024-09-03T09:16:37.327Z"
+          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
+          activatedAt: "2024-09-03T09:16:37.327Z"
+          expiryDate: "2024-09-03T09:16:37.327Z"
+          ecoHubStatus: "Created"
+        - keyId: "0e84035f-d211-4fbd-9ce0-ecc259d7814dÃ¥"
+          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
+          version: "string"
+          keyType: "signature"
+          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          createdAt: "2024-09-03T09:16:37.327Z"
+          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
+          activatedAt: "2024-09-03T09:16:37.327Z"
+          expiryDate: "2024-09-03T09:16:37.327Z"
+          ecoHubStatus: "Created"
     PublicKeyResponse:
       type: object
       properties:
@@ -349,6 +424,8 @@ components:
           $ref: "#/components/schemas/MembershipIdType"
         version:
           $ref: "#/components/schemas/PublicKeyVersionType"
+        keyType:
+          $ref: "#/components/schemas/PublicKeyTypeType"
         key:
           $ref: "#/components/schemas/PublicKeyDataType"
         createdAt:
@@ -362,39 +439,60 @@ components:
         ecoHubStatus:
           $ref: "#/components/schemas/PublicKeyStatusType"
       additionalProperties: false
+      example:
+        keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
+        version: "string"
+        keyType: "encryption"
+        key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+        createdAt: "2024-09-03T09:16:37.327Z"
+        lastUpdatedAt: "2024-09-03T09:16:37.327Z"
+        activatedAt: "2024-09-03T09:16:37.327Z"
+        expiryDate: "2024-09-03T09:16:37.327Z"
+        ecoHubStatus: "Created"
     PublicKeyUploadRequest:
-      required:
-        - expireInDays
-        - key
-        - version
-      type: object
-      properties:
-        version:
-          $ref: "#/components/schemas/PublicKeyVersionType"
-        key:
-          $ref: "#/components/schemas/PublicKeyDataType"
-        expireInDays:
-          $ref: "#/components/schemas/ExpireInDaysType"
-      additionalProperties: false
+      type: array
+      items:
+        type: object
+        properties:
+          version:
+            $ref: "#/components/schemas/PublicKeyVersionType"
+          keyType:
+            $ref: "#/components/schemas/PublicKeyTypeType"
+          key:
+            $ref: "#/components/schemas/PublicKeyDataType"
+          expireInDays:
+            $ref: "#/components/schemas/ExpireInDaysType"
+        required:
+          - expireInDays
+          - key
+          - version
+        additionalProperties: false
+      minItems: 1
     PublicKeyVerifyRequest:
       type: object
       properties:
-        decryptedContent:
+        verifiedContent:
           type: string
-          description: Must be the original content of the verification challenge, which is retrieved
-            by decoding and decrypting the 'encryptedContent' response from the GET /verify API endpoint.
-          nullable: true
+          description: Depending on the keyType of the key being verified, this must be
+            either the decrypted or signed verificationContent of the response from the GET /verify API
+            endpoint.
       additionalProperties: false
     PublicKeyVerifyChallenge:
       type: object
       properties:
         keyId:
           $ref: "#/components/schemas/PublicKeyIdType"
-        encryptedContent:
+        keyType:
+          $ref: "#/components/schemas/PublicKeyTypeType"
+        verificationContent:
           type: string
-          description: Contains a random string which has been encrypted with your active public key using RSA with PKCS#1 
-            v1.5 padding and encoded as base64. This value must be decoded and decrypted, so that the original content
-            can be retrieved and used as input for the POST /verify API call.
+          description: When verifying an encryption key, this contains a random string which has 
+            been encrypted with your active public key using RSA with OAEP_SHA256 padding and encoded 
+            as base64. The value must be decoded and decrypted, so that the original plain text
+            can be used as input for the POST /verify API call.
+            When verifying a signature key, this contains a random plaintext string. Create the signature
+            for the plaintext with your active signature key using the EC secp384r1 algorithm.
       additionalProperties: false
     PublicKeyDataType:
       minLength: 1
@@ -447,6 +545,11 @@ components:
       type: string
       enum: ["Created", "Verified", "Activated", "Deactivated"]
       nullable: false
+    PublicKeyTypeType:
+      description: Specifies the type of operation for which the public key will be used. The following operations are supported
+      type: string
+      enum: ["encryption", "signature"]
+      default: "encryption"
     PublicKeyVerifyResponse:
       type: object
       properties:
