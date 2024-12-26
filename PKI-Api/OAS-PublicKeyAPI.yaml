@@ -14,6 +14,7 @@ info:
     ### Version 0.5.0
       - Introducing new property keyType, to support the digital signature public keys
       - GET /keys returns a list of keys instead of a single object
+      - Introducing new property supportedProcesses, to restrict keys to be used with certain core processes.
     
     ### Version 0.4.1 (30.01.2025)
       - Enhanced documentation
@@ -400,6 +401,9 @@ components:
           version: "string"
           keyType: "encryption"
           key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          supportedProcesses:
+            - processName: offer.nlpi
+              processVersion: 0.3.0
           createdAt: "2024-09-03T09:16:37.327Z"
           lastUpdatedAt: "2024-09-03T09:16:37.327Z"
           activatedAt: "2024-09-03T09:16:37.327Z"
@@ -410,6 +414,9 @@ components:
           version: "string"
           keyType: "signature"
           key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          supportedProcesses:
+            - processName: offer.nlpi
+              processVersion: 0.3.0
           createdAt: "2024-09-03T09:16:37.327Z"
           lastUpdatedAt: "2024-09-03T09:16:37.327Z"
           activatedAt: "2024-09-03T09:16:37.327Z"
@@ -428,6 +435,8 @@ components:
           $ref: "#/components/schemas/PublicKeyTypeType"
         key:
           $ref: "#/components/schemas/PublicKeyDataType"
+        supportedProcesses:
+          $ref: "#/components/schemas/SupportedProcessesType"
         createdAt:
           $ref: "#/components/schemas/CreatedAtType"
         lastUpdatedAt:
@@ -445,6 +454,9 @@ components:
         version: "string"
         keyType: "encryption"
         key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+        supportedProcesses:
+          - processName: offer.nlpi
+            processVersion: 0.3.0
         createdAt: "2024-09-03T09:16:37.327Z"
         lastUpdatedAt: "2024-09-03T09:16:37.327Z"
         activatedAt: "2024-09-03T09:16:37.327Z"
@@ -574,3 +586,24 @@ components:
           type: string
           description: Message detailing the error
           example: "Key version already exists for this membership"
+    SupportedProcessesType:
+      description: Restricts the processes this key can be used for. If omitted, this key is not restricted and can
+        be used for any process. When retrieving a key for encryption / checking a
+        signature, make sure that the key matches the processName and processVersion of the event.
+      type: array
+      minItems: 1
+      items:
+        type: object
+        properties:
+          processName:
+            description: Restricts the key to a particular core process.
+            type: string
+            enum: [ "offer.nlpi" ]
+          processVersion:
+            description: Restricts the key to a particular version of the used core process. If omitted, the version is
+              not restricted and the key can be used for any version of the indicated process.
+            type: string
+            pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+        required:
+          - processName
+        additionalProperties: false
