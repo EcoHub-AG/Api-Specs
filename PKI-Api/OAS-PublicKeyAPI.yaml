@@ -13,9 +13,9 @@ info:
 
     ### Version 0.4.0 (26.12.2024)
 
-    - Removing unused paths for insurers and brokers
-    - Only allow application/json as content type
-    - Enhanced documentation
+      - Removing unused paths for insurers and brokers
+      - Only allow application/json as content type
+      - Enhanced documentation
 
     ### Version 0.3.0 (11.07.2024)
     
