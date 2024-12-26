@@ -1,15 +1,19 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework"
-  version: 0.3.1
+  version: 0.3.2
   description: >
     ## Security
     
     All endpoints except the techUserEnrolment are protected and a TechUser certificate (mTLS) or 
     bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
-    the /techUserEnrolment endpoint.
+    the /techUserEnrolment endpoint of this API.
     
     ## Changelog
+    
+    ### Version 0.3.2 (26.12.2024)
+
+      - Enhanced documentation
     
     ### Version 0.3.1 (12.12.2024)
     
@@ -30,11 +34,13 @@ paths:
     post:
       tags:
         - "General APIs"
-      summary: Performs action in EcoHub SAF to receive a list of all available receivers for this techUser,
-        i.e. all receivers this TechUser has an active SA with.
+      summary: Retrieve all SAF receivers which are available to the caller
+      description: This endpoint returns a list of all SAF receivers available to the calling member. A receiver will 
+        be included in the list if they are connected to the Standard API Framework (SAF), and if the calling member 
+        has an active service agreement with that receiver. The calling member is determined through the techUser
+        used for the API request.
       operationId: SafReceivers
       requestBody:
-        description: saf-receivers request, to retrieve a list of available receivers for the authenticated tech user
         content:
           application/json:
             schema:
@@ -50,7 +56,9 @@ paths:
               $ref: '#/components/schemas/GeneralRequestData'
       responses:
         '200':
-          description: Returns a list of available receivers
+          description: Returns a list of the available receivers. The IDP numbers contained in the response can
+            be used to specify the eventReceiver in the event json and for further API calls which require the
+            IDP number of the receiver as a parameter.
           content:
             application/json:
               schema:
@@ -77,11 +85,13 @@ paths:
     post:
       tags:
         - "General APIs"
-      summary: Performs action in EcoHub SAF to receive a list of all insurers available on SAF. This caller does not
-        need to have an active service agreement with the insurers.
+      summary: Retrieve a list of all insurers in SAF along with the standards they support.
+      description: This endpoint returns a list of all insurers on EcoHub that are connected to the Standard API 
+        Framework, along with the specific standards they support. This endpoint is informational only and does not 
+        guarantee that the listed insurers are valid recipients for the API caller. To obtain the appropriate receiver
+        information for sending a SAF event, use the /saf-receivers endpoint.
       operationId: SafInsurers
       requestBody:
-        description: saf-insurers request, to retrieve a list of all insurers connected to the Standard API Framework and which Standards are supported.
         content:
           application/json:
             schema:
@@ -124,10 +134,17 @@ paths:
     post:
       tags:
         - "TechUser Enrollment"
-      summary: Performs TechUserEnrolment action.
+      summary: Retrieve techUser credentials for SAF
+      description: This endpoint provides the necessary credentials (certificate and OAuth2 credentials) for 
+        the specified SAF techUser, enabling further API calls. To interact with other APIs or endpoints, the 
+        client must supply either the certificate or the bearer token obtained via OAuth2.
       operationId: EnrolTechUser
       requestBody:
-        description: TechUserEnrolmentRequest.
+        description: To authenticate the request, the IDP number, password and a one-time activate code for the SAF
+          techUser must be provided. These can be retrieved by logging into EcoHub and navigating to the SAF techUsers
+          section. Note that SAF techUsers are separate from DXP techUsers. They are not interchangeable, and each has 
+          its own set of credentials. Ensure you provide the correct SAF techUser credentials, as this endpoint is 
+          specifically designed for SAF techUsers.
         content:
           application/json:
             schema:
@@ -180,18 +197,18 @@ components:
       properties:
         licenceKey:
           type: string
-          description: The license key for the requesting SC application.
+          description: The license key of the requesting application.
           example: fdsaf346t54grthe65euz467jhz7r
           maxLength: 200
         password:
           type: string
-          description: The TechUser password.
+          description: The password of the techUser used for the request.
           example: password
           maxLength: 100
         requestId:
           type: string
           example: 486ebf73-8306-4dd2-96bf-82ce4b15444f
-          description: Unique request ID. This is created by the broker or DXP-GUI and passed on to the VU and should be logged there to help with troubleshooting.
+          description: Unique request ID. This is created by the caller and provided to help with troubleshooting.
         requestTime:
           type: string
           description: Time of the request at the client as timestamp (date and time, each UTC without corresponding specification). YYYY-MM-DDTHH:MM:SS RFC 3339 formatted datetime.
@@ -293,13 +310,13 @@ components:
         iak:
           type: string
           maxLength: 100
-          description: The activation code from EcoHub
+          description: One-time activation code for the techUser
           example: "004321"
           nullable: false
         idpUserId:
           type: string
           maxLength: 10
-          description: The IDP_UserID of the TechUser.
+          description: IDP number of the techUser
           example: IDP9873467
       additionalProperties: false
     TechUserEnrolmentResponse:
@@ -325,13 +342,16 @@ components:
       additionalProperties: false
     UserAgent:
       type: object
+      description: Identifies the software that was used to make the request
       properties:
         name:
           type: string
+          description: Name of the application
           example: Client software XYZ
           maxLength: 100
         version:
           type: string
+          description: Version of the application
           example: Version 1.0
           maxLength: 30
       additionalProperties: false
