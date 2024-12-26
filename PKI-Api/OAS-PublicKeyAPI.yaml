@@ -1,15 +1,25 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 0.3.0
+  version: 0.4.0
   description: >
+    ## Security
+
+    All endpoints are protected and a TechUser certificate (mTLS) or 
+    bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
+    the /techUserEnrolment endpoint of the general API.
+    
     ## Changelog
+
+    ### Version 0.4.0 (26.12.2024)
+
+      - Removing unused paths for insurers and brokers
+      - Only allow application/json as content type
+      - Enhanced documentation
 
     ### Version 0.3.0 (11.07.2024)
     
     - Initial public release of the public key store api, that is needed to retrieve the receivers public key and to manage your own public key.
-    
-    - The API is secured and can only be acessed with a valid tech user client certificate.
 servers:
   - url: 'https://services.test-myecohub.ch/publickeystore'
     description: EcoHub IAT Enviroment
@@ -25,16 +35,7 @@ paths:
       requestBody:
         description: Request.
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyUploadRequest'
           application/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyUploadRequest'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyUploadRequest'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/PublicKeyUploadRequest'
       responses:
@@ -51,7 +52,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '409':
           description: Conflict
           content:
@@ -73,7 +74,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/PublicKeyResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
   /keys/{keyId}/verify:
     get:
       tags:
@@ -86,8 +87,7 @@ paths:
           description: keyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       responses:
         '200':
           description: Success
@@ -102,7 +102,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -120,21 +120,11 @@ paths:
           description: keyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       requestBody:
         description: Verify Request.
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyVerifyRequest'
           application/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyVerifyRequest'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/PublicKeyVerifyRequest'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/PublicKeyVerifyRequest'
       responses:
@@ -151,7 +141,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -192,7 +182,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -210,8 +200,7 @@ paths:
           description: KeyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       responses:
         '200':
           description: Success
@@ -222,7 +211,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '403':
           description: Forbidden
           content:
@@ -231,89 +220,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /brokers/{brokerRegNo}/key:
-    get:
-      tags:
-        - PublicKeyApi
-      summary: >-
-        Get the active public key of a broker with whom my membership has a
-        Service Agreement.
-      operationId: GetActivePublicKeyOfBroker
-      parameters:
-        - name: brokerRegNo
-          in: path
-          required: true
-          schema:
-            type: string
-            maxLength: 15
-            pattern: "^(CHE\\-(FINMA|IGB\\dB)\\-\\d{5}|(FINMA)\\-F\\d{8}|LIE\\-FMA\\-\\d{5})$"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicKeyResponse'
-        '204':
-          description: No content
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authorization (mTLS) missing
-        '404':
-          description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /insurers/{insurerId}/key:
-    get:
-      tags:
-        - PublicKeyApi
-      summary: >-
-        Get the active public key of an insurer with whom my membership has a
-        Service Agreement.
-      operationId: GetActivePublicKeyOfInsurer
-      parameters:
-        - name: insurerId
-          in: path
-          description: InsurerId.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicKeyResponse'
-        '204':
-          description: No content
-        '401':
-          description: Authorization (mTLS) missing
-        '404':
-          description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: Conflict
           content:
             application/json:
               schema:
@@ -330,8 +236,7 @@ paths:
           description: KeyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       responses:
         '200':
           description: Success
@@ -365,8 +270,7 @@ paths:
           description: KeyId.
           required: true
           schema:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/PublicKeyIdType'
       responses:
         '200':
           description: Success
@@ -418,7 +322,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
-          description: Authorization (mTLS) missing
+          description: Authorization (mTLS or JWT) missing
         '404':
           description: Resource not found
           content:
@@ -562,7 +466,7 @@ tQIDAQAB"
           type: string
           enum: ["KEY_VERSION_EXISTS", "KEY_INVALID", "REQUEST_INVALID",
                  "KEY_ID_INVALID", "KEY_NOT_FOUND", "VERIFICATION_NOT_STARTED",
-                  "UNAUTHORIZED", "NO_SERVICE_AGREEMENT", "KEY_IS_ACTIVE", "ERROR"]
+                 "UNAUTHORIZED", "NO_SERVICE_AGREEMENT", "KEY_IS_ACTIVE", "ERROR"]
           description: Code identifying the type of error
           example: "KEY_VERSION_EXISTS"
         errorMessage:
