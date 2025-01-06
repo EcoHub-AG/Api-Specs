@@ -2,7 +2,7 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framework: Message Broker System'
-  version: 0.3.1
+  version: 0.3.2
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -10,20 +10,18 @@ info:
   description: >
     ## Changelog
     
+    ### Version 0.3.2
+      - Enhanced documentation
+    
     ### Version 0.3.1
-    
-    - Added SafErrorEvent and OfferNLPIErrorEvent as valid messages for all operations.
-    
-    - Updated documentation (descriptions and examples).
-    
-    - EventDataType
-      - Prohibit additional properties
-    
-    - SAFErrorEventType
-      - Prohibit additional properties
-    
-    - UserAgentType
-      - Prohibit additional properties
+      - Added SafErrorEvent and OfferNLPIErrorEvent as valid messages for all operations.
+      - Updated documentation (descriptions and examples).
+      - EventDataType
+        - Prohibit additional properties
+      - SAFErrorEventType
+        - Prohibit additional properties
+      - UserAgentType
+        - Prohibit additional properties
     
     ### Version 0.2.4 (20.08.2024) - Initial public release
   license:
@@ -560,30 +558,26 @@ components:
       description: UUID, that won't change during the offer processes. The UUID is set by the party, that starts the process.
     senderReceiverType:
       type: object
+      additionalProperties: false
       properties:
         category:
-          type: string
+          description: The category of the organisation
           enum:
             - broker
             - insurer
             - serviceprovider
-
           example: broker
-          description: The category of organisation
-        id:
           type: string
-
-          minLength: 3
+        id:
+          description: The IDP number of the member's techUser. The IDP number of the eventReceiver
+            can be determined through the /saf-receivers endpoint of the General API.
           examples:
-            - IDP1239865
-            - CHE-IGB2B-12345
-            - CHE-FINMA-F012345678
-            - SP-ins1
-          description: Depending on the type either the brokerRegNo/IDPNumber or the insurerCode needs to be set
+            - IDP1239856
+          minLength: 3
+          type: string
       required:
         - category
         - id
-      additionalProperties: false
     eventDataType:
       description: The event payload.
       type: object

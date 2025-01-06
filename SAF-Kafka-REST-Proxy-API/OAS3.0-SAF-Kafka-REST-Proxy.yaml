@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: 'Standard API Framework: Kafka REST Proxy API'
-  version: 0.3.1
+  version: 0.3.2
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -17,6 +17,10 @@ info:
     the /techUserEnrolment endpoint of the general api.
     
     ## Changelog
+    
+    ### Version 0.3.2
+      - Fixed schemaVersionId header value
+      - Enhanced documentation
     
     ### Version 0.3.1
       - Fixing content type definitions
@@ -48,7 +52,7 @@ paths:
           description: The id of the schema which is used to serialize the event value
           schema:
             type: integer
-            enum: [ 100019 ]
+            enum: [ 100024 ]
           required: true
         - name: keySchemaVersionId
           in: header
@@ -696,7 +700,7 @@ components:
       additionalProperties: false
       properties:
         category:
-          description: The category of organisation
+          description: The category of the organisation
           enum:
             - broker
             - insurer
@@ -704,9 +708,9 @@ components:
           example: broker
           type: string
         id:
-          description: Depending on the type either the brokerRegNo/IDPNumber or the insurerCode
-            needs to be set
-          example: IDP1239856, CHE-IGB2B-12345, SP-ins1
+          description: The IDP number of the member's techUser. The IDP number of the eventReceiver
+            can be determined through the /saf-receivers endpoint of the General API.
+          example: IDP1239856
           minLength: 3
           type: string
       required:

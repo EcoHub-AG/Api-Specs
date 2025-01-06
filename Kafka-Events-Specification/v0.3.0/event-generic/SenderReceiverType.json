@@ -3,7 +3,7 @@
   "additionalProperties": false,
   "properties": {
     "category": {
-      "description": "The category of organisation",
+      "description": "The category of the organisation",
       "enum": [
         "broker",
         "insurer",
@@ -13,11 +13,9 @@
       "type": "string"
     },
     "id": {
-      "description": "Depending on the type either the brokerRegNo/IDPNumber or the insurerCode needs to be set",
+      "description": "The IDP number of the member's techUser. The IDP number of the eventReceiver can be determined through the /saf-receivers endpoint of the General API.",
       "examples": [
-        "IDP1239856",
-        "CHE-IGB2B-12345",
-        "SP-ins1"
+        "IDP1239856"
       ],
       "minLength": 3,
       "type": "string"
