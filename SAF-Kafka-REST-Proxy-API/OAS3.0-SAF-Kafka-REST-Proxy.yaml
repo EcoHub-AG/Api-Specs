@@ -20,6 +20,7 @@ info:
 
     ### Version 0.5.0
       - Added property 'processVersion' to all events.
+      - Added 'onBehalfBy' property to SenderReceiverType
     
     ### Version 0.4.0
           - Changed format of the EventType to reverse-dns
@@ -758,6 +759,10 @@ components:
           example: IDP1239856
           minLength: 3
           type: string
+        onBehalfBy:
+          type: string
+          description: The IDP number of the software provider if the event is send on behalf.
+          pattern: "^IDP(\\d{6})$"
       required:
         - category
         - id
