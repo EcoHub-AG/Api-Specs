@@ -21,20 +21,23 @@ info:
     ### Version 0.5.0
       - Added property 'processVersion' to all events.
       - Added 'onBehalfBy' property to SenderReceiverType
+      - "payloadSignature" and "signatureKeyVersion" are mandatory for "EventDataType"
+      - "messageSignature" and "signatureKeyVersion" are mandatory for "EventMessageDataType"
+    
     
     ### Version 0.4.0
-          - Changed format of the EventType to reverse-dns
-          - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
-          - OfferNLPIErrorEventType
-            - Prohibit additional properties
-          - EventMessageDataType
-            - Removed property "md5MessageHash"
-            - Added properties "messageSignature" and "signatureKeyVersion"
-            - Prohibit additional properties
-          - LicenseKeyType
-            - Renamed to "LicenceKeyType"
-          - OfferNLPIErrorEventType
-            - Restructured the type and renamed error codes
+      - Changed format of the EventType to reverse-dns
+      - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
+      - OfferNLPIErrorEventType
+        - Prohibit additional properties
+      - EventMessageDataType
+        - Removed property "md5MessageHash"
+        - Added properties "messageSignature" and "signatureKeyVersion"
+        - Prohibit additional properties
+      - LicenseKeyType
+        - Renamed to "LicenceKeyType"
+      - OfferNLPIErrorEventType
+        - Restructured the type and renamed error codes
     
     ### Version 0.3.3
       - Enhanced documentation
@@ -647,7 +650,8 @@ components:
       minLength: 1
       type: string
     EventDataType:
-      description: The event payload.
+      description: The data transmitted with the event and relevant attributes for signing
+        and encryption.
       type: object
       properties:
         payload:
@@ -658,8 +662,8 @@ components:
           minLength: 3
           type: string
         payLoadSignature:
-          description: Signature key of the signed payload, to verify by whom the encrypted
-            message has been created
+          description: Signature of the payload, to verify by whom the encrypted message
+            has been created
           minLength: 3
           type: string
         links:
@@ -697,13 +701,15 @@ components:
           minLength: 3
           type: string
         signatureKeyVersion:
-          description: 'The version of the signature key, that was used to sign '
+          description: The version of the signature key, that was used to sign the payload.
           minLength: 3
           type: string
       required:
         - payload
+        - payLoadSignature
         - encryptionKey
         - publicKeyVersion
+        - signatureKeyVersion
       additionalProperties: false
     EventType:
       description: 'Reverse DNS entry to defines the type of event: data, inquiry, standard-error
@@ -860,7 +866,8 @@ components:
           format: uuid
       additionalProperties: false
     EventMessageDataType:
-      description: The event payload.
+      description: The message transmitted with the event and relevant attributes for signing
+        and encryption.
       type: object
       properties:
         encryptionKey:
@@ -870,7 +877,8 @@ components:
           minLength: 3
           type: string
         messageSignature:
-          description: signature key of the signed message, to verify by whom the encrypted message has been created
+          description: Signature of the message, to verify by whom the encrypted message
+            has been created
           minLength: 3
           type: string
         message:
@@ -885,13 +893,15 @@ components:
           minLength: 3
           type: string
         signatureKeyVersion:
-          description: 'The version of the signature key, that was used to sign '
+          description: The version of the signature key, that was used to sign the message.
           minLength: 3
           type: string
       required:
         - message
+        - payLoadSignature
         - encryptionKey
         - publicKeyVersion
+        - signatureKeyVersion
       additionalProperties: false
     SAFErrorEventType:
       description: SAF error event, i.e. an event for errors which are unrelated to the event payload.

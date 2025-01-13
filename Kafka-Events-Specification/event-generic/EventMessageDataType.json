@@ -1,5 +1,5 @@
 {
-  "description": "The event payload.",
+  "description": "The message transmitted with the event and relevant attributes for signing and encryption.",
   "type": "object",
   "properties": {
     "encryptionKey": {
@@ -8,7 +8,7 @@
       "type": "string"
     },
     "messageSignature": {
-      "description": "signature key of the signed message, to verify by whom the encrypted message has been created",
+      "description": "Signature of the message, to verify by whom the encrypted message has been created",
       "minLength": 3,
       "type": "string"
     },
@@ -23,15 +23,17 @@
       "type": "string"
     },
     "signatureKeyVersion": {
-      "description": "The version of the signature key, that was used to sign ",
+      "description": "The version of the signature key, that was used to sign the message.",
       "minLength": 3,
       "type": "string"
     }
   },
   "required": [
     "message",
+    "messageSignature",
     "encryptionKey",
-    "publicKeyVersion"
+    "publicKeyVersion",
+    "signatureKeyVersion"
   ],
   "additionalProperties": false
 }
