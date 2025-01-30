@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "payload": {
-      "description": "The payload needs to be first gzipped and afterwards encrypted. The base64 representation of encrypted bytes will be added as payload",
+      "description": "The base64 representation of the first g-zipped and then encrypted original payload. For encryption, the AES-GCM algorithm with a 256-bit key, a 96-bit initialization vector (IV), and a 128-bit authentication tag must be used.",
       "minLength": 3,
       "type": "string"
     },
@@ -42,12 +42,12 @@
       "type": "array"
     },
     "encryptionKey": {
-      "description": "The with the public key of the receiver encrypted symmetric key to decrypt the data (KEK)",
+      "description": "The encrypted AES key, which was used to symmetrically encrypt the transmitted data. The key must be encrypted with the public key of the eventReceiver using RSA with PKCS#1 v1.5 padding.",
       "minLength": 3,
       "type": "string"
     },
     "publicKeyVersion": {
-      "description": "The version of the public key used to encrypt the encryptionKey (DEK)",
+      "description": "The version of the public key that was used to encrypt the encryptionKey.",
       "minLength": 3,
       "type": "string"
     },

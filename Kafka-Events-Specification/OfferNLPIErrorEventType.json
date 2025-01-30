@@ -92,7 +92,7 @@
       "type": "object",
       "properties": {
         "errorCode": {
-          "description": "The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload ",
+          "description": "The code best describing the occured error.",
           "minLength": 3,
           "type": "string",
           "enum": [

@@ -2,13 +2,16 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framework: Message Broker System'
-  version: 0.3.2
+  version: 0.3.3
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
     url: 'https://www.myecohub.ch'
   description: >
     ## Changelog
+    
+    ### Version 0.3.3
+      - Enhanced documentation
     
     ### Version 0.3.2
       - Enhanced documentation
@@ -349,7 +352,7 @@ components:
       type: object
       properties:
         errorCode:
-          description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
+          description: 'The code best describing the occured error.'
           type: string
           minLength: 3
           enum:
@@ -473,22 +476,27 @@ components:
       description: The event payload.
       type: object
       properties:
-        message:
-          description: 'The payload needs to be first encrypted and afterwards gzipped. the base64 repesentation of gezipped bytes will be added as payload '
-          type: string
+        encryptionKey:
+          description: The encrypted AES key, which was used to symmetrically encrypt the
+            transmitted message. The key must be encrypted with the public key of the eventReceiver
+            using RSA with PKCS#1 v1.5 padding.
           minLength: 3
+          type: string
         md5MessageHash:
           description: The md5 hash of the byte content of the encrypted data
-          type: string
           minLength: 3
-        encryptionKey:
-          description: The with the public key of the receiver encrypted symmetric key to decrypt the data (KEK)
           type: string
+        message:
+          description: The base64 representation of the first g-zipped and then encrypted
+            original message. For encryption, the AES-GCM algorithm with a 256-bit key,
+            a 96-bit initialization vector (IV), and a 128-bit authentication tag must be
+            used.
           minLength: 3
+          type: string
         publicKeyVersion:
-          description: The version of the public key used to encrypt the DEK
-          type: string
+          description: The version of the public key that was used to encrypt the encryptionKey.
           minLength: 3
+          type: string
       required:
         - message
         - encryptionKey
@@ -583,11 +591,15 @@ components:
       type: object
       properties:
         payload:
-          description: 'The payload needs to be first gzipped and afterwards encrypted. The base64 representation of encrypted bytes will be added as payload'
+          description: The base64 representation of the first g-zipped and then encrypted
+            original payload. For encryption, the AES-GCM algorithm with a 256-bit key,
+            a 96-bit initialization vector (IV), and a 128-bit authentication tag must be
+            used.
           minLength: 3
           type: string
         payLoadSignature:
-          description: Signature key of the signed payload, to verify by whom the encrypted message has been created
+          description: Signature key of the signed payload, to verify by whom the encrypted
+            message has been created
           minLength: 3
           type: string
         links:
@@ -615,12 +627,13 @@ components:
             additionalProperties: false
           type: array
         encryptionKey:
-          description: The with the public key of the receiver encrypted symmetric key to
-            decrypt the data (KEK)
+          description: The encrypted AES key, which was used to symmetrically encrypt the
+            transmitted data. The key must be encrypted with the public key of the eventReceiver
+            using RSA with PKCS#1 v1.5 padding.
           minLength: 3
           type: string
         publicKeyVersion:
-          description: The version of the public key used to encrypt the encryptionKey (DEK)
+          description: The version of the public key that was used to encrypt the encryptionKey.
           minLength: 3
           type: string
         signatureKeyVersion:
@@ -671,7 +684,7 @@ components:
           - 'null'
           - string
       dataschemadef:
-        description: Identifies the schema that data adheres to. Must point to the respective raw schema in 
+        description: Identifies the schema that data adheres to. Must point to the respective raw schema in
           the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).
         format: uri
         minLength: 1
@@ -750,16 +763,16 @@ components:
             dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json
             subject: offer nlpi request
             time: '2023-08-17T14:15:22.000Z'
-            licenceKey: mvikeporivmf/342)*fjdskaföj
+            licenceKey: REcxZEVMZWV1UXFwOUZwaz...
             userAgent:
               name: BS1
               version: '1.0'
             eventReceiver:
               category: insurer
-              id: insurer1
+              id: IDP1234567
             eventSender:
               category: broker
-              id: broker1
+              id: IDP7654321
             data:
               payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
               payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
@@ -767,7 +780,7 @@ components:
                 - href: 7F8C+RQDyYAIhAIjt+X0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ
                   rel: offer-nlpi
                   description: Pdf file that contains additional informations for the offer.
-              encryptionKey: jgfisogjeioüwgj
+              encryptionKey: urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...
               publicKeyVersion: '1.1'
               signatureKeyVersion: '1.3'
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
@@ -790,10 +803,10 @@ components:
               version: '1.0'
             eventReceiver:
               category: broker
-              id: broker1
+              id: IDP7654321
             eventSender:
               category: insurer
-              id: insurer1
+              id: IDP1234567
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
             subProcessName: request
@@ -816,10 +829,10 @@ components:
               version: '1.0'
             eventSender:
               category: insurer
-              id: insurer1
+              id: IDP1234567
             eventReceiver:
               category: broker
-              id: broker1
+              id: IDP7654321
             data:
               payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
               payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
@@ -844,16 +857,16 @@ components:
             type: data
             subject: offer nlpi offer received
             time: '2023-08-17T14:15:22.000Z'
-            licenceKey: mvikeporivmf/342)*fjdskaföj
+            licenceKey: REcxZEVMZWV1UXFwOUZwaz...
             userAgent:
               name: BS1
               version: '1.0'
             eventReceiver:
               category: insurer
-              id: insurer1
+              id: IDP1234567
             eventSender:
               category: broker
-              id: broker1
+              id: IDP7654321
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
             processStatus: active
@@ -870,16 +883,16 @@ components:
             dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiFeedbackDataType.json
             subject: offer feedback
             time: '2023-08-17T14:15:22.000Z'
-            licenceKey: mvikeporivmf/342)*fjdskaföj
+            licenceKey: REcxZEVMZWV1UXFwOUZwaz...
             userAgent:
               name: BS1
               version: '1.0'
             eventReceiver:
               category: insurer
-              id: insurer1
+              id: IDP1234567
             eventSender:
               category: broker
-              id: broker1
+              id: IDP7654321
             data:
               payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
               payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
@@ -887,7 +900,7 @@ components:
                 - href: 7F8C+RQDyYAIhAIjt+X0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ
                   rel: offer-nlpi
                   description: Pdf file that contains additional informations for the offer.
-              encryptionKey: jgfisogjeioüwgj
+              encryptionKey: urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...
               publicKeyVersion: '1.1'
               signatureKeyVersion: '1.3'
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
@@ -910,10 +923,10 @@ components:
               version: '1.0'
             eventReceiver:
               category: broker
-              id: broker1
+              id: IDP7654321
             eventSender:
               category: insurer
-              id: insurer1
+              id: IDP1234567
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
             subProcessName: feedback
@@ -937,10 +950,10 @@ components:
               version: '1.0'
             eventSender:
               category: insurer
-              id: insurer1
+              id: IDP1234567
             eventReceiver:
               category: broker
-              id: broker1
+              id: IDP7654321
             data:
               payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
               payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
@@ -961,16 +974,16 @@ components:
             type: data
             subject: offer nlpi conclusionDecision received
             time: '2023-08-17T14:15:22.000Z'
-            licenceKey: mvikeporivmf/342)*fjdskaföj
+            licenceKey: REcxZEVMZWV1UXFwOUZwaz...
             userAgent:
               name: BS1
               version: '1.0'
             eventReceiver:
               category: insurer
-              id: insurer1
+              id: IDP1234567
             eventSender:
               category: broker
-              id: broker1
+              id: IDP7654321
             processId: ff9275bf-5b35-492e-bdd2-c217e151d335
             processName: offer.nlpi
             processStatus: closed
