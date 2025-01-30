@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 0.4.0
+  version: 0.4.1
   description: >
     ## Security
 
@@ -10,6 +10,9 @@ info:
     the /techUserEnrolment endpoint of the general API.
     
     ## Changelog
+    
+    ### Version 0.4.1 (30.01.2025)
+      - Enhanced documentation
 
     ### Version 0.4.0 (26.12.2024)
 
@@ -395,16 +398,11 @@ components:
       additionalProperties: false
     PublicKeyDataType:
       minLength: 1
-      description: Base64-encoded representation of the public key portion of an RSA key pair in PEM format
+      description: The string representation of a 2048-bit RSA public key using the SPKI data structure in PEM format. Must contain
+        the complete PEM format, including the headers, footers and line breaks.
       type: string
       nullable: false
-      example: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L
-iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww
-Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/
-KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4
-24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO
-0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt
-tQIDAQAB"
+      example: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnHzh51ti/7VGUb/GHl1o\nAwL7eTJREdq0A5jCA2viLmjcdEUUjFtcUK6fvySR6ukygLnRlMA1fvzy1xEKlyfu\ntRjb3D5gNiHVqmOHsDG7GTkMAn8XVM4061ad1mhOrjr+Gmd1jaWBTExjJus1PkbG\n4vY5BDVg5nZw4QuyxnFQG96ADIss9n9cp4Sz8STi3bLyPoT8N23/5jpn7kZpbCbz\nG0TZrgzIp3JsABYQ5bxZFmG6Leca3gUEblzAgTyafjYrcj1CQTZLvDezja/aiYzY\nR5qIhFIXBVxBr/ePqmEUUIu6IsXsh2AiQQF2xykwPXsQbtcr+En2MnfNicK/3fhN\nrQIDAQAB\n-----END PUBLIC KEY-----"
     PublicKeyVersionType:
       type: string
       description: Version of the public key
