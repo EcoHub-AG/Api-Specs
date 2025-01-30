@@ -381,7 +381,8 @@ components:
       properties:
         decryptedContent:
           type: string
-          description: The decrypted String from the PublicKeyVerifyChallenge encryptedContent
+          description: Must be the original content of the verification challenge, which is retrieved
+            by decoding and decrypting the 'encryptedContent' response from the GET /verify API endpoint.
           nullable: true
       additionalProperties: false
     PublicKeyVerifyChallenge:
@@ -391,10 +392,9 @@ components:
           $ref: "#/components/schemas/PublicKeyIdType"
         encryptedContent:
           type: string
-          description: Random base64 encoded content, which has been encrypted with the
-            public key. Needs to be decoded and decrypted, so that it can be used as 
-            input for the verify API call.
-          nullable: true
+          description: Contains a random string which has been encrypted with your active public key using RSA with PKCS#1 
+            v1.5 padding and encoded as base64. This value must be decoded and decrypted, so that the original content
+            can be retrieved and used as input for the POST /verify API call.
       additionalProperties: false
     PublicKeyDataType:
       minLength: 1
