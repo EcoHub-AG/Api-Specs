@@ -2,13 +2,16 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framework: Message Broker System'
-  version: 0.3.3
+  version: 0.3.4
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
     url: 'https://www.myecohub.ch'
   description: >
     ## Changelog
+    
+    ### Version 0.3.4
+      - Fixed schema registry urls
     
     ### Version 0.3.3
       - Enhanced documentation
@@ -27,9 +30,6 @@ info:
         - Prohibit additional properties
     
     ### Version 0.2.4 (20.08.2024) - Initial public release
-  license:
-    name: EcoHub AG
-    url: 'https://www.license.com/'
 servers:
   ecohub-iat-saf-server:
     host: saf.test-myecohub.ch:9092
@@ -37,7 +37,7 @@ servers:
     description: EcoHub IAT SAF broker
     bindings:
       kafka:
-        schemaRegistryUrl: "https://services.test-myecohub.ch/safschemaregistry"
+        schemaRegistryUrl: "https://services.test-myecohub.ch/schemaregistry"
         schemaRegistryVendor: "confluent"
     security:
       - $ref: '#/components/securitySchemes/X509'
@@ -47,7 +47,7 @@ servers:
     description: EcoHub Prod SAF broker
     bindings:
       kafka:
-        schemaRegistryUrl: "https://schemaregistry.myecohub.ch"
+        schemaRegistryUrl: "https://services.myecohub.ch/schemaregistry"
         schemaRegistryVendor: "confluent"
     security:
       - $ref: '#/components/securitySchemes/X509'
@@ -92,7 +92,7 @@ channels:
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
-        description: "The EcoHubId can be looked up in EcoHub on the Standard API Framework configuration page."
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
