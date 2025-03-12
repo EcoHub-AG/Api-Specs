@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Format of the kafka message key",
+  "type": "object",
+  "properties": {
+    "processId": {
+      "$ref": "event-generic/ProcessIdType.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "processId"
+  ]
+}

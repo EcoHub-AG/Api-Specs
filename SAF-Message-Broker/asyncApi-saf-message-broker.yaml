@@ -2,13 +2,16 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framework: Message Broker System'
-  version: 0.3.4
+  version: 0.3.5
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
     url: 'https://www.myecohub.ch'
   description: >
     ## Changelog
+    
+    ### Version 0.3.5
+      - Changed definition of the kafka message key from uuid to object with processId
     
     ### Version 0.3.4
       - Fixed schema registry urls
@@ -737,6 +740,15 @@ components:
         - name
         - version
       additionalProperties: false
+    SAFKeyType:
+      description: Format of the kafka message key
+      type: object
+      properties:
+        processId:
+          $ref: '#/components/schemas/processIdType'
+      additionalProperties: false
+      required:
+        - processId
   messages:
     safEvent:
       name: safEvent
@@ -747,7 +759,7 @@ components:
       bindings:
         kafka:
           key:
-            $ref: '#/components/schemas/processIdType'
+            $ref: '#/components/schemas/SAFKeyType'
           schemaIdLocation: 'payload'
           schemaIdPayloadEncoding: 'confluent'
           bindingVersion: '0.4.0'
@@ -996,7 +1008,7 @@ components:
       bindings:
         kafka:
           key:
-            $ref: '#/components/schemas/processIdType'
+            $ref: '#/components/schemas/SAFKeyType'
           schemaIdLocation: 'payload'
           schemaIdPayloadEncoding: 'confluent'
           bindingVersion: '0.4.0'
@@ -1150,7 +1162,7 @@ components:
       bindings:
         kafka:
           key:
-            $ref: '#/components/schemas/processIdType'
+            $ref: '#/components/schemas/SAFKeyType'
           schemaIdLocation: 'payload'
           schemaIdPayloadEncoding: 'confluent'
           bindingVersion: '0.4.0'
@@ -1163,7 +1175,7 @@ components:
       bindings:
         kafka:
           key:
-            $ref: '#/components/schemas/processIdType'
+            $ref: '#/components/schemas/SAFKeyType'
           schemaIdLocation: 'payload'
           schemaIdPayloadEncoding: 'confluent'
           bindingVersion: '0.4.0'
