@@ -7,8 +7,8 @@
       "minLength": 3,
       "type": "string"
     },
-    "md5MessageHash": {
-      "description": "The md5 hash of the byte content of the encrypted data",
+    "messageSignature": {
+      "description": "signature key of the signed message, to verify by whom the encrypted message has been created",
       "minLength": 3,
       "type": "string"
     },
@@ -21,11 +21,17 @@
       "description": "The version of the public key that was used to encrypt the encryptionKey.",
       "minLength": 3,
       "type": "string"
+    },
+    "signatureKeyVersion": {
+      "description": "The version of the signature key, that was used to sign ",
+      "minLength": 3,
+      "type": "string"
     }
   },
   "required": [
     "message",
     "encryptionKey",
     "publicKeyVersion"
-  ]
+  ],
+  "additionalProperties": false
 }
