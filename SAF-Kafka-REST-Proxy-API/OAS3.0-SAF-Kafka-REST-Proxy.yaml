@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: 'Standard API Framework: Kafka REST Proxy API'
-  version: 0.3.3
+  version: 0.4.0
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -17,6 +17,20 @@ info:
     the /techUserEnrolment endpoint of the general api.
     
     ## Changelog
+    
+    ### Version 0.4.0
+          - Changed format of the EventType to reverse-dns
+          - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
+          - OfferNLPIErrorEventType
+            - Prohibit additional properties
+          - EventMessageDataType
+            - Removed property "md5MessageHash"
+            - Added properties "messageSignature" and "signatureKeyVersion"
+            - Prohibit additional properties
+          - LicenseKeyType
+            - Renamed to "LicenceKeyType"
+          - OfferNLPIErrorEventType
+            - Restructured the type and renamed error codes
     
     ### Version 0.3.3
       - Enhanced documentation
@@ -474,7 +488,7 @@ components:
         time:
           $ref: '#/components/schemas/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/LicenseKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
           $ref: '#/components/schemas/UserAgentType'
         eventReceiver:
@@ -529,7 +543,7 @@ components:
         time:
           $ref: '#/components/schemas/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/LicenseKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
           $ref: '#/components/schemas/UserAgentType'
         eventReceiver:
@@ -673,15 +687,16 @@ components:
         - publicKeyVersion
       additionalProperties: false
     EventType:
-      description: Defines the type of event / data, inquiry, standard-error or saf-error
+      description: 'Reverse DNS entry to defines the type of event: data, inquiry, standard-error
+        or saf-error'
       minLength: 1
       type: string
       enum:
-        - data
-        - inquiry
-        - standard-error
-        - saf-error
-    LicenseKeyType:
+        - ch.ecohub.saf.data
+        - ch.ecohub.saf.inquiry
+        - ch.ecohub.saf.standard-error
+        - ch.ecohub.saf.saf-error
+    LicenceKeyType:
       description: The license key for the requesting SC application.
       type: string
       maxLength: 200
@@ -738,7 +753,7 @@ components:
         - Created
         - Received
         - InProgress
-        - Responsed
+        - Responded
         - Updated
         - Error
         - Inquiry
@@ -827,8 +842,8 @@ components:
             using RSA with PKCS#1 v1.5 padding.
           minLength: 3
           type: string
-        md5MessageHash:
-          description: The md5 hash of the byte content of the encrypted data
+        messageSignature:
+          description: signature key of the signed message, to verify by whom the encrypted message has been created
           minLength: 3
           type: string
         message:
@@ -842,10 +857,15 @@ components:
           description: The version of the public key that was used to encrypt the encryptionKey.
           minLength: 3
           type: string
+        signatureKeyVersion:
+          description: 'The version of the signature key, that was used to sign '
+          minLength: 3
+          type: string
       required:
         - message
         - encryptionKey
         - publicKeyVersion
+      additionalProperties: false
     SAFErrorEventType:
       description: SAF error event, i.e. an event for errors which are unrelated to the event payload.
       type: object
@@ -867,7 +887,7 @@ components:
         time:
           $ref: '#/components/schemas/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/LicenseKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
           $ref: '#/components/schemas/UserAgentType'
         data:
@@ -954,7 +974,7 @@ components:
         time:
           $ref: '#/components/schemas/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/LicenseKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
           $ref: '#/components/schemas/UserAgentType'
         data:
@@ -989,61 +1009,51 @@ components:
         - licenceKey
       additionalProperties: false
     OfferNLPIErrorType:
-      type: object
-      properties:
-        errorCode:
-          description: 'The code best describing the occured error.'
-          minLength: 3
-          type: string
-          enum:
-            - offer-missing-informations
-            - offer-incorrect-informations
-            - offer-date-expired
-            - offer-missing-claims-expierence
-            - offer-requested-several-times
-            - offer-already-issued
-            - offer-missing-documents
-            - offer-incorrect-attachment
-            - offer-other-error
-            - mandate-missing
-            - mandate-expired
-            - mandate-terminated
-            - mandate-invalid
-            - mandate-other-error
-            - cooperationagreement-missing
-            - cooperationagreement-expired-terminated
-            - cooperationagreement-other-error
-            - customer-data-referenceno-mismatch
-            - customer-data-incomplete
-            - customer-data-incorrect
-            - customer-not-identified
-            - customer-other-error
-            - claims-expierence-date-range-invalid
-            - claims-expierence-data-incorrect
-            - claims-expierence-contract-incorrect
-            - claims-expierence-customer-incorrect
-            - claims-expierence-other-error
-        errorMessage:
-          description: Error message
-          minLength: 3
-          type: string
-        incorrectDataList:
-          description: List of JSON paths, where wrong information has been entered
-          items:
+      type: array
+      minItems: 1
+      items:
+        type: object
+        properties:
+          errorCode:
+            description: 'The code best describing the occured error.'
+            minLength: 3
             type: string
-          minItems: 1
-          type: array
-        errorDateTime:
-          description: Date and time of the error
-          format: date-time
-          type: string
-        missingDataList:
-          description: List of JSON paths, where information is missing
-          items:
+            enum:
+              - offer-missing-information
+              - offer-incorrect-information
+              - offer-date-expired
+              - offer-missing-claims-experience
+              - offer-requested-several-times
+              - offer-already-issued
+              - offer-missing-documents
+              - offer-incorrect-attachment
+              - offer-other-error
+              - mandate-missing
+              - mandate-expired
+              - mandate-terminated
+              - mandate-invalid
+              - mandate-other-error
+              - cooperationagreement-missing
+              - cooperationagreement-expired-terminated
+              - cooperationagreement-other-error
+              - customer-data-referenceno-mismatch
+              - customer-data-incomplete
+              - customer-data-incorrect
+              - customer-not-identified
+              - customer-other-error
+              - claims-experience-date-range-invalid
+              - claims-experience-data-incorrect
+              - claims-experience-contract-incorrect
+              - claims-experience-customer-incorrect
+              - claims-experience-other-error
+          errorMessage:
+            description: Error message
+            minLength: 3
             type: string
-          minItems: 1
-          type: array
-      required:
-        - errorCode
-        - errorMessage
-        - errorDateTime
+          path:
+            description: xPath or JsonPath to the property where the error occurred.
+            type: string
+        additionalProperties: false
+        required:
+          - errorCode
+          - errorMessage
