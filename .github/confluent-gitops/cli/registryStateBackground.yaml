@@ -1,0 +1,2420 @@
+compatibility: NONE
+subjects:
+- name: eh.saf.326036.reminder-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.311000.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.325011.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.325005.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.326036.contractGeneric-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.334000.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: ProcessNameType
+  file: null
+  type: JSON
+  schema: "{\"description\":\"Comment describing your JSON Schema\",\"type\":\"string\"\
+    ,\"enum\":[\"offer.nlpi\"],\"example\":\"offer.nlpi\"}"
+  compatibility: NONE
+  references: []
+- name: eh.saf.322120.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.313014.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.336009.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326034.commission-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326007.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: OfferNLPIEventType
+  file: null
+  type: JSON
+  schema: "{\"$schema\":\"https://json-schema.org/draft/2019-09/schema\",\"description\"\
+    :\"Offer NLPI Event JSON schema definition\",\"type\":\"object\",\"properties\"\
+    :{\"id\":{\"description\":\"Identifies the event.\",\"examples\":[\"A234-1234-1234\"\
+    ],\"$ref\":\"CloudEventsType.json#/definitions/iddef\"},\"source\":{\"description\"\
+    :\"Identifies the context in which an event happened.\",\"examples\":[\"https://github.com/cloudevents\"\
+    ,\"mailto:cncf-wg-serverless@lists.cncf.io\",\"urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66\"\
+    ,\"cloudevents/spec/pull/123\",\"/sensors/tn-1234567/alerts\",\"1-555-123-4567\"\
+    ],\"$ref\":\"CloudEventsType.json#/definitions/sourcedef\"},\"specversion\":{\"\
+    description\":\"The version of the CloudEvents specification which the event uses.\"\
+    ,\"examples\":[\"1.0\"],\"$ref\":\"CloudEventsType.json#/definitions/specversiondef\"\
+    },\"type\":{\"description\":\"Describes the type of event related to the originating\
+    \ occurrence.\",\"$ref\":\"event-generic/EventType.json\"},\"datacontenttype\"\
+    :{\"description\":\"Content type of the data value. Must adhere to RFC 2046 format.\"\
+    ,\"examples\":[\"text/xml\",\"application/json\",\"image/png\",\"multipart/form-data\"\
+    ],\"$ref\":\"CloudEventsType.json#/definitions/datacontenttypedef\"},\"dataschema\"\
+    :{\"description\":\"Identifies the schema that data adheres to.\",\"$ref\":\"\
+    CloudEventsType.json#/definitions/dataschemadef\"},\"subject\":{\"description\"\
+    :\"Describes the subject of the event in the context of the event producer (identified\
+    \ by source).\",\"examples\":[\"mynewfile.jpg\"],\"$ref\":\"CloudEventsType.json#/definitions/subjectdef\"\
+    },\"time\":{\"description\":\"Timestamp of when the occurrence happened. Must\
+    \ adhere to RFC 3339.\",\"examples\":[\"2018-04-05T17:31:00Z\"],\"$ref\":\"CloudEventsType.json#/definitions/timedef\"\
+    },\"data_base64\":{\"description\":\"Base64 encoded event payload. Must adhere\
+    \ to RFC4648.\",\"examples\":[\"Zm9vYg==\"],\"$ref\":\"CloudEventsType.json#/definitions/data_base64def\"\
+    },\"licenceKey\":{\"$ref\":\"event-generic/LicenseKeyType.json\"},\"userAgent\"\
+    :{\"$ref\":\"event-generic/UserAgentType.json\"},\"data\":{\"$ref\":\"event-generic/EventDataType.json\"\
+    },\"eventReceiver\":{\"$ref\":\"event-generic/SenderReceiverType.json\"},\"eventSender\"\
+    :{\"$ref\":\"event-generic/SenderReceiverType.json\"},\"processId\":{\"$ref\"\
+    :\"event-generic/ProcessIdType.json\"},\"processStatus\":{\"$ref\":\"event-generic/ProcessStatusType.json\"\
+    },\"subProcessName\":{\"type\":\"string\",\"enum\":[\"request\",\"offer\",\"feedback\"\
+    ,\"conclusionDecision\"],\"nullable\":false,\"example\":\"offer.nlpi\"},\"subProcessStatus\"\
+    :{\"$ref\":\"event-generic/ProcessStatusType.json\"}},\"required\":[\"id\",\"\
+    source\",\"specversion\",\"type\",\"processId\",\"subProcessName\",\"processStatus\"\
+    ,\"subProcessStatus\",\"eventReceiver\",\"eventSender\",\"userAgent\",\"licenceKey\"\
+    ]}"
+  compatibility: NONE
+  references:
+  - name: CloudEventsType.json
+    subject: CloudEventsType
+    version: 2
+  - name: event-generic/LicenseKeyType.json
+    subject: LicenseKeyType
+    version: 1
+  - name: event-generic/UserAgentType.json
+    subject: UserAgentType
+    version: 1
+  - name: event-generic/EventDataType.json
+    subject: EventDataType
+    version: 1
+  - name: event-generic/SenderReceiverType.json
+    subject: SenderReceiverType
+    version: 1
+  - name: event-generic/ProcessIdType.json
+    subject: ProcessIdType
+    version: 1
+  - name: event-generic/ProcessStatusType.json
+    subject: ProcessStatusType
+    version: 1
+  - name: event-generic/EventType.json
+    subject: EventType
+    version: 2
+- name: SAFErrorEventType
+  file: null
+  type: JSON
+  schema: "{\"$schema\":\"https://json-schema.org/draft/2019-09/schema\",\"additionalProperties\"\
+    :false,\"description\":\"SAF error event, i.e. an event for errors which are unrelated\
+    \ to the event payload.\",\"properties\":{\"data\":{\"$ref\":\"event-generic/ErrorDataType.json\"\
+    },\"datacontenttype\":{\"$ref\":\"CloudEventsType.json#/definitions/datacontenttypedef\"\
+    ,\"description\":\"Content type of the data value. Must adhere to RFC 2046 format.\"\
+    ,\"examples\":[\"text/xml\",\"application/json\",\"image/png\",\"multipart/form-data\"\
+    ]},\"dataschema\":{\"$ref\":\"CloudEventsType.json#/definitions/dataschemadef\"\
+    ,\"description\":\"Identifies the schema that data adheres to.\"},\"eventReceiver\"\
+    :{\"$ref\":\"event-generic/SenderReceiverType.json\"},\"eventSender\":{\"$ref\"\
+    :\"event-generic/SenderReceiverType.json\"},\"id\":{\"$ref\":\"CloudEventsType.json#/definitions/iddef\"\
+    ,\"description\":\"Identifies the event.\",\"examples\":[\"A234-1234-1234\"]},\"\
+    licenceKey\":{\"$ref\":\"event-generic/LicenceKeyType.json\"},\"processId\":{\"\
+    $ref\":\"event-generic/ProcessIdType.json\"},\"processName\":{\"$ref\":\"event-generic/ProcessNameType.json\"\
+    },\"processStatus\":{\"$ref\":\"event-generic/ProcessStatusType.json\"},\"source\"\
+    :{\"$ref\":\"CloudEventsType.json#/definitions/sourcedef\",\"description\":\"\
+    Identifies the context in which an event happened.\",\"examples\":[\"http://www.igb2b.ch/offer/nlpi/0.2.0\"\
+    ]},\"specversion\":{\"$ref\":\"CloudEventsType.json#/definitions/specversiondef\"\
+    ,\"description\":\"The version of the CloudEvents specification which the event\
+    \ uses.\",\"examples\":[\"1.0\"]},\"subProcessName\":{\"$ref\":\"event-generic/SubProcessNameType.json\"\
+    },\"subProcessStatus\":{\"$ref\":\"event-generic/SubProcessStatusType.json\"},\"\
+    subject\":{\"$ref\":\"CloudEventsType.json#/definitions/subjectdef\",\"description\"\
+    :\"Describes the subject of the event in the context of the event producer (identified\
+    \ by source).\",\"examples\":[\"request\"]},\"time\":{\"$ref\":\"CloudEventsType.json#/definitions/timedef\"\
+    ,\"description\":\"Timestamp of when the occurrence happened. Must adhere to RFC\
+    \ 3339.\",\"examples\":[\"2018-04-05T17:31:00Z\"]},\"type\":{\"$ref\":\"event-generic/EventType.json\"\
+    },\"userAgent\":{\"$ref\":\"event-generic/UserAgentType.json\"}},\"required\"\
+    :[\"id\",\"source\",\"specversion\",\"type\",\"data\",\"processId\",\"processName\"\
+    ,\"subProcessName\",\"processStatus\",\"subProcessStatus\",\"eventReceiver\",\"\
+    eventSender\",\"userAgent\",\"licenceKey\"],\"type\":\"object\"}"
+  compatibility: NONE
+  references:
+  - name: CloudEventsType.json
+    subject: CloudEventsType
+    version: 4
+  - name: event-generic/EventType.json
+    subject: EventType
+    version: 4
+  - name: event-generic/LicenceKeyType.json
+    subject: LicenceKeyType
+    version: 1
+  - name: event-generic/UserAgentType.json
+    subject: UserAgentType
+    version: 3
+  - name: event-generic/ErrorDataType.json
+    subject: ErrorDataType
+    version: 2
+  - name: event-generic/SenderReceiverType.json
+    subject: SenderReceiverType
+    version: 2
+  - name: event-generic/ProcessIdType.json
+    subject: ProcessIdType
+    version: 2
+  - name: event-generic/ProcessNameType.json
+    subject: ProcessNameType
+    version: 1
+  - name: event-generic/ProcessStatusType.json
+    subject: ProcessStatusType
+    version: 2
+  - name: event-generic/SubProcessNameType.json
+    subject: SubProcessNameType
+    version: 1
+  - name: event-generic/SubProcessStatusType.json
+    subject: SubProcessStatusType
+    version: 3
+- name: eh.saf.326036.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: LicenseKeyType
+  file: null
+  type: JSON
+  schema: "{\"description\":\"The license key for the requesting SC application.\"\
+    ,\"type\":\"string\",\"maxLength\":200,\"minLength\":3,\"example\":\"fdsaf346t54grthe65euz467jhz7r\"\
+    }"
+  compatibility: NONE
+  references: []
+- name: eh.saf.326033.reminder-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.323012.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.326036.billing-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.326007.commission-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.316008.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.337005.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326034.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: OfferNLPIInquiryEventType
+  file: null
+  type: JSON
+  schema: "{\"$schema\":\"https://json-schema.org/draft/2019-09/schema\",\"description\"\
+    :\"Offer NLPI Event JSON schema definition\",\"type\":\"object\",\"properties\"\
+    :{\"id\":{\"description\":\"Identifies the event.\",\"examples\":[\"A234-1234-1234\"\
+    ],\"$ref\":\"CloudEventsType.json#/definitions/iddef\"},\"source\":{\"description\"\
+    :\"Identifies the context in which an event happened.\",\"examples\":[\"https://github.com/cloudevents\"\
+    ,\"mailto:cncf-wg-serverless@lists.cncf.io\",\"urn:uuid:6e8bc430-9c3a-11d9-9669-0800200c9a66\"\
+    ,\"cloudevents/spec/pull/123\",\"/sensors/tn-1234567/alerts\",\"1-555-123-4567\"\
+    ],\"$ref\":\"CloudEventsType.json#/definitions/sourcedef\"},\"specversion\":{\"\
+    description\":\"The version of the CloudEvents specification which the event uses.\"\
+    ,\"examples\":[\"1.0\"],\"$ref\":\"CloudEventsType.json#/definitions/specversiondef\"\
+    },\"type\":{\"description\":\"Describes the type of event related to the originating\
+    \ occurrence.\",\"$ref\":\"event-generic/EventType.json\"},\"datacontenttype\"\
+    :{\"description\":\"Content type of the data value. Must adhere to RFC 2046 format.\"\
+    ,\"examples\":[\"text/xml\",\"application/json\",\"image/png\",\"multipart/form-data\"\
+    ],\"$ref\":\"CloudEventsType.json#/definitions/datacontenttypedef\"},\"dataschema\"\
+    :{\"description\":\"Identifies the schema that data adheres to.\",\"$ref\":\"\
+    CloudEventsType.json#/definitions/dataschemadef\"},\"subject\":{\"description\"\
+    :\"Describes the subject of the event in the context of the event producer (identified\
+    \ by source).\",\"examples\":[\"mynewfile.jpg\"],\"$ref\":\"CloudEventsType.json#/definitions/subjectdef\"\
+    },\"time\":{\"description\":\"Timestamp of when the occurrence happened. Must\
+    \ adhere to RFC 3339.\",\"examples\":[\"2018-04-05T17:31:00Z\"],\"$ref\":\"CloudEventsType.json#/definitions/timedef\"\
+    },\"data_base64\":{\"description\":\"Base64 encoded event payload. Must adhere\
+    \ to RFC4648.\",\"examples\":[\"Zm9vYg==\"],\"$ref\":\"CloudEventsType.json#/definitions/data_base64def\"\
+    },\"licenceKey\":{\"$ref\":\"event-generic/LicenseKeyType.json\"},\"userAgent\"\
+    :{\"$ref\":\"event-generic/UserAgentType.json\"},\"data\":{\"$ref\":\"event-generic/EventDataType.json\"\
+    },\"eventReceiver\":{\"$ref\":\"event-generic/SenderReceiverType.json\"},\"eventSender\"\
+    :{\"$ref\":\"event-generic/SenderReceiverType.json\"},\"processId\":{\"$ref\"\
+    :\"event-generic/ProcessIdType.json\"},\"processStatus\":{\"$ref\":\"event-generic/ProcessStatusType.json\"\
+    },\"subProcessName\":{\"type\":\"string\",\"enum\":[\"request.inquiry\",\"offer.inquiry\"\
+    ],\"nullable\":false,\"example\":\"offer.nlpi\"},\"subProcessStatus\":{\"$ref\"\
+    :\"event-generic/ProcessStatusType.json\"}},\"required\":[\"id\",\"source\",\"\
+    specversion\",\"type\",\"processId\",\"subProcessName\",\"processStatus\",\"subProcessStatus\"\
+    ,\"eventReceiver\",\"eventSender\",\"userAgent\",\"licenceKey\"]}"
+  compatibility: NONE
+  references:
+  - name: CloudEventsType.json
+    subject: CloudEventsType
+    version: 2
+  - name: event-generic/LicenseKeyType.json
+    subject: LicenseKeyType
+    version: 1
+  - name: event-generic/UserAgentType.json
+    subject: UserAgentType
+    version: 1
+  - name: event-generic/EventDataType.json
+    subject: EventDataType
+    version: 1
+  - name: event-generic/SenderReceiverType.json
+    subject: SenderReceiverType
+    version: 1
+  - name: event-generic/ProcessIdType.json
+    subject: ProcessIdType
+    version: 1
+  - name: event-generic/ProcessStatusType.json
+    subject: ProcessStatusType
+    version: 1
+  - name: event-generic/EventType.json
+    subject: EventType
+    version: 2
+- name: eh.saf.326032.reminder-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.30009.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.325010.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.325007.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: EventType
+  file: null
+  type: JSON
+  schema: "{\"description\":\"Reverse DNS entry to defines the type of event: data,\
+    \ inquiry, standard-error or saf-error\",\"minLength\":1,\"type\":\"string\",\"\
+    enum\":[\"ch.ecohub.saf.data\",\"ch.ecohub.saf.inquiry\",\"ch.ecohub.saf.standard-error\"\
+    ,\"ch.ecohub.saf.saf-error\"]}"
+  compatibility: NONE
+  references: []
+- name: eh.saf.308031.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.326034.commission-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.325008.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.324037.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.302003.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: SenderReceiverType
+  file: null
+  type: JSON
+  schema: "{\"type\":\"object\",\"properties\":{\"category\":{\"description\":\"The\
+    \ category of organisation\",\"type\":\"string\",\"enum\":[\"broker\",\"insurer\"\
+    ,\"serviceprovider\"],\"example\":\"broker\"},\"id\":{\"description\":\"Depending\
+    \ on the type either the brokerRegNo/IDPNumber or the insurerCode needs to be\
+    \ set\",\"type\":\"string\",\"examples\":[\"IDP1239856\",\"CHE-IGB2B-12345\",\"\
+    SP-ins1\"],\"minLength\":3}},\"required\":[\"category\",\"id\"],\"additionalProperties\"\
+    :false}"
+  compatibility: NONE
+  references: []
+- name: eh.saf.326033.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.302003.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326034.billing-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326033.billing-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326007.contractGeneric-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.326032.billing-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.308031.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: test-piotr-2-key
+  file: null
+  type: JSON
+  schema: "{\"allOf\":[{\"$ref\":\"SAFKeyType.json\"}]}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326033.reminder-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326034.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.311013.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: LicenceKeyType
+  file: null
+  type: JSON
+  schema: "{\"description\":\"The license key for the requesting SC application.\"\
+    ,\"type\":\"string\",\"maxLength\":200,\"minLength\":3,\"examples\":[\"fdsaf346t54grthe65euz467jhz7r\"\
+    ]}"
+  compatibility: NONE
+  references: []
+- name: eh.saf.322030.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326036.billing-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: SAFKeyType
+  file: null
+  type: JSON
+  schema: "{\"type\":\"object\",\"properties\":{\"processId\":{\"$ref\":\"event-generic/ProcessIdType.json\"\
+    }}}"
+  compatibility: NONE
+  references:
+  - name: event-generic/ProcessIdType.json
+    subject: ProcessIdType
+    version: 2
+- name: eh.saf.326036.contractGeneric-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.in-key
+  file: null
+  type: JSON
+  schema: "{\"allOf\":[{\"$ref\":\"SAFKeyType.json\"}]}"
+  compatibility: FORWARD_TRANSITIVE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.325004.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.322120.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.337005.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.325005.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326032.commission-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.334002.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.325007.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.325008.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326007.commission-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.in-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.336009.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.323025.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.326033.contractGeneric-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: ErrorDataType
+  file: null
+  type: JSON
+  schema: "{\"$schema\":\"https://json-schema.org/draft/2019-09/schema\",\"type\"\
+    :\"object\",\"description\":\"The error event payload.\",\"properties\":{\"errorCode\"\
+    :{\"description\":\"The payload needs to be first encrypted and afterwards gzipped.\
+    \ the base64 repesentation of gezipped bytes will be added as payload \",\"enum\"\
+    :[\"licenseKey-not-valid\",\"sa-not-found\",\"receiver-not-found\",\"event-not-valid\"\
+    ,\"pk-version-not-found\",\"data-content-invalid\",\"data-schema-invalid\",\"\
+    data-not-readable\",\"data-decryption-failed\",\"data-decompression-failed\",\"\
+    other\"],\"minLength\":3,\"type\":\"string\"},\"errorDateTime\":{\"description\"\
+    :\"\",\"format\":\"date-time\",\"type\":\"string\"},\"errorMessage\":{\"description\"\
+    :\"\",\"minLength\":3,\"type\":\"string\"}},\"required\":[\"errorCode\",\"errorMessage\"\
+    ,\"errorDateTime\"]}"
+  compatibility: NONE
+  references: []
+- name: eh.saf.302000.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"}]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+- name: eh.saf.316008.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326034.contractGeneric-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.326007.billing-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.324037.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: SubProcessNameType
+  file: null
+  type: JSON
+  schema: "{\"description\":\"Comment describing your JSON Schema\",\"type\":\"string\"\
+    ,\"enum\":[\"request\",\"offer\",\"feedback\",\"conclusionDecision\"],\"example\"\
+    :\"request\"}"
+  compatibility: NONE
+  references: []
+- name: eh.saf.meta.ok-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326034.reminder-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.325010.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: test-piotr-2-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.326032.billing-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.30009.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.322003.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.308002.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: EventDataType
+  file: null
+  type: JSON
+  schema: "{\"description\":\"The event payload.\",\"type\":[\"object\"],\"properties\"\
+    :{\"payload\":{\"description\":\"The payload needs to be first encrypted and afterwards\
+    \ gzipped. the base64 repesentation of gezipped bytes will be added as payload\
+    \ \",\"type\":\"string\",\"minLength\":3},\"payLoadSignature\":{\"description\"\
+    :\"The md5 hash of the byte content of the encrypted data\",\"type\":\"string\"\
+    ,\"minLength\":3},\"signatureKeyVersion\":{\"description\":\"The version of the\
+    \ signature key, that was used to sign \",\"type\":\"string\",\"minLength\":3},\"\
+    links\":{\"type\":\"array\",\"items\":{\"properties\":{\"href\":{\"description\"\
+    :\"the- encrypted URL that should be called, to receive additional encrypted unstructured\
+    \ data, such as pdf, pictures, etc.\",\"type\":\"string\",\"minLength\":3,\"example\"\
+    :\"https://services.test-myecohub.ch/offer/nlpi/{offerId}/{attachmentId} (unencrypted\
+    \ example)\"},\"rel\":{\"description\":\"The IG B2B Standard the links belongs\
+    \ to.\",\"type\":\"string\",\"example\":\"offer-nlpi\",\"minLength\":3},\"description\"\
+    :{\"description\":\"Description of the purpose of the link\",\"type\":\"string\"\
+    }},\"required\":[\"href\",\"rel\"]}},\"encryptionKey\":{\"description\":\"The\
+    \ with the public key of the receiver encrypted symmetric key to decrypt the data\
+    \ (KEK)\",\"type\":\"string\",\"minLength\":3},\"publicKeyVersion\":{\"description\"\
+    :\"The version of the public key used to encrypt the encryptionKey (DEK)\",\"\
+    type\":\"string\",\"minLength\":3}},\"required\":[\"payload\",\"encryptionKey\"\
+    ,\"publicKeyVersion\"]}"
+  compatibility: BACKWARD
+  references: []
+- name: eh.saf.322003.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.315013.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326032.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.315013.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: topic_16-value
+  file: null
+  type: JSON
+  schema: "{\"type\":\"object\",\"properties\":{\"f1\":{\"type\":\"string\"}}}"
+  compatibility: NONE
+  references: []
+- name: eh.saf.326007.reminder-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326032.contractGeneric-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: SubProcessStatusType
+  file: null
+  type: JSON
+  schema: "{\"type\":\"string\",\"enum\":[\"Created\",\"Received\",\"InProgress\"\
+    ,\"Responded\",\"Updated\",\"Error\",\"Inquiry\",\"Inquiry_Answer\",\"Closed\"\
+    ]}"
+  compatibility: BACKWARD
+  references: []
+- name: eh.saf.326036.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326032.commission-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: SAFInquiryEventType
+  file: null
+  type: JSON
+  schema: "{\"$schema\":\"https://json-schema.org/draft/2019-09/schema\",\"additionalProperties\"\
+    :false,\"description\":\"SAF inquiry event, i.e. an event containing a generic\
+    \ message.\",\"properties\":{\"data\":{\"$ref\":\"event-generic/EventMessageDataType.json\"\
+    },\"datacontenttype\":{\"$ref\":\"CloudEventsType.json#/definitions/datacontenttypedef\"\
+    },\"dataschema\":{\"$ref\":\"CloudEventsType.json#/definitions/dataschemadef\"\
+    },\"eventReceiver\":{\"$ref\":\"event-generic/SenderReceiverType.json\"},\"eventSender\"\
+    :{\"$ref\":\"event-generic/SenderReceiverType.json\"},\"id\":{\"$ref\":\"CloudEventsType.json#/definitions/iddef\"\
+    },\"licenceKey\":{\"$ref\":\"event-generic/LicenceKeyType.json\"},\"processId\"\
+    :{\"$ref\":\"event-generic/ProcessIdType.json\"},\"processName\":{\"$ref\":\"\
+    event-generic/ProcessNameType.json\"},\"processStatus\":{\"$ref\":\"event-generic/ProcessStatusType.json\"\
+    },\"source\":{\"$ref\":\"CloudEventsType.json#/definitions/sourcedef\"},\"specversion\"\
+    :{\"$ref\":\"CloudEventsType.json#/definitions/specversiondef\"},\"subProcessName\"\
+    :{\"$ref\":\"event-generic/SubProcessNameType.json\"},\"subProcessStatus\":{\"\
+    $ref\":\"event-generic/SubProcessStatusType.json\"},\"subject\":{\"$ref\":\"CloudEventsType.json#/definitions/subjectdef\"\
+    },\"time\":{\"$ref\":\"CloudEventsType.json#/definitions/timedef\"},\"type\":{\"\
+    $ref\":\"event-generic/EventType.json\"},\"userAgent\":{\"$ref\":\"event-generic/UserAgentType.json\"\
+    }},\"required\":[\"id\",\"source\",\"specversion\",\"type\",\"data\",\"processId\"\
+    ,\"processName\",\"subProcessName\",\"processStatus\",\"subProcessStatus\",\"\
+    eventReceiver\",\"eventSender\",\"userAgent\",\"licenceKey\"],\"type\":\"object\"\
+    }"
+  compatibility: BACKWARD
+  references:
+  - name: CloudEventsType.json
+    subject: CloudEventsType
+    version: 4
+  - name: event-generic/EventType.json
+    subject: EventType
+    version: 4
+  - name: event-generic/LicenceKeyType.json
+    subject: LicenceKeyType
+    version: 1
+  - name: event-generic/UserAgentType.json
+    subject: UserAgentType
+    version: 3
+  - name: event-generic/EventMessageDataType.json
+    subject: EventMessageDataType
+    version: 2
+  - name: event-generic/SenderReceiverType.json
+    subject: SenderReceiverType
+    version: 2
+  - name: event-generic/ProcessIdType.json
+    subject: ProcessIdType
+    version: 2
+  - name: event-generic/ProcessNameType.json
+    subject: ProcessNameType
+    version: 1
+  - name: event-generic/ProcessStatusType.json
+    subject: ProcessStatusType
+    version: 2
+  - name: event-generic/SubProcessNameType.json
+    subject: SubProcessNameType
+    version: 1
+  - name: event-generic/SubProcessStatusType.json
+    subject: SubProcessStatusType
+    version: 3
+- name: SAFEventType
+  file: null
+  type: JSON
+  schema: "{\"$schema\":\"https://json-schema.org/draft/2019-09/schema\",\"description\"\
+    :\"SAF data event, i.e. an event containing data according to a specific standard\"\
+    ,\"type\":\"object\",\"properties\":{\"id\":{\"$ref\":\"CloudEventsType.json#/definitions/iddef\"\
+    },\"source\":{\"$ref\":\"CloudEventsType.json#/definitions/sourcedef\"},\"specversion\"\
+    :{\"$ref\":\"CloudEventsType.json#/definitions/specversiondef\"},\"type\":{\"\
+    $ref\":\"event-generic/EventType.json\"},\"datacontenttype\":{\"$ref\":\"CloudEventsType.json#/definitions/datacontenttypedef\"\
+    },\"dataschema\":{\"$ref\":\"CloudEventsType.json#/definitions/dataschemadef\"\
+    },\"subject\":{\"$ref\":\"CloudEventsType.json#/definitions/subjectdef\"},\"time\"\
+    :{\"$ref\":\"CloudEventsType.json#/definitions/timedef\"},\"licenceKey\":{\"$ref\"\
+    :\"event-generic/LicenceKeyType.json\"},\"userAgent\":{\"$ref\":\"event-generic/UserAgentType.json\"\
+    },\"eventReceiver\":{\"$ref\":\"event-generic/SenderReceiverType.json\"},\"eventSender\"\
+    :{\"$ref\":\"event-generic/SenderReceiverType.json\"},\"data\":{\"$ref\":\"event-generic/EventDataType.json\"\
+    },\"processId\":{\"$ref\":\"event-generic/ProcessIdType.json\"},\"processName\"\
+    :{\"$ref\":\"event-generic/ProcessNameType.json\"},\"processStatus\":{\"$ref\"\
+    :\"event-generic/ProcessStatusType.json\"},\"subProcessName\":{\"$ref\":\"event-generic/SubProcessNameType.json\"\
+    },\"subProcessStatus\":{\"$ref\":\"event-generic/SubProcessStatusType.json\"}},\"\
+    additionalProperties\":false,\"required\":[\"id\",\"source\",\"specversion\",\"\
+    type\",\"processId\",\"processName\",\"subProcessName\",\"processStatus\",\"subProcessStatus\"\
+    ,\"eventReceiver\",\"eventSender\",\"userAgent\",\"licenceKey\"],\"examples\"\
+    :[{\"name\":\"offerRequestExample\",\"summary\":\"Example of an offerRequest event,\
+    \ initiated by an broker\",\"payload\":{\"id\":\"044d2e50-12d6-43e4-bb1b-7b54841c9c82\"\
+    ,\"source\":\"http://www.myecohub.ch/ecoHub-mock-broker-producer1\",\"specversion\"\
+    :\"1.0\",\"type\":\"ch.ecohub.saf.data\",\"datacontenttype\":\"application/json\"\
+    ,\"dataschema\":\"https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json\"\
+    ,\"subject\":\"offer nlpi request\",\"time\":\"2023-08-17T14:15:22.000Z\",\"licenceKey\"\
+    :\"mvikeporivmf/342)*fjdskaföj\",\"userAgent\":{\"name\":\"BS1\",\"version\":\"\
+    1.0\"},\"eventReceiver\":{\"category\":\"insurer\",\"id\":\"insurer1\"},\"eventSender\"\
+    :{\"category\":\"broker\",\"id\":\"broker1\"},\"data\":{\"payload\":\"V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp\"\
+    ,\"payloadSignature\":\"MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP\",\"links\":[{\"\
+    href\":\"7F8C+RQDyYAIhAIjt+X0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ\",\"rel\":\"\
+    offer-nlpi\",\"description\":\"Pdf file that contains additional informations\
+    \ for the offer.\"}],\"encryptionKey\":\"jgfisogjeioüwgj\",\"publicKeyVersion\"\
+    :\"1.1\",\"signatureKeyVersion\":\"1.3\"},\"processId\":\"ff9275bf-5b35-492e-bdd2-c217e151d335\"\
+    ,\"processName\":\"offer.nlpi\",\"processStatus\":\"active\",\"subProcessName\"\
+    :\"request\",\"subProcessStatus\":\"Created\"}},{\"name\":\"offerRequestReceivedExample\"\
+    ,\"summary\":\"Example of an offerRequest received event, sent by the insurer\"\
+    ,\"payload\":{\"id\":\"3e921406-ee31-42e9-9a17-14c9e42cae21\",\"source\":\"http://www.myecohub.ch/ecoHub-mock-insurer-producer1\"\
+    ,\"specversion\":\"1.0\",\"type\":\"ch.ecohub.saf.data\",\"subject\":\"offer nlpi\
+    \ request received\",\"time\":\"2023-08-17T14:15:22.000Z\",\"licenceKey\":\"8985+9403*jgfksld94&%fjd\"\
+    ,\"userAgent\":{\"name\":\"Insurer backoffice system 1\",\"version\":\"1.0\"},\"\
+    eventReceiver\":{\"category\":\"broker\",\"id\":\"broker1\"},\"eventSender\":{\"\
+    category\":\"insurer\",\"id\":\"insurer1\"},\"processId\":\"ff9275bf-5b35-492e-bdd2-c217e151d335\"\
+    ,\"processName\":\"offer.nlpi\",\"subProcessName\":\"request\",\"processStatus\"\
+    :\"active\",\"subProcessStatus\":\"Received\"}},{\"name\":\"offerExample\",\"\
+    summary\":\"Example of an offer event, sent by the insurer to the broker\",\"\
+    payload\":{\"id\":\"d1ebd951-e44e-4464-939e-bd6f4c8d1d8e\",\"source\":\"http://www.myecohub.ch/ecoHub-mock-insurer-producer1\"\
+    ,\"specversion\":\"1.0\",\"type\":\"ch.ecohub.saf.data\",\"datacontenttype\":\"\
+    application/json\",\"dataschema\":\"https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json\"\
+    ,\"subject\":\"offer\",\"time\":\"2023-08-17T14:15:22.000Z\",\"licenceKey\":\"\
+    8985+9403*jgfksld94&%fjd\",\"userAgent\":{\"name\":\"Insurer backoffice system\
+    \ 1\",\"version\":\"1.0\"},\"eventSender\":{\"category\":\"insurer\",\"id\":\"\
+    insurer1\"},\"eventReceiver\":{\"category\":\"broker\",\"id\":\"broker1\"},\"\
+    data\":{\"payload\":\"V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp\"\
+    ,\"payloadSignature\":\"MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP\",\"links\":[{\"\
+    href\":\"0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ\",\"rel\":\"offer-nlpi\",\"description\"\
+    :\"Pdf file that contains additional informations for the offer.\"}],\"encryptionKey\"\
+    :\"mfkaclou7z84z\",\"publicKeyVersion\":\"1.0\",\"signatureKeyVersion\":\"1.1\"\
+    },\"processId\":\"ff9275bf-5b35-492e-bdd2-c217e151d335\",\"processName\":\"offer.nlpi\"\
+    ,\"subProcessName\":\"offer\",\"processStatus\":\"active\",\"subProcessStatus\"\
+    :\"Created\"}},{\"name\":\"offerReceivedExample\",\"summary\":\"Example of an\
+    \ offer received event, sent by the broker\",\"payload\":{\"id\":\"1aa99947-59ee-4b75-86b2-33618d34dd32\"\
+    ,\"source\":\"http://www.myecohub.ch/ecoHub-mock-broker-producer1\",\"specversion\"\
+    :\"1.0\",\"type\":\"ch.ecohub.saf.data\",\"subject\":\"offer nlpi offer received\"\
+    ,\"time\":\"2023-08-17T14:15:22.000Z\",\"licenceKey\":\"mvikeporivmf/342)*fjdskafö\
+    j\",\"userAgent\":{\"name\":\"BS1\",\"version\":\"1.0\"},\"eventReceiver\":{\"\
+    category\":\"insurer\",\"id\":\"insurer1\"},\"eventSender\":{\"category\":\"broker\"\
+    ,\"id\":\"broker1\"},\"processId\":\"ff9275bf-5b35-492e-bdd2-c217e151d335\",\"\
+    processName\":\"offer.nlpi\",\"processStatus\":\"active\",\"subProcessName\":\"\
+    offer\",\"subProcessStatus\":\"Received\"}},{\"name\":\"offerFeedbackExample\"\
+    ,\"summary\":\"Example of an offer feedback event, sent by the broker to the insurer\"\
+    ,\"payload\":{\"id\":\"1aa99947-59ee-4b75-86b2-33618d34dd32\",\"source\":\"http://www.myecohub.ch/ecoHub-mock-broker-producer1\"\
+    ,\"specversion\":\"1.0\",\"type\":\"ch.ecohub.saf.data\",\"datacontenttype\":\"\
+    application/json\",\"dataschema\":\"https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiFeedbackDataType.json\"\
+    ,\"subject\":\"offer feedback\",\"time\":\"2023-08-17T14:15:22.000Z\",\"licenceKey\"\
+    :\"mvikeporivmf/342)*fjdskaföj\",\"userAgent\":{\"name\":\"BS1\",\"version\":\"\
+    1.0\"},\"eventReceiver\":{\"category\":\"insurer\",\"id\":\"insurer1\"},\"eventSender\"\
+    :{\"category\":\"broker\",\"id\":\"broker1\"},\"data\":{\"payload\":\"V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp\"\
+    ,\"payloadSignature\":\"MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP\",\"links\":[{\"\
+    href\":\"7F8C+RQDyYAIhAIjt+X0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ\",\"rel\":\"\
+    offer-nlpi\",\"description\":\"Pdf file that contains additional informations\
+    \ for the offer.\"}],\"encryptionKey\":\"jgfisogjeioüwgj\",\"publicKeyVersion\"\
+    :\"1.1\",\"signatureKeyVersion\":\"1.3\"},\"processId\":\"ff9275bf-5b35-492e-bdd2-c217e151d335\"\
+    ,\"processName\":\"offer.nlpi\",\"processStatus\":\"active\",\"subProcessName\"\
+    :\"feedback\",\"subProcessStatus\":\"Created\"}},{\"name\":\"offerFeedbackReceivedExample\"\
+    ,\"summary\":\"Example of an offer feedback received event, sent by the insurer\"\
+    ,\"payload\":{\"id\":\"5df58bad-960c-4752-81f7-3a2721493b2c\",\"source\":\"http://www.myecohub.ch/ecoHub-mock-insurer-producer1\"\
+    ,\"specversion\":\"1.0\",\"type\":\"ch.ecohub.saf.data\",\"subject\":\"offer nlpi\
+    \ feedback received\",\"time\":\"2023-08-17T14:15:22.000Z\",\"licenceKey\":\"\
+    8985+9403*jgfksld94&%fjd\",\"userAgent\":{\"name\":\"Insurer backoffice system\
+    \ 1\",\"version\":\"1.0\"},\"eventReceiver\":{\"category\":\"broker\",\"id\":\"\
+    broker1\"},\"eventSender\":{\"category\":\"insurer\",\"id\":\"insurer1\"},\"processId\"\
+    :\"ff9275bf-5b35-492e-bdd2-c217e151d335\",\"processName\":\"offer.nlpi\",\"subProcessName\"\
+    :\"feedback\",\"processStatus\":\"active\",\"subProcessStatus\":\"Received\"}},{\"\
+    name\":\"offerConclusionDecisionExample\",\"summary\":\"Example of an offer conclusion\
+    \ decision event, sent by the insurer to the broker\",\"payload\":{\"id\":\"53198975-f2ed-48d7-ae5d-0ba5f8b1e95e\"\
+    ,\"source\":\"http://www.myecohub.ch/ecoHub-mock-insurer-producer1\",\"specversion\"\
+    :\"1.0\",\"type\":\"ch.ecohub.saf.data\",\"datacontenttype\":\"application/json\"\
+    ,\"dataschema\":\"https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiConclusionDecisionDataType.json\"\
+    ,\"subject\":\"offer conclusion decision\",\"time\":\"2023-08-17T14:15:22.000Z\"\
+    ,\"licenceKey\":\"8985+9403*jgfksld94&%fjd\",\"userAgent\":{\"name\":\"Insurer\
+    \ backoffice system 1\",\"version\":\"1.0\"},\"eventSender\":{\"category\":\"\
+    insurer\",\"id\":\"insurer1\"},\"eventReceiver\":{\"category\":\"broker\",\"id\"\
+    :\"broker1\"},\"data\":{\"payload\":\"V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp\"\
+    ,\"payloadSignature\":\"MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP\",\"encryptionKey\"\
+    :\"mfkaclou7z84z\",\"publicKeyVersion\":\"1.0\",\"signatureKeyVersion\":\"1.1\"\
+    },\"processId\":\"ff9275bf-5b35-492e-bdd2-c217e151d335\",\"processName\":\"offer.nlpi\"\
+    ,\"subProcessName\":\"conclusionDecision\",\"processStatus\":\"active\",\"subProcessStatus\"\
+    :\"Created\"}},{\"name\":\"offerConclusionDecisionReceivedExample\",\"summary\"\
+    :\"Example of an offer conclusion decision received event, sent by the broker\"\
+    ,\"payload\":{\"id\":\"1607aa76-4de4-417f-9e88-88bbb4b62f34\",\"source\":\"http://www.myecohub.ch/ecoHub-mock-broker-producer1\"\
+    ,\"specversion\":\"1.0\",\"type\":\"ch.ecohub.saf.data\",\"subject\":\"offer nlpi\
+    \ conclusionDecision received\",\"time\":\"2023-08-17T14:15:22.000Z\",\"licenceKey\"\
+    :\"mvikeporivmf/342)*fjdskaföj\",\"userAgent\":{\"name\":\"BS1\",\"version\":\"\
+    1.0\"},\"eventReceiver\":{\"category\":\"insurer\",\"id\":\"insurer1\"},\"eventSender\"\
+    :{\"category\":\"broker\",\"id\":\"broker1\"},\"processId\":\"ff9275bf-5b35-492e-bdd2-c217e151d335\"\
+    ,\"processName\":\"offer.nlpi\",\"processStatus\":\"closed\",\"subProcessName\"\
+    :\"conclusionDecision\",\"subProcessStatus\":\"Received\"}}]}"
+  compatibility: BACKWARD
+  references:
+  - name: CloudEventsType.json
+    subject: CloudEventsType
+    version: 4
+  - name: event-generic/EventType.json
+    subject: EventType
+    version: 4
+  - name: event-generic/LicenceKeyType.json
+    subject: LicenceKeyType
+    version: 1
+  - name: event-generic/UserAgentType.json
+    subject: UserAgentType
+    version: 3
+  - name: event-generic/SenderReceiverType.json
+    subject: SenderReceiverType
+    version: 2
+  - name: event-generic/EventDataType.json
+    subject: EventDataType
+    version: 2
+  - name: event-generic/ProcessIdType.json
+    subject: ProcessIdType
+    version: 2
+  - name: event-generic/ProcessNameType.json
+    subject: ProcessNameType
+    version: 1
+  - name: event-generic/ProcessStatusType.json
+    subject: ProcessStatusType
+    version: 2
+  - name: event-generic/SubProcessNameType.json
+    subject: SubProcessNameType
+    version: 1
+  - name: event-generic/SubProcessStatusType.json
+    subject: SubProcessStatusType
+    version: 3
+- name: eh.saf.332013.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: CloudEventsType
+  file: null
+  type: JSON
+  schema: "{\"$schema\":\"https://json-schema.org/draft/2019-09/schema\",\"description\"\
+    :\"CloudEvents Specification JSON Schema\",\"type\":\"object\",\"definitions\"\
+    :{\"iddef\":{\"description\":\"Identifies the event. Producers MUST ensure that\
+    \ source + id is unique for each distinct event. If a duplicate event is re-sent\
+    \ (e.g. due to a network error) it MAY have the same id. Consumers MAY assume\
+    \ that Events with identical source and id are duplicates.\",\"examples\":[\"\
+    A234-1234-1234\"],\"minLength\":1,\"type\":\"string\"},\"sourcedef\":{\"description\"\
+    :\"Uniquely identifies the producer of the event. Must be globally unique, including\
+    \ across environments.\",\"examples\":[\"http://www.myecohub.ch/iat/ecohub-processes\"\
+    ,\"http://www.myecohub.ch/prod/ecohub-processes\",\"http://www.myecohub.ch/ck/postman\"\
+    ],\"format\":\"uri-reference\",\"minLength\":1,\"type\":\"string\"},\"specversiondef\"\
+    :{\"description\":\"The version of the CloudEvents specification which the event\
+    \ uses. MUST be set to 1.0\",\"examples\":[\"1.0\"],\"minLength\":1,\"type\":\"\
+    string\"},\"typedef\":{\"minLength\":1,\"type\":\"string\"},\"datacontenttypedef\"\
+    :{\"description\":\"Content type of the data value. Must adhere to RFC 2046 format.\"\
+    ,\"examples\":[\"text/xml\",\"application/json\"],\"minLength\":1,\"type\":[\"\
+    null\",\"string\"]},\"dataschemadef\":{\"description\":\"Identifies the schema\
+    \ that data adheres to. Must point to the respective raw schema in the EcoHub\
+    \ GitHub schema repository (https://github.com/EcoHub-AG/Standards).\",\"format\"\
+    :\"uri\",\"minLength\":1,\"type\":\"string\",\"examples\":[\"https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json\"\
+    ,\"https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json\"\
+    ]},\"subjectdef\":{\"description\":\"Describes the subject of the event to provide\
+    \ additional context about the event.\",\"examples\":[\"Billing november 2024\"\
+    ,\"MF offer company A\"],\"minLength\":1,\"type\":[\"null\",\"string\"]},\"timedef\"\
+    :{\"description\":\"Timestamp of when the occurrence happened. Must adhere to\
+    \ RFC 3339.\",\"examples\":[\"2018-04-05T17:31:00Z\"],\"format\":\"date-time\"\
+    ,\"minLength\":1,\"type\":[\"null\",\"string\"]}}}"
+  compatibility: BACKWARD
+  references: []
+- name: eh.saf.326007.contractGeneric-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326032.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.326033.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326032.contractGeneric-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.326036.commission-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.311000.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326033.commission-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.322030.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.323025.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: test-piotr-1-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.308002.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326007.reminder-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.305011.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326033.contractGeneric-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: OfferNLPIErrorEventType
+  file: null
+  type: JSON
+  schema: "{\"$schema\":\"https://json-schema.org/draft/2019-09/schema\",\"description\"\
+    :\"Offer NLPI error event, i.e. an event for errors which related to the event\
+    \ payload.\",\"type\":\"object\",\"properties\":{\"id\":{\"$ref\":\"CloudEventsType.json#/definitions/iddef\"\
+    ,\"description\":\"Identifies the event.\",\"examples\":[\"A234-1234-1234\"]},\"\
+    source\":{\"$ref\":\"CloudEventsType.json#/definitions/sourcedef\",\"description\"\
+    :\"Identifies the context in which an event happened.\",\"examples\":[\"http://www.igb2b.ch/offer/nlpi/0.2.0\"\
+    ]},\"specversion\":{\"$ref\":\"CloudEventsType.json#/definitions/specversiondef\"\
+    ,\"description\":\"The version of the CloudEvents specification which the event\
+    \ uses.\",\"examples\":[\"1.0\"]},\"type\":{\"$ref\":\"event-generic/EventType.json\"\
+    ,\"description\":\"Describes the type of event related to the originating occurrence.\"\
+    },\"datacontenttype\":{\"$ref\":\"CloudEventsType.json#/definitions/datacontenttypedef\"\
+    ,\"description\":\"Content type of the data value. Must adhere to RFC 2046 format.\"\
+    ,\"examples\":[\"text/xml\",\"application/json\",\"image/png\",\"multipart/form-data\"\
+    ]},\"dataschema\":{\"$ref\":\"CloudEventsType.json#/definitions/dataschemadef\"\
+    ,\"description\":\"Identifies the schema that data adheres to.\"},\"subject\"\
+    :{\"$ref\":\"CloudEventsType.json#/definitions/subjectdef\",\"description\":\"\
+    Describes the subject of the event in the context of the event producer (identified\
+    \ by source).\",\"examples\":[\"request\"]},\"time\":{\"$ref\":\"CloudEventsType.json#/definitions/timedef\"\
+    ,\"description\":\"Timestamp of when the occurrence happened. Must adhere to RFC\
+    \ 3339.\",\"examples\":[\"2018-04-05T17:31:00Z\"]},\"licenceKey\":{\"$ref\":\"\
+    event-generic/LicenceKeyType.json\"},\"userAgent\":{\"$ref\":\"event-generic/UserAgentType.json\"\
+    },\"data\":{\"$ref\":\"#/definitions/offerNLPIErrorType\"},\"eventReceiver\":{\"\
+    $ref\":\"event-generic/SenderReceiverType.json\"},\"eventSender\":{\"$ref\":\"\
+    event-generic/SenderReceiverType.json\"},\"processId\":{\"$ref\":\"event-generic/ProcessIdType.json\"\
+    },\"processName\":{\"$ref\":\"event-generic/ProcessNameType.json\"},\"processStatus\"\
+    :{\"$ref\":\"event-generic/ProcessStatusType.json\"},\"subProcessName\":{\"$ref\"\
+    :\"event-generic/SubProcessNameType.json\"},\"subProcessStatus\":{\"$ref\":\"\
+    event-generic/SubProcessStatusType.json\"}},\"definitions\":{\"offerNLPIErrorType\"\
+    :{\"type\":\"array\",\"minItems\":1,\"items\":{\"type\":\"object\",\"properties\"\
+    :{\"errorCode\":{\"description\":\"Type of error\",\"minLength\":3,\"type\":\"\
+    string\",\"enum\":[\"offer-missing-information\",\"offer-incorrect-information\"\
+    ,\"offer-date-expired\",\"offer-missing-claims-experience\",\"offer-requested-several-times\"\
+    ,\"offer-already-issued\",\"offer-missing-documents\",\"offer-incorrect-attachment\"\
+    ,\"offer-other-error\",\"mandate-missing\",\"mandate-expired\",\"mandate-terminated\"\
+    ,\"mandate-invalid\",\"mandate-other-error\",\"cooperationagreement-missing\"\
+    ,\"cooperationagreement-expired-terminated\",\"cooperationagreement-other-error\"\
+    ,\"customer-data-referenceno-mismatch\",\"customer-data-incomplete\",\"customer-data-incorrect\"\
+    ,\"customer-not-identified\",\"customer-other-error\",\"claims-experience-date-range-invalid\"\
+    ,\"claims-experience-data-incorrect\",\"claims-experience-contract-incorrect\"\
+    ,\"claims-experience-customer-incorrect\",\"claims-experience-other-error\"]},\"\
+    errorMessage\":{\"description\":\"Error message\",\"minLength\":3,\"type\":\"\
+    string\"},\"path\":{\"description\":\"xPath or JsonPath to the property where\
+    \ the error occurred.\",\"type\":\"string\"}},\"additionalProperties\":false,\"\
+    required\":[\"errorCode\",\"errorMessage\"],\"allOf\":[{\"if\":{\"properties\"\
+    :{\"errorCode\":{\"const\":\"offer-missing-information\"}}},\"then\":{\"required\"\
+    :[\"path\"]}},{\"if\":{\"properties\":{\"errorCode\":{\"const\":\"offer-incorrect-information\"\
+    }}},\"then\":{\"required\":[\"path\"]}},{\"if\":{\"properties\":{\"errorCode\"\
+    :{\"const\":\"offer-missing-claims-experience\"}}},\"then\":{\"required\":[\"\
+    path\"]}},{\"if\":{\"properties\":{\"errorCode\":{\"const\":\"offer-missing-documents\"\
+    }}},\"then\":{\"required\":[\"path\"]}},{\"if\":{\"properties\":{\"errorCode\"\
+    :{\"const\":\"offer-incorrect-attachment\"}}},\"then\":{\"required\":[\"path\"\
+    ]}},{\"if\":{\"properties\":{\"errorCode\":{\"const\":\"customer-data-incomplete\"\
+    }}},\"then\":{\"required\":[\"path\"]}},{\"if\":{\"properties\":{\"errorCode\"\
+    :{\"const\":\"customer-data-incorrect\"}}},\"then\":{\"required\":[\"path\"]}}]}}},\"\
+    required\":[\"id\",\"source\",\"specversion\",\"type\",\"data\",\"processId\"\
+    ,\"processName\",\"subProcessName\",\"processStatus\",\"subProcessStatus\",\"\
+    eventReceiver\",\"eventSender\",\"userAgent\",\"licenceKey\"],\"additionalProperties\"\
+    :false}"
+  compatibility: BACKWARD
+  references:
+  - name: CloudEventsType.json
+    subject: CloudEventsType
+    version: 4
+  - name: event-generic/EventType.json
+    subject: EventType
+    version: 4
+  - name: event-generic/LicenceKeyType.json
+    subject: LicenceKeyType
+    version: 1
+  - name: event-generic/UserAgentType.json
+    subject: UserAgentType
+    version: 3
+  - name: event-generic/SenderReceiverType.json
+    subject: SenderReceiverType
+    version: 2
+  - name: event-generic/ProcessIdType.json
+    subject: ProcessIdType
+    version: 2
+  - name: event-generic/ProcessNameType.json
+    subject: ProcessNameType
+    version: 1
+  - name: event-generic/ProcessStatusType.json
+    subject: ProcessStatusType
+    version: 2
+  - name: event-generic/SubProcessNameType.json
+    subject: SubProcessNameType
+    version: 1
+  - name: event-generic/SubProcessStatusType.json
+    subject: SubProcessStatusType
+    version: 3
+- name: eh.saf.313014.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.336010.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326034.contractGeneric-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: ProcessIdType
+  file: null
+  type: JSON
+  schema: "{\"description\":\"UUID, that won't change during the offer processes.\
+    \ The UUID is set by the party, that starts the process.\",\"type\":\"string\"\
+    ,\"format\":\"uuid\"}"
+  compatibility: BACKWARD
+  references: []
+- name: eh.saf.334000.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326034.billing-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.332013.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.332009.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.311013.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: EventMessageDataType
+  file: null
+  type: JSON
+  schema: "{\"description\":\"The event payload.\",\"type\":\"object\",\"properties\"\
+    :{\"message\":{\"description\":\"The payload needs to be first gzipped and afterwards\
+    \ encrypted. The base64 representation of encrypted bytes will be added as payload\"\
+    ,\"type\":\"string\",\"minLength\":3},\"messageSignature\":{\"description\":\"\
+    signature key of the signed message, to verify by whom the encrypted message has\
+    \ been created\",\"minLength\":3,\"type\":\"string\"},\"encryptionKey\":{\"description\"\
+    :\"The with the public key of the receiver encrypted symmetric key to decrypt\
+    \ the data (KEK)\",\"type\":\"string\",\"minLength\":3},\"publicKeyVersion\":{\"\
+    description\":\"The version of the public key used to encrypt the DEK\",\"type\"\
+    :\"string\",\"minLength\":3},\"signatureKeyVersion\":{\"description\":\"The version\
+    \ of the signature key, that was used to sign \",\"minLength\":3,\"type\":\"string\"\
+    }},\"required\":[\"message\",\"encryptionKey\",\"publicKeyVersion\"],\"additionalProperties\"\
+    :false}"
+  compatibility: NONE
+  references: []
+- name: eh.saf.326036.reminder-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.334002.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.305011.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: UserAgentType
+  file: null
+  type: JSON
+  schema: "{\"type\":\"object\",\"description\":\"Identifies the software that was\
+    \ used to produce the event\",\"properties\":{\"name\":{\"description\":\"Name\
+    \ of the application\",\"example\":\"Client software XYZ\",\"maxLength\":100,\"\
+    minLength\":3,\"type\":\"string\"},\"version\":{\"description\":\"Used version\
+    \ of the application\",\"example\":\"Version 1.0\",\"maxLength\":30,\"minLength\"\
+    :3,\"type\":\"string\"}},\"required\":[\"name\",\"version\"],\"additionalProperties\"\
+    :false}"
+  compatibility: BACKWARD
+  references: []
+- name: eh.saf.326032.reminder-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326034.reminder-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: test-piotr-1-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.336010.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.326007.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326033.commission-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326036.commission-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 4
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2
+- name: eh.saf.332009.offer.nlpi.out-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: eh.saf.326007.billing-key
+  file: null
+  type: JSON
+  schema: "{\"$ref\":\"SAFKeyType.json\"}"
+  compatibility: NONE
+  references:
+  - name: SAFKeyType.json
+    subject: SAFKeyType
+    version: 1
+- name: ProcessStatusType
+  file: null
+  type: JSON
+  schema: "{\"description\":\"Defines status of the overall process.\",\"type\":\"\
+    string\",\"enum\":[\"active\",\"closed\"]}"
+  compatibility: NONE
+  references: []
+- name: eh.saf.325011.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.meta.ok-value
+  file: null
+  type: JSON
+  schema: "{\"$schema\":\"https://json-schema.org/draft/2019-09/schema\",\"description\"\
+    :\"Offer NLPI Event JSON schema definition\",\"type\":\"object\",\"properties\"\
+    :{\"id\":{\"description\":\"Identifies the event.\",\"examples\":[\"A234-1234-1234\"\
+    ],\"$ref\":\"CloudEventsType.json#/definitions/iddef\"},\"source\":{\"description\"\
+    :\"Identifies the context in which an event happened.\",\"examples\":[\"http://www.igb2b.ch/offer/nlpi/0.2.0\"\
+    ],\"$ref\":\"CloudEventsType.json#/definitions/sourcedef\"},\"specversion\":{\"\
+    description\":\"The version of the CloudEvents specification which the event uses.\"\
+    ,\"examples\":[\"1.0\"],\"$ref\":\"CloudEventsType.json#/definitions/specversiondef\"\
+    },\"type\":{\"description\":\"Describes the type of event related to the originating\
+    \ occurrence.\",\"$ref\":\"event-generic/EventType.json\"},\"datacontenttype\"\
+    :{\"description\":\"Content type of the data value. Must adhere to RFC 2046 format.\"\
+    ,\"examples\":[\"text/xml\",\"application/json\",\"image/png\",\"multipart/form-data\"\
+    ],\"$ref\":\"CloudEventsType.json#/definitions/datacontenttypedef\"},\"dataschema\"\
+    :{\"description\":\"Identifies the schema that data adheres to.\",\"$ref\":\"\
+    CloudEventsType.json#/definitions/dataschemadef\"},\"subject\":{\"description\"\
+    :\"Describes the subject of the event in the context of the event producer (identified\
+    \ by source).\",\"examples\":[\"request\"],\"$ref\":\"CloudEventsType.json#/definitions/subjectdef\"\
+    },\"time\":{\"description\":\"Timestamp of when the occurrence happened. Must\
+    \ adhere to RFC 3339.\",\"examples\":[\"2018-04-05T17:31:00Z\"],\"$ref\":\"CloudEventsType.json#/definitions/timedef\"\
+    },\"licenceKey\":{\"$ref\":\"event-generic/LicenseKeyType.json\"},\"userAgent\"\
+    :{\"$ref\":\"event-generic/UserAgentType.json\"},\"eventReceiver\":{\"$ref\":\"\
+    event-generic/SenderReceiverType.json\"},\"eventSender\":{\"$ref\":\"event-generic/SenderReceiverType.json\"\
+    },\"processId\":{\"$ref\":\"event-generic/ProcessIdType.json\"},\"processName\"\
+    :{\"$ref\":\"event-generic/ProcessNameType.json\"},\"processStatus\":{\"$ref\"\
+    :\"event-generic/ProcessStatusType.json\"},\"subProcessName\":{\"$ref\":\"event-generic/SubProcessNameType.json\"\
+    },\"subProcessStatus\":{\"$ref\":\"event-generic/SubProcessStatusType.json\"}},\"\
+    required\":[\"id\",\"source\",\"specversion\",\"type\",\"processId\",\"processName\"\
+    ,\"subProcessName\",\"processStatus\",\"subProcessStatus\",\"eventReceiver\",\"\
+    eventSender\",\"userAgent\",\"licenceKey\"]}"
+  compatibility: NONE
+  references:
+  - name: CloudEventsType.json
+    subject: CloudEventsType
+    version: 3
+  - name: event-generic/EventType.json
+    subject: EventType
+    version: 3
+  - name: event-generic/LicenseKeyType.json
+    subject: LicenseKeyType
+    version: 2
+  - name: event-generic/UserAgentType.json
+    subject: UserAgentType
+    version: 2
+  - name: event-generic/SenderReceiverType.json
+    subject: SenderReceiverType
+    version: 2
+  - name: event-generic/ProcessIdType.json
+    subject: ProcessIdType
+    version: 2
+  - name: event-generic/ProcessNameType.json
+    subject: ProcessNameType
+    version: 1
+  - name: event-generic/ProcessStatusType.json
+    subject: ProcessStatusType
+    version: 2
+  - name: event-generic/SubProcessNameType.json
+    subject: SubProcessNameType
+    version: 1
+  - name: event-generic/SubProcessStatusType.json
+    subject: SubProcessStatusType
+    version: 2
+- name: eh.saf.325004.offer.nlpi.out-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 2
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 2
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 1
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 1
+- name: eh.saf.326033.billing-value
+  file: null
+  type: JSON
+  schema: "{\"oneOf\":[{\"$ref\":\"SAFEventType.json\"},{\"$ref\":\"SAFInquiryEventType.json\"\
+    },{\"$ref\":\"SAFErrorEventType.json\"},{\"$ref\":\"OfferNLPIErrorEventType.json\"\
+    }]}"
+  compatibility: NONE
+  references:
+  - name: SAFEventType.json
+    subject: SAFEventType
+    version: 3
+  - name: SAFInquiryEventType.json
+    subject: SAFInquiryEventType
+    version: 4
+  - name: SAFErrorEventType.json
+    subject: SAFErrorEventType
+    version: 3
+  - name: OfferNLPIErrorEventType.json
+    subject: OfferNLPIErrorEventType
+    version: 2

@@ -1,0 +1,69 @@
+# sets global compatibility level (optional)
+compatibility: BACKWARD
+subjects:
+  # a subject that links to a file for the schema definition
+  - name: ErrorDataType
+    # sets compatibility level for this subject (optional)
+    compatibility: BACKWARD
+    # file paths are always relative to the given (this) YAML file
+    file: ../../../Kafka-Events-Specification/event-generic/ErrorDataType.json
+    # AVRO is the default type and can safely be omitted (only available for Schema Registry >= 5.5)
+    type: JSON
+    # (optional) list of references for this subject
+    # please note that these must be present in the registry before they can be referenced here
+#    references:
+#      # name including the namespace, should be the same as the `type` being used in AVRO
+#      - name: CloudEventsType.json
+#        # subject name this schema is registered with in the registry
+#        subject: CloudEventsType
+#        # version of the referenced schema
+#        version: 4
+  # a subject that links to a file for the schema definition
+  - name: CloudEventsType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/CloudEventsType.json
+    type: JSON
+  - name: EventDataType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/EventDataType.json
+    type: JSON
+  - name: EventMessageDataType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/EventMessageDataType.json
+    type: JSON
+  - name: EventType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/EventType.json
+    type: JSON
+  - name: LicenseKeyType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/LicenseKeyType.json
+    type: JSON
+  - name: ProcessIdType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/ProcessIdType.json
+    type: JSON
+  - name: ProcessNameType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/ProcessNameType.json
+    type: JSON
+  - name: ProcessStatusType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/ProcessStatusType.json
+    type: JSON
+  - name: SenderReceiverType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/SenderReceiverType.json
+    type: JSON
+  - name: SubProcessNameType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/SubProcessNameType.json
+    type: JSON
+  - name: SubProcessStatusType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/SubProcessStatusType.json
+    type: JSON
+  - name: UserAgentType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/event-generic/UserAgentType.json
+    type: JSON

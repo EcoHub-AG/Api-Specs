@@ -1,0 +1,152 @@
+# sets global compatibility level (optional)
+compatibility: BACKWARD
+subjects:
+  - name: SAFEventType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/SAFEventType.json
+    type: JSON
+    references:
+      - name: CloudEventsType.json
+        subject: CloudEventsType
+        version: 1
+      - name: event-generic/EventType.json
+        subject: EventType
+        version: 1
+      - name: event-generic/LicenseKeyType.json
+        subject: LicenseKeyType
+        version: 1
+      - name: event-generic/UserAgentType.json
+        subject: UserAgentType
+        version: 1
+      - name: event-generic/SenderReceiverType.json
+        subject: SenderReceiverType
+        version: 1
+      - name: event-generic/EventDataType.json
+        subject: EventDataType
+        version: 1
+      - name: event-generic/ProcessIdType.json
+        subject: ProcessIdType
+        version: 1
+      - name: event-generic/ProcessNameType.json
+        subject: ProcessNameType
+        version: 1
+      - name: event-generic/ProcessStatusType.json
+        subject: ProcessStatusType
+        version: 1
+      - name: event-generic/SubProcessNameType.json
+        subject: SubProcessNameType
+        version: 1
+      - name: event-generic/SubProcessStatusType.json
+        subject: SubProcessStatusType
+        version: 1
+  - name: SAFErrorEventType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/SAFErrorEventType.json
+    type: JSON
+    references:
+      - name: CloudEventsType.json
+        subject: CloudEventsType
+        version: 1
+      - name: event-generic/EventType.json
+        subject: EventType
+        version: 1
+      - name: event-generic/LicenseKeyType.json
+        subject: LicenseKeyType
+        version: 1
+      - name: event-generic/UserAgentType.json
+        subject: UserAgentType
+        version: 1
+      - name: event-generic/ErrorDataType.json
+        subject: ErrorDataType
+        version: 1
+      - name: event-generic/SenderReceiverType.json
+        subject: SenderReceiverType
+        version: 1
+      - name: event-generic/ProcessIdType.json
+        subject: ProcessIdType
+        version: 1
+      - name: event-generic/ProcessNameType.json
+        subject: ProcessNameType
+        version: 1
+      - name: event-generic/ProcessStatusType.json
+        subject: ProcessStatusType
+        version: 1
+      - name: event-generic/SubProcessNameType.json
+        subject: SubProcessNameType
+        version: 1
+      - name: event-generic/SubProcessStatusType.json
+        subject: SubProcessStatusType
+        version: 1
+  - name: SAFInquiryEventType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/SAFInquiryEventType.json
+    type: JSON
+    references:
+      - name: CloudEventsType.json
+        subject: CloudEventsType
+        version: 1
+      - name: event-generic/EventType.json
+        subject: EventType
+        version: 1
+      - name: event-generic/LicenseKeyType.json
+        subject: LicenseKeyType
+        version: 1
+      - name: event-generic/UserAgentType.json
+        subject: UserAgentType
+        version: 1
+      - name: event-generic/EventMessageDataType.json
+        subject: EventMessageDataType
+        version: 1
+      - name: event-generic/SenderReceiverType.json
+        subject: SenderReceiverType
+        version: 1
+      - name: event-generic/ProcessIdType.json
+        subject: ProcessIdType
+        version: 1
+      - name: event-generic/ProcessNameType.json
+        subject: ProcessNameType
+        version: 1
+      - name: event-generic/ProcessStatusType.json
+        subject: ProcessStatusType
+        version: 1
+      - name: event-generic/SubProcessNameType.json
+        subject: SubProcessNameType
+        version: 1
+      - name: event-generic/SubProcessStatusType.json
+        subject: SubProcessStatusType
+        version: 1
+  - name: OfferNLPIErrorEventType
+    compatibility: BACKWARD
+    file: ../../../Kafka-Events-Specification/OfferNLPIErrorEventType.json
+    type: JSON
+    references:
+      - name: CloudEventsType.json
+        subject: CloudEventsType
+        version: 1
+      - name: event-generic/EventType.json
+        subject: EventType
+        version: 1
+      - name: event-generic/LicenseKeyType.json
+        subject: LicenseKeyType
+        version: 1
+      - name: event-generic/UserAgentType.json
+        subject: UserAgentType
+        version: 1
+      - name: event-generic/SenderReceiverType.json
+        subject: SenderReceiverType
+        version: 1
+      - name: event-generic/ProcessIdType.json
+        subject: ProcessIdType
+        version: 1
+      - name: event-generic/ProcessNameType.json
+        subject: ProcessNameType
+        version: 1
+      - name: event-generic/ProcessStatusType.json
+        subject: ProcessStatusType
+        version: 1
+      - name: event-generic/SubProcessNameType.json
+        subject: SubProcessNameType
+        version: 1
+      - name: event-generic/SubProcessStatusType.json
+        subject: SubProcessStatusType
+        version: 1

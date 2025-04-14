@@ -1,0 +1,3 @@
+#!/bin/bash
+cd ./../cli
+java -jar ./schema-registry-gitops.jar --properties=./gitops.properties apply ./../updateReferenceSchemas/event-generic-state.yaml
