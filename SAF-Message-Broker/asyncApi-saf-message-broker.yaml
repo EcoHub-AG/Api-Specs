@@ -2,7 +2,7 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framework: Message Broker System'
-  version: 0.5.0
+  version: 1.0.0
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -10,15 +10,13 @@ info:
   description: >
     ## Changelog
     
-    ### Version 0.5.0
+    ### Version 1.0.0
         - Added values to 'processNameType' for proxy standards
         - Added values to 'SubProcessNameType' for proxy standards
         - Added property 'processVersion' to all events.
         - Added 'onBehalfBy' property to SenderReceiverType
         - "payloadSignature" and "signatureKeyVersion" are mandatory for "EventDataType"
         - "messageSignature" and "signatureKeyVersion" are mandatory for "EventMessageDataType"
-    
-    ### Version 0.4.0
         - Changed format of the EventType to reverse-dns
         - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
         - EventMessageDataType
@@ -29,8 +27,9 @@ info:
           - Renamed to "LicenceKeyType"
         - OfferNLPIErrorEventType
           - Prohibit additional properties
-        - OfferNLPIErrorEventType
-          - Restructured the type and renamed error codes
+          - Restructured the type and replaced error codes
+          - The data attribute is now mandatory
+          
     
     ### Version 0.3.5
       - Changed definition of the kafka message key from uuid to object with processId
@@ -374,6 +373,7 @@ components:
         - source
         - specversion
         - type
+        - data
         - processId
         - processName
         - processVersion
@@ -392,37 +392,11 @@ components:
         type: object
         properties:
           errorCode:
-            description: 'The code best describing the occured error.'
+            description: The code best describing the occured error.
             minLength: 3
             type: string
             enum:
-              - offer-missing-information
-              - offer-incorrect-information
-              - offer-date-expired
-              - offer-missing-claims-experience
-              - offer-requested-several-times
-              - offer-already-issued
-              - offer-missing-documents
-              - offer-incorrect-attachment
-              - offer-other-error
-              - mandate-missing
-              - mandate-expired
-              - mandate-terminated
-              - mandate-invalid
-              - mandate-other-error
-              - cooperationagreement-missing
-              - cooperationagreement-expired-terminated
-              - cooperationagreement-other-error
-              - customer-data-referenceno-mismatch
-              - customer-data-incomplete
-              - customer-data-incorrect
-              - customer-not-identified
-              - customer-other-error
-              - claims-experience-date-range-invalid
-              - claims-experience-data-incorrect
-              - claims-experience-contract-incorrect
-              - claims-experience-customer-incorrect
-              - claims-experience-other-error
+              - other
           errorMessage:
             description: Error message
             minLength: 3
@@ -434,56 +408,6 @@ components:
         required:
           - errorCode
           - errorMessage
-        allOf:
-          - if:
-              properties:
-                errorCode:
-                  const: offer-missing-information
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: offer-incorrect-information
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: offer-missing-claims-experience
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: offer-missing-documents
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: offer-incorrect-attachment
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: customer-data-incomplete
-            then:
-              required:
-                - path
-          - if:
-              properties:
-                errorCode:
-                  const: customer-data-incorrect
-            then:
-              required:
-                - path
     processNameType:
       description: Name of the core process
       type: string

@@ -4,57 +4,28 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "CloudEventsType.json#/definitions/iddef",
-      "description": "Identifies the event.",
-      "examples": [
-        "A234-1234-1234"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/iddef"
     },
     "source": {
-      "$ref": "CloudEventsType.json#/definitions/sourcedef",
-      "description": "Identifies the context in which an event happened.",
-      "examples": [
-        "http://www.igb2b.ch/offer/nlpi/0.2.0"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/sourcedef"
     },
     "specversion": {
-      "$ref": "CloudEventsType.json#/definitions/specversiondef",
-      "description": "The version of the CloudEvents specification which the event uses.",
-      "examples": [
-        "1.0"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/specversiondef"
     },
     "type": {
-      "$ref": "event-generic/EventType.json",
-      "description": "Describes the type of event related to the originating occurrence."
+      "$ref": "event-generic/EventType.json"
     },
     "datacontenttype": {
-      "$ref": "CloudEventsType.json#/definitions/datacontenttypedef",
-      "description": "Content type of the data value. Must adhere to RFC 2046 format.",
-      "examples": [
-        "text/xml",
-        "application/json",
-        "image/png",
-        "multipart/form-data"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/datacontenttypedef"
     },
     "dataschema": {
-      "$ref": "CloudEventsType.json#/definitions/dataschemadef",
-      "description": "Identifies the schema that data adheres to."
+      "$ref": "CloudEventsType.json#/definitions/dataschemadef"
     },
     "subject": {
-      "$ref": "CloudEventsType.json#/definitions/subjectdef",
-      "description": "Describes the subject of the event in the context of the event producer (identified by source).",
-      "examples": [
-        "request"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/subjectdef"
     },
     "time": {
-      "$ref": "CloudEventsType.json#/definitions/timedef",
-      "description": "Timestamp of when the occurrence happened. Must adhere to RFC 3339.",
-      "examples": [
-        "2018-04-05T17:31:00Z"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/timedef"
     },
     "licenceKey": {
       "$ref": "event-generic/LicenceKeyType.json"
@@ -102,33 +73,7 @@
             "minLength": 3,
             "type": "string",
             "enum": [
-              "offer-missing-information",
-              "offer-incorrect-information",
-              "offer-date-expired",
-              "offer-missing-claims-experience",
-              "offer-requested-several-times",
-              "offer-already-issued",
-              "offer-missing-documents",
-              "offer-incorrect-attachment",
-              "offer-other-error",
-              "mandate-missing",
-              "mandate-expired",
-              "mandate-terminated",
-              "mandate-invalid",
-              "mandate-other-error",
-              "cooperationagreement-missing",
-              "cooperationagreement-expired-terminated",
-              "cooperationagreement-other-error",
-              "customer-data-referenceno-mismatch",
-              "customer-data-incomplete",
-              "customer-data-incorrect",
-              "customer-not-identified",
-              "customer-other-error",
-              "claims-experience-date-range-invalid",
-              "claims-experience-data-incorrect",
-              "claims-experience-contract-incorrect",
-              "claims-experience-customer-incorrect",
-              "claims-experience-other-error"
+              "other"
             ]
           },
           "errorMessage": {
@@ -145,106 +90,6 @@
         "required": [
           "errorCode",
           "errorMessage"
-        ],
-        "allOf": [
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "offer-missing-information"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "offer-incorrect-information"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "offer-missing-claims-experience"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "offer-missing-documents"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "offer-incorrect-attachment"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "customer-data-incomplete"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "errorCode": {
-                  "const": "customer-data-incorrect"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "path"
-              ]
-            }
-          }
         ]
       }
     }

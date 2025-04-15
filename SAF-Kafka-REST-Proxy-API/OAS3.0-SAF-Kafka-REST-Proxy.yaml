@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: 'Standard API Framework: Kafka REST Proxy API'
-  version: 0.5.0
+  version: 1.0.0
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -16,30 +16,27 @@ info:
     bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
     the /techUserEnrolment endpoint of the general api.
     
-    ## Changelog
-
-    ### Version 0.5.0
+    ## Changelog     
+    
+    ### Version 1.0.0
       - Added values to 'ProcessNameType' for proxy standards
       - Added values to 'SubProcessNameType' for proxy standards
       - Added property 'processVersion' to all events.
       - Added 'onBehalfBy' property to SenderReceiverType
       - "payloadSignature" and "signatureKeyVersion" are mandatory for "EventDataType"
       - "messageSignature" and "signatureKeyVersion" are mandatory for "EventMessageDataType"
-    
-    
-    ### Version 0.4.0
       - Changed format of the EventType to reverse-dns
       - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
       - OfferNLPIErrorEventType
         - Prohibit additional properties
+        - Restructured the type and replaced error codes
+        - The data attribute is now mandatory
       - EventMessageDataType
         - Removed property "md5MessageHash"
         - Added properties "messageSignature" and "signatureKeyVersion"
         - Prohibit additional properties
       - LicenseKeyType
         - Renamed to "LicenceKeyType"
-      - OfferNLPIErrorEventType
-        - Restructured the type and renamed error codes
     
     ### Version 0.3.3
       - Enhanced documentation
@@ -1003,7 +1000,8 @@ components:
         - errorMessage
         - errorDateTime
     OfferNLPIErrorEventType:
-      description: Offer NLPI error event, i.e. an event for errors which related to the event payload.
+      description: Offer NLPI error event, i.e. an event for errors which related to the
+        event payload.
       type: object
       properties:
         id:
@@ -1027,7 +1025,7 @@ components:
         userAgent:
           $ref: '#/components/schemas/UserAgentType'
         data:
-          $ref: "#/components/schemas/OfferNLPIErrorType"
+          $ref: '#/components/schemas/OfferNLPIErrorType'
         eventReceiver:
           $ref: '#/components/schemas/SenderReceiverType'
         eventSender:
@@ -1049,6 +1047,7 @@ components:
         - source
         - specversion
         - type
+        - data
         - processId
         - processName
         - processVersion
@@ -1067,37 +1066,11 @@ components:
         type: object
         properties:
           errorCode:
-            description: 'The code best describing the occured error.'
+            description: The code best describing the occured error.
             minLength: 3
             type: string
             enum:
-              - offer-missing-information
-              - offer-incorrect-information
-              - offer-date-expired
-              - offer-missing-claims-experience
-              - offer-requested-several-times
-              - offer-already-issued
-              - offer-missing-documents
-              - offer-incorrect-attachment
-              - offer-other-error
-              - mandate-missing
-              - mandate-expired
-              - mandate-terminated
-              - mandate-invalid
-              - mandate-other-error
-              - cooperationagreement-missing
-              - cooperationagreement-expired-terminated
-              - cooperationagreement-other-error
-              - customer-data-referenceno-mismatch
-              - customer-data-incomplete
-              - customer-data-incorrect
-              - customer-not-identified
-              - customer-other-error
-              - claims-experience-date-range-invalid
-              - claims-experience-data-incorrect
-              - claims-experience-contract-incorrect
-              - claims-experience-customer-incorrect
-              - claims-experience-other-error
+              - other
           errorMessage:
             description: Error message
             minLength: 3
