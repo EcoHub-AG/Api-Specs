@@ -11,6 +11,8 @@ info:
     ## Changelog
     
     ### Version 0.5.0
+        - Added values to 'processNameType' for proxy standards
+        - Added values to 'SubProcessNameType' for proxy standards
         - Added property 'processVersion' to all events.
         - Added 'onBehalfBy' property to SenderReceiverType
         - "payloadSignature" and "signatureKeyVersion" are mandatory for "EventDataType"
@@ -483,11 +485,13 @@ components:
               required:
                 - path
     processNameType:
-      description: Comment describing your JSON Schema
+      description: Name of the core process
       type: string
       enum:
-        - offer.nlpi
-      example: offer.nlpi
+      - offer.nlpi
+      - Invoices
+      - Commission
+      - Contract
     processVersionType:
       description: Version of the used core process
       type: string
@@ -576,10 +580,14 @@ components:
       description: Comment describing your JSON Schema
       type: string
       enum:
-        - request
-        - offer
-        - feedback
-        - conclusionDecision
+      - request
+      - offer
+      - feedback
+      - conclusionDecision
+      - Premium invoice
+      - Reminder
+      - Contract generic
+      - Commission
       example: request
     subProcessStatusType:
       type: string

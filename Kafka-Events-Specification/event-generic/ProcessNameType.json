@@ -1,7 +1,10 @@
 {
-  "description": "Comment describing your JSON Schema",
+  "description": "Name of the core process",
   "type": "string",
   "enum": [
-    "offer.nlpi"
+    "offer.nlpi",
+    "Invoices",
+    "Commission",
+    "Contract"
   ]
 }
