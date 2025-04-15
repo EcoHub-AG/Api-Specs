@@ -42,6 +42,9 @@
     "eventSender": {
       "$ref": "event-generic/SenderReceiverType.json"
     },
+    "processGroupId": {
+      "$ref": "event-generic/ProcessGroupIdType.json"
+    },
     "processId": {
       "$ref": "event-generic/ProcessIdType.json"
     },

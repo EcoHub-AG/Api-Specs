@@ -42,6 +42,9 @@
     "data": {
       "$ref": "event-generic/EventDataType.json"
     },
+    "processGroupId": {
+      "$ref": "event-generic/ProcessGroupIdType.json"
+    },
     "processId": {
       "$ref": "event-generic/ProcessIdType.json"
     },

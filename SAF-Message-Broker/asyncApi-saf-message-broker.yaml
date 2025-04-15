@@ -11,24 +11,39 @@ info:
     ## Changelog
     
     ### Version 1.0.0
-        - Added values to 'processNameType' for proxy standards
-        - Added values to 'SubProcessNameType' for proxy standards
-        - Added property 'processVersion' to all events.
-        - Added 'onBehalfBy' property to SenderReceiverType
-        - "payloadSignature" and "signatureKeyVersion" are mandatory for "EventDataType"
-        - "messageSignature" and "signatureKeyVersion" are mandatory for "EventMessageDataType"
-        - Changed format of the EventType to reverse-dns
-        - Renamed SubProcessStatusType enum value "Responsed" to "Responded"
-        - EventMessageDataType
-          - Removed property "md5MessageHash"
-          - Added properties "messageSignature" and "signatureKeyVersion"
-          - Prohibit additional properties
-        - LicenseKeyType
-          - Renamed to "LicenceKeyType"
-        - OfferNLPIErrorEventType
-          - Prohibit additional properties
-          - Restructured the type and replaced error codes
-          - The data attribute is now mandatory
+      - ProcessNameType
+        - Added values for proxy standards
+      - SubProcessNameType
+        - Added values for proxy standards
+      - SubProcessStatusType
+        - Renamed enum value "Responsed" to "Responded"
+      - OfferNLPIErrorEventType
+        - Prohibit additional properties
+        - Restructured the type and replaced error codes
+        - The data attribute is now mandatory
+        - Added mandatory property 'processVersion'
+        - Added property processGroupId
+      - EventDataType
+        - "payloadSignature" and "signatureKeyVersion" are now mandatory
+      - EventMessageDataType
+        - Removed property "md5MessageHash"
+        - Added mandatory properties "messageSignature" and "signatureKeyVersion"
+        - Prohibit additional properties
+      - EventType
+        - Changed format of the values to reverse-dns
+      - LicenseKeyType
+        - Renamed to "LicenceKeyType"
+      - SenderReceiverType
+        - Added property 'onBehalfBy'
+      - SAFErrorEventType
+        - Added mandatory property 'processVersion'
+        - Added property processGroupId
+      - SAFEventType
+        - Added mandatory property 'processVersion'
+        - Added property processGroupId
+      - SAFInquiryEventType
+        - Added mandatory property 'processVersion'
+        - Added property processGroupId
           
     
     ### Version 0.3.5
@@ -180,6 +195,8 @@ components:
           $ref: '#/components/schemas/senderReceiverType'
         data:
           $ref: '#/components/schemas/eventDataType'
+        processGroupId:
+          $ref: '#/components/schemas/processGroupIdType'
         processId:
           $ref: '#/components/schemas/processIdType'
         processName:
@@ -239,6 +256,8 @@ components:
           $ref: "#/components/schemas/senderReceiverType"
         eventSender:
           $ref: "#/components/schemas/senderReceiverType"
+        processGroupId:
+          $ref: '#/components/schemas/processGroupIdType'
         processId:
           $ref: "#/components/schemas/processIdType"
         processName:
@@ -298,6 +317,8 @@ components:
           $ref: "#/components/schemas/senderReceiverType"
         eventSender:
           $ref: "#/components/schemas/senderReceiverType"
+        processGroupId:
+          $ref: '#/components/schemas/processGroupIdType'
         processId:
           $ref: "#/components/schemas/processIdType"
         processName:
@@ -356,6 +377,8 @@ components:
           $ref: "#/components/schemas/senderReceiverType"
         eventSender:
           $ref: "#/components/schemas/senderReceiverType"
+        processGroupId:
+          $ref: '#/components/schemas/processGroupIdType'
         processId:
           $ref: "#/components/schemas/processIdType"
         processName:
@@ -724,6 +747,11 @@ components:
       additionalProperties: false
       required:
         - processId
+    processGroupIdType:
+      description: UUID, that is used to associate multiple processes. The exact usage is
+        specified in each data standard.
+      type: string
+      format: uuid
   messages:
     safEvent:
       name: safEvent
