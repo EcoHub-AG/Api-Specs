@@ -13,6 +13,7 @@ info:
     
     ### Version 0.5.0
       - Introducing new property keyType, to support the digital signature public keys
+      - Adjust /members endpoint to use /keys instead of /key, as there are now multiple
       - GET /keys returns a list of keys instead of a single object
       - Introducing new property supportedProcesses, to restrict keys to be used with certain core processes.
     
@@ -298,7 +299,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /members/{idpNumber}/key:
+  /members/{idpNumber}/keys:
     get:
       tags:
         - PublicKeyApi
@@ -341,7 +342,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /members/{idpNumber}/key/{keyType}:
+  /members/{idpNumber}/keys/{keyType}:
     get:
       tags:
         - PublicKeyApi
