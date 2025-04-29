@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: 'Standard API Framework: Kafka REST Proxy API'
-  version: 0.3.3
+  version: 0.3.4
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -17,6 +17,9 @@ info:
     the /techUserEnrolment endpoint of the general api.
     
     ## Changelog
+    
+    ### Version 0.3.4
+      - Adjusted type of the key property of the response when consuming messages
     
     ### Version 0.3.3
       - Enhanced documentation
@@ -395,7 +398,7 @@ paths:
                     topic:
                       type: string
                     key:
-                      type: string
+                      $ref: '#/components/schemas/SAFKeyType'
                     value:
                       type: object
                       oneOf:
@@ -415,7 +418,8 @@ paths:
                     - offset
               example:
                 - topic: eh.saf.329050.offer.nlpi.out
-                  key: processId5899128-3779-4446-94ef-e2d7d005d2e1
+                  key:
+                    processId: '5899128-3779-4446-94ef-e2d7d005d2e1'
                   value:
                     id: 3e921406-ee31-42e9-9a17-14c9e42cae21
                     source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
@@ -1047,3 +1051,12 @@ components:
         - errorCode
         - errorMessage
         - errorDateTime
+    SAFKeyType:
+      description: Format of the kafka message key
+      type: object
+      properties:
+        processId:
+          $ref: '#/components/schemas/ProcessIdType'
+      additionalProperties: false
+      required:
+        - processId
