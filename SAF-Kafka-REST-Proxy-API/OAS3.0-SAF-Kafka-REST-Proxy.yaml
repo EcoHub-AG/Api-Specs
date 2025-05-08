@@ -32,6 +32,7 @@ info:
         - Added mandatory property 'processVersion'
         - Added property processGroupId
       - EventDataType
+        - renamed "payLoadSignature" to "payloadSignature"
         - "payloadSignature" and "signatureKeyVersion" are now mandatory
       - EventMessageDataType
         - Removed property "md5MessageHash"
@@ -680,7 +681,7 @@ components:
             used.
           minLength: 3
           type: string
-        payLoadSignature:
+        payloadSignature:
           description: Signature of the payload, to verify by whom the encrypted message
             has been created
           minLength: 3
@@ -725,7 +726,7 @@ components:
           type: string
       required:
         - payload
-        - payLoadSignature
+        - payloadSignature
         - encryptionKey
         - publicKeyVersion
         - signatureKeyVersion
@@ -924,7 +925,7 @@ components:
           type: string
       required:
         - message
-        - payLoadSignature
+        - messageSignature
         - encryptionKey
         - publicKeyVersion
         - signatureKeyVersion

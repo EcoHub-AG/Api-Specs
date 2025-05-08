@@ -123,6 +123,7 @@
         },
         "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
         "processName": "offer.nlpi",
+        "processVersion": "0.5.1",
         "processStatus": "active",
         "subProcessName": "request",
         "subProcessStatus": "Created"
@@ -153,6 +154,7 @@
         },
         "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
         "processName": "offer.nlpi",
+        "processVersion": "0.5.1",
         "subProcessName": "request",
         "processStatus": "active",
         "subProcessStatus": "Received"
@@ -199,6 +201,7 @@
         },
         "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
         "processName": "offer.nlpi",
+        "processVersion": "0.5.1",
         "subProcessName": "offer",
         "processStatus": "active",
         "subProcessStatus": "Created"
@@ -229,6 +232,7 @@
         },
         "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
         "processName": "offer.nlpi",
+        "processVersion": "0.5.1",
         "processStatus": "active",
         "subProcessName": "offer",
         "subProcessStatus": "Received"
@@ -275,6 +279,7 @@
         },
         "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
         "processName": "offer.nlpi",
+        "processVersion": "0.5.1",
         "processStatus": "active",
         "subProcessName": "feedback",
         "subProcessStatus": "Created"
@@ -305,6 +310,7 @@
         },
         "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
         "processName": "offer.nlpi",
+        "processVersion": "0.5.1",
         "subProcessName": "feedback",
         "processStatus": "active",
         "subProcessStatus": "Received"
@@ -344,6 +350,7 @@
         },
         "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
         "processName": "offer.nlpi",
+        "processVersion": "0.5.1",
         "subProcessName": "conclusionDecision",
         "processStatus": "active",
         "subProcessStatus": "Created"
@@ -374,6 +381,7 @@
         },
         "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
         "processName": "offer.nlpi",
+        "processVersion": "0.5.1",
         "processStatus": "closed",
         "subProcessName": "conclusionDecision",
         "subProcessStatus": "Received"

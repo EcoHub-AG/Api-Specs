@@ -7,7 +7,7 @@
       "minLength": 3,
       "type": "string"
     },
-    "payLoadSignature": {
+    "payloadSignature": {
       "description": "Signature of the payload, to verify by whom the encrypted message has been created",
       "minLength": 3,
       "type": "string"
@@ -59,7 +59,7 @@
   },
   "required": [
     "payload",
-    "payLoadSignature",
+    "payloadSignature",
     "encryptionKey",
     "publicKeyVersion",
     "signatureKeyVersion"
