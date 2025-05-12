@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 0.5.0
+  version: 1.0.0-preview
   description: >
     ## Security
 
@@ -11,11 +11,18 @@ info:
     
     ## Changelog
     
-    ### Version 0.5.0
+    ### Version 1.0.0
+      - Introducing major version prefix for all endpoints
       - Introducing new property keyType, to support the digital signature public keys
       - Adjust /members endpoint to use /keys instead of /key, as there are now multiple
       - GET /keys returns a list of keys instead of a single object
       - Introducing new property supportedProcesses, to restrict keys to be used with certain core processes.
+      - added minLength requirement to PublicKeyVersionType
+      - allow additionalProperties in PublicKeyResponse
+      - mark mandatory properties in PublicKeyResponse
+      - allow additional properties in PublicKeyVerifyResponse
+      - allow additional properties in PublicKeyVerifyChallenge
+      - mark mandatory properties in PublicKeyVerifyChallenge
     
     ### Version 0.4.1 (30.01.2025)
       - Enhanced documentation
@@ -30,26 +37,26 @@ info:
     
     - Initial public release of the public key store api, that is needed to retrieve the receivers public key and to manage your own public key.
 servers:
-  - url: 'https://services.test-myecohub.ch/publickeystore'
+  - url: 'https://services.test-myecohub.ch/publickeystore/v1'
     description: EcoHub IAT Enviroment
-  - url: 'https://services.myecohub.ch/publickeystore'
+  - url: 'https://services.myecohub.ch/publickeystore/v1'
     description: EcoHub PROD Enviroment
 paths:
   /keys:
     post:
       tags:
         - PublicKeyApi
-      summary: Upload a new public key for your membership.
+      summary: Upload new public keys for your membership.
       operationId: UploadKey
       requestBody:
-        description: Request.
+        description: List of encryption and signatures keys to be uploaded.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PublicKeyUploadRequest'
       responses:
         '200':
-          description: Public key has been uploaded with success
+          description: Public keys have been uploaded with success
           content:
             application/json:
               schema:
@@ -91,7 +98,7 @@ paths:
       parameters:
         - name: keyId
           in: path
-          description: keyId.
+          description: ID of the key you want to verify.
           required: true
           schema:
             $ref: '#/components/schemas/PublicKeyIdType'
@@ -124,12 +131,11 @@ paths:
       parameters:
         - name: keyId
           in: path
-          description: keyId.
+          description: ID of the key you want to verify.
           required: true
           schema:
             $ref: '#/components/schemas/PublicKeyIdType'
       requestBody:
-        description: Verify Request.
         content:
           application/json:
             schema:
@@ -170,7 +176,7 @@ paths:
       parameters:
         - name: keyId
           in: path
-          description: keyId.
+          description: ID of one of your keys you want to get the details for.
           required: true
           schema:
             type: string
@@ -199,12 +205,12 @@ paths:
     delete:
       tags:
         - PublicKeyApi
-      summary: Delete inactive public key by member admin.
+      summary: Delete an inactive public key of my membership.
       operationId: Delete
       parameters:
         - name: keyId
           in: path
-          description: KeyId.
+          description: ID of one of your keys you want to delete.
           required: true
           schema:
             $ref: '#/components/schemas/PublicKeyIdType'
@@ -240,7 +246,7 @@ paths:
       parameters:
         - name: keyId
           in: path
-          description: KeyId.
+          description: ID of the key you want to activate.
           required: true
           schema:
             $ref: '#/components/schemas/PublicKeyIdType'
@@ -274,7 +280,7 @@ paths:
       parameters:
         - name: keyId
           in: path
-          description: KeyId.
+          description: ID of the key you want to deactivate.
           required: true
           schema:
             $ref: '#/components/schemas/PublicKeyIdType'
@@ -304,12 +310,12 @@ paths:
       tags:
         - PublicKeyApi
       summary: Get the active public keys of the receiving party
-      description: Get the active public keys, for encryption and signing, of a member by idp-number with whom my membership has a Service Agreement.
+      description: Get the active public keys, for encryption and signing, of a member by idp-number with whom my membership has a service agreement.
       operationId: GetActivePublicKeyOfMemberByIdpNumber
       parameters:
         - name: idpNumber
           in: path
-          description: IdpNumber.
+          description: IDP number of one of the TechUsers of the receiving party. If the receiving party has multiple TechUsers, any of the IDP numbers can be submitted.
           required: true
           schema:
             type: string
@@ -347,12 +353,12 @@ paths:
       tags:
         - PublicKeyApi
       summary: Get the active encryption or signing public key of the receiving party
-      description: Get the active encryption or signing public key of a member by idp-number and keyType with whom my membership has a Service Agreement.
+      description: Get the active encryption or signing public key of a member by idp-number and keyType with whom my membership has a service agreement.
       operationId: GetActivePublicKeyOfMemberByOperationAndIdpNumber
       parameters:
         - name: idpNumber
           in: path
-          description: IdpNumber.
+          description: IDP number of one of the TechUsers of the receiving party. If the receiving party has multiple TechUsers, any of the IDP numbers can be submitted.
           required: true
           schema:
             type: string
@@ -392,37 +398,56 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    PublicKeyUploadRequest:
+      type: array
+      items:
+        type: object
+        properties:
+          version:
+            $ref: "#/components/schemas/PublicKeyVersionType"
+          keyType:
+            $ref: "#/components/schemas/PublicKeyTypeType"
+          key:
+            $ref: "#/components/schemas/PublicKeyDataType"
+          expireInDays:
+            $ref: "#/components/schemas/ExpireInDaysType"
+        required:
+          - expireInDays
+          - key
+          - version
+        additionalProperties: false
+      minItems: 1
     PublicKeyListResponse:
       type: array
       items:
         $ref: '#/components/schemas/PublicKeyResponse'
       example:
-        - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
-          version: "string"
-          keyType: "encryption"
-          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+        - keyType: "encryption"
+          keyId: "fa0f8e74-8151-4a05-a07c-03a9f7410361"
+          membershipId: "6d490403-a95e-4900-967c-8eb65812036d"
+          version: "1.0"
+          key: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhgbfE7PdCHfiPtvdC1rv\nrzF//bPBbQTofH6lVKmLpweliyJkir+FQZ8v+6XfeGc4yNBd3OMsh+lIxxJxV0ox\no57owsqMYPm7zAGOsZm/tb8SX29+NCJTx3IY07TPix8gD096batkfH7B9R3cXp3f\nXTx3z8rhKA0Q7oNu2xMbUv+MEP5LBISWCdhoYOvBLaiZHh/XlZB1VHDPTK/ZV+OO\nkw/ubAobawfgE5dlXuym8LqwAcM9QKs/cVajDT1paOb1nZo9/cfuQjQLWtty0exx\n+5QgUsdzMOCAUBfkaq+bVCHMbvd/R+BnUHalcgdQZ2X8R0fnbP3BJDdTqEz5kFPm\nXQIDAQAB\n-----END PUBLIC KEY-----"
+          createdAt: "2025-04-08T10:22:52.128Z"
+          lastUpdatedAt: "2025-04-08T12:14:31.842Z"
+          activatedAt: "0001-01-01T00:00:00.000Z"
+          expiryDate: "2026-04-08T12:22:52.128Z"
+          ecoHubStatus: "Verified"
           supportedProcesses:
-            - processName: offer.nlpi
-              processVersion: 0.3.0
-          createdAt: "2024-09-03T09:16:37.327Z"
-          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
-          activatedAt: "2024-09-03T09:16:37.327Z"
-          expiryDate: "2024-09-03T09:16:37.327Z"
+            - processName: "offer.nlpi"
+              processVersion: "0.3.0"
+        - keyType: "signature"
+          keyId: "df4eee5b-8552-48f0-916a-62ee4e1e6fbc"
+          membershipId: "6d490403-a95e-4900-967c-8eb65812036d"
+          version: '1.0'
+          key: "-----BEGIN PUBLIC KEY-----\nMHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE/xcCNJce71JRlmPEjbCgiNARsq7Ea6dm\n+uWufrHaJpl89esF3oDFlTusALWlL48dxikma1d8+IkhqbcMh+s56Uoeet4qzAqd\ntqGS4kxcYR/A7KKhtUsM9npnQsoEdiYD\n-----END PUBLIC KEY-----"
+          createdAt: "2025-05-05T08:19:42.631Z"
+          lastUpdatedAt: "0001-01-01T00:00:00.000Z"
+          activatedAt: "0001-01-01T00:00:00.000Z"
+          expiryDate: "2026-05-05T10:19:42.631Z"
           ecoHubStatus: "Created"
-        - keyId: "0e84035f-d211-4fbd-9ce0-ecc259d7814dÃ¥"
-          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
-          version: "string"
-          keyType: "signature"
-          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
           supportedProcesses:
-            - processName: offer.nlpi
-              processVersion: 0.3.0
-          createdAt: "2024-09-03T09:16:37.327Z"
-          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
-          activatedAt: "2024-09-03T09:16:37.327Z"
-          expiryDate: "2024-09-03T09:16:37.327Z"
-          ecoHubStatus: "Created"
+            - processName: "offer.nlpi"
+              processVersion: "0.3.0"
     PublicKeyResponse:
       type: object
       properties:
@@ -448,49 +473,31 @@ components:
           $ref: "#/components/schemas/ExpiryDateType"
         ecoHubStatus:
           $ref: "#/components/schemas/PublicKeyStatusType"
-      additionalProperties: false
       example:
-        keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-        membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
-        version: "string"
         keyType: "encryption"
-        key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+        keyId: "fa0f8e74-8151-4a05-a07c-03a9f7410361"
+        membershipId: "6d490403-a95e-4900-967c-8eb65812036d"
+        version: "1.0"
+        key: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhgbfE7PdCHfiPtvdC1rv\nrzF//bPBbQTofH6lVKmLpweliyJkir+FQZ8v+6XfeGc4yNBd3OMsh+lIxxJxV0ox\no57owsqMYPm7zAGOsZm/tb8SX29+NCJTx3IY07TPix8gD096batkfH7B9R3cXp3f\nXTx3z8rhKA0Q7oNu2xMbUv+MEP5LBISWCdhoYOvBLaiZHh/XlZB1VHDPTK/ZV+OO\nkw/ubAobawfgE5dlXuym8LqwAcM9QKs/cVajDT1paOb1nZo9/cfuQjQLWtty0exx\n+5QgUsdzMOCAUBfkaq+bVCHMbvd/R+BnUHalcgdQZ2X8R0fnbP3BJDdTqEz5kFPm\nXQIDAQAB\n-----END PUBLIC KEY-----"
+        createdAt: "2025-04-08T10:22:52.128Z"
+        lastUpdatedAt: "2025-04-08T12:14:31.842Z"
+        activatedAt: "0001-01-01T00:00:00.000Z"
+        expiryDate: "2026-04-08T12:22:52.128Z"
+        ecoHubStatus: "Verified"
         supportedProcesses:
-          - processName: offer.nlpi
-            processVersion: 0.3.0
-        createdAt: "2024-09-03T09:16:37.327Z"
-        lastUpdatedAt: "2024-09-03T09:16:37.327Z"
-        activatedAt: "2024-09-03T09:16:37.327Z"
-        expiryDate: "2024-09-03T09:16:37.327Z"
-        ecoHubStatus: "Created"
-    PublicKeyUploadRequest:
-      type: array
-      items:
-        type: object
-        properties:
-          version:
-            $ref: "#/components/schemas/PublicKeyVersionType"
-          keyType:
-            $ref: "#/components/schemas/PublicKeyTypeType"
-          key:
-            $ref: "#/components/schemas/PublicKeyDataType"
-          expireInDays:
-            $ref: "#/components/schemas/ExpireInDaysType"
-        required:
-          - expireInDays
-          - key
-          - version
-        additionalProperties: false
-      minItems: 1
-    PublicKeyVerifyRequest:
-      type: object
-      properties:
-        verifiedContent:
-          type: string
-          description: Depending on the keyType of the key being verified, this must be
-            either the decrypted or signed verificationContent of the response from the GET /verify API
-            endpoint.
-      additionalProperties: false
+          - processName: "offer.nlpi"
+            processVersion: "0.3.0"
+      required:
+        - keyId
+        - membershipId
+        - version
+        - keyType
+        - key
+        - createdAt
+        - lastUpdatedAt
+        - activatedAt
+        - expiryDate
+        - ecoHubStatus
     PublicKeyVerifyChallenge:
       type: object
       properties:
@@ -504,13 +511,27 @@ components:
             been encrypted with your active public key using RSA with OAEP_SHA256 padding and encoded 
             as base64. The value must be decoded and decrypted, so that the original plain text
             can be used as input for the POST /verify API call.
-            When verifying a signature key, this contains a random plaintext string. Create the signature
-            for the plaintext with your active signature key using the EC secp384r1 algorithm.
+            When verifying a signature key, this contains a random plaintext string. Create the ASN.1 signature
+            of the plaintext with your active signature key using the EC secp384r1 algorithm with a SHA-384 hash. 
+            Then submit the base64 encoded signature using the POST /verify API endpoint.
+      required:
+        - keyId
+        - keyType
+        - verificationContent
+    PublicKeyVerifyRequest:
+      type: object
+      properties:
+        verifiedContent:
+          type: string
+          description: To verify an RSA key, submit the decrypted plaintext retrieved from the GET /verify endpoint. To verify
+            a signature key, submit the base64 encoded EC secp384r1 signature of the plaintext retrieved from the GET /verify endpoint.
+            The signature must be generated using a SHA-384 hash and must be encoded in ASN.1.
       additionalProperties: false
     PublicKeyDataType:
       minLength: 1
-      description: The string representation of a 2048-bit RSA public key using the SPKI data structure in PEM format. Must contain
-        the complete PEM format, including the headers, footers and line breaks.
+      description: For encryption keys, this is 2048-bit RSA public key using the SPKI (SubjectPublicKeyInfo) structure, formatted in PEM.
+        For signature keys, this is an Elliptic Curve (EC) public key using the secp384r1 curve, also in PEM format and structured internally using ASN.1.
+        In both cases, the key must be a plain string, including the full PEM headers and footers and all original line breaks.
       type: string
       nullable: false
       example: "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnHzh51ti/7VGUb/GHl1o\nAwL7eTJREdq0A5jCA2viLmjcdEUUjFtcUK6fvySR6ukygLnRlMA1fvzy1xEKlyfu\ntRjb3D5gNiHVqmOHsDG7GTkMAn8XVM4061ad1mhOrjr+Gmd1jaWBTExjJus1PkbG\n4vY5BDVg5nZw4QuyxnFQG96ADIss9n9cp4Sz8STi3bLyPoT8N23/5jpn7kZpbCbz\nG0TZrgzIp3JsABYQ5bxZFmG6Leca3gUEblzAgTyafjYrcj1CQTZLvDezja/aiYzY\nR5qIhFIXBVxBr/ePqmEUUIu6IsXsh2AiQQF2xykwPXsQbtcr+En2MnfNicK/3fhN\nrQIDAQAB\n-----END PUBLIC KEY-----"
@@ -518,6 +539,7 @@ components:
       type: string
       description: Version of the public key
       nullable: false
+      minLength: 3
     PublicKeyIdType:
       description: Unique identifier of the public key stored in EcoHub
       type: string
@@ -559,7 +581,7 @@ components:
       enum: ["Created", "Verified", "Activated", "Deactivated"]
       nullable: false
     PublicKeyTypeType:
-      description: Specifies the type of operation for which the public key will be used. The following operations are supported
+      description: Specifies the type of the key.
       type: string
       enum: ["encryption", "signature"]
       default: "encryption"
@@ -572,7 +594,6 @@ components:
           description: Status of the verification check
           nullable: false
           example: Success/Fail
-      additionalProperties: false
     ErrorResponse:
       type: object
       properties:
