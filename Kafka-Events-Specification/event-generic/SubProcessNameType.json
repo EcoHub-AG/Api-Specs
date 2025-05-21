@@ -5,6 +5,10 @@
     "request",
     "offer",
     "feedback",
-    "conclusionDecision"
+    "conclusionDecision",
+    "Premium invoice",
+    "Reminder",
+    "Contract generic",
+    "Commission"
   ]
 }

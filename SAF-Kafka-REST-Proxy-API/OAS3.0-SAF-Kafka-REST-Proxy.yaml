@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: 'Standard API Framework: Kafka REST Proxy API'
-  version: 0.3.4
+  version: 1.0.0
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -17,6 +17,46 @@ info:
     the /techUserEnrolment endpoint of the general api.
     
     ## Changelog
+    
+    ### Version 1.0.0
+      - ProcessNameType
+        - Added values for proxy standards
+      - SubProcessNameType
+        - Added values for proxy standards
+      - SubProcessStatusType
+        - Renamed enum value "Responsed" to "Responded"
+      - OfferNLPIErrorEventType
+        - Prohibit additional properties
+        - Restructured the type and replaced error codes
+        - The data attribute is now mandatory
+        - Added mandatory property 'processVersion'
+        - Added property processGroupId
+      - EventDataType
+        - renamed "payLoadSignature" to "payloadSignature"
+        - "payloadSignature" and "signatureKeyVersion" are now mandatory
+        - removed minLength requirement from publicKeyVersion and signatureKeyVersion
+        - added minItems requirement to "links" property
+      - EventMessageDataType
+        - Removed property "md5MessageHash"
+        - Added mandatory properties "messageSignature" and "signatureKeyVersion"
+        - removed minLength requirement from publicKeyVersion
+        - Prohibit additional properties
+      - EventType
+        - Changed format of the values to reverse-dns
+      - LicenseKeyType
+        - Renamed to "LicenceKeyType"
+      - SenderReceiverType
+        - Added property 'onBehalfBy'
+      - SAFErrorEventType
+        - Added mandatory property 'processVersion'
+        - Added property processGroupId
+      - SAFEventType
+        - Added mandatory property 'processVersion'
+        - Added property processGroupId
+      - SAFInquiryEventType
+        - Added mandatory property 'processVersion'
+        - Added property processGroupId
+      
     
     ### Version 0.3.4
       - Adjusted type of the key property of the response when consuming messages
@@ -42,8 +82,8 @@ info:
     ### Version 0.3.0 (20.08.2024)
     - Initial public release
 servers:
-  - url: 'https://services.test-myecohub.ch/saf'
-  - url: 'https://services.myecohub.ch/saf'
+  - url: 'https://services.test-myecohub.ch/saf/v1'
+  - url: 'https://services.myecohub.ch/saf/v1'
 paths:
   /in:
     post:
@@ -92,7 +132,7 @@ paths:
                   id: 044d2e50-12d6-43e4-bb1b-7b54841c9c82
                   source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   datacontenttype: application/json
                   dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json
                   subject: offer nlpi request
@@ -119,6 +159,7 @@ paths:
                     signatureKeyVersion: '1.3'
                   processId: ff9275bf-5b35-492e-bdd2-c217e151d335
                   processName: offer.nlpi
+                  processVersion: 0.3.0
                   processStatus: active
                   subProcessName: request
                   subProcessStatus: Created
@@ -128,7 +169,7 @@ paths:
                   id: 3e921406-ee31-42e9-9a17-14c9e42cae21
                   source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   subject: offer nlpi request received
                   time: '2023-08-17T14:15:22.000Z'
                   licenceKey: 8985+9403*jgfksld94&%fjd
@@ -143,6 +184,7 @@ paths:
                     id: IDP1234567
                   processId: ff9275bf-5b35-492e-bdd2-c217e151d335
                   processName: offer.nlpi
+                  processVersion: 0.3.0
                   subProcessName: request
                   processStatus: active
                   subProcessStatus: Received
@@ -152,7 +194,7 @@ paths:
                   id: d1ebd951-e44e-4464-939e-bd6f4c8d1d8e
                   source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   datacontenttype: application/json
                   dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json
                   subject: offer
@@ -179,6 +221,7 @@ paths:
                     signatureKeyVersion: '1.1'
                   processId: ff9275bf-5b35-492e-bdd2-c217e151d335
                   processName: offer.nlpi
+                  processVersion: 0.3.0
                   subProcessName: offer
                   processStatus: active
                   subProcessStatus: Created
@@ -188,7 +231,7 @@ paths:
                   id: 1aa99947-59ee-4b75-86b2-33618d34dd32
                   source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   subject: offer nlpi offer received
                   time: '2023-08-17T14:15:22.000Z'
                   licenceKey: REcxZEVMZWV1UXFwOUZwaz...
@@ -203,6 +246,7 @@ paths:
                     id: IDP7654321
                   processId: ff9275bf-5b35-492e-bdd2-c217e151d335
                   processName: offer.nlpi
+                  processVersion: 0.3.0
                   processStatus: active
                   subProcessName: offer
                   subProcessStatus: Received
@@ -212,7 +256,7 @@ paths:
                   id: 1aa99947-59ee-4b75-86b2-33618d34dd32
                   source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   datacontenttype: application/json
                   dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiFeedbackDataType.json
                   subject: offer feedback
@@ -239,6 +283,7 @@ paths:
                     signatureKeyVersion: '1.3'
                   processId: ff9275bf-5b35-492e-bdd2-c217e151d335
                   processName: offer.nlpi
+                  processVersion: 0.3.0
                   processStatus: active
                   subProcessName: feedback
                   subProcessStatus: Created
@@ -248,7 +293,7 @@ paths:
                   id: 5df58bad-960c-4752-81f7-3a2721493b2c
                   source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   subject: offer nlpi feedback received
                   time: '2023-08-17T14:15:22.000Z'
                   licenceKey: 8985+9403*jgfksld94&%fjd
@@ -263,6 +308,7 @@ paths:
                     id: IDP1234567
                   processId: ff9275bf-5b35-492e-bdd2-c217e151d335
                   processName: offer.nlpi
+                  processVersion: 0.3.0
                   subProcessName: feedback
                   processStatus: active
                   subProcessStatus: Received
@@ -273,7 +319,7 @@ paths:
                   id: 53198975-f2ed-48d7-ae5d-0ba5f8b1e95e
                   source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   datacontenttype: application/json
                   dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiConclusionDecisionDataType.json
                   subject: offer conclusion decision
@@ -296,6 +342,7 @@ paths:
                     signatureKeyVersion: '1.1'
                   processId: ff9275bf-5b35-492e-bdd2-c217e151d335
                   processName: offer.nlpi
+                  processVersion: 0.3.0
                   subProcessName: conclusionDecision
                   processStatus: active
                   subProcessStatus: Created
@@ -305,7 +352,7 @@ paths:
                   id: 1607aa76-4de4-417f-9e88-88bbb4b62f34
                   source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
                   specversion: '1.0'
-                  type: data
+                  type: ch.ecohub.saf.data
                   subject: offer nlpi conclusionDecision received
                   time: '2023-08-17T14:15:22.000Z'
                   licenceKey: REcxZEVMZWV1UXFwOUZwaz...
@@ -320,6 +367,7 @@ paths:
                     id: IDP7654321
                   processId: ff9275bf-5b35-492e-bdd2-c217e151d335
                   processName: offer.nlpi
+                  processVersion: 0.3.0
                   processStatus: closed
                   subProcessName: conclusionDecision
                   subProcessStatus: Received
@@ -424,7 +472,7 @@ paths:
                     id: 3e921406-ee31-42e9-9a17-14c9e42cae21
                     source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
                     specversion: '1.0'
-                    type: data
+                    type: ch.ecohub.saf.data
                     subject: offer nlpi request received
                     time: '2023-08-17T14:15:22.000Z'
                     licenceKey: 8985+9403*jgfksld94&%fjd
@@ -439,6 +487,7 @@ paths:
                       id: insurer1
                     processId: ff9275bf-5b35-492e-bdd2-c217e151d335
                     processName: offer.nlpi
+                    processVersion: 0.3.0
                     subProcessName: request
                     processStatus: active
                     subProcessStatus: Received
@@ -478,7 +527,7 @@ components:
         time:
           $ref: '#/components/schemas/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/LicenseKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
           $ref: '#/components/schemas/UserAgentType'
         eventReceiver:
@@ -487,10 +536,14 @@ components:
           $ref: '#/components/schemas/SenderReceiverType'
         data:
           $ref: '#/components/schemas/EventDataType'
+        processGroupId:
+          $ref: '#/components/schemas/ProcessGroupIdType'
         processId:
           $ref: '#/components/schemas/ProcessIdType'
         processName:
           $ref: '#/components/schemas/ProcessNameType'
+        processVersion:
+          $ref: '#/components/schemas/ProcessVersionType'
         processStatus:
           $ref: '#/components/schemas/ProcessStatusType'
         subProcessName:
@@ -505,6 +558,7 @@ components:
         - type
         - processId
         - processName
+        - processVersion
         - subProcessName
         - processStatus
         - subProcessStatus
@@ -533,7 +587,7 @@ components:
         time:
           $ref: '#/components/schemas/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/LicenseKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
           $ref: '#/components/schemas/UserAgentType'
         eventReceiver:
@@ -542,10 +596,14 @@ components:
           $ref: '#/components/schemas/SenderReceiverType'
         data:
           $ref: '#/components/schemas/EventMessageDataType'
+        processGroupId:
+          $ref: '#/components/schemas/ProcessGroupIdType'
         processId:
           $ref: '#/components/schemas/ProcessIdType'
         processName:
           $ref: '#/components/schemas/ProcessNameType'
+        processVersion:
+          $ref: '#/components/schemas/ProcessVersionType'
         processStatus:
           $ref: '#/components/schemas/ProcessStatusType'
         subProcessName:
@@ -560,6 +618,7 @@ components:
         - type
         - processId
         - processName
+        - processVersion
         - subProcessName
         - processStatus
         - subProcessStatus
@@ -618,7 +677,8 @@ components:
       minLength: 1
       type: string
     EventDataType:
-      description: The event payload.
+      description: The data transmitted with the event and relevant attributes for signing
+        and encryption.
       type: object
       properties:
         payload:
@@ -628,9 +688,12 @@ components:
             used.
           minLength: 3
           type: string
-        payLoadSignature:
-          description: Signature key of the signed payload, to verify by whom the encrypted
-            message has been created
+        payloadSignature:
+          description: A digital signature used to verify the origin of the encrypted payload.
+            The signature is created by signing the content of the payload attribute using
+            the elliptic curve algorithm secp384r1 with a SHA-384 hash, and your active
+            signature key. The resulting signature must be ASN.1 encoded and transmitted
+            in Base64.
           minLength: 3
           type: string
         links:
@@ -657,35 +720,38 @@ components:
               - rel
             additionalProperties: false
           type: array
+          minItems: 1
         encryptionKey:
           description: The encrypted AES key, which was used to symmetrically encrypt the
             transmitted data. The key must be encrypted with the public key of the eventReceiver
-            using RSA with PKCS#1 v1.5 padding.
+            using RSA with OAEP padding with a SHA256 hash.
           minLength: 3
           type: string
         publicKeyVersion:
-          description: The version of the public key that was used to encrypt the encryptionKey.
-          minLength: 3
+          description: The version of the receiver's public key that was used to encrypt
+            the encryptionKey.
           type: string
         signatureKeyVersion:
-          description: 'The version of the signature key, that was used to sign '
-          minLength: 3
+          description: The version of your signature key, that was used to sign the payload.
           type: string
       required:
         - payload
+        - payloadSignature
         - encryptionKey
         - publicKeyVersion
+        - signatureKeyVersion
       additionalProperties: false
     EventType:
-      description: Defines the type of event / data, inquiry, standard-error or saf-error
+      description: 'Reverse DNS entry to defines the type of event: data, inquiry, standard-error
+        or saf-error'
       minLength: 1
       type: string
       enum:
-        - data
-        - inquiry
-        - standard-error
-        - saf-error
-    LicenseKeyType:
+        - ch.ecohub.saf.data
+        - ch.ecohub.saf.inquiry
+        - ch.ecohub.saf.standard-error
+        - ch.ecohub.saf.saf-error
+    LicenceKeyType:
       description: The license key for the requesting SC application.
       type: string
       maxLength: 200
@@ -697,10 +763,17 @@ components:
       type: string
       format: uuid
     ProcessNameType:
-      description: Comment describing your JSON Schema
+      description: Name of the core process
       type: string
       enum:
         - offer.nlpi
+        - Invoices
+        - Commission
+        - Contract
+    ProcessVersionType:
+      description: Version of the used core process
+      type: string
+      pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
     ProcessStatusType:
       description: Defines status of the overall process.
       type: string
@@ -725,6 +798,11 @@ components:
           example: IDP1239856
           minLength: 3
           type: string
+        onBehalfBy:
+          type: string
+          description: The IDP number of the software provider's techUser if the event is
+            send on behalf.
+          pattern: "^IDP(\\d{7})$"
       required:
         - category
         - id
@@ -736,13 +814,17 @@ components:
         - offer
         - feedback
         - conclusionDecision
+        - Premium invoice
+        - Reminder
+        - Contract generic
+        - Commission
     SubProcessStatusType:
       type: string
       enum:
         - Created
         - Received
         - InProgress
-        - Responsed
+        - Responded
         - Updated
         - Error
         - Inquiry
@@ -822,17 +904,22 @@ components:
           format: uuid
       additionalProperties: false
     EventMessageDataType:
-      description: The event payload.
+      description: The message transmitted with the event and relevant attributes for signing
+        and encryption.
       type: object
       properties:
         encryptionKey:
           description: The encrypted AES key, which was used to symmetrically encrypt the
             transmitted message. The key must be encrypted with the public key of the eventReceiver
-            using RSA with PKCS#1 v1.5 padding.
+            using RSA with OAEP padding with a SHA256 hash.
           minLength: 3
           type: string
-        md5MessageHash:
-          description: The md5 hash of the byte content of the encrypted data
+        messageSignature:
+          description: A digital signature used to verify the origin of the encrypted message.
+            The signature is created by signing the content of the payload attribute using
+            the elliptic curve algorithm secp384r1 with a SHA-384 hash, and your active
+            signature key. The resulting signature must be ASN.1 encoded and transmitted
+            in Base64.
           minLength: 3
           type: string
         message:
@@ -843,13 +930,19 @@ components:
           minLength: 3
           type: string
         publicKeyVersion:
-          description: The version of the public key that was used to encrypt the encryptionKey.
-          minLength: 3
+          description: The version of the receiver's public key that was used to encrypt
+            the encryptionKey.
+          type: string
+        signatureKeyVersion:
+          description: The version of your signature key, that was used to sign the message.
           type: string
       required:
         - message
+        - messageSignature
         - encryptionKey
         - publicKeyVersion
+        - signatureKeyVersion
+      additionalProperties: false
     SAFErrorEventType:
       description: SAF error event, i.e. an event for errors which are unrelated to the event payload.
       type: object
@@ -871,7 +964,7 @@ components:
         time:
           $ref: '#/components/schemas/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/LicenseKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
           $ref: '#/components/schemas/UserAgentType'
         data:
@@ -880,10 +973,14 @@ components:
           $ref: '#/components/schemas/SenderReceiverType'
         eventSender:
           $ref: '#/components/schemas/SenderReceiverType'
+        processGroupId:
+          $ref: '#/components/schemas/ProcessGroupIdType'
         processId:
           $ref: '#/components/schemas/ProcessIdType'
         processName:
           $ref: '#/components/schemas/ProcessNameType'
+        processVersion:
+          $ref: '#/components/schemas/ProcessVersionType'
         processStatus:
           $ref: '#/components/schemas/ProcessStatusType'
         subProcessName:
@@ -897,6 +994,7 @@ components:
         - type
         - processId
         - processName
+        - processVersion
         - subProcessName
         - processStatus
         - subProcessStatus
@@ -938,7 +1036,8 @@ components:
         - errorMessage
         - errorDateTime
     OfferNLPIErrorEventType:
-      description: Offer NLPI error event, i.e. an event for errors which related to the event payload.
+      description: Offer NLPI error event, i.e. an event for errors which related to the
+        event payload.
       type: object
       properties:
         id:
@@ -958,19 +1057,23 @@ components:
         time:
           $ref: '#/components/schemas/timedef'
         licenceKey:
-          "$ref": '#/components/schemas/LicenseKeyType'
+          $ref: '#/components/schemas/LicenceKeyType'
         userAgent:
           $ref: '#/components/schemas/UserAgentType'
         data:
-          $ref: "#/components/schemas/OfferNLPIErrorType"
+          $ref: '#/components/schemas/OfferNLPIErrorType'
         eventReceiver:
           $ref: '#/components/schemas/SenderReceiverType'
         eventSender:
           $ref: '#/components/schemas/SenderReceiverType'
+        processGroupId:
+          $ref: '#/components/schemas/ProcessGroupIdType'
         processId:
           $ref: '#/components/schemas/ProcessIdType'
         processName:
           $ref: '#/components/schemas/ProcessNameType'
+        processVersion:
+          $ref: '#/components/schemas/ProcessVersionType'
         processStatus:
           $ref: '#/components/schemas/ProcessStatusType'
         subProcessName:
@@ -982,8 +1085,10 @@ components:
         - source
         - specversion
         - type
+        - data
         - processId
         - processName
+        - processVersion
         - subProcessName
         - processStatus
         - subProcessStatus
@@ -993,64 +1098,33 @@ components:
         - licenceKey
       additionalProperties: false
     OfferNLPIErrorType:
-      type: object
-      properties:
-        errorCode:
-          description: 'The code best describing the occured error.'
-          minLength: 3
-          type: string
-          enum:
-            - offer-missing-informations
-            - offer-incorrect-informations
-            - offer-date-expired
-            - offer-missing-claims-expierence
-            - offer-requested-several-times
-            - offer-already-issued
-            - offer-missing-documents
-            - offer-incorrect-attachment
-            - offer-other-error
-            - mandate-missing
-            - mandate-expired
-            - mandate-terminated
-            - mandate-invalid
-            - mandate-other-error
-            - cooperationagreement-missing
-            - cooperationagreement-expired-terminated
-            - cooperationagreement-other-error
-            - customer-data-referenceno-mismatch
-            - customer-data-incomplete
-            - customer-data-incorrect
-            - customer-not-identified
-            - customer-other-error
-            - claims-expierence-date-range-invalid
-            - claims-expierence-data-incorrect
-            - claims-expierence-contract-incorrect
-            - claims-expierence-customer-incorrect
-            - claims-expierence-other-error
-        errorMessage:
-          description: Error message
-          minLength: 3
-          type: string
-        incorrectDataList:
-          description: List of JSON paths, where wrong information has been entered
-          items:
+      type: array
+      minItems: 1
+      items:
+        type: object
+        properties:
+          errorCode:
+            description: The code best describing the occured error.
+            minLength: 3
             type: string
-          minItems: 1
-          type: array
-        errorDateTime:
-          description: Date and time of the error
-          format: date-time
-          type: string
-        missingDataList:
-          description: List of JSON paths, where information is missing
-          items:
+            enum:
+              - other
+          errorMessage:
+            description: Error message
+            minLength: 3
             type: string
-          minItems: 1
-          type: array
-      required:
-        - errorCode
-        - errorMessage
-        - errorDateTime
+          path:
+            description: xPath or JsonPath to the property where the error occurred.
+            type: string
+        additionalProperties: false
+        required:
+          - errorCode
+          - errorMessage
+    ProcessGroupIdType:
+      description: UUID, that is used to associate multiple processes. The exact usage is
+        specified in each data standard.
+      type: string
+      format: uuid
     SAFKeyType:
       description: Format of the kafka message key
       type: object
@@ -1060,3 +1134,4 @@ components:
       additionalProperties: false
       required:
         - processId
+

@@ -4,59 +4,31 @@
   "description": "SAF error event, i.e. an event for errors which are unrelated to the event payload.",
   "properties": {
     "id": {
-      "$ref": "CloudEventsType.json#/definitions/iddef",
-      "description": "Identifies the event.",
-      "examples": [
-        "A234-1234-1234"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/iddef"
     },
     "source": {
-      "$ref": "CloudEventsType.json#/definitions/sourcedef",
-      "description": "Identifies the context in which an event happened.",
-      "examples": [
-        "http://www.igb2b.ch/offer/nlpi/0.2.0"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/sourcedef"
     },
     "specversion": {
-      "$ref": "CloudEventsType.json#/definitions/specversiondef",
-      "description": "The version of the CloudEvents specification which the event uses.",
-      "examples": [
-        "1.0"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/specversiondef"
     },
     "type": {
       "$ref": "event-generic/EventType.json"
     },
     "datacontenttype": {
-      "$ref": "CloudEventsType.json#/definitions/datacontenttypedef",
-      "description": "Content type of the data value. Must adhere to RFC 2046 format.",
-      "examples": [
-        "text/xml",
-        "application/json",
-        "image/png",
-        "multipart/form-data"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/datacontenttypedef"
     },
     "dataschema": {
-      "$ref": "CloudEventsType.json#/definitions/dataschemadef",
-      "description": "Identifies the schema that data adheres to."
+      "$ref": "CloudEventsType.json#/definitions/dataschemadef"
     },
     "subject": {
-      "$ref": "CloudEventsType.json#/definitions/subjectdef",
-      "description": "Describes the subject of the event in the context of the event producer (identified by source).",
-      "examples": [
-        "request"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/subjectdef"
     },
     "time": {
-      "$ref": "CloudEventsType.json#/definitions/timedef",
-      "description": "Timestamp of when the occurrence happened. Must adhere to RFC 3339.",
-      "examples": [
-        "2018-04-05T17:31:00Z"
-      ]
+      "$ref": "CloudEventsType.json#/definitions/timedef"
     },
     "licenceKey": {
-      "$ref": "event-generic/LicenseKeyType.json"
+      "$ref": "event-generic/LicenceKeyType.json"
     },
     "userAgent": {
       "$ref": "event-generic/UserAgentType.json"
@@ -70,11 +42,17 @@
     "eventSender": {
       "$ref": "event-generic/SenderReceiverType.json"
     },
+    "processGroupId": {
+      "$ref": "event-generic/ProcessGroupIdType.json"
+    },
     "processId": {
       "$ref": "event-generic/ProcessIdType.json"
     },
     "processName": {
       "$ref": "event-generic/ProcessNameType.json"
+    },
+    "processVersion": {
+      "$ref": "event-generic/ProcessVersionType.json"
     },
     "processStatus": {
       "$ref": "event-generic/ProcessStatusType.json"
@@ -93,6 +71,7 @@
     "type",
     "processId",
     "processName",
+    "processVersion",
     "subProcessName",
     "processStatus",
     "subProcessStatus",

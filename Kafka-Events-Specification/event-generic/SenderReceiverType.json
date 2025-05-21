@@ -19,6 +19,11 @@
       ],
       "minLength": 3,
       "type": "string"
+    },
+    "onBehalfBy": {
+      "type": "string",
+      "description": "The IDP number of the software provider's techUser if the event is send on behalf.",
+      "pattern": "^IDP(\\d{7})$"
     }
   },
   "required": [

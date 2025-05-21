@@ -28,7 +28,7 @@
       "$ref": "CloudEventsType.json#/definitions/timedef"
     },
     "licenceKey": {
-      "$ref": "event-generic/LicenseKeyType.json"
+      "$ref": "event-generic/LicenceKeyType.json"
     },
     "userAgent": {
       "$ref": "event-generic/UserAgentType.json"
@@ -42,11 +42,17 @@
     "data": {
       "$ref": "event-generic/EventMessageDataType.json"
     },
+    "processGroupId": {
+      "$ref": "event-generic/ProcessGroupIdType.json"
+    },
     "processId": {
       "$ref": "event-generic/ProcessIdType.json"
     },
     "processName": {
       "$ref": "event-generic/ProcessNameType.json"
+    },
+    "processVersion": {
+      "$ref": "event-generic/ProcessVersionType.json"
     },
     "processStatus": {
       "$ref": "event-generic/ProcessStatusType.json"
@@ -66,6 +72,7 @@
     "type",
     "processId",
     "processName",
+    "processVersion",
     "subProcessName",
     "processStatus",
     "subProcessStatus",

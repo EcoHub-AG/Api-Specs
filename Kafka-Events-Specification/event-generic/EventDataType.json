@@ -1,5 +1,5 @@
 {
-  "description": "The event payload.",
+  "description": "The data transmitted with the event and relevant attributes for signing and encryption.",
   "type": "object",
   "properties": {
     "payload": {
@@ -7,8 +7,8 @@
       "minLength": 3,
       "type": "string"
     },
-    "payLoadSignature": {
-      "description": "Signature key of the signed payload, to verify by whom the encrypted message has been created",
+    "payloadSignature": {
+      "description": "A digital signature used to verify the origin of the encrypted payload. The signature is created by signing the content of the payload attribute using the elliptic curve algorithm secp384r1 with a SHA-384 hash, and your active signature key. The resulting signature must be ASN.1 encoded and transmitted in Base64.",
       "minLength": 3,
       "type": "string"
     },
@@ -39,28 +39,29 @@
         ],
         "additionalProperties": false
       },
-      "type": "array"
+      "type": "array",
+      "minItems": 1
     },
     "encryptionKey": {
-      "description": "The encrypted AES key, which was used to symmetrically encrypt the transmitted data. The key must be encrypted with the public key of the eventReceiver using RSA with PKCS#1 v1.5 padding.",
+      "description": "The encrypted AES key, which was used to symmetrically encrypt the transmitted data. The key must be encrypted with the public key of the eventReceiver using RSA with OAEP padding with a SHA256 hash.",
       "minLength": 3,
       "type": "string"
     },
     "publicKeyVersion": {
-      "description": "The version of the public key that was used to encrypt the encryptionKey.",
-      "minLength": 3,
+      "description": "The version of the receiver's public key that was used to encrypt the encryptionKey.",
       "type": "string"
     },
     "signatureKeyVersion": {
-      "description": "The version of the signature key, that was used to sign ",
-      "minLength": 3,
+      "description": "The version of your signature key, that was used to sign the payload.",
       "type": "string"
     }
   },
   "required": [
     "payload",
+    "payloadSignature",
     "encryptionKey",
-    "publicKeyVersion"
+    "publicKeyVersion",
+    "signatureKeyVersion"
   ],
   "additionalProperties": false
 }

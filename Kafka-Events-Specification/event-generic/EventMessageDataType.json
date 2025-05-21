@@ -1,14 +1,14 @@
 {
-  "description": "The event payload.",
+  "description": "The message transmitted with the event and relevant attributes for signing and encryption.",
   "type": "object",
   "properties": {
     "encryptionKey": {
-      "description": "The encrypted AES key, which was used to symmetrically encrypt the transmitted message. The key must be encrypted with the public key of the eventReceiver using RSA with PKCS#1 v1.5 padding.",
+      "description": "The encrypted AES key, which was used to symmetrically encrypt the transmitted message. The key must be encrypted with the public key of the eventReceiver using RSA with OAEP padding with a SHA256 hash.",
       "minLength": 3,
       "type": "string"
     },
-    "md5MessageHash": {
-      "description": "The md5 hash of the byte content of the encrypted data",
+    "messageSignature": {
+      "description": "A digital signature used to verify the origin of the encrypted message. The signature is created by signing the content of the payload attribute using the elliptic curve algorithm secp384r1 with a SHA-384 hash, and your active signature key. The resulting signature must be ASN.1 encoded and transmitted in Base64.",
       "minLength": 3,
       "type": "string"
     },
@@ -18,14 +18,20 @@
       "type": "string"
     },
     "publicKeyVersion": {
-      "description": "The version of the public key that was used to encrypt the encryptionKey.",
-      "minLength": 3,
+      "description": "The version of the receiver's public key that was used to encrypt the encryptionKey.",
+      "type": "string"
+    },
+    "signatureKeyVersion": {
+      "description": "The version of your signature key, that was used to sign the message.",
       "type": "string"
     }
   },
   "required": [
     "message",
+    "messageSignature",
     "encryptionKey",
-    "publicKeyVersion"
-  ]
+    "publicKeyVersion",
+    "signatureKeyVersion"
+  ],
+  "additionalProperties": false
 }
