@@ -2,7 +2,7 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framework: Message Broker System'
-  version: 1.0.0
+  version: 1.0.0-preview
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
