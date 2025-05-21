@@ -26,9 +26,12 @@ info:
       - EventDataType
         - renamed "payLoadSignature" to "payloadSignature"
         - "payloadSignature" and "signatureKeyVersion" are now mandatory
+        - removed minLength requirement from publicKeyVersion and signatureKeyVersion
+        - added minItems requirement to "links" property
       - EventMessageDataType
         - Removed property "md5MessageHash"
         - Added mandatory properties "messageSignature" and "signatureKeyVersion"
+        - removed minLength requirement from publicKeyVersion
         - Prohibit additional properties
       - EventType
         - Changed format of the values to reverse-dns
@@ -93,11 +96,11 @@ servers:
       - $ref: '#/components/securitySchemes/X509'
 defaultContentType: application/json
 channels:
-  eh.saf.in:
-    address: eh.saf.in
+  eh.saf.in.v1:
+    address: eh.saf.in.v1
     bindings:
       kafka:
-        topic: 'eh.saf.in'
+        topic: 'eh.saf.in.v1'
         partitions: 9
         replicas: 2
         topicConfiguration:
@@ -116,11 +119,11 @@ channels:
         $ref: '#/components/messages/safErrorEvent'
       offerNlpiErrorEvent:
         $ref: '#/components/messages/offerNlpiErrorEvent'
-  eh.saf.offer.out:
-    address: eh.saf.{ecohubId}.offer.nlpi.out
+  eh.saf.offer.out.v1:
+    address: eh.saf.{ecohubId}.offer.nlpi.out.v1
     bindings:
       kafka:
-        topic: 'eh.saf.{ecohubId}.offer.nlpi.out'
+        topic: 'eh.saf.{ecohubId}.offer.nlpi.out.v1'
         partitions: 3
         replicas: 2
         topicConfiguration:
@@ -146,7 +149,7 @@ operations:
   produceSAFEvent:
     action: send
     channel:
-      $ref: "#/channels/eh.saf.in"
+      $ref: "#/channels/eh.saf.in.v1"
   consumeOfferEvent:
     action: receive
     bindings:
@@ -159,7 +162,7 @@ operations:
           format: uuid
         bindingVersion: '0.4.0'
     channel:
-      $ref: "#/channels/eh.saf.offer.out"
+      $ref: "#/channels/eh.saf.offer.out.v1"
 components:
   securitySchemes:
     X509:
@@ -462,12 +465,15 @@ components:
         encryptionKey:
           description: The encrypted AES key, which was used to symmetrically encrypt the
             transmitted message. The key must be encrypted with the public key of the eventReceiver
-            using RSA with PKCS#1 v1.5 padding.
+            using RSA with OAEP padding with a SHA256 hash.
           minLength: 3
           type: string
         messageSignature:
-          description: Signature of the message, to verify by whom the encrypted message
-            has been created
+          description: A digital signature used to verify the origin of the encrypted message.
+            The signature is created by signing the content of the payload attribute using
+            the elliptic curve algorithm secp384r1 with a SHA-384 hash, and your active
+            signature key. The resulting signature must be ASN.1 encoded and transmitted
+            in Base64.
           minLength: 3
           type: string
         message:
@@ -478,12 +484,11 @@ components:
           minLength: 3
           type: string
         publicKeyVersion:
-          description: The version of the public key that was used to encrypt the encryptionKey.
-          minLength: 3
+          description: The version of the receiver's public key that was used to encrypt
+            the encryptionKey.
           type: string
         signatureKeyVersion:
-          description: The version of the signature key, that was used to sign the message.
-          minLength: 3
+          description: The version of your signature key, that was used to sign the message.
           type: string
       required:
         - message
@@ -580,8 +585,9 @@ components:
           type: string
         onBehalfBy:
           type: string
-          description: The IDP number of the software provider if the event is send on behalf.
-          pattern: "^IDP(\\d{6})$"
+          description: The IDP number of the software provider's techUser if the event is
+            send on behalf.
+          pattern: "^IDP(\\d{7})$"
       required:
         - category
         - id
@@ -598,8 +604,11 @@ components:
           minLength: 3
           type: string
         payloadSignature:
-          description: Signature of the payload, to verify by whom the encrypted message
-            has been created
+          description: A digital signature used to verify the origin of the encrypted payload.
+            The signature is created by signing the content of the payload attribute using
+            the elliptic curve algorithm secp384r1 with a SHA-384 hash, and your active
+            signature key. The resulting signature must be ASN.1 encoded and transmitted
+            in Base64.
           minLength: 3
           type: string
         links:
@@ -626,23 +635,23 @@ components:
               - rel
             additionalProperties: false
           type: array
+          minItems: 1
         encryptionKey:
           description: The encrypted AES key, which was used to symmetrically encrypt the
             transmitted data. The key must be encrypted with the public key of the eventReceiver
-            using RSA with PKCS#1 v1.5 padding.
+            using RSA with OAEP padding with a SHA256 hash.
           minLength: 3
           type: string
         publicKeyVersion:
-          description: The version of the public key that was used to encrypt the encryptionKey.
-          minLength: 3
+          description: The version of the receiver's public key that was used to encrypt
+            the encryptionKey.
           type: string
         signatureKeyVersion:
-          description: The version of the signature key, that was used to sign the payload.
-          minLength: 3
+          description: The version of your signature key, that was used to sign the payload.
           type: string
       required:
         - payload
-        - payloadSignaturev
+        - payloadSignature
         - encryptionKey
         - publicKeyVersion
         - signatureKeyVersion
@@ -707,7 +716,7 @@ components:
       timedef:
         description: Timestamp of when the occurrence happened. Must adhere to RFC 3339.
         examples:
-          - '2018-04-05T17:31:00Z'
+          - '2018-04-05T17:31:03.526Z'
         format: date-time
         minLength: 1
         type:

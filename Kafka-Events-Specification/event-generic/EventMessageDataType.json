@@ -3,12 +3,12 @@
   "type": "object",
   "properties": {
     "encryptionKey": {
-      "description": "The encrypted AES key, which was used to symmetrically encrypt the transmitted message. The key must be encrypted with the public key of the eventReceiver using RSA with PKCS#1 v1.5 padding.",
+      "description": "The encrypted AES key, which was used to symmetrically encrypt the transmitted message. The key must be encrypted with the public key of the eventReceiver using RSA with OAEP padding with a SHA256 hash.",
       "minLength": 3,
       "type": "string"
     },
     "messageSignature": {
-      "description": "Signature of the message, to verify by whom the encrypted message has been created",
+      "description": "A digital signature used to verify the origin of the encrypted message. The signature is created by signing the content of the payload attribute using the elliptic curve algorithm secp384r1 with a SHA-384 hash, and your active signature key. The resulting signature must be ASN.1 encoded and transmitted in Base64.",
       "minLength": 3,
       "type": "string"
     },
@@ -18,13 +18,11 @@
       "type": "string"
     },
     "publicKeyVersion": {
-      "description": "The version of the public key that was used to encrypt the encryptionKey.",
-      "minLength": 3,
+      "description": "The version of the receiver's public key that was used to encrypt the encryptionKey.",
       "type": "string"
     },
     "signatureKeyVersion": {
-      "description": "The version of the signature key, that was used to sign the message.",
-      "minLength": 3,
+      "description": "The version of your signature key, that was used to sign the message.",
       "type": "string"
     }
   },

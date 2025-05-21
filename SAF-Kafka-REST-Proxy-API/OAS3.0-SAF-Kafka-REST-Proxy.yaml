@@ -34,9 +34,12 @@ info:
       - EventDataType
         - renamed "payLoadSignature" to "payloadSignature"
         - "payloadSignature" and "signatureKeyVersion" are now mandatory
+        - removed minLength requirement from publicKeyVersion and signatureKeyVersion
+        - added minItems requirement to "links" property
       - EventMessageDataType
         - Removed property "md5MessageHash"
         - Added mandatory properties "messageSignature" and "signatureKeyVersion"
+        - removed minLength requirement from publicKeyVersion
         - Prohibit additional properties
       - EventType
         - Changed format of the values to reverse-dns
@@ -76,8 +79,8 @@ info:
     ### Version 0.3.0 (20.08.2024)
     - Initial public release
 servers:
-  - url: 'https://services.test-myecohub.ch/saf'
-  - url: 'https://services.myecohub.ch/saf'
+  - url: 'https://services.test-myecohub.ch/saf/v1'
+  - url: 'https://services.myecohub.ch/saf/v1'
 paths:
   /in:
     post:
@@ -682,8 +685,11 @@ components:
           minLength: 3
           type: string
         payloadSignature:
-          description: Signature of the payload, to verify by whom the encrypted message
-            has been created
+          description: A digital signature used to verify the origin of the encrypted payload.
+            The signature is created by signing the content of the payload attribute using
+            the elliptic curve algorithm secp384r1 with a SHA-384 hash, and your active
+            signature key. The resulting signature must be ASN.1 encoded and transmitted
+            in Base64.
           minLength: 3
           type: string
         links:
@@ -710,19 +716,19 @@ components:
               - rel
             additionalProperties: false
           type: array
+          minItems: 1
         encryptionKey:
           description: The encrypted AES key, which was used to symmetrically encrypt the
             transmitted data. The key must be encrypted with the public key of the eventReceiver
-            using RSA with PKCS#1 v1.5 padding.
+            using RSA with OAEP padding with a SHA256 hash.
           minLength: 3
           type: string
         publicKeyVersion:
-          description: The version of the public key that was used to encrypt the encryptionKey.
-          minLength: 3
+          description: The version of the receiver's public key that was used to encrypt
+            the encryptionKey.
           type: string
         signatureKeyVersion:
-          description: The version of the signature key, that was used to sign the payload.
-          minLength: 3
+          description: The version of your signature key, that was used to sign the payload.
           type: string
       required:
         - payload
@@ -790,8 +796,9 @@ components:
           type: string
         onBehalfBy:
           type: string
-          description: The IDP number of the software provider if the event is send on behalf.
-          pattern: "^IDP(\\d{6})$"
+          description: The IDP number of the software provider's techUser if the event is
+            send on behalf.
+          pattern: "^IDP(\\d{7})$"
       required:
         - category
         - id
@@ -900,12 +907,15 @@ components:
         encryptionKey:
           description: The encrypted AES key, which was used to symmetrically encrypt the
             transmitted message. The key must be encrypted with the public key of the eventReceiver
-            using RSA with PKCS#1 v1.5 padding.
+            using RSA with OAEP padding with a SHA256 hash.
           minLength: 3
           type: string
         messageSignature:
-          description: Signature of the message, to verify by whom the encrypted message
-            has been created
+          description: A digital signature used to verify the origin of the encrypted message.
+            The signature is created by signing the content of the payload attribute using
+            the elliptic curve algorithm secp384r1 with a SHA-384 hash, and your active
+            signature key. The resulting signature must be ASN.1 encoded and transmitted
+            in Base64.
           minLength: 3
           type: string
         message:
@@ -916,12 +926,11 @@ components:
           minLength: 3
           type: string
         publicKeyVersion:
-          description: The version of the public key that was used to encrypt the encryptionKey.
-          minLength: 3
+          description: The version of the receiver's public key that was used to encrypt
+            the encryptionKey.
           type: string
         signatureKeyVersion:
-          description: The version of the signature key, that was used to sign the message.
-          minLength: 3
+          description: The version of your signature key, that was used to sign the message.
           type: string
       required:
         - message
