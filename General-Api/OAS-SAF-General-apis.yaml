@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: "Standard API Framework"
+  title: "Standard API Framework: General API"
   version: 1.0.0-preview
   description: >
     ## Security
