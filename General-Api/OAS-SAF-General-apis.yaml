@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework"
-  version: 0.3.2
+  version: 1.0.0-preview
   description: >
     ## Security
     
@@ -10,6 +10,15 @@ info:
     the /techUserEnrolment endpoint of this API.
     
     ## Changelog
+    
+    ### Version 1.0.0
+      - SAFSupportedStandards
+        - Renamed and restructured type to align with processName and processVersion in SAF events
+      - Only allow application/json as content type
+      - add version prefix to all endpoints
+      - removed 404 response from /saf-receivers and /saf-insurers endpoint
+      - correctly marked required attributes in all types
+      - Enhanced documentation
     
     ### Version 0.3.2 (26.12.2024)
 
@@ -23,10 +32,10 @@ info:
     
       - Initial public release
 servers:
-  - url: https://services.test-myecohub.ch/general
+  - url: https://services.test-myecohub.ch/general/v1
     variables: {}
     description: EcoHub IAT Environment
-  - url: https://services.myecohub.ch/general
+  - url: https://services.myecohub.ch/general/v1
     variables: {}
     description: EcoHub PROD Environment
 paths:
@@ -44,15 +53,6 @@ paths:
         content:
           application/json:
             schema:
-              title: SAF receiver request
-              $ref: '#/components/schemas/GeneralRequestData'
-          text/json:
-            schema:
-              title: SAF receiver request
-              $ref: '#/components/schemas/GeneralRequestData'
-          application/*+json:
-            schema:
-              title: SAF receiver request
               $ref: '#/components/schemas/GeneralRequestData'
       responses:
         '200':
@@ -62,19 +62,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SAFReceiverResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/SAFReceiverResponse'
         '400':
           description: If saf-receiver operation is unsuccessful
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SAFErrorResponse'
-        '404':
-          description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GeneralErrorResponse'
         '500':
           description: Unexpected error
           content:
@@ -95,15 +91,6 @@ paths:
         content:
           application/json:
             schema:
-              title: SAF insurers request
-              $ref: '#/components/schemas/GeneralRequestData'
-          text/json:
-            schema:
-              title: SAF insurers request
-              $ref: '#/components/schemas/GeneralRequestData'
-          application/*+json:
-            schema:
-              title: SAF insurers request
               $ref: '#/components/schemas/GeneralRequestData'
       responses:
         '200':
@@ -111,19 +98,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SAFInsurersResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/SAFInsurersResponse'
         '400':
           description: If saf-insurers operation is unsuccessful
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SAFErrorResponse'
-        '404':
-          description: Resource not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GeneralErrorResponse'
         '500':
           description: Unexpected error
           content:
@@ -152,22 +135,9 @@ paths:
               allOf:
                 - $ref: '#/components/schemas/TechUserEnrolmentRequest'
                 - $ref: '#/components/schemas/GeneralRequestData'
-          text/json:
-            schema:
-              title: TechUserEnrolmentRequest
-              allOf:
-                - $ref: '#/components/schemas/TechUserEnrolmentRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-          application/*+json:
-            schema:
-              title: TechUserEnrolmentRequest
-              allOf:
-                - $ref: '#/components/schemas/TechUserEnrolmentRequest'
-                - $ref: '#/components/schemas/GeneralRequestData'
-
       responses:
         '200':
-          description: Returns DXPInsurerService.Models.TechUserEnrolmentResponse
+          description: TechUser enrollment successful
           content:
             application/json:
               schema:
@@ -211,11 +181,17 @@ components:
           description: Unique request ID. This is created by the caller and provided to help with troubleshooting.
         requestTime:
           type: string
-          description: Time of the request at the client as timestamp (date and time, each UTC without corresponding specification). YYYY-MM-DDTHH:MM:SS RFC 3339 formatted datetime.
+          description: Time of the request at the client as timestamp (date and time, each UTC without corresponding specification). YYYY-MM-DDThh:mm:ss RFC 3339 formatted datetime.
           format: date-time
         userAgent:
           $ref: '#/components/schemas/UserAgent'
       additionalProperties: false
+      required:
+        - licenceKey
+        - password
+        - requestId
+        - requestTime
+        - userAgent
     GeneralErrorResponse:
       type: object
       properties:
@@ -240,16 +216,17 @@ components:
       type: string
       example: ERROR
     SAFInsurersResponse:
-      type : array
-      items:
-        properties:
-          companyName:
-            type: string
-            description: name of the insurer
-            example: EcoHub Insurance Simulator
-          safSupportedStandards:
-            $ref: '#/components/schemas/SAFSupportedStandardsType'
-      additionalProperties: false
+      type : object
+      properties:
+        companyName:
+          type: string
+          description: name of the insurer
+          example: EcoHub Insurance Simulator
+        supportedProcesses:
+          $ref: '#/components/schemas/SupportedProcessesType'
+      required:
+        - companyName
+        - supportedProcesses
     SAFErrorResponse:
       type: object
       properties:
@@ -263,47 +240,61 @@ components:
       enum:
         - LICENCE_KEY_OR_PASSWORD_INVALID
         - AUTH_FAILED
+        - USER_NOT_FOUND
         - ERROR
       type: string
       example: LICENCE_KEY_OR_PASSWORD_INVALID
     SAFReceiverResponse:
-      type : array
-      items:
-        properties:
-          idp:
-            type: array
-            description: The IDP numbers of the receiver. When sending an event to this receiver, any of the
-              returned IDP numbers can be used.
-            items:
-              type: string
-              example: IDP234213
-          companyName:
+      type : object
+      properties:
+        idp:
+          type: array
+          description: The IDP numbers of the receiver. When sending an event to this receiver, any of the
+            returned IDP numbers can be used.
+          items:
             type: string
-            description: name of the company
-            example: EcoHub Insurance Simulator
-          memberType:
-            description: Type of the receiver
-            type: string
-            example: Insurer
-            enum:
-              - Broker
-              - Insurer
-              - ServiceProvider
-          safSupportedStandards:
-            $ref: '#/components/schemas/SAFSupportedStandardsType'
-      additionalProperties: false
-    SAFSupportedStandardsType:
-      description: The supported Standards by the receiver.
+            example: IDP234213
+        companyName:
+          type: string
+          description: name of the company
+          example: EcoHub Insurance Simulator
+        memberType:
+          description: Type of the receiver
+          type: string
+          example: Insurer
+          enum:
+            - Broker
+            - Insurer
+            - ServiceProvider
+        supportedProcesses:
+          $ref: '#/components/schemas/SupportedProcessesType'
+      required:
+        - idp
+        - companyName
+        - memberType
+        - supportedProcesses
+    SupportedProcessesType:
+      description: The standards supported by the receiver.
       type: array
       items:
         type: object
         properties:
-          standard:
+          processName:
+            description: The identifier of the core process
             type: string
-            enum: ["offer.nlpi"]
-          version:
+            enum:
+              - offer.nlpi
+              - Invoices
+              - Commission
+              - Contract
+          processVersion:
+            description: Version of the used core process
             type: string
-            enum: ["0.3.0"]
+            pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+            example: 0.5.1
+        required:
+          - processName
+          - processVersion
     TechUserEnrolmentRequest:
       type: object
       properties:
@@ -312,18 +303,20 @@ components:
           maxLength: 100
           description: One-time activation code for the techUser
           example: "004321"
-          nullable: false
         idpUserId:
           type: string
           maxLength: 10
           description: IDP number of the techUser
           example: IDP9873467
       additionalProperties: false
+      required:
+        - iak
+        - idpUserId
     TechUserEnrolmentResponse:
       type: object
       properties:
         techUserCert:
-          description: "Base64 encoded .p12 certificate"
+          description: "Base64 encoded .p12 certificate. The password for the certificate is the password for the tech user."
           type: string
           format: byte
         oAuth2:
@@ -339,7 +332,13 @@ components:
               type: string
               description: well-known OpenID configuration URL
               format: url
-      additionalProperties: false
+          required:
+            - clientId
+            - clientSecret
+            - openIdConfigurationEndpoint
+      required:
+        - techUserCert
+        - oAuth2
     UserAgent:
       type: object
       description: Identifies the software that was used to make the request
@@ -355,3 +354,6 @@ components:
           example: Version 1.0
           maxLength: 30
       additionalProperties: false
+      required:
+        - name
+        - version
