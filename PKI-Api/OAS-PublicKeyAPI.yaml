@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 1.0.0-preview
+  version: 1.0.0-preview02
   description: >
     ## Security
 
@@ -17,7 +17,6 @@ info:
       - Adjust /members endpoint to use /keys instead of /key, as there are now multiple
       - GET /keys returns a list of keys instead of a single object
       - Introducing new property supportedProcesses, to restrict keys to be used with certain core processes.
-      - added minLength requirement to PublicKeyVersionType
       - allow additionalProperties in PublicKeyResponse
       - mark mandatory properties in PublicKeyResponse
       - allow additional properties in PublicKeyVerifyResponse
@@ -539,7 +538,6 @@ components:
       type: string
       description: Version of the public key
       nullable: false
-      minLength: 3
     PublicKeyIdType:
       description: Unique identifier of the public key stored in EcoHub
       type: string
