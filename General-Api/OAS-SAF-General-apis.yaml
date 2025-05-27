@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework: General API"
-  version: 1.0.0-preview
+  version: 1.0.0
   description: >
     ## Security
     
@@ -13,23 +13,21 @@ info:
     
     ### Version 1.0.0
       - SAFSupportedStandards
-        - Renamed and restructured type to align with processName and processVersion in SAF events
+        - Renamed and restructured type to align with processName and processVersion in SAF events and PKI API
       - Only allow application/json as content type
       - add version prefix to all endpoints
       - removed 404 response from /saf-receivers and /saf-insurers endpoint
       - correctly marked required attributes in all types
+      - allowed additionalProperties in GeneralErrorResponse and SAFErrorResponse
       - Enhanced documentation
     
     ### Version 0.3.2 (26.12.2024)
-
       - Enhanced documentation
     
     ### Version 0.3.1 (12.12.2024)
-    
       - Enhanced documentation
 
     ### Version 0.3.0 (10.07.2024)
-    
       - Initial public release
 servers:
   - url: https://services.test-myecohub.ch/general/v1
@@ -209,7 +207,6 @@ components:
         - errorCode
         - errorMessageId
         - errorMessage
-      additionalProperties: false
     GeneralErrorReturnCode:
       enum:
         - ERROR
@@ -235,7 +232,6 @@ components:
         errorMessage:
           type: string
           example: The given license key or password is invalid.
-      additionalProperties: false
     SAFErrorReturnCode:
       enum:
         - LICENCE_KEY_OR_PASSWORD_INVALID
