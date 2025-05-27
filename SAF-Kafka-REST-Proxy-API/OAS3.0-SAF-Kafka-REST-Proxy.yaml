@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: 'Standard API Framework: Kafka REST Proxy API'
-  version: 1.0.0-preview
+  version: 1.0.0
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -98,14 +98,14 @@ paths:
           description: The id of the schema which is used to serialize the event value
           schema:
             type: integer
-            enum: [ 100024 ]
+            enum: [ 100044 ]
           required: true
         - name: keySchemaVersionId
           in: header
           description: The id of the schema which is used to serialize the event key
           schema:
             type: integer
-            enum: [ 100020 ]
+            enum: [ 100021 ]
           required: true
         - name: Content-Type
           in: header
