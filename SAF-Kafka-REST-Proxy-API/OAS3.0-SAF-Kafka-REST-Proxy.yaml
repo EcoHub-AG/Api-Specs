@@ -19,6 +19,8 @@ info:
     ## Changelog
     
     ### Version 1.0.0
+      - added version prefix to all endpoints
+      - updated schemaVersionId and keySchemaVersionId header value for POST /in endpoint
       - ProcessNameType
         - Added values for proxy standards
       - SubProcessNameType
