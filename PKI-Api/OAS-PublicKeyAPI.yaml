@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 1.0.0-preview02
+  version: 1.0.0
   description: >
     ## Security
 
@@ -22,6 +22,7 @@ info:
       - allow additional properties in PublicKeyVerifyResponse
       - allow additional properties in PublicKeyVerifyChallenge
       - mark mandatory properties in PublicKeyVerifyChallenge
+      - mark mandatory properties in PublicKeyVerifyRequest
     
     ### Version 0.4.1 (30.01.2025)
       - Enhanced documentation
@@ -326,7 +327,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PublicKeyListResponse'
         '204':
-          description: No content
+          description: Member does not have any active keys
         '400':
           description: Bad request
           content:
@@ -374,7 +375,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/PublicKeyResponse'
         '204':
-          description: No content
+          description: Member does not have any active keys
         '400':
           description: Bad request
           content:
@@ -522,10 +523,13 @@ components:
       properties:
         verifiedContent:
           type: string
+          minLength: 1
           description: To verify an RSA key, submit the decrypted plaintext retrieved from the GET /verify endpoint. To verify
             a signature key, submit the base64 encoded EC secp384r1 signature of the plaintext retrieved from the GET /verify endpoint.
             The signature must be generated using a SHA-384 hash and must be encoded in ASN.1.
       additionalProperties: false
+      required:
+        - verifiedContent
     PublicKeyDataType:
       minLength: 1
       description: For encryption keys, this is 2048-bit RSA public key using the SPKI (SubjectPublicKeyInfo) structure, formatted in PEM.
