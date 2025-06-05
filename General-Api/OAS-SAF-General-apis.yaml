@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework: General API"
-  version: 1.0.0
+  version: 1.1.0
   description: >
     ## Security
     
@@ -10,6 +10,9 @@ info:
     the /techUserEnrolment endpoint of this API.
     
     ## Changelog
+    
+    ### Version 1.1.0
+      - added parameter "onBehalfOf" to the saf-receivers request
     
     ### Version 1.0.0
       - SAFSupportedStandards
@@ -21,13 +24,13 @@ info:
       - allowed additionalProperties in GeneralErrorResponse and SAFErrorResponse
       - Enhanced documentation
     
-    ### Version 0.3.2 (26.12.2024)
+    ### Version 0.3.2
       - Enhanced documentation
     
-    ### Version 0.3.1 (12.12.2024)
+    ### Version 0.3.1
       - Enhanced documentation
 
-    ### Version 0.3.0 (10.07.2024)
+    ### Version 0.3.0
       - Initial public release
 servers:
   - url: https://services.test-myecohub.ch/general/v1
@@ -51,7 +54,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/GeneralRequestData'
+              title: SAFReceiverRequest
+              allOf:
+                - $ref: '#/components/schemas/GeneralRequestData'
+                - $ref: '#/components/schemas/SAFReceiverRequest'
       responses:
         '200':
           description: Returns a list of the available receivers. The IDP numbers contained in the response can
@@ -240,6 +246,14 @@ components:
         - ERROR
       type: string
       example: LICENCE_KEY_OR_PASSWORD_INVALID
+    SAFReceiverRequest:
+      type: object
+      properties:
+        onBehalfOf:
+          type: string
+          description: The IDP number of the broker's techUser if the event is
+            send on behalf.
+          pattern: "^IDP(\\d{7})$"
     SAFReceiverResponse:
       type : object
       properties:
