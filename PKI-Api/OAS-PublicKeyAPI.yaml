@@ -410,7 +410,9 @@ paths:
       tags:
         - PublicKeyApi
       summary: Get the signing public key of the receiving party with a specific version
-      description: Get the signing public key of a member by idp-number and version with whom my membership has a service agreement. The key with the specified version does not need to be active.
+      description: Get the signing public key of a member by idp-number and version with whom my membership has a service agreement. 
+        The key with the specified version does not need to be active. There may be instances where multiple keys with the same version
+        but different 'supportedProcesses' are returned.
       operationId: GetPublicKeyOfMemberByOperationAndIdpNumberAndVersion
       parameters:
         - name: idpNumber
@@ -430,7 +432,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublicKeyResponse'
+                $ref: '#/components/schemas/PublicKeyListResponse'
         '400':
           description: Bad request
           content:
@@ -439,6 +441,12 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '401':
           description: Authorization (mTLS or JWT) missing
+        '403':
+          description: There is no service agreement between the calling TechUser's member and the member specified by IDP.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: The member with the specified IDP number of the version of the key were not found
           content:
