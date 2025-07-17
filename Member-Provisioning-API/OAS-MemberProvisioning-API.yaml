@@ -1,0 +1,372 @@
+openapi: 3.0.1
+info:
+  title: MemberProvisioning API
+  version: "3.1"
+  description: >
+    The MemberProvisioning-API specifies the webservice which must be exposed by service providers to benefit from
+    the provisioning of member and organizational unit data. EcoHub will call the endpoint exposing this
+    API with the updated data whenever there is a change in relevant members or organizational units.
+paths:
+  /:
+    post:
+      tags:
+        - Provisioning
+      summary: Provision members and organizational units.
+      description: The endpoint is configured within the member's service provider configuration on EcoHub.
+      requestBody:
+        description: Payload of the provisioning request. Consists of an envelope and a payload which differs depending
+          on the operation and action.
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/ProvisioningRequest'
+              description: Payload of the provisioning request.
+              nullable: true
+            examples:
+              CreateMembership:
+                summary: Create membership
+                value:
+                  payload:
+                    id: 30003
+                    membershipType: Broker
+                    brokerType: Tied
+                    registrationNumber: CHE-IGB2B-24563
+                    currentRegistrationNumber: CHE-IGB2B-12345
+                    primaryOrgUnitId: 300003
+                    legalForm: General Partnership
+                    companyName: My broker company
+                    address:
+                      addressLine1: Hombergstrasse
+                      addressLine2: 22b
+                      zipCode: '4612'
+                      city: Wangen b. Olten
+                      country: Switzerland
+                    phone: +880 1521498748
+                    email: company@example.com
+                    fax: '12345'
+                    uid: CHE439992835
+                    language: English
+                  operation: MembershipProvisioning
+                  action: Create
+                  requestId: XoD5k7dnii
+                  executedBy: IDP1234567
+                  requestTime: '2021-03-30T11:30:45Z'
+              UpdateMembership:
+                summary: Update membership
+                value:
+                  payload:
+                    id: 30003
+                    membershipType: Broker
+                    brokerType: Tied
+                    registrationNumber: CHE-IGB2B-24563
+                    currentRegistrationNumber: CHE-IGB2B-12345
+                    primaryOrgUnitId: 300003
+                    legalForm: General Partnership
+                    companyName: My broker company
+                    address:
+                      addressLine1: Hombergstrasse
+                      addressLine2: 22b
+                      zipCode: '4612'
+                      city: Wangen b. Olten
+                      country: Switzerland
+                    phone: +880 1521498748
+                    email: company@example.com
+                    fax: '12345'
+                    uid: CHE439992835
+                    language: English
+                  operation: MembershipProvisioning
+                  action: Update
+                  requestId: XoD5k7dnii
+                  executedBy: IDP1234567
+                  requestTime: '2021-03-30T11:30:45Z'
+              DeleteMembership:
+                summary: Delete membership
+                value:
+                  payload:
+                    id: 30003
+                  operation: MembershipProvisioning
+                  action: Delete
+                  requestId: XoD5k7dnii
+                  executedBy: IDP1234567
+                  requestTime: '2021-03-30T11:30:45Z'
+              CreateOrgUnit:
+                summary: Create OrgUnit
+                value:
+                  payload:
+                    id: 300004
+                    orgUnitName: Branch 1
+                    orgUnitType: Branch
+                    orgId: 30003
+                    membershipName: My broker company
+                    legalForm: General Partnership
+                    address:
+                      addressLine1: Hombergstrasse
+                      addressLine2: 22b
+                      zipCode: '4612'
+                      city: Wangen b. Olten
+                      country: Switzerland
+                    phone: +880 1521498748
+                    email: company@example.com
+                    finma: CHE-IGB2B-24593
+                    currentFinma: CHE-IGB2B-12345
+                    fax: '12345'
+                    uid: CHE869997835
+                    language: English
+                  operation: OrgUnitProvisioning
+                  action: Create
+                  requestId: XoD5k7dnii
+                  executedBy: IDP1234567
+                  requestTime: '2021-03-30T11:30:45Z'
+              UpdateOrgUnit:
+                summary: Update OrgUnit
+                value:
+                  payload:
+                    id: 300004
+                    orgUnitName: Branch 1
+                    orgUnitType: Branch
+                    orgId: 30003
+                    membershipName: My broker company
+                    legalForm: General Partnership
+                    address:
+                      addressLine1: Hombergstrasse
+                      addressLine2: 22b
+                      zipCode: '4612'
+                      city: Wangen b. Olten
+                      country: Switzerland
+                    phone: +880 1521498748
+                    email: company@example.com
+                    finma: CHE-IGB2B-24593
+                    currentFinma: CHE-IGB2B-12345
+                    fax: '12345'
+                    uid: CHE869997835
+                    language: English
+                  operation: OrgUnitProvisioning
+                  action: Update
+                  requestId: XoD5k7dnii
+                  executedBy: IDP1234567
+                  requestTime: '2021-03-30T11:30:45Z'
+              DeleteOrgUnit:
+                summary: Delete OrgUnit
+                value:
+                  payload:
+                    id: 300004
+                  operation: OrgUnitProvisioning
+                  action: Delete
+                  requestId: XoD5k7dnii
+                  executedBy: IDP1234567
+                  requestTime: '2021-03-30T11:30:45Z'
+      responses:
+        '200':
+          description: If the data was provisioned successfully. If any other status code is returned, EcoHub 
+            considers the provisioning job as failed.
+components:
+  schemas:
+    MembershipDeletionPayload:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The member ID. Within EcoHub this is referred to as the OrgId of the membership.
+          format: int64
+      additionalProperties: false
+    Address:
+      required:
+        - addressLine1
+        - city
+        - country
+        - zipCode
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          description: Address line 1.
+        addressLine2:
+          type: string
+          description: Address line 2.
+          nullable: true
+        zipCode:
+          type: string
+          description: ZIP code.
+        city:
+          type: string
+          description: Name of the city.
+        country:
+          type: string
+          description: Name of the country.
+      additionalProperties: false
+    MemberUpsertPayload:
+      description: A member is EcoHub can have multiple organizational units, one of which is the headquarter (HQ). Every
+        member has a HQ. The information of the HQ is included in provisioning requests for the membership, as it contains the
+        relevant data. Only very little information is attached to the member itself.
+      required:
+        - address
+        - companyName
+        - email
+        - fax
+        - id
+        - language
+        - legalForm
+        - membershipType
+        - phone
+        - primaryOrgUnitId
+        - registrationNumber
+        - currentRegistrationNumber
+        - uid
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The member ID. Within EcoHub this is referred to as the OrgId of the membership.
+          format: int64
+        membershipType:
+          type: string
+          description: Type of the membership. i.e - Broker, InsuranceCompany, SoftwareManufacturer and StrategicPartner.
+        brokerType:
+          type: string
+          description: Type of the broker. i.e - Tied, Independent and Other. In case of insurance company, the value will be null or empty.
+        registrationNumber:
+          type: string
+          description: Finma number of the consumer member. In case of insurance company, insurer code is used as the registration number.
+        currentRegistrationNumber:
+          type: string
+          description: Current Finma number of the consumer member. In case of insurance company, insurer code is used as the current registration number.
+        primaryOrgUnitId:
+          type: integer
+          description: OrgUnitId of the HQ.
+          format: int64
+        legalForm:
+          type: string
+          description: Legal status of the HQ.
+        companyName:
+          type: string
+          description: Name of the HQ.
+        address:
+          $ref: '#/components/schemas/Address'
+        phone:
+          type: string
+          description: Phone number of the headquarter.
+        email:
+          type: string
+          description: Email address of the headquarter.
+        fax:
+          type: string
+          description: Fax number of the headquarter.
+        uid:
+          type: string
+          description: Zefix registration number of the headquarter.
+        language:
+          type: string
+          description: Language of the headquarter. i.e - German, English, French, Italian
+      additionalProperties: false
+    OrgUnitDeletionPayload:
+      required:
+        - id
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the organizational unit. Within EcoHub this is referred to as the OrgUnitId.
+          format: int64
+      additionalProperties: false
+    OrgUnitUpsertPayload:
+      required:
+        - address
+        - email
+        - fax
+        - finma
+        - currentFinma
+        - id
+        - language
+        - legalForm
+        - membershipName
+        - orgId
+        - orgUnitName
+        - orgUnitType
+        - phone
+        - uid
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the organizational unit. Within EcoHub this is referred to as the OrgUnitId.
+          format: int64
+        orgUnitName:
+          type: string
+          description: Name of the organizational unit.
+        orgUnitType:
+          type: string
+          description: Type of the organizational unit. i.e - HQ, Branch, Affiliate, Subsidiary, SpecialPortfolio.
+        orgId:
+          type: integer
+          description: The member ID. Within EcoHub this is referred to as the OrgId of the membership.
+          format: int64
+        membershipName:
+          type: string
+          description: Name of the HQ of the member.
+        legalForm:
+          type: string
+          description: Legal status of the organizational unit.
+        address:
+          $ref: '#/components/schemas/Address'
+        phone:
+          type: string
+          description: Phone number of the organizational unit.
+        email:
+          type: string
+          description: Email address of the organizational unit.
+        finma:
+          type: string
+          description: Finma number of the organizational unit.
+        currentFinma:
+          type: string
+          description: Current Finma number of the organizational unit.
+        fax:
+          type: string
+          description: Fax number of the organizational unit.
+        uid:
+          type: string
+          description: Zefix registration number of the organizational unit.
+        language:
+          type: string
+          description: Language of the organizational unit. i.e - German, English, French, Italian
+      additionalProperties: false
+    ProvisioningRequest:
+      required:
+        - action
+        - executedBy
+        - operation
+        - payload
+        - requestId
+        - requestTime
+      type: object
+      properties:
+        operation:
+          type: string
+          description: Type of the provisioning. i.e - MembershipProvisioning and OrgUnitProvisioning.
+        action:
+          type: string
+          description: Provisioning action for the entity. i.e - Create, Update, Delete.
+        requestId:
+          maxLength: 10
+          minLength: 10
+          type: string
+          description: Unique identifier of the request.
+        executedBy:
+          maxLength: 10
+          minLength: 10
+          type: string
+          description: "IDP number of the actor. Here actor means for whom the provisioning request was triggered.\r\nIn case of an act of IG admin, use IDP0000000."
+        requestTime:
+          type: string
+          description: The time when the request was sent in ISO 8601 date time format.
+          format: date-time
+        payload:
+          oneOf:
+            - $ref: '#/components/schemas/MemberUpsertPayload'
+            - $ref: '#/components/schemas/MembershipDeletionPayload'
+            - $ref: '#/components/schemas/OrgUnitUpsertPayload'
+            - $ref: '#/components/schemas/OrgUnitDeletionPayload'
+      additionalProperties: false
