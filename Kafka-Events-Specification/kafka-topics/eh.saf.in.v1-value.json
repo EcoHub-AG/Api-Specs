@@ -1,0 +1,16 @@
+{
+  "anyOf": [
+    {
+      "$ref": "SAFEventType.json"
+    },
+    {
+      "$ref": "SAFInquiryEventType.json"
+    },
+    {
+      "$ref": "SAFErrorEventType.json"
+    },
+    {
+      "$ref": "OfferNLPIErrorEventType.json"
+    }
+  ]
+}
