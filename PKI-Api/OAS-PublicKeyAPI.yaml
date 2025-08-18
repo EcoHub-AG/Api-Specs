@@ -1,7 +1,14 @@
+# © 2025 EcoHub AG. All rights reserved.
+# Publicly accessible for informational purposes only.
+# No rights to use, implement, modify, reproduce, distribute, or create derivative works without prior written authorization.
+# Swiss law applies. Jurisdiction: Zurich.
+
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 1.0.1
+  version: 1.0.2
+  x-ecohub-license: >
+    © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   description: >
     ## Security
 
@@ -10,6 +17,11 @@ info:
     the /techUserEnrolment endpoint of the general API.
     
     ## Changelog
+    
+    ### Version 1.0.2
+      - Corrected the API specification to include missing enum values in "supportedProcesses" that have been 
+        returned by the implementation since v1.0.0. This was a documentation error. Clients on earlier 
+        specifications may already receive these values.
     
     ### Version 1.0.1
       - Corrected the response type in the specification for the /members/{idpNumber}/keys/{keyType}
@@ -629,9 +641,7 @@ components:
         type: object
         properties:
           processName:
-            description: Restricts the key to a particular core process.
-            type: string
-            enum: [ "offer.nlpi" ]
+            $ref: "#/components/schemas/ProcessNameType"
           processVersion:
             description: Restricts the key to a particular version of the used core process. If omitted, the version is
               not restricted and the key can be used for any version of the indicated process.
@@ -640,3 +650,11 @@ components:
         required:
           - processName
         additionalProperties: false
+    ProcessNameType:
+      description: Name of the core process
+      type: string
+      enum:
+        - offer.nlpi
+        - Invoices
+        - Commission
+        - Contract
