@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework: General API"
-  version: 1.1.0
+  version: 1.2.0
   description: >
     ## Security
     
@@ -10,6 +10,9 @@ info:
     the /techUserEnrolment endpoint of this API.
     
     ## Changelog
+    
+    ### Version 1.2.0
+      - added orgId and membershipId to the /saf-receivers and /saf-insurers response
     
     ### Version 1.1.0
       - added parameter "onBehalfOf" to the saf-receivers request
@@ -221,6 +224,10 @@ components:
     SAFInsurersResponse:
       type : object
       properties:
+        orgId:
+          $ref: '#/components/schemas/OrgIdType'
+        membershipId:
+          $ref: '#/components/schemas/MembershipIdType'
         companyName:
           type: string
           description: name of the insurer
@@ -257,6 +264,10 @@ components:
     SAFReceiverResponse:
       type : object
       properties:
+        orgId:
+          $ref: '#/components/schemas/OrgIdType'
+        membershipId:
+          $ref: '#/components/schemas/MembershipIdType'
         idp:
           type: array
           description: The IDP numbers of the receiver. When sending an event to this receiver, any of the
@@ -367,3 +378,12 @@ components:
       required:
         - name
         - version
+    OrgIdType:
+      type: string
+      description: The ID of the member, how it was used in EcoHub's predecessor Brokergate. This ID is also
+        displayed in EcoHub's UI in the membership information and is included in user- and member-provisioning requests.
+      example: '42013'
+    MembershipIdType:
+      type: string
+      format: uuid
+      description: The UUID of the membership. This is EcoHub's internal primary key to identify a membership.
