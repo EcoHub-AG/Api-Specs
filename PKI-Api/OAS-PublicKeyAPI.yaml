@@ -6,7 +6,7 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 1.0.2
+  version: 1.1.0
   x-ecohub-license: >
     © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   description: >
@@ -17,6 +17,9 @@ info:
     the /techUserEnrolment endpoint of the general API.
     
     ## Changelog
+    
+    ### Version 1.1.0
+      - Added an endpoint to retrieve the signature key of a member with a specific version.
     
     ### Version 1.0.2
       - Corrected the API specification to include missing enum values in "supportedProcesses" that have been 
@@ -409,6 +412,48 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /members/{idpNumber}/keys/signature/{version}:
+    get:
+      tags:
+        - PublicKeyApi
+      summary: Get the signing public key of the receiving party with a specific version
+      description: Get the signing public key of a member by idp-number and version with whom my membership has a service agreement. 
+        The key with the specified version does not need to be active. There may be instances where multiple keys with the same version
+        but different 'supportedProcesses' are returned.
+      operationId: GetPublicKeyOfMemberByOperationAndIdpNumberAndVersion
+      parameters:
+        - name: idpNumber
+          in: path
+          description: IDP number of one of the TechUsers of the receiving party. If the receiving party has multiple TechUsers, any of the IDP numbers can be submitted.
+          required: true
+          schema:
+            type: string
+        - name: version
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/PublicKeyVersionType"
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKeyListResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS or JWT) missing
+        '404':
+          description: The member with the specified IDP number of the version of the key were not found
           content:
             application/json:
               schema:
