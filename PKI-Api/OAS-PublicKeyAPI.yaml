@@ -6,7 +6,7 @@
 openapi: 3.0.1
 info:
   title: Public Key Store
-  version: 1.1.0
+  version: 1.2.0
   x-ecohub-license: >
     © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   description: >
@@ -17,6 +17,10 @@ info:
     the /techUserEnrolment endpoint of the general API.
     
     ## Changelog
+    
+    ### Version 1.2.0
+      - Removed enum value "Verified" from ecoHubStatus in PublicKeyResponse
+      - Added property "verificationStatus" to PublicKeyResponse
     
     ### Version 1.1.0
       - Added an endpoint to retrieve the signature key of a member with a specific version.
@@ -114,6 +118,7 @@ paths:
       tags:
         - PublicKeyApi
       summary: Get content to verify public key.
+      description: Returns the content to verify a public key. Can be called anytime.
       operationId: GetEncryptedContent
       parameters:
         - name: keyId
@@ -147,6 +152,9 @@ paths:
       tags:
         - PublicKeyApi
       summary: Submit content to verify public key.
+      description: Submit the verification response to verify your public key. A key can be 
+        (re-)verified at any time. An unverified or "Failed" key cannot be activated. If 
+        verification fails and the key is active, it will be deactivated.
       operationId: VerifyPublicKeyByDecryptedContent
       parameters:
         - name: keyId
@@ -493,7 +501,8 @@ components:
           lastUpdatedAt: "2025-04-08T12:14:31.842Z"
           activatedAt: "0001-01-01T00:00:00.000Z"
           expiryDate: "2026-04-08T12:22:52.128Z"
-          ecoHubStatus: "Verified"
+          ecoHubStatus: "Created"
+          verificationStatus: "Verified"
           supportedProcesses:
             - processName: "offer.nlpi"
               processVersion: "0.3.0"
@@ -507,6 +516,7 @@ components:
           activatedAt: "0001-01-01T00:00:00.000Z"
           expiryDate: "2026-05-05T10:19:42.631Z"
           ecoHubStatus: "Created"
+          verificationStatus: "Verified"
           supportedProcesses:
             - processName: "offer.nlpi"
               processVersion: "0.3.0"
@@ -535,6 +545,8 @@ components:
           $ref: "#/components/schemas/ExpiryDateType"
         ecoHubStatus:
           $ref: "#/components/schemas/PublicKeyStatusType"
+        verificationStatus:
+          $ref: "#/components/schemas/VerificationStatusType"
       example:
         keyType: "encryption"
         keyId: "fa0f8e74-8151-4a05-a07c-03a9f7410361"
@@ -545,7 +557,8 @@ components:
         lastUpdatedAt: "2025-04-08T12:14:31.842Z"
         activatedAt: "0001-01-01T00:00:00.000Z"
         expiryDate: "2026-04-08T12:22:52.128Z"
-        ecoHubStatus: "Verified"
+        ecoHubStatus: "Created"
+        verificationStatus: "Verified"
         supportedProcesses:
           - processName: "offer.nlpi"
             processVersion: "0.3.0"
@@ -629,7 +642,7 @@ components:
       format: date-time
       nullable: false
     ActivatedAtType:
-      description: Timestamp when the public key has been activated
+      description: Timestamp when the public key has been activated. If the key has not been activated, a default timestamp (0001-01-01T00:00:00.000Z) will be returned.
       type: string
       format: date-time
       nullable: false
@@ -646,7 +659,14 @@ components:
     PublicKeyStatusType:
       description: EcoHub status of the public key
       type: string
-      enum: ["Created", "Verified", "Activated", "Deactivated"]
+      enum: ["Created", "Activated", "Deactivated"]
+      nullable: false
+    VerificationStatusType:
+      description: Verification status of the public key. A key can be (re-)verified at any time. 
+        An unverified or invalid/corrupt (status 'Failed') key cannot be activated. A "Failed"
+        verification will deactivate an active key.
+      type: string
+      enum: [ "Unverified", "Verified", "Failed" ]
       nullable: false
     PublicKeyTypeType:
       description: Specifies the type of the key.
