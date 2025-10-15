@@ -242,6 +242,8 @@ components:
         supportedProcesses:
           $ref: '#/components/schemas/SupportedProcessesType'
       required:
+        - orgId
+        - membershipId
         - companyName
         - supportedProcesses
     SAFErrorResponse:
@@ -297,6 +299,8 @@ components:
         supportedProcesses:
           $ref: '#/components/schemas/SupportedProcessesType'
       required:
+        - orgId
+        - membershipId
         - idp
         - companyName
         - memberType
