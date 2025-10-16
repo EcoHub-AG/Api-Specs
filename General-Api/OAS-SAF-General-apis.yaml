@@ -6,7 +6,7 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework: General API"
-  version: 1.2.0-rc1
+  version: 1.2.0-rc2
   x-ecohub-license: >
     © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   description: >
@@ -20,6 +20,7 @@ info:
     
     ### Version 1.2.0
       - added orgId and membershipId to the /saf-receivers and /saf-insurers response
+      - explicitly set additionalProperties to true where it was implicitly implied by JSON schema defaults (helps with code generation)
     
     ### Version 1.1.0
       - added parameter "onBehalfOf" to the saf-receivers request
@@ -219,6 +220,7 @@ components:
           type: string
           description: "Error message in english, that belongs to the errorMessageId"
           example: "The requested resource is not available"
+      additionalProperties: true
       required:
         - errorCode
         - errorMessageId
@@ -241,6 +243,7 @@ components:
           example: EcoHub Insurance Simulator
         supportedProcesses:
           $ref: '#/components/schemas/SupportedProcessesType'
+      additionalProperties: true
       required:
         - orgId
         - membershipId
@@ -254,6 +257,7 @@ components:
         errorMessage:
           type: string
           example: The given license key or password is invalid.
+      additionalProperties: true
     SAFErrorReturnCode:
       enum:
         - LICENCE_KEY_OR_PASSWORD_INVALID
@@ -298,6 +302,7 @@ components:
             - ServiceProvider
         supportedProcesses:
           $ref: '#/components/schemas/SupportedProcessesType'
+      additionalProperties: true
       required:
         - orgId
         - membershipId
@@ -324,6 +329,7 @@ components:
             type: string
             pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
             example: 0.5.1
+        additionalProperties: true
         required:
           - processName
           - processVersion
@@ -364,10 +370,12 @@ components:
               type: string
               description: well-known OpenID configuration URL
               format: url
+          additionalProperties: true
           required:
             - clientId
             - clientSecret
             - openIdConfigurationEndpoint
+      additionalProperties: true
       required:
         - techUserCert
         - oAuth2
