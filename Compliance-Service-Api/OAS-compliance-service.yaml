@@ -1,0 +1,1896 @@
+# © 2025 EcoHub AG. All rights reserved.
+# Publicly accessible for informational purposes only.
+# No rights to use, implement, modify, reproduce, distribute, or create derivative works without prior written authorization.
+# Swiss law applies. Jurisdiction: Zurich.
+
+openapi: 3.1.0
+info:
+  title: EcoHub Compliance Service API
+  version: 1.0.3
+  description: 'Note: Swagger UI ''Try it out'' does not support client certificates (mTLS). Use the code samples with your client cert and the required ''ocp-apim-subscription-key'' header.'
+security:
+  - mtls: []
+    ApiKeyHeader: []
+  - oauth2: []
+    ApiKeyHeader: []
+paths:
+  /compliance/v1/entities/{entityId}:
+    get:
+      tags:
+        - compliance
+      summary: Get insurance brokerage (legal entity) or intermediary (natural person) by ID
+      operationId: get_entity_api_v1_compliance_entities__id__get
+      parameters:
+        - $ref: '#/components/parameters/entityId'
+        - $ref: '#/components/parameters/atDate'
+        - $ref: '#/components/parameters/lang'
+        - $ref: '#/components/parameters/expand'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryEntity'
+              examples:
+                intermediary:
+                  summary: Intermediary example
+                  value:
+                    entityType: INTERMEDIARY
+                    entityId: F01189930
+                    firstName: Hans
+                    lastName: Müller
+                    licenseType:
+                      code: INTERMEDIARY_UNTIED
+                    affiliatedEntities:
+                      - entityId: F00102154
+                        name: Acme Broker AG
+                        relationType: EMPLOYER
+                brokerage_default:
+                  summary: Brokerage example with default parameters
+                  value:
+                    entityType: BROKERAGE
+                    entityId: F00102154
+                    name: Demo Broker AG
+                    legalForm:
+                      code: AG
+                    uid: CHE-105.944.759
+                    address:
+                      street: Bahnhofstrasse 1
+                      zip: '8001'
+                      city: Zürich
+                      legalSeat: Zürich
+                    registrationDate: '2012-06-18'
+                    licenseType:
+                      code: BROKERAGE
+                    insuranceLines:
+                      - code: PROPERTY
+                    affiliatedEntities:
+                      - entityId: F01189930
+                        name: Hans Müller
+                        relationType: EMPLOYEE
+                brokerage_summary:
+                  summary: Brokerage example with expand=affiliates.summary
+                  value:
+                    entityType: BROKERAGE
+                    entityId: F00102154
+                    name: Demo Broker AG
+                    legalForm:
+                      code: AG
+                    uid: CHE-105.944.759
+                    address:
+                      street: Bahnhofstrasse 1
+                      zip: '8001'
+                      city: Zürich
+                      legalSeat: Zürich
+                    registrationDate: '2012-06-18'
+                    licenseType:
+                      code: BROKERAGE
+                    insuranceLines:
+                      - code: PROPERTY
+                    affiliatedEntities:
+                      - entityId: F01189930
+                        name: Hans Müller
+                        relationType: EMPLOYEE
+                        entityType: INTERMEDIARY
+                        status: ACTIVE
+                        licenseType: { code: INTERMEDIARY_UNTIED }
+                        insuranceLines: [ { code: LIFE } ]
+        '400':
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/400'
+        '401':
+          description: Unauthorized (missing/invalid credentials)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/401'
+        '403':
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/403'
+        '404':
+          description: Resource not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/404'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+              examples:
+                default:
+                  $ref: '#/components/examples/422'
+        '429':
+          description: Too many requests
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+                minimum: 1
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/429'
+        '500':
+          description: Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/500'
+  /compliance/v1/entities/{entityId}/history:
+    get:
+      tags:
+        - compliance
+      summary: Get historical snapshots for an entity
+      description: 'Returns an object with either a single historical snapshot at a given date (`toDate parameter is set and fromDate is empty`) or a list of snapshots in a range (`timeline`), plus optional relationship events (`edges`). If no time filter is provided, returns the full known history, most recent first. Default sort: timeline by validFrom desc; edges by txAt asc.'
+      operationId: get_entity_history_api_v1_compliance_entities__id__history_get
+      parameters:
+        - $ref: '#/components/parameters/entityId'
+        - $ref: '#/components/parameters/rangeFromDate'
+        - $ref: '#/components/parameters/rangeToDate'
+        - $ref: '#/components/parameters/lang'
+        - $ref: '#/components/parameters/expand'
+        - name: include
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - timeline
+              - edges
+              - both
+            default: both
+          description: 'Which sections to include: ''timeline'' (snapshots), ''edges'' (relationship events), or ''both'' (default).'
+        - name: relationType
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/RelationType'
+          description: Filter edge events by relation type (applies when include includes 'edges').
+        - name: limitTimeline
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+          description: Max number of timeline snapshots to return (optional).
+        - name: limitEdges
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+          description: Max number of edge events to return (optional).
+        - name: cursorTimeline
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Opaque cursor for paging timeline snapshots (provider-defined).
+        - name: cursorEdges
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Opaque cursor for paging edge events (provider-defined).
+
+      responses:
+        '200':
+          description: Historical snapshot(s). Snapshots are sorted by validFrom descending; edges are ordered by txAt ascending. Use 'include', paging limits, and cursors to control payload size.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityHistoryResponse'
+              examples:
+                default:
+                  summary: Sample timeline with one edge
+                  value:
+                    entityId: F01189930
+                    timeline:
+                      - version: 1
+                        validFrom: '2021-03-15T00:00:00Z'
+                        payload:
+                          entityType: INTERMEDIARY
+                          entityId: F01189930
+                    edges:
+                      - edgeId: e1
+                        relationType: EMPLOYER
+                        fromId: F01189930
+                        toId: F00102154
+                        eventType: EDGE_UPSERT
+                        validFrom: '2021-03-15T00:00:00Z'
+        '400':
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/400'
+        '401':
+          description: Unauthorized (missing/invalid credentials)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/401'
+        '403':
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/403'
+        '404':
+          description: Resource not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/404'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/422'
+        '429':
+          description: Too many requests
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+                minimum: 1
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/429'
+        '500':
+          description: Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/500'
+  /compliance/v1/entities/changes:
+    get:
+      tags:
+        - compliance
+      summary: List entities changed in a timeframe
+      description: 'Returns entities that changed in the specified window. Results are ordered by txAt descending by default. Use either `lastDays` or (`from` and `to`). If no time filter is provided, the default window is the last 7 days. Optionally filter by entities (`entityIds`). If entityIds is not provided, the response includes all entities that changed within the given parameters. Default sort: by txAt desc.'
+      operationId: list_entity_changes_api_v1_compliance_entities_changes_get
+      parameters:
+        - $ref: '#/components/parameters/lastDays'
+        - $ref: '#/components/parameters/rangeFromDateTime'
+        - $ref: '#/components/parameters/rangeToDateTime'
+        - $ref: '#/components/parameters/entityIds'
+        - name: entityType
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EntityType'
+          description: Filter by entity type
+       # - name: status
+       #   in: query
+       #   required: false
+       #   schema:
+       #     $ref: '#/components/schemas/RegistryStatus'
+       #   description: Search by current registry status
+       # - $ref: '#/components/parameters/page'
+       # - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: Change list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityChangePage'
+              examples:
+                default:
+                  summary: Two recent changes (truncated)
+                  value:
+                    page: 1
+                    pageSize: 2
+                    totalItems: 2
+                    items:
+                      - entityId: F01189930
+                        entityType: INTERMEDIARY
+                        version: 2
+                        txAt: '2024-09-01T10:00:00Z'
+                        changes:
+                          - path: status
+                            op: replace
+                            from: INACTIVE
+                            to: ACTIVE
+                      - entityId: F00102154
+                        entityType: BROKERAGE
+                        version: 5
+                        txAt: '2024-10-02T08:00:00Z'
+                        changes:
+                          - path: address.legalSeat
+                            op: replace
+                            from: Zürich
+                            to: Bern
+        '400':
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/400'
+        '401':
+          description: Unauthorized (missing/invalid credentials)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/401'
+        '403':
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/403'
+        '404':
+          description: Resource not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/404'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+              examples:
+                default:
+                  $ref: '#/components/examples/422'
+        '429':
+          description: Too many requests
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+                minimum: 1
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/429'
+        '500':
+          description: Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/500'
+  /compliance/v1/search:
+    get:
+      tags:
+        - compliance
+      summary: Targeted search for brokerages and/or intermediaries
+      description: Returns a small, targeted list. Large/open searches are not supported. Provide **at least one** identifying parameter. `entityType` can restrict to one type; if omitted, both are searched. Employer fields are **enriched** from linked brokerage records.
+      operationId: search_api_v1_compliance_search_get
+      parameters:
+        - name: entityType
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EntityType'
+          description: Restrict search to a single type. If omitted, both are searched.
+        - $ref: '#/components/parameters/entityId'
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/RegistryStatus'
+          description: Search by current registry status
+        - name: uid
+          in: query
+          required: false
+          description: UID (e.g., CHE-105.944.759) — brokerages only
+          schema:
+            type: string
+            pattern: ^CHE-\d{3}\.\d{3}\.\d{3}$
+        - name: companyName
+          in: query
+          required: false
+          description: Brokerage company name (exact or prefix; implementation-defined)
+          schema:
+            type: string
+            minLength: 2
+        - name: street
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: zip
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: city
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: legalSeat
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: lastName
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 2
+        - name: firstName
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 2
+        - name: employerCompanyName
+          in: query
+          required: false
+          description: Employer company name (enriched)
+          schema:
+            type: string
+            minLength: 2
+        - name: employerStreet
+          in: query
+          required: false
+          description: Employer street (enriched)
+          schema:
+            type: string
+        - name: employerZip
+          in: query
+          required: false
+          description: Employer ZIP (enriched)
+          schema:
+            type: string
+        - name: employerCity
+          in: query
+          required: false
+          description: Employer city (enriched)
+          schema:
+            type: string
+        - name: employerLegalSeat
+          in: query
+          required: false
+          description: Employer legal seat (enriched)
+          schema:
+            type: string
+        - $ref: '#/components/parameters/lastDays'
+        - $ref: '#/components/parameters/rangeFromDateTime'
+        - $ref: '#/components/parameters/rangeToDateTime'
+        - $ref: '#/components/parameters/lang'
+      responses:
+        '200':
+          description: Targeted search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+              examples:
+                default:
+                  summary: Intermediary and brokerage hit
+                  value:
+                    results:
+                      - entityId: F01189930
+                        category: INTERMEDIARIES
+                        displayName: Hans Müller
+                      - entityId: F00102154
+                        category: BROKERAGES
+                        displayName: Demo Broker AG
+                    count: 2
+        '400':
+          description: Bad request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/400'
+        '401':
+          description: Unauthorized (missing/invalid credentials)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/401'
+        '403':
+          description: Forbidden
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/403'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+              examples:
+                default:
+                  $ref: '#/components/examples/422'
+        '429':
+          description: Too many requests
+          headers:
+            Retry-After:
+              description: Seconds to wait before retrying
+              schema:
+                type: integer
+                minimum: 1
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/429'
+        '500':
+          description: Server error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/HTTPError'
+              examples:
+                default:
+                  $ref: '#/components/examples/500'
+  /compliance/v1/health:
+    get:
+      tags:
+        - ops
+      summary: Liveness probe
+      operationId: health_get
+      security: []
+      responses:
+        '200':
+          description: Service is alive
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - UP
+                required:
+                  - status
+              examples:
+                default:
+                  value:
+                    status: UP
+components:
+  securitySchemes:
+    mtls:
+      type: mutualTLS
+      description: Mutual TLS authentication using client certificates
+    oauth2:
+      type: oauth2
+      description: OAuth 2.0 Client Credentials (Bearer token)
+      flows:
+        clientCredentials:
+          tokenUrl: https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token
+          scopes:
+            api://{appId}/Compliance.Read: Read access to Compliance Service
+            api://{appId}/Compliance.Write: Write access to Compliance Service
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: ocp-apim-subscription-key
+      description: Required subscription key
+  examples:
+    '400':
+      summary: Bad request (parameter conflict)
+      value:
+        type: https://api.ecohub.ch/problems/bad-request
+        title: Bad request
+        status: 400
+        detail: 'Invalid combination of parameters: both ''at'' and ''from/to'' provided.'
+        instance: /compliance/v1/entities/F01189930/history
+    '401':
+      summary: Unauthorized
+      value:
+        type: https://api.ecohub.ch/problems/unauthorized
+        title: Unauthorized
+        status: 401
+        detail: Missing or invalid credentials.
+        instance: /compliance/v1/search
+    '403':
+      summary: Forbidden
+      value:
+        type: https://api.ecohub.ch/problems/forbidden
+        title: Forbidden
+        status: 403
+        detail: Insufficient permissions to access this resource.
+        instance: /compliance/v1/entities/F00102154
+    '404':
+      summary: Not Found
+      value:
+        type: https://api.ecohub.ch/problems/not-found
+        title: Resource not found
+        status: 404
+        detail: Entity 'F09999999' does not exist.
+        instance: /compliance/v1/entities/F09999999
+    '422':
+      summary: Validation error (missing/invalid fields)
+      value:
+        detail:
+          - loc:
+              - query
+              - entityId
+            msg: Field required
+            type: value_error.missing
+          - loc:
+              - query
+              - pageSize
+            msg: ensure this value is less than or equal to 1000
+            type: value_error.number.not_le
+    '429':
+      summary: Too Many Requests
+      value:
+        type: https://api.ecohub.ch/problems/too-many-requests
+        title: Too Many Requests
+        status: 429
+        detail: Rate limit exceeded. Retry after 2 seconds.
+        instance: /compliance/v1/entities/changes
+    '500':
+      summary: Internal Server Error
+      value:
+        type: https://api.ecohub.ch/problems/internal
+        title: Internal Server Error
+        status: 500
+        detail: 'Unexpected error. Reference id: 3d5c1a1d-0c9e-4b9e-9a2f-4c5a1d6e7b2f'
+        instance: /compliance/v1/check-service
+  parameters:
+    atDate:
+      name: at
+      in: query
+      required: false
+      description: Point-in-time date to retrieve the state at (RFC 3339 full-date, YYYY-MM-DD). Mutually exclusive with `from`/`to`.
+      schema:
+        type: string
+        format: date
+    entityId:
+      name: entityId
+      in: path
+      required: true
+      schema:
+        type: string
+        title: entity id
+        examples:
+          - F12345678
+        minLength: 9
+        maxLength: 9
+        pattern: ^(F\d{8})$
+    entityIds:
+      name: entityIds
+      in: query
+      required: false
+      description: Filter to a list of FINMA register numbers. Provide as repeated query params (e.g., `entityIds=F00102154&entityIds=F00345678`) or a comma-separated string. Mutually exclusive with `entityId`.
+      schema:
+        type: array
+        items:
+          type: string
+          minLength: 9
+          maxLength: 9
+          pattern: ^(F\d{8})$
+          examples:
+            - F12345678
+        minItems: 1
+        maxItems: 100
+      style: form
+      explode: true
+    expand:
+      name: expand
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            # Entities
+            - affiliates.summary
+            - affiliates.full
+            # History
+            - history.timeline
+            - history.edges
+            - edges.fromSnapshot
+            - edges.toSnapshot
+        uniqueItems: true
+      style: form
+      explode: true
+      description: >
+        Optional expansion flags (namespaced). Unknown tokens are ignored.
+        - affiliates.summary : add affiliate status, licenseType, insuranceLines
+        - affiliates.full    : embed affiliate snapshots
+        - history.timeline   : include timeline snapshots
+        - history.edges      : include relationship events
+        - edges.fromSnapshot : on edges, include lightweight 'from' node snapshots
+        - edges.toSnapshot   : on edges, include lightweight 'to' node snapshots
+    lang:
+      name: lang
+      in: query
+      required: false
+      schema:
+        anyOf:
+          - $ref: '#/components/schemas/Language'
+          - type: 'null'
+      description: Language of the result labels (de, fr, it, en)
+    lastDays:
+      name: lastDays
+      in: query
+      required: false
+      description: Number of days back from now (UTC) to include. Mutually exclusive with `from`/`to`.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 365
+        default: 7
+    page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: Page index (1-based)
+    pageSize:
+      name: pageSize
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 100
+      description: Items per page
+    rangeFromDate:
+      name: from
+      in: query
+      required: false
+      description: Start of date range (inclusive, RFC 3339 full-date, YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+    rangeToDate:
+      name: to
+      in: query
+      required: false
+      description: End of date range (inclusive, RFC 3339 full-date, YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+    rangeFromDateTime:
+      name: from
+      in: query
+      required: false
+      description: Start of window (inclusive, RFC 3339 date-time, UTC)
+      schema:
+        type: string
+        format: date-time
+    rangeToDateTime:
+      name: to
+      in: query
+      required: false
+      description: End of window (inclusive, RFC 3339 date-time, UTC)
+      schema:
+        type: string
+        format: date-time
+  schemas:
+    Address:
+      properties:
+        street:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Street
+          description: |-
+            en: Street and house number
+             de: Strasse und Hausnummer
+             fr: Rue et numéro
+             it: Via e numero civico
+        zip:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Zip
+          description: |-
+            en: Postal code
+             de: Postleitzahl
+             fr: Code postal
+             it: CAP
+        city:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: City
+          description: |-
+            en: City
+             de: Stadt
+             fr: Ville
+             it: Città
+        legalSeat:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Legal Seat
+          description: |-
+            en: Legal seat
+             de: Rechtssitz
+             fr: Siège légal
+             it: Sede legale
+      type: object
+      title: Address
+      description: |-
+        en: Address of a legal entity or intermediary
+         de: Adresse einer juristischen Person oder eines Vermittlers
+         fr: Adresse d'une personne morale ou d'un intermédiaire
+         it: Indirizzo di una persona giuridica o di un intermediario
+    AffiliatedEntitySummary:
+      type: object
+      required: [ entityId, relationType, entityType, status ]
+      properties:
+        entityId: { $ref: '#/components/schemas/EntityId' }
+        name: { type: string, nullable: true }
+        relationType: { $ref: '#/components/schemas/RelationType' }
+        entityType: { $ref: '#/components/schemas/EntityType' }
+        status: { $ref: '#/components/schemas/RegistryStatus' }
+        licenseType:
+          anyOf: [ { $ref: '#/components/schemas/LicenseType' }, { type: 'null' } ]
+        insuranceLines:
+          type: array
+          items: { $ref: '#/components/schemas/InsuranceLine' }
+    ArrayChange:
+      type: object
+      description: Change on an array field keyed by a specific element key.
+      properties:
+        path:
+          type: string
+          description: Dot-path to the array field
+        key:
+          type: string
+          description: Element key used to correlate array items (e.g., 'id')
+        added:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+          description: New elements added
+        removed:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+          description: Elements removed
+        updated:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChangeOperation'
+          description: Element-level updates expressed as ChangeOperation with array index/key in path
+      required:
+        - path
+        - key
+    BrokerageEntity:
+      x-discriminator-value: BROKERAGE
+      allOf:
+        - $ref: '#/components/schemas/RegistryEntityBase'
+        - $ref: '#/components/schemas/InsuranceBrokerage'
+        - type: object
+          properties:
+            entityType:
+              $ref: '#/components/schemas/EntityType'
+          required:
+            - entityType
+      description: An InsuranceBrokerage payload with discriminator field `entityType` = BROKERAGE.
+    ChangeType:
+      type: string
+      enum:
+        - CREATED
+        - UPDATED
+        - STATUS_CHANGED
+        - REMOVED
+    ChangeOperation:
+      type: object
+      description: Atomic change on a scalar or object field.
+      properties:
+        path:
+          type: string
+          description: Dot-path to the changed field
+        op:
+          type: string
+          enum:
+            - add
+            - remove
+            - replace
+          description: Operation type
+        from:
+          description: Previous value
+          nullable: true
+        to:
+          description: New value
+          nullable: true
+      required:
+        - path
+        - op
+    EntityId:
+      description: Entity id
+      type: string
+      examples:
+        - F12345678
+      minLength: 9
+      maxLength: 9
+      pattern: ^(F\d{8})$
+    EntityChangeItem:
+      type: object
+      description: Single change event as stored in entity_diffs.
+      properties:
+        entityId:
+          $ref: '#/components/schemas/EntityId'
+        entityType:
+          $ref: '#/components/schemas/EntityType'
+        source:
+          type: string
+          description: Origin of the change (e.g., FINMA_API, FILE_FIXTURE, MANUAL)
+        txAt:
+          type: string
+          format: date-time
+          description: Transaction timestamp when the change was written (RFC 3339 date-time, UTC)
+        txBy:
+          type: string
+          description: Actor who wrote the change (e.g., sync, seed)
+        corrId:
+          anyOf:
+            - type: string
+            - type: 'null'
+          description: Correlation ID if available
+        version:
+          type: integer
+          minimum: 1
+          description: Monotonic version after applying this change
+        validFrom:
+          type: string
+          format: date-time
+          description: Business-effective start (inclusive, RFC 3339 date-time, UTC)
+        validTo:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+          description: Business-effective end (exclusive, RFC 3339 date-time, UTC). Null if current.
+        changes:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/ChangeOperation'
+              - $ref: '#/components/schemas/ArrayChange'
+          description: Collection of atomic field changes or array diffs.
+      required:
+        - entityId
+        - entityType
+        - txAt
+        - version
+        - validFrom
+        - changes
+    EntityChangePage:
+      type: object
+      properties:
+        page:
+          type: integer
+          minimum: 1
+        pageSize:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        totalItems:
+          type: integer
+          minimum: 0
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityChangeItem'
+      required:
+        - page
+        - pageSize
+        - totalItems
+        - items
+    EntityReference:
+      properties:
+        entityId:
+          anyOf:
+            - $ref: '#/components/schemas/EntityId'
+            - type: 'null'
+          title: Entity id
+          description: |-
+            en: Unique identifier of the referenced entity
+            de: Eindeutige Identifikationsnummer der referenzierten Entität
+            fr: Identifiant unique de l'entité référencée
+            it: Identificativo univoco dell'entità di riferimento
+        name:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Name
+          description: |-
+            en: Name of the referenced entity
+            de: Name der referenzierten Entität
+            fr: Nom de l'entité référencée
+            it: Nome dell'entità di riferimento
+        relationType:
+          anyOf:
+            - $ref: '#/components/schemas/RelationType'
+            - type: 'null'
+          description: |-
+            en: Relation to the entity (e.g. employer, employee)
+            de: Beziehung zur Entität (z. B. Arbeitgeber, Arbeitnehmer)
+            fr: Relation avec l'entité (par ex. employeur, employé)
+            it: Relazione con l'entità (ad es. datore di lavoro, dipendente)
+      type: object
+      title: EntityReference
+      description: |-
+        en: Reference to an affiliated entity (e.g. employer or intermediary)
+        de: Referenz auf eine verbundene Entität (z. B. Arbeitgeber oder Vermittler)
+        fr: Référence à une entité associée (par ex. employeur ou intermédiaire)
+        it: Riferimento a un'entità collegata (ad es. datore di lavoro o intermediario)
+      example:
+        entityId: F00102154
+        name: Demo Broker AG
+        relationType: EMPLOYER
+    EntityReferenceSummary:
+      type: object
+      properties:
+        entityId:
+          $ref: '#/components/schemas/EntityId'
+        name:
+          type: string
+          nullable: true
+        relationType:
+          anyOf:
+            - $ref: '#/components/schemas/RelationType'
+            - type: 'null'
+          description: |-
+            en: Relation to the entity (e.g. employer, employee)
+            de: Beziehung zur Entität (z. B. Arbeitgeber, Arbeitnehmer)
+            fr: Relation avec l'entité (par ex. employeur, employé)
+            it: Relazione con l'entità (ad es. datore di lavoro, dipendente)
+        entityType:
+          $ref: '#/components/schemas/EntityType'
+        status:
+          $ref: '#/components/schemas/RegistryStatus'
+        licenseType:
+          anyOf:
+            - $ref: '#/components/schemas/LicenseType'
+            - type: 'null'
+        insuranceLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InsuranceLine'
+      required:
+        - entityId
+        - relationType
+        - entityType
+        - status
+    EntityReferenceExpanded:
+      type: object
+      properties:
+        relationType:
+          $ref: '#/components/schemas/RelationType'
+        snapshot:
+          $ref: '#/components/schemas/RegistryEntity'
+      description: >
+        Embedded affiliate snapshot resolved as of the same 'at' date used for the parent request.
+      required:
+        - relationType
+        - snapshot
+    EntityType:
+      type: string
+      enum:
+        - BROKERAGE
+        - INTERMEDIARY
+    EntityHistoryResponse:
+      type: object
+      description: History response containing either a single as-of snapshot or a timeline plus optional edge events.
+      properties:
+        entityId:
+          $ref: '#/components/schemas/EntityId'
+        asOf:
+          anyOf:
+            - $ref: '#/components/schemas/RegistryEntityVersion'
+            - type: 'null'
+          description: Single snapshot when 'at' is used.
+        timeline:
+          anyOf:
+            - type: array
+              items:
+                $ref: '#/components/schemas/RegistryEntityVersion'
+            - type: 'null'
+          description: Snapshots overlapping the requested window, sorted by validFrom **descending**.
+        edges:
+          anyOf:
+            - type: array
+              items:
+                $ref: '#/components/schemas/EdgeEvent'
+            - type: 'null'
+          description: Relationship events overlapping the same window (e.g., employer/employee links). Sorted by txAt ascending.
+        nextCursorTimeline:
+          anyOf:
+            - type: string
+            - type: 'null'
+          description: Opaque cursor to retrieve the next page of timeline snapshots.
+        nextCursorEdges:
+          anyOf:
+            - type: string
+            - type: 'null'
+          description: Opaque cursor to retrieve the next page of edge events.
+      required:
+        - entityId
+    EdgeEvent:
+      type: object
+      description: A relationship (edge) event with optional node snapshots.
+      properties:
+        edgeId:
+          type: string
+        relationType:
+          $ref: '#/components/schemas/RelationType'
+        fromEntityId:
+          $ref: '#/components/schemas/EntityId'
+        toEntityId:
+          $ref: '#/components/schemas/EntityId'
+        eventType:
+          type: string
+          enum:
+            - EDGE_UPSERT
+            - EDGE_CLOSE
+            - EDGE_SPLIT
+            - NODE_ATTR_CHANGE
+        validFrom:
+          type: string
+          format: date-time
+          description: Event validity start (inclusive, RFC 3339 date-time, UTC)
+        validTo:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+          description: Event validity end (exclusive, RFC 3339 date-time, UTC). Null if current.
+        txAt:
+          type: string
+          format: date-time
+          description: Transaction timestamp when the event was written (RFC 3339 date-time, UTC)
+        txBy:
+          type: string
+        fromSnapshot:
+          anyOf:
+            - type: object
+              additionalProperties: true
+            - type: 'null'
+          description: Optional lightweight snapshot of the 'from' node at event time.
+        toSnapshot:
+          anyOf:
+            - type: object
+              additionalProperties: true
+            - type: 'null'
+          description: Optional lightweight snapshot of the 'to' node at event time.
+      required:
+        - edgeId
+        - relationType
+        - fromEntityId
+        - toEntityId
+        - eventType
+        - validFrom
+        - txAt
+        - txBy
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HTTPError:
+      type: object
+      description: RFC 9457 Problem Details object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI reference that identifies the problem type
+        title:
+          type: string
+          description: Short, human-readable summary of the problem
+        status:
+          type: integer
+          description: HTTP status code
+        detail:
+          type: string
+          description: Explanation specific to this occurrence
+        instance:
+          type: string
+          format: uri
+          description: URI reference for this occurrence
+    InsuranceBrokerage:
+      properties:
+        entityId:
+          anyOf:
+            - $ref: '#/components/schemas/EntityId'
+            - type: 'null'
+          title: Entity id
+          description: |-
+            en: Unique ID of the brokerage
+            de: Eindeutige ID des Brokerunternehmens
+            fr: Identifiant unique de la société de courtage
+            it: ID univoco della società di brokeraggio
+        name:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Name
+          description: |-
+            en: Name of the brokerage
+            de: Name des Brokerunternehmens
+            fr: Nom de la société de courtage
+            it: Nome della società di brokeraggio
+        legalForm:
+          anyOf:
+            - $ref: '#/components/schemas/LegalForm'
+            - type: 'null'
+          description: |-
+            en: Legal form (e.g. natural person)
+            de: Rechtsnatur (z. B. natürliche Person)
+            fr: Forme juridique (p. ex. personne physique)
+            it: Forma giuridica (ad es. persona fisica)
+        uid:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Uid
+          description: |-
+            en: Company identification number (UID)
+            de: Unternehmens-Identifikationsnummer (UID)
+            fr: Numéro d'identification des entreprises (IDE)
+            it: Numero d'identificazione delle imprese (IDI)
+        address:
+          anyOf:
+            - $ref: '#/components/schemas/Address'
+            - type: 'null'
+          description: |-
+            en: Business address
+            de: Geschäftsadresse
+            fr: Adresse du siège
+            it: Indirizzo della sede
+        registrationDate:
+          anyOf:
+            - type: string
+              format: date
+            - type: 'null'
+          title: Registration Date
+          description: |-
+            en: Registration date (format: YYYY-MM-DD)
+            de: Registrierungsdatum (Format: YYYY-MM-DD)
+            fr: Date d'enregistrement (format : YYYY-MM-DD)
+            it: Data di registrazione (formato: YYYY-MM-DD)
+        licenseType:
+          anyOf:
+            - $ref: '#/components/schemas/LicenseType'
+            - type: 'null'
+          description: |-
+            en: Licensed as
+            de: Zulassung als
+            fr: Autorisation en tant que
+            it: Autorizzazione come
+        insuranceLines:
+          anyOf:
+            - items:
+                $ref: '#/components/schemas/InsuranceLine'
+              type: array
+            - type: 'null'
+          title: Insurance Lines
+          description: |-
+            en: Insurance lines the brokerage is registered/authorized for
+            de: Versicherungssparten, für die das Brokerage registriert/autorisiert ist
+            fr: Branches d'assurance pour lesquelles le courtage est enregistré/autorisé
+            it: Rami assicurativi per cui il brokeraggio è registrato/autorizzato
+        affiliatedEntities:
+          anyOf:
+            - items:
+                $ref: '#/components/schemas/EntityReference'
+              type: array
+            - type: 'null'
+          title: Affiliated Entities
+          description: |-
+            en: Affiliated intermediaries (entity references)
+            de: Zugehörige Vermittler (Entitätenreferenzen)
+            fr: Intermédiaires affiliés (références d'entités)
+            it: Intermediari affiliati (riferimenti ad entità)
+        affiliatedEntitiesSummary:
+          anyOf:
+            - type: array
+              items: { $ref: '#/components/schemas/AffiliatedEntitySummary' }
+            - type: 'null'
+          description: Included if 'expand' contains 'affiliates.summary'.
+      type: object
+      title: InsuranceBrokerage
+      description: |-
+        en: Insurance brokerage record
+        de: Datensatz eines Versicherungsbrokers/-brokerage
+        fr: Enregistrement d'un courtier/courtage d'assurance
+        it: Record di un broker/intermediazione assicurativa
+      example:
+        entityType: BROKERAGE
+        entityId: F00102154
+        name: Demo Broker AG
+        legalForm:
+          code: AG
+        uid: CHE-105.944.759
+        address:
+          street: Bahnhofstrasse 1
+          zip: '8001'
+          city: Zürich
+          legalSeat: Zürich
+        registrationDate: '2012-06-18'
+        licenseType:
+          code: BROKERAGE
+        insuranceLines:
+          - code: PROPERTY
+        affiliatedEntities:
+          - entityId: F01189930
+            name: Hans Müller
+            relationType: EMPLOYEE
+    InsuranceIntermediary:
+      properties:
+        entityId:
+          anyOf:
+            - $ref: '#/components/schemas/EntityId'
+            - type: 'null'
+          title: Entity id
+          description: |-
+            en: Unique ID of the insurance intermediary
+            de: Eindeutige ID des Versicherungsvermittlers
+            fr: Identifiant unique de l'intermédiaire d'assurance
+            it: Identificativo univoco dell'intermediario assicurativo
+        firstName:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: First Name
+          description: |-
+            en: First name of the intermediary
+            de: Vorname des Vermittlers
+            fr: Prénom de l'intermédiaire
+            it: Nome dell'intermediario
+        lastName:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Last Name
+          description: |-
+            en: Last name of the intermediary
+            de: Nachname des Vermittlers
+            fr: Nom de famille de l'intermédiaire
+            it: Cognome dell'intermediario
+        legalForm:
+          anyOf:
+            - $ref: '#/components/schemas/LegalForm'
+            - type: 'null'
+          description: |-
+            en: Legal form (multilingual label)
+            de: Rechtsform (mehrsprachiges Label)
+            fr: Forme juridique (libellé multilingue)
+            it: Forma giuridica (etichetta multilingue)
+        registrationDate:
+          anyOf:
+            - type: string
+              format: date
+            - type: 'null'
+          title: Registration Date
+          description: |-
+            en: Registration date (format: YYYY-MM-DD)
+            de: Registrierungsdatum (Format: YYYY-MM-DD)
+            fr: Date d'enregistrement (format: YYYY-MM-DD)
+            it: Data di registrazione (formato: YYYY-MM-DD)
+        licenseType:
+          anyOf:
+            - $ref: '#/components/schemas/LicenseType'
+            - type: 'null'
+          description: |-
+            en: Licensed as
+            de: Zulassung als
+            fr: Autorisation en tant que
+            it: Autorizzazione come
+        insuranceLines:
+          anyOf:
+            - items:
+                $ref: '#/components/schemas/InsuranceLine'
+              type: array
+            - type: 'null'
+          title: Insurance Lines
+          description: |-
+            en: Insurance lines the intermediary is registered/authorized for
+            de: Versicherungssparten, für die der Vermittler registriert/autorisiert ist
+            fr: Branches d'assurance pour lesquelles l'intermédiaire est enregistré/autorisée
+            it: Rami assicurativi per cui l'intermediario è registrato/autorizzato
+        affiliatedEntities:
+          anyOf:
+            - items:
+                $ref: '#/components/schemas/EntityReference'
+              type: array
+            - type: 'null'
+          title: Affiliated Entities
+          description: |-
+            en: Affiliated entities (e.g. employer or intermediary)
+            de: Verbundene Entitäten (z. B. Arbeitgeber oder Vermittler)
+            fr: Entités associées (p. ex. employeur ou intermédiaire)
+            it: Entità collegate (ad es. datore di lavoro o intermediario)
+      type: object
+      title: InsuranceIntermediary
+      description: |-
+        en: Insurance intermediary record
+        de: Datensatz eines Versicherungsvermittlers
+        fr: Enregistrement d'un intermédiaire d'assurance
+        it: Record di un intermediario assicurativo
+      example:
+        entityType: INTERMEDIARY
+        entityId: F01189930
+        firstName: Hans
+        lastName: Müller
+        legalForm:
+          code: NATURAL_PERSON
+        registrationDate: '2021-03-15'
+        licenseType:
+          code: INTERMEDIARY_UNTIED
+        insuranceLines:
+          - code: LIFE
+        affiliatedEntities:
+          - entityId: F00102154
+            name: Demo Broker AG
+            relationType: EMPLOYER
+    IntermediaryEntity:
+      x-discriminator-value: INTERMEDIARY
+      allOf:
+        - $ref: '#/components/schemas/RegistryEntityBase'
+        - $ref: '#/components/schemas/InsuranceIntermediary'
+        - type: object
+          properties:
+            entityType:
+              $ref: '#/components/schemas/EntityType'
+          required:
+            - entityType
+      description: An InsuranceIntermediary payload with discriminator field `entityType` = INTERMEDIARY.
+    InsuranceLine:
+      properties:
+        code:
+          anyOf:
+            - $ref: '#/components/schemas/InsuranceLineCode'
+            - type: 'null'
+          description: |-
+            en: Unique code of the insurance line
+            de: Eindeutiger Code der Versicherungssparte
+            fr: Code unique de la branche d'assurance
+            it: Codice univoco del ramo assicurativo
+        label:
+          anyOf:
+            - $ref: '#/components/schemas/MultiLanguageLabel'
+            - type: 'null'
+          description: |-
+            en: Multilingual label of the insurance line
+            de: Mehrsprachige Bezeichnung der Versicherungssparte
+            fr: Libellé multilingue de la branche d'assurance
+            it: Etichetta multilingue del ramo assicurativo
+      type: object
+      title: InsuranceLine
+      description: |-
+        en: Possible codes - LIFE = Life insurance; QLIFE = Qualified life insurance; PROPERTY = Property/casualty insurance; HEALTH_ADDON = Supplementary health insurance; AGRI = Crop / livestock epidemic insurance; MOTOR = Motor insurance; REINSURANCE = Reinsurance
+        de: Mögliche Codes - LIFE = Lebensversicherung; QLIFE = Qualifizierte Lebensversicherung; PROPERTY = Schadensversicherung; HEALTH_ADDON = Krankenzusatzversicherung; AGRI = Ernteausfall-/Tierseuchenversicherung; MOTOR = Motorfahrzeugversicherung; REINSURANCE = Rückversicherung
+        fr: Codes possibles - LIFE = Assurance vie; QLIFE = Assurance vie qualifiée; PROPERTY = Assurance dommages; HEALTH_ADDON = Assurance complémentaire santé; AGRI = Assurance récolte / épizooties; MOTOR = Assurance automobile; REINSURANCE = Réassurance
+        it: Codici possibili - LIFE = Assicurazione vita; QLIFE = Assicurazione vita qualificata; PROPERTY = Assicurazione danni; HEALTH_ADDON = Assicurazione sanitaria complementare; AGRI = Assicurazione raccolto / malattie animali; MOTOR = Assicurazione veicoli a motore; REINSURANCE = Riassicurazione
+    InsuranceLineCode:
+      type: string
+      enum:
+        - LIFE
+        - QLIFE
+        - PROPERTY
+        - HEALTH_ADDON
+        - AGRI
+        - MOTOR
+        - REINSURANCE
+        - DAMAGE
+        - UNKNOWN
+      title: InsuranceLineCode
+    Language:
+      type: string
+      enum:
+        - de
+        - fr
+        - it
+        - en
+      title: Language
+    LegalForm:
+      properties:
+        code:
+          anyOf:
+            - $ref: '#/components/schemas/LegalFormCode'
+            - type: 'null'
+          description: |-
+            en: Legal form (e.g. natural person)
+            de: Rechtsnatur (z. B. natürliche Person)
+            fr: Forme juridique (p. ex. personne physique)
+            it: Forma giuridica (ad es. persona fisica)
+        label:
+          anyOf:
+            - $ref: '#/components/schemas/MultiLanguageLabel'
+            - type: 'null'
+          description: |-
+            en: Multilingual label of the legal form
+            de: Mehrsprachige Bezeichnung der Rechtsform
+            fr: Libellé multilingue de la forme juridique
+            it: Etichetta multilingue della forma giuridica
+      type: object
+      title: LegalForm
+      description: |-
+        de: Mögliche Codes - NATURAL_PERSON = Natürliche Person; SOLE_PROP_REGISTERED = Einzelfirma (im Handelsregister eingetragen); SOLE_PROP_UNREGISTERED = Einzelfirma (nicht im Handelsregister eingetragen); AG = Aktiengesellschaft; GMBH = Gesellschaft mit beschränkter Haftung; ASSOCIATION = Verein; COOPERATIVE = Genossenschaft; FOUNDATION = Stiftung; GENERAL_PARTNERSHIP = Kollektivgesellschaft; LIMITED_PARTNERSHIP = Kommanditgesellschaft; SIMPLE_COMPANY = Einfache Gesellschaft; BRANCH = Zweigniederlassung; FOREIGN_LEGAL_STRUCTURE = Ausländische Rechtsform; PUBLIC_LAW_ENTITY = Körperschaft/Anstalt des öffentlichen Rechts; PUBLIC_LAW_JSC = Aktiengesellschaft des öffentlichen Rechts; UNKNOWN = Unbekannt
+        fr: Codes possibles - NATURAL_PERSON = Personne physique; SOLE_PROP_REGISTERED = Entreprise individuelle (inscrite au registre du commerce); SOLE_PROP_UNREGISTERED = Entreprise individuelle (non inscrite au registre du commerce); AG = Société anonyme; GMBH = Société à responsabilité limitée; ASSOCIATION = Association; COOPERATIVE = Coopérative; FOUNDATION = Fondation; GENERAL_PARTNERSHIP = Société en nom collectif; LIMITED_PARTNERSHIP = Société en commandite; SIMPLE_COMPANY = Société simple; BRANCH = Succursale; FOREIGN_LEGAL_STRUCTURE = Forme juridique étrangère; PUBLIC_LAW_ENTITY = Entité de droit public; PUBLIC_LAW_JSC = Société anonyme de droit public; UNKNOWN = Inconnu
+        it: Codici possibili - NATURAL_PERSON = Persona fisica; SOLE_PROP_REGISTERED = Ditta individuale (iscritta al registro di commercio); SOLE_PROP_UNREGISTERED = Ditta individuale (non iscritta al registro di commercio); AG = Società anonima; GMBH = Società a garanzia limitata; ASSOCIATION = Associazione; COOPERATIVE = Cooperativa; FOUNDATION = Fondazione; GENERAL_PARTNERSHIP = Società in nome collettivo; LIMITED_PARTNERSHIP = Società in accomandita; SIMPLE_COMPANY = Società semplice; BRANCH = Succursale; FOREIGN_LEGAL_STRUCTURE = Forma giuridica estera; PUBLIC_LAW_ENTITY = Ente di diritto pubblico; PUBLIC_LAW_JSC = Società anonima di diritto pubblico; UNKNOWN = Sconosciuto
+        en: Possible codes - NATURAL_PERSON = Natural person; SOLE_PROP_REGISTERED = Sole proprietorship (registered in commercial register); SOLE_PROP_UNREGISTERED = Sole proprietorship (not registered in commercial register); AG = Joint stock company; GMBH = Limited liability company; ASSOCIATION = Association; COOPERATIVE = Cooperative; FOUNDATION = Foundation; GENERAL_PARTNERSHIP = General partnership; LIMITED_PARTNERSHIP = Limited partnership; SIMPLE_COMPANY = Simple partnership; BRANCH = Branch; FOREIGN_LEGAL_STRUCTURE = Foreign legal structure; PUBLIC_LAW_ENTITY = Public-law entity; PUBLIC_LAW_JSC = Joint stock corporation under public law; UNKNOWN = Unknown
+    LegalFormCode:
+      type: string
+      enum:
+        - NATURAL_PERSON
+        - AG
+        - GMBH
+        - ASSOCIATION
+        - FOUNDATION
+        - COOPERATIVE
+        - GENERAL_PARTNERSHIP
+        - BRANCH
+        - FOREIGN_LEGAL_STRUCTURE
+        - PUBLIC_LAW_JSC
+        - LIMITED_PARTNERSHIP
+        - PUBLIC_LAW_ENTITY
+        - SIMPLE_COMPANY
+        - SOLE_PROP_REGISTERED
+        - SOLE_PROP_UNREGISTERED
+        - UNKNOWN
+      title: LegalFormCode
+    LicenseType:
+      properties:
+        code:
+          anyOf:
+            - $ref: '#/components/schemas/LicenseTypeCode'
+            - type: 'null'
+          description: |-
+            en: Unique code of the license type
+            de: Eindeutiger Code des Zulassungstyps
+            fr: Code unique du type d'autorisation
+            it: Codice univoco del tipo di autorizzazione
+        label:
+          anyOf:
+            - $ref: '#/components/schemas/MultiLanguageLabel'
+            - type: 'null'
+          description: |-
+            en: Multilingual label of the license type
+            de: Mehrsprachige Bezeichnung des Zulassungstyps
+            fr: Libellé multilingue du type d'autorisation
+            it: Etichetta multilingue del tipo di autorizzazione
+      type: object
+      title: LicenseType
+      description: |-
+        en: Possible codes - INTERMEDIARY_UNTIED = Insurance intermediary (untied); INTERMEDIARY_TIED = Insurance intermediary (tied); BROKERAGE = Insurance brokerage
+        de: Mögliche Codes - INTERMEDIARY_UNTIED = Versicherungsvermittler:in ungebunden; INTERMEDIARY_TIED = Versicherungsvermittler:in gebunden; BROKERAGE = Versicherungsbroker:in
+        fr: Codes possibles - INTERMEDIARY_UNTIED = Intermédiaire d'assurance non lié; INTERMEDIARY_TIED = Intermédiaire d'assurance lié; BROKERAGE = Courtier d'assurance
+        it: Codici possibili - INTERMEDIARY_UNTIED = Intermediario assicurativo non legato; INTERMEDIARY_TIED = Intermediario assicurativo legato; BROKERAGE = Broker assicurativo
+    LicenseTypeCode:
+      type: string
+      enum:
+        - INTERMEDIARY_UNTIED
+        - INTERMEDIARY_TIED
+        - BROKERAGE
+        - UNKNOWN
+      title: LicenseTypeCode
+    MultiLanguageLabel:
+      properties:
+        de:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: De
+          description: German translation
+        fr:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Fr
+          description: French translation
+        it:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: It
+          description: Italian translation
+        en:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: En
+          description: English translation
+      type: object
+      title: MultiLanguageLabel
+      description: |-
+        en: Multilingual label with translations for de, fr, it, en
+        de: Mehrsprachiges Label mit Übersetzungen für de, fr, it, en
+        fr: Libellé multilingue avec traductions pour de, fr, it, en
+        it: Etichetta multilingue con traduzioni per de, fr, it, en
+    RegistryEntity:
+      oneOf:
+        - $ref: '#/components/schemas/IntermediaryEntity'
+        - $ref: '#/components/schemas/BrokerageEntity'
+      type: object
+      properties:
+        entityType:
+          $ref: '#/components/schemas/EntityType'
+      required:
+        - entityType
+      discriminator:
+        propertyName: entityType
+        mapping:
+          INTERMEDIARY: '#/components/schemas/IntermediaryEntity'
+          BROKERAGE: '#/components/schemas/BrokerageEntity'
+      description: 'Union type: returns either an InsuranceIntermediary or an InsuranceBrokerage. Use `entityType` discriminator to determine which.'
+    RegistryEntityBase:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+            - REMOVED
+          description: |-
+            en: Record status
+            de: Status im Finma-Register
+            fr: Statut de l'enregistrement
+            it: Stato del record
+        creationDate:
+          type: string
+          format: date-time
+          description: Audit timestamp when the record was created (RFC 3339 date-time, UTC).
+        updatedDate:
+          type: string
+          format: date-time
+          description: Audit timestamp when the record was last updated (RFC 3339 date-time, UTC).
+        lastSynchDate:
+          type: string
+          format: date-time
+          description: Audit timestamp of the last synchronization (RFC 3339 date-time, UTC).
+      description: Common audit and status fields added to both entities.
+    RegistryStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - INACTIVE
+        - REMOVED
+    RelationType:
+      type: string
+      enum:
+        - EMPLOYER
+        - EMPLOYEE
+        - INTERMEDIARY
+        - BROKER
+        - AGENT
+      title: RelationType
+    SearchResult:
+      properties:
+        entityId:
+          anyOf:
+            - $ref: '#/components/schemas/EntityId'
+            - type: 'null'
+          title: Entity id
+          description: |-
+            en: Unique identifier of the search result
+            de: Eindeutige Identifikationsnummer des Suchergebnisses
+            fr: Identifiant unique du résultat de recherche
+            it: Identificativo univoco del risultato di ricerca
+        category:
+          anyOf:
+            - $ref: '#/components/schemas/EntityType'
+            - type: 'null'
+          description: |-
+            en: Category of the search result (intermediaries or brokerages)
+            de: Kategorie des Suchergebnisses (intermediaries oder brokerages)
+            fr: Catégorie du résultat de recherche (intermediaries ou brokerages)
+            it: Categoria del risultato di ricerca (intermediaries o brokerages)
+        displayName:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Display Name
+          description: |-
+            en: Display name (e.g. company name or first and last name)
+            de: Anzeigename (z. B. Name oder Vor- und Nachname)
+            fr: Nom affiché (par ex. nom ou prénom et nom)
+            it: Nome visualizzato (es. nome o nome e cognome)
+        licenseType:
+          anyOf:
+            - $ref: '#/components/schemas/LicenseType'
+            - type: 'null'
+          description: |-
+            en: Licensed as
+            de: Zulassung als
+            fr: Autorisation en tant que
+            it: Autorizzazione come
+        legalForm:
+          anyOf:
+            - $ref: '#/components/schemas/LegalForm'
+            - type: 'null'
+          description: |-
+            en: Legal form (e.g. natural person)
+            de: Rechtsnatur (z. B. natürliche Person)
+            fr: Forme juridique (p. ex. personne physique)
+            it: Forma giuridica (ad es. persona fisica)
+      type: object
+      title: SearchResult
+      description: |-
+        en: Result object of a search for intermediaries or brokerages
+        de: Ergebnisobjekt einer Suche nach Vermittlern oder Brokerages
+        fr: Objet de résultat d'une recherche d'intermédiaires ou de courtiers
+        it: Oggetto risultato di una ricerca di intermediari o broker
+    SearchResults:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        count:
+          type: integer
+          description: Count of search results in the response.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
+
+    RegistryEntityVersion:
+      type: object
+      description: A historical snapshot of an entity including validity window and version metadata.
+      properties:
+        version:
+          type: integer
+          minimum: 1
+          description: Monotonic version number
+        validFrom:
+          type: string
+          format: date-time
+          description: Snapshot validity start (inclusive, RFC 3339 date-time, UTC)
+        validTo:
+          anyOf:
+            - type: string
+              format: date-time
+            - type: 'null'
+          description: Snapshot validity end (exclusive, RFC 3339 date-time, UTC). Null if current.
+        changeType:
+          $ref: '#/components/schemas/ChangeType'
+        payload:
+          description: The full entity snapshot at this version.
+          $ref: '#/components/schemas/RegistryEntity'
+        txAt:
+          type: string
+          format: date-time
+          description: Transaction timestamp when the snapshot was written (RFC 3339 date-time, UTC)
+        txBy:
+          type: string
+      required:
+        - version
+        - validFrom
+        - payload
