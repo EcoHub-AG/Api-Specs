@@ -6,7 +6,7 @@
 openapi: 3.1.0
 info:
   title: EcoHub Compliance Service API
-  version: 1.0.3
+  version: 1.0.3-rc
   description: 'Note: Swagger UI ''Try it out'' does not support client certificates (mTLS). Use the code samples with your client cert and the required ''ocp-apim-subscription-key'' header.'
 security:
   - mtls: []
