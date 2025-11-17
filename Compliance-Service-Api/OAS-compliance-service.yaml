@@ -6,7 +6,7 @@
 openapi: 3.1.0
 info:
   title: EcoHub Compliance Service API
-  version: 1.0.3-rc
+  version: 1.0.4-rc
   description: 'Note: Swagger UI ''Try it out'' does not support client certificates (mTLS). Use the code samples with your client cert and the required ''ocp-apim-subscription-key'' header.'
 security:
   - mtls: []
@@ -336,14 +336,14 @@ paths:
           schema:
             $ref: '#/components/schemas/EntityType'
           description: Filter by entity type
-       # - name: status
-       #   in: query
-       #   required: false
-       #   schema:
-       #     $ref: '#/components/schemas/RegistryStatus'
-       #   description: Search by current registry status
-       # - $ref: '#/components/parameters/page'
-       # - $ref: '#/components/parameters/pageSize'
+        # - name: status
+        #   in: query
+        #   required: false
+        #   schema:
+        #     $ref: '#/components/schemas/RegistryStatus'
+        #   description: Search by current registry status
+        # - $ref: '#/components/parameters/page'
+        # - $ref: '#/components/parameters/pageSize'
       responses:
         '200':
           description: Change list
@@ -925,16 +925,24 @@ components:
       type: object
       required: [ entityId, relationType, entityType, status ]
       properties:
-        entityId: { $ref: '#/components/schemas/EntityId' }
-        name: { type: string, nullable: true }
-        relationType: { $ref: '#/components/schemas/RelationType' }
-        entityType: { $ref: '#/components/schemas/EntityType' }
-        status: { $ref: '#/components/schemas/RegistryStatus' }
+        entityId:
+          $ref: '#/components/schemas/EntityId'
+        name:
+          type: string
+        relationType:
+          $ref: '#/components/schemas/RelationType'
+        entityType:
+          $ref: '#/components/schemas/EntityType'
+        status:
+          $ref: '#/components/schemas/RegistryStatus'
         licenseType:
-          anyOf: [ { $ref: '#/components/schemas/LicenseType' }, { type: 'null' } ]
+          anyOf:
+            - $ref: '#/components/schemas/LicenseType'
+            - type: 'null'
         insuranceLines:
           type: array
-          items: { $ref: '#/components/schemas/InsuranceLine' }
+          items:
+            $ref: '#/components/schemas/InsuranceLine'
     ArrayChange:
       type: object
       description: Change on an array field keyed by a specific element key.
@@ -1000,10 +1008,8 @@ components:
           description: Operation type
         from:
           description: Previous value
-          nullable: true
         to:
           description: New value
-          nullable: true
       required:
         - path
         - op
@@ -1137,7 +1143,6 @@ components:
           $ref: '#/components/schemas/EntityId'
         name:
           type: string
-          nullable: true
         relationType:
           anyOf:
             - $ref: '#/components/schemas/RelationType'
