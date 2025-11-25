@@ -6,7 +6,7 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework: General API"
-  version: 1.2.0-rc2
+  version: 1.2.0
   x-ecohub-license: >
     © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   description: >
