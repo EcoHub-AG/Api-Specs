@@ -1,14 +1,17 @@
 {
-  "description": "Comment describing your JSON Schema",
+  "description": "Identifier for the current subprocess / process step within the core process.",
   "type": "string",
   "enum": [
     "request",
     "offer",
     "feedback",
     "conclusionDecision",
-    "Premium invoice",
-    "Reminder",
-    "Contract generic",
-    "Commission"
+    "billing",
+    "reminder",
+    "contract",
+    "commission",
+    "submission",
+    "cancellation",
+    "claimsExperience"
   ]
 }

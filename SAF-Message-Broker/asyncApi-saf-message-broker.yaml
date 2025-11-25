@@ -10,6 +10,14 @@ info:
   description: >
     ## Changelog
     
+    ### Version 1.1.0
+      - ProcessNameType
+        - renamed the enum values for proxy standards. These values were not yet supported by the platform and could not be used yet, therefore this change is treated as MINOR, not MAJOR.
+        - added enum values for remaining legacy standards
+      - SubProcessNameType
+        - renamed the enum values for proxy standards. These values were not yet supported by the platform and could not be used yet, therefore this change is treated as MINOR, not MAJOR.
+        - added enum values for remaining legacy standards 
+    
     ### Version 1.0.0
       - ProcessNameType
         - Added values for proxy standards
@@ -436,13 +444,15 @@ components:
           - errorCode
           - errorMessage
     processNameType:
-      description: Name of the core process
+      description: Identifier of the core process
       type: string
       enum:
-      - offer.nlpi
-      - Invoices
-      - Commission
-      - Contract
+        - offer.nlpi
+        - invoice
+        - commission
+        - contract
+        - mandate
+        - claimsExperience
     processVersionType:
       description: Version of the used core process
       type: string
@@ -530,17 +540,21 @@ components:
         - errorMessage
         - errorDateTime
     subProcessNameType:
-      description: Comment describing your JSON Schema
+      description: Identifier for the current subprocess / process step within the core
+        process.
       type: string
       enum:
-      - request
-      - offer
-      - feedback
-      - conclusionDecision
-      - Premium invoice
-      - Reminder
-      - Contract generic
-      - Commission
+        - request
+        - offer
+        - feedback
+        - conclusionDecision
+        - billing
+        - reminder
+        - contract
+        - commission
+        - submission
+        - cancellation
+        - claimsExperience
       example: request
     subProcessStatusType:
       type: string

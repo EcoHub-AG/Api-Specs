@@ -18,6 +18,15 @@ info:
     
     ## Changelog
     
+    ### Version 1.1.0
+
+      - ProcessNameType
+        - renamed the enum values for proxy standards. These values were not yet supported by the platform and could not be used yet, therefore this change is treated as MINOR, not MAJOR.
+        - added enum values for remaining legacy standards
+      - SubProcessNameType
+        - renamed the enum values for proxy standards. These values were not yet supported by the platform and could not be used yet, therefore this change is treated as MINOR, not MAJOR.
+        - added enum values for remaining legacy standards 
+    
     ### Version 1.0.0
       - added version prefix to all endpoints
       - updated schemaVersionId and keySchemaVersionId header value for POST /in endpoint
@@ -765,13 +774,15 @@ components:
       type: string
       format: uuid
     ProcessNameType:
-      description: Name of the core process
+      description: Identifier of the core process
       type: string
       enum:
         - offer.nlpi
-        - Invoices
-        - Commission
-        - Contract
+        - invoice
+        - commission
+        - contract
+        - mandate
+        - claimsExperience
     ProcessVersionType:
       description: Version of the used core process
       type: string
@@ -809,17 +820,21 @@ components:
         - category
         - id
     SubProcessNameType:
-      description: Comment describing your JSON Schema
+      description: Identifier for the current subprocess / process step within the core
+        process.
       type: string
       enum:
         - request
         - offer
         - feedback
         - conclusionDecision
-        - Premium invoice
-        - Reminder
-        - Contract generic
-        - Commission
+        - billing
+        - reminder
+        - contract
+        - commission
+        - submission
+        - cancellation
+        - claimsExperience
     SubProcessStatusType:
       type: string
       enum:
