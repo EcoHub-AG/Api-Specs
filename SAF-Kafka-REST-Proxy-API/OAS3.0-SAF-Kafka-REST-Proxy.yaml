@@ -1,7 +1,14 @@
+# © 2025 EcoHub AG. All rights reserved.
+# Publicly accessible for informational purposes only.
+# No rights to use, implement, modify, reproduce, distribute, or create derivative works without prior written authorization.
+# Swiss law applies. Jurisdiction: Zurich.
+
 openapi: 3.0.1
 info:
-  title: 'Standard API Framework: Kafka REST Proxy API'
-  version: 1.0.0
+  title: 'SAF Kafka REST Proxy API'
+  version: 1.1.0
+  x-ecohub-license: >
+    © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   contact:
     email: support@myecohub.ch
     name: EcoHub AG
@@ -10,88 +17,25 @@ info:
     The SAF Kafka REST Proxy provides a RESTful interface to the Kafka cluster, making it easy to produce and consume 
     messages.
     
-    ## Security
+    ### Security
 
     All endpoints are protected and a TechUser certificate (mTLS) or 
     bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
-    the /techUserEnrolment endpoint of the general api.
+    the /techUserEnrolment endpoint of the General API.
     
-    ## Changelog
-    
-    ### Version 1.1.0
-
+    ### Changes in Version 1.1.0
+      - Improved documentation
       - ProcessNameType
-        - renamed the enum values for proxy standards. These values were not yet supported by the platform and could not be used yet, therefore this change is treated as MINOR, not MAJOR.
+        - renamed the enum values for proxy standards. These values were not yet used on the platform, therefore this change is treated as MINOR, not MAJOR.
         - added enum values for remaining legacy standards
       - SubProcessNameType
-        - renamed the enum values for proxy standards. These values were not yet supported by the platform and could not be used yet, therefore this change is treated as MINOR, not MAJOR.
+        - renamed the enum values for proxy standards. These values were not yet used on the platform, therefore this change is treated as MINOR, not MAJOR.
         - added enum values for remaining legacy standards 
+      - added endpoint to consume commission topic
+      - added endpoint to consume invoice topic
+      - added endpoint to consume contract topic
     
-    ### Version 1.0.0
-      - added version prefix to all endpoints
-      - updated schemaVersionId and keySchemaVersionId header value for POST /in endpoint
-      - ProcessNameType
-        - Added values for proxy standards
-      - SubProcessNameType
-        - Added values for proxy standards
-      - SubProcessStatusType
-        - Renamed enum value "Responsed" to "Responded"
-      - OfferNLPIErrorEventType
-        - Prohibit additional properties
-        - Restructured the type and replaced error codes
-        - The data attribute is now mandatory
-        - Added mandatory property 'processVersion'
-        - Added property processGroupId
-      - EventDataType
-        - renamed "payLoadSignature" to "payloadSignature"
-        - "payloadSignature" and "signatureKeyVersion" are now mandatory
-        - removed minLength requirement from publicKeyVersion and signatureKeyVersion
-        - added minItems requirement to "links" property
-      - EventMessageDataType
-        - Removed property "md5MessageHash"
-        - Added mandatory properties "messageSignature" and "signatureKeyVersion"
-        - removed minLength requirement from publicKeyVersion
-        - Prohibit additional properties
-      - EventType
-        - Changed format of the values to reverse-dns
-      - LicenseKeyType
-        - Renamed to "LicenceKeyType"
-      - SenderReceiverType
-        - Added property 'onBehalfBy'
-      - SAFErrorEventType
-        - Added mandatory property 'processVersion'
-        - Added property processGroupId
-      - SAFEventType
-        - Added mandatory property 'processVersion'
-        - Added property processGroupId
-      - SAFInquiryEventType
-        - Added mandatory property 'processVersion'
-        - Added property processGroupId
-      
-    
-    ### Version 0.3.4
-      - Adjusted type of the key property of the response when consuming messages
-    
-    ### Version 0.3.3
-      - Enhanced documentation
-    
-    ### Version 0.3.2
-      - Fixed schemaVersionId header value
-      - Enhanced documentation
-    
-    ### Version 0.3.1
-      - Fixing content type definitions
-      - Added SAFErrorEventType and OfferNLPIErrorEventType as valid types to POST to /in
-      - Updated documentation (descriptions and examples). 
-      - EventDataType
-        - Prohibit additional properties
-      - SAFErrorEventType
-        - Prohibit additional properties
-      - UserAgentType
-        - Prohibit additional properties       
-
-    ### Version 0.3.0 (20.08.2024)
-    - Initial public release
+    *changes in previous versions are available in the changelog file in GitHub*
 servers:
   - url: 'https://services.test-myecohub.ch/saf/v1'
   - url: 'https://services.myecohub.ch/saf/v1'
@@ -99,9 +43,9 @@ paths:
   /in:
     post:
       tags:
-        - Offer NLPI
-      summary: Post an offer NLPI event to the SAF Message Broker
-      description: Post an offer NLPI event to the SAF Message Broker
+        - Producing Messages
+      summary: Post an event to the SAF Message Broker
+      description: Post an event to the SAF Message Broker
       operationId: post-eh-saf-in
       parameters:
         - name: schemaVersionId
@@ -127,7 +71,7 @@ paths:
             type: string
             default: application/json
       requestBody:
-        description: Offer NLPI event to SAF Message Broker.
+        description: The event to be produced.
         content:
           application/json:
             schema:
@@ -137,8 +81,8 @@ paths:
                 - $ref: '#/components/schemas/SAFErrorEventType'
                 - $ref: '#/components/schemas/OfferNLPIErrorEventType'
             examples:
-              offerRequestExample:
-                summary: Example of an offerRequest event, initiated by an broker
+              eventWithPayloadExample:
+                summary: SAFEvent with offer.nlpi payload
                 value:
                   id: 044d2e50-12d6-43e4-bb1b-7b54841c9c82
                   source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
@@ -159,12 +103,8 @@ paths:
                     category: broker
                     id: IDP7654321
                   data:
-                    payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
+                    payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZ...
                     payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
-                    links:
-                      - href: 7F8C+RQDyYAIhAIjt+X0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ
-                        rel: offer-nlpi
-                        description: Pdf file that contains additional informations for the offer.
                     encryptionKey: urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...
                     publicKeyVersion: '1.1'
                     signatureKeyVersion: '1.3'
@@ -174,213 +114,30 @@ paths:
                   processStatus: active
                   subProcessName: request
                   subProcessStatus: Created
-              offerRequestReceivedExample:
-                summary: Example of an offerRequest received event, sent by the insurer
+              acknowledgeEventExample:
+                summary: Acknowledge Event
                 value:
-                  id: 3e921406-ee31-42e9-9a17-14c9e42cae21
-                  source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
+                  id: 044d2e50-12d6-43e4-bb1b-7b54841c9c82
+                  source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
                   specversion: '1.0'
                   type: ch.ecohub.saf.data
-                  subject: offer nlpi request received
+                  subject: offer nlpi request acknowledgement
                   time: '2023-08-17T14:15:22.000Z'
-                  licenceKey: 8985+9403*jgfksld94&%fjd
+                  licenceKey: REcxZEVMZWV1UXFwOUZwaz...
                   userAgent:
-                    name: Insurer backoffice system 1
+                    name: BS1
                     version: '1.0'
                   eventReceiver:
-                    category: broker
-                    id: IDP7654321
-                  eventSender:
                     category: insurer
                     id: IDP1234567
+                  eventSender:
+                    category: broker
+                    id: IDP7654321
                   processId: ff9275bf-5b35-492e-bdd2-c217e151d335
                   processName: offer.nlpi
                   processVersion: 0.3.0
+                  processStatus: active
                   subProcessName: request
-                  processStatus: active
-                  subProcessStatus: Received
-              offerExample:
-                summary: Example of an offer event, sent by the insurer to the broker
-                value:
-                  id: d1ebd951-e44e-4464-939e-bd6f4c8d1d8e
-                  source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
-                  specversion: '1.0'
-                  type: ch.ecohub.saf.data
-                  datacontenttype: application/json
-                  dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json
-                  subject: offer
-                  time: '2023-08-17T14:15:22.000Z'
-                  licenceKey: 8985+9403*jgfksld94&%fjd
-                  userAgent:
-                    name: Insurer backoffice system 1
-                    version: '1.0'
-                  eventSender:
-                    category: insurer
-                    id: IDP1234567
-                  eventReceiver:
-                    category: broker
-                    id: IDP7654321
-                  data:
-                    payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
-                    payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
-                    links:
-                      - href: 0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ
-                        rel: offer-nlpi
-                        description: Pdf file that contains additional informations for the offer.
-                    encryptionKey: mfkaclou7z84z
-                    publicKeyVersion: '1.0'
-                    signatureKeyVersion: '1.1'
-                  processId: ff9275bf-5b35-492e-bdd2-c217e151d335
-                  processName: offer.nlpi
-                  processVersion: 0.3.0
-                  subProcessName: offer
-                  processStatus: active
-                  subProcessStatus: Created
-              offerReceivedExample:
-                summary: Example of an offer received event, sent by the broker
-                value:
-                  id: 1aa99947-59ee-4b75-86b2-33618d34dd32
-                  source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
-                  specversion: '1.0'
-                  type: ch.ecohub.saf.data
-                  subject: offer nlpi offer received
-                  time: '2023-08-17T14:15:22.000Z'
-                  licenceKey: REcxZEVMZWV1UXFwOUZwaz...
-                  userAgent:
-                    name: BS1
-                    version: '1.0'
-                  eventReceiver:
-                    category: insurer
-                    id: IDP1234567
-                  eventSender:
-                    category: broker
-                    id: IDP7654321
-                  processId: ff9275bf-5b35-492e-bdd2-c217e151d335
-                  processName: offer.nlpi
-                  processVersion: 0.3.0
-                  processStatus: active
-                  subProcessName: offer
-                  subProcessStatus: Received
-              offerFeedbackExample:
-                summary: Example of an offer feedback event, sent by the broker to the insurer
-                value:
-                  id: 1aa99947-59ee-4b75-86b2-33618d34dd32
-                  source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
-                  specversion: '1.0'
-                  type: ch.ecohub.saf.data
-                  datacontenttype: application/json
-                  dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiFeedbackDataType.json
-                  subject: offer feedback
-                  time: '2023-08-17T14:15:22.000Z'
-                  licenceKey: REcxZEVMZWV1UXFwOUZwaz...
-                  userAgent:
-                    name: BS1
-                    version: '1.0'
-                  eventReceiver:
-                    category: insurer
-                    id: IDP1234567
-                  eventSender:
-                    category: broker
-                    id: IDP7654321
-                  data:
-                    payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
-                    payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
-                    links:
-                      - href: 7F8C+RQDyYAIhAIjt+X0BXF0sWZYQUhzQaVElQptMEZjZiMVcXwUeL9ZJ
-                        rel: offer-nlpi
-                        description: Pdf file that contains additional informations for the offer.
-                    encryptionKey: urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...
-                    publicKeyVersion: '1.1'
-                    signatureKeyVersion: '1.3'
-                  processId: ff9275bf-5b35-492e-bdd2-c217e151d335
-                  processName: offer.nlpi
-                  processVersion: 0.3.0
-                  processStatus: active
-                  subProcessName: feedback
-                  subProcessStatus: Created
-              offerFeedbackReceivedExample:
-                summary: Example of an offer feedback received event, sent by the insurer
-                value:
-                  id: 5df58bad-960c-4752-81f7-3a2721493b2c
-                  source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
-                  specversion: '1.0'
-                  type: ch.ecohub.saf.data
-                  subject: offer nlpi feedback received
-                  time: '2023-08-17T14:15:22.000Z'
-                  licenceKey: 8985+9403*jgfksld94&%fjd
-                  userAgent:
-                    name: Insurer backoffice system 1
-                    version: '1.0'
-                  eventReceiver:
-                    category: broker
-                    id: IDP7654321
-                  eventSender:
-                    category: insurer
-                    id: IDP1234567
-                  processId: ff9275bf-5b35-492e-bdd2-c217e151d335
-                  processName: offer.nlpi
-                  processVersion: 0.3.0
-                  subProcessName: feedback
-                  processStatus: active
-                  subProcessStatus: Received
-              offerConclusionDecisionExample:
-                summary: Example of an offer conclusion decision event, sent by the insurer to the
-                  broker
-                value:
-                  id: 53198975-f2ed-48d7-ae5d-0ba5f8b1e95e
-                  source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
-                  specversion: '1.0'
-                  type: ch.ecohub.saf.data
-                  datacontenttype: application/json
-                  dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiConclusionDecisionDataType.json
-                  subject: offer conclusion decision
-                  time: '2023-08-17T14:15:22.000Z'
-                  licenceKey: 8985+9403*jgfksld94&%fjd
-                  userAgent:
-                    name: Insurer backoffice system 1
-                    version: '1.0'
-                  eventSender:
-                    category: insurer
-                    id: IDP1234567
-                  eventReceiver:
-                    category: broker
-                    id: IDP7654321
-                  data:
-                    payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZXJlIGZvciBicmV2aXR5LiBJZiBjb3Vyc2UsIGluIHRoZSByZWFsIHdvcmxkLCB0aGlzIHBheWxvYWQgd291bGQgYmUgaW52YWxpZCBvZiBjb3Vyc2UsIGFzIGl0IGRvZXMgbm90IGNvbXBseSB3aXRoIHRoZSBPZmZlciBOTFBJIHNjaGVtYS4gQnJvd255IHBvaW50cyB0byB5b3UgZm9yIGFjdHVhbGx5IGRlY29kaW5nIHRoZSBleGFtcGxlIDsp
-                    payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
-                    encryptionKey: mfkaclou7z84z
-                    publicKeyVersion: '1.0'
-                    signatureKeyVersion: '1.1'
-                  processId: ff9275bf-5b35-492e-bdd2-c217e151d335
-                  processName: offer.nlpi
-                  processVersion: 0.3.0
-                  subProcessName: conclusionDecision
-                  processStatus: active
-                  subProcessStatus: Created
-              offerConclusionDecisionReceivedExample:
-                summary: Example of an offer conclusion decision received event, sent by the broker
-                value:
-                  id: 1607aa76-4de4-417f-9e88-88bbb4b62f34
-                  source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
-                  specversion: '1.0'
-                  type: ch.ecohub.saf.data
-                  subject: offer nlpi conclusionDecision received
-                  time: '2023-08-17T14:15:22.000Z'
-                  licenceKey: REcxZEVMZWV1UXFwOUZwaz...
-                  userAgent:
-                    name: BS1
-                    version: '1.0'
-                  eventReceiver:
-                    category: insurer
-                    id: IDP1234567
-                  eventSender:
-                    category: broker
-                    id: IDP7654321
-                  processId: ff9275bf-5b35-492e-bdd2-c217e151d335
-                  processName: offer.nlpi
-                  processVersion: 0.3.0
-                  processStatus: closed
-                  subProcessName: conclusionDecision
                   subProcessStatus: Received
       responses:
         '200':
@@ -399,7 +156,14 @@ paths:
                 error_code: 400
                 message: 'Bad Request: #: #: 0 subschemas matched instead of one'
         '401':
-          description: Not authorized
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponseType'
+              example:
+                statusCode: 401
+                message: 'Invalid Azure AD JWT'
         '404':
           description: Resource not found
           content:
@@ -422,9 +186,9 @@ paths:
   '/{ecohubId}/offer/nlpi/out':
     get:
       tags:
-        - Offer NLPI
-      summary: Retrieve an offer NLPI event from the SAF Message Broker
-      description: Retrieve an offer NLPI event from the SAF Message Broker
+        - Consuming Messages
+      summary: Consume messages from the offer.nlpi topic.
+      description: Returns unread messages from the offer.nlpi topic.
       operationId: get-eh-saf-ecohubid-offer-nlpi-out
       parameters:
         - name: ecohubId
@@ -446,37 +210,13 @@ paths:
             type: string
       responses:
         '200':
-          description: "Returns all message which haven't been consumed yet by the techUser"
+          description: "All unread messages in the topic"
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    topic:
-                      type: string
-                    key:
-                      $ref: '#/components/schemas/SAFKeyType'
-                    value:
-                      type: object
-                      oneOf:
-                        - $ref: '#/components/schemas/SAFEventType'
-                        - $ref: '#/components/schemas/SAFInquiryEventType'
-                        - $ref: '#/components/schemas/SAFErrorEventType'
-                        - $ref: '#/components/schemas/OfferNLPIErrorEventType'
-                    partition:
-                      type: integer
-                    offset:
-                      type: integer
-                  required:
-                    - topic
-                    - key
-                    - value
-                    - partition
-                    - offset
+                $ref: '#/components/schemas/TopicResponseType'
               example:
-                - topic: eh.saf.329050.offer.nlpi.out
+                - topic: eh.saf.329050.offer.nlpi.out.v1
                   key:
                     processId: '5899128-3779-4446-94ef-e2d7d005d2e1'
                   value:
@@ -505,7 +245,14 @@ paths:
                   partition: 1
                   offset: 4
         '401':
-          description: Not authorized
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponseType'
+              example:
+                statusCode: 401
+                message: 'Invalid Azure AD JWT'
         403:
           description: Forbidden
           content:
@@ -514,11 +261,248 @@ paths:
                 $ref: '#/components/schemas/ErrorResponseType'
               example:
                 error_code: 40301
-                message: 'Not authorized to access topics: [eh.saf.329050.offer.nlpi.out]'
+                message: 'Not authorized to access topics: [eh.saf.329050.offer.nlpi.out.v1]'
+  '/{ecohubId}/commission/out':
+    get:
+      tags:
+        - Consuming Messages
+      summary: Consume messages from the commission topic.
+      description: Returns unread mesassages from the commission topic
+      operationId: get-eh-saf-ecohubid-commission-out
+      parameters:
+        - name: ecohubId
+          in: path
+          description: >-
+            The EcoHubId can be looked up in EcoHub on the Standard API
+            Framework configuration page.
+          required: true
+          schema:
+            type: string
+        - name: auto.offset.reset
+          in: header
+          description: The auto offset that should be used to retrieve records
+          required: true
+          schema:
+            enum:
+              - earliest
+              - latest
+            type: string
+      responses:
+        '200':
+          description: "All unread messages in the topic"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicResponseType'
+              example:
+                - topic: eh.saf.329050.commission.out.v1
+                  key:
+                    processId: '5899128-3779-4446-94ef-e2d7d005d2e1'
+                  value:
+                    id: 3e921406-ee31-42e9-9a17-14c9e42cae21
+                    source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
+                    specversion: '1.0'
+                    type: ch.ecohub.saf.data
+                    subject: Commission documents
+                    time: '2023-08-17T14:15:22.000Z'
+                    licenceKey: 8985+9403*jgfksld94&%fjd
+                    userAgent:
+                      name: Insurer backoffice system 1
+                      version: '1.0'
+                    eventReceiver:
+                      category: broker
+                      id: broker1
+                    eventSender:
+                      category: insurer
+                      id: insurer1
+                    processId: ff9275bf-5b35-492e-bdd2-c217e151d335
+                    processName: commission
+                    processVersion: 5.4.1
+                    subProcessName: commission
+                    processStatus: closed
+                    subProcessStatus: Created
+                  partition: 1
+                  offset: 4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponseType'
+              example:
+                statusCode: 401
+                message: 'Invalid Azure AD JWT'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseType'
+              example:
+                error_code: 40301
+                message: 'Not authorized to access topics: [eh.saf.329050.commission.out.v1]'
+  '/{ecohubId}/invoice/out':
+    get:
+      tags:
+        - Consuming Messages
+      summary: Consume messages from the invoice topic.
+      description: Returns unread messages from the invoice topic
+      operationId: get-eh-saf-ecohubid-invoice-out
+      parameters:
+        - name: ecohubId
+          in: path
+          description: >-
+            The EcoHubId can be looked up in EcoHub on the Standard API
+            Framework configuration page.
+          required: true
+          schema:
+            type: string
+        - name: auto.offset.reset
+          in: header
+          description: The auto offset that should be used to retrieve records
+          required: true
+          schema:
+            enum:
+              - earliest
+              - latest
+            type: string
+      responses:
+        '200':
+          description: "All unread messages in the topic"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicResponseType'
+              example:
+                - topic: eh.saf.329050.invoice.out.v1
+                  key:
+                    processId: '5899128-3779-4446-94ef-e2d7d005d2e1'
+                  value:
+                    id: 3e921406-ee31-42e9-9a17-14c9e42cae21
+                    source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
+                    specversion: '1.0'
+                    type: ch.ecohub.saf.data
+                    subject: Billing documents
+                    time: '2023-08-17T14:15:22.000Z'
+                    licenceKey: 8985+9403*jgfksld94&%fjd
+                    userAgent:
+                      name: Insurer backoffice system 1
+                      version: '1.0'
+                    eventReceiver:
+                      category: broker
+                      id: broker1
+                    eventSender:
+                      category: insurer
+                      id: insurer1
+                    processId: ff9275bf-5b35-492e-bdd2-c217e151d335
+                    processName: invoice
+                    processVersion: 5.4.1
+                    subProcessName: billing
+                    processStatus: closed
+                    subProcessStatus: Created
+                  partition: 1
+                  offset: 4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponseType'
+              example:
+                statusCode: 401
+                message: 'Invalid Azure AD JWT'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseType'
+              example:
+                error_code: 40301
+                message: 'Not authorized to access topics: [eh.saf.329050.invoice.out.v1]'
+  '/{ecohubId}/contract/out':
+    get:
+      tags:
+        - Consuming Messages
+      summary: Consume messages from the contract topic.
+      description: Returns unread messages from the contract topic
+      operationId: get-eh-saf-ecohubid-contract-out
+      parameters:
+        - name: ecohubId
+          in: path
+          description: >-
+            The EcoHubId can be looked up in EcoHub on the Standard API
+            Framework configuration page.
+          required: true
+          schema:
+            type: string
+        - name: auto.offset.reset
+          in: header
+          description: The auto offset that should be used to retrieve records
+          required: true
+          schema:
+            enum:
+              - earliest
+              - latest
+            type: string
+      responses:
+        '200':
+          description: "All unread messages in the topic"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicResponseType'
+              example:
+                - topic: eh.saf.329050.contract.out.v1
+                  key:
+                    processId: '5899128-3779-4446-94ef-e2d7d005d2e1'
+                  value:
+                    id: 3e921406-ee31-42e9-9a17-14c9e42cae21
+                    source: http://www.myecohub.ch/ecoHub-mock-insurer-producer1
+                    specversion: '1.0'
+                    type: ch.ecohub.saf.data
+                    subject: Policy documents
+                    time: '2023-08-17T14:15:22.000Z'
+                    licenceKey: 8985+9403*jgfksld94&%fjd
+                    userAgent:
+                      name: Insurer backoffice system 1
+                      version: '1.0'
+                    eventReceiver:
+                      category: broker
+                      id: broker1
+                    eventSender:
+                      category: insurer
+                      id: insurer1
+                    processId: ff9275bf-5b35-492e-bdd2-c217e151d335
+                    processName: contract
+                    processVersion: 5.4.1
+                    subProcessName: contract
+                    processStatus: closed
+                    subProcessStatus: Created
+                  partition: 1
+                  offset: 4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponseType'
+              example:
+                statusCode: 401
+                message: 'Invalid Azure AD JWT'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseType'
+              example:
+                error_code: 40301
+                message: 'Not authorized to access topics: [eh.saf.329050.invoice.out.v1]'
 components:
   schemas:
     SAFEventType:
-      description: 'SAF data event, i.e. an event containing data according to a specific standard'
+      description: 'The main event type which can either be used to transmit business data according to a data standard or to send an acknowledge event.'
       type: object
       properties:
         id:
@@ -1151,4 +1135,30 @@ components:
       additionalProperties: false
       required:
         - processId
+    TopicResponseType:
+      type: array
+      items:
+        type: object
+        properties:
+          topic:
+            type: string
+          key:
+            $ref: '#/components/schemas/SAFKeyType'
+          value:
+            type: object
+            oneOf:
+              - $ref: '#/components/schemas/SAFEventType'
+              - $ref: '#/components/schemas/SAFInquiryEventType'
+              - $ref: '#/components/schemas/SAFErrorEventType'
+              - $ref: '#/components/schemas/OfferNLPIErrorEventType'
+          partition:
+            type: integer
+          offset:
+            type: integer
+        required:
+          - topic
+          - key
+          - value
+          - partition
+          - offset
 
