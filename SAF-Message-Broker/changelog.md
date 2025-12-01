@@ -1,3 +1,15 @@
+### Version 1.1.0
+  - Improved documentation
+  - ProcessNameType
+    - renamed the enum values for proxy standards. These values were not yet supported by the platform and could not be used yet, therefore this change is treated as MINOR, not MAJOR.
+    - added enum values for remaining legacy standards
+  - SubProcessNameType
+    - renamed the enum values for proxy standards. These values were not yet supported by the platform and could not be used yet, therefore this change is treated as MINOR, not MAJOR.
+    - added enum values for remaining legacy standards
+  - added operation to consume commission topic
+  - added operation to consume invoice topic
+  - added operation to consume contract topic
+
 ### Version 1.0.0
   - ProcessNameType
     - Added values for proxy standards
