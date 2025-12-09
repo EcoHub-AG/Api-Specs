@@ -28,6 +28,8 @@ info:
       - added operation to consume commission topic
       - added operation to consume invoice topic
       - added operation to consume contract topic
+      - added operation to consume mandate topic
+      - added operation to consume claimsExperience topic
     
     *changes in previous versions are available in the changelog file in GitHub*
 
@@ -175,6 +177,54 @@ channels:
         $ref: '#/components/messages/safInquiryEvent'
       safErrorEvent:
         $ref: '#/components/messages/safErrorEvent'
+  eh.saf.mandate.out.v1:
+    address: eh.saf.{ecohubId}.mandate.out.v1
+    bindings:
+      kafka:
+        topic: 'eh.saf.{ecohubId}.mandate.out.v1'
+        partitions: 3
+        replicas: 2
+        topicConfiguration:
+          cleanup.policy: [ "delete" ]
+          retention.ms: 604800000
+          retention.bytes: -1
+          delete.retention.ms: 86400000
+          max.message.bytes: 5242880
+        bindingVersion: '0.4.0'
+    parameters:
+      ecohubId:
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page."
+    messages:
+      consumeSAFEvent:
+        $ref: '#/components/messages/safEvent'
+      consumeSAFInquiryEvent:
+        $ref: '#/components/messages/safInquiryEvent'
+      safErrorEvent:
+        $ref: '#/components/messages/safErrorEvent'
+  eh.saf.claimsExperience.out.v1:
+    address: eh.saf.{ecohubId}.claimsExperience.out.v1
+    bindings:
+      kafka:
+        topic: 'eh.saf.{ecohubId}.claimsExperience.out.v1'
+        partitions: 3
+        replicas: 2
+        topicConfiguration:
+          cleanup.policy: [ "delete" ]
+          retention.ms: 604800000
+          retention.bytes: -1
+          delete.retention.ms: 86400000
+          max.message.bytes: 5242880
+        bindingVersion: '0.4.0'
+    parameters:
+      ecohubId:
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page."
+    messages:
+      consumeSAFEvent:
+        $ref: '#/components/messages/safEvent'
+      consumeSAFInquiryEvent:
+        $ref: '#/components/messages/safInquiryEvent'
+      safErrorEvent:
+        $ref: '#/components/messages/safErrorEvent'
 operations:
   produceSAFEvent:
     action: send
@@ -232,6 +282,32 @@ operations:
         bindingVersion: '0.4.0'
     channel:
       $ref: "#/channels/eh.saf.contract.out.v1"
+  consumeMandateEvent:
+    action: receive
+    bindings:
+      kafka:
+        groupId:
+          type: string
+          pattern: ^CG-(\d{5,6})-IDP(\d{6})$
+        clientId:
+          type: string
+          format: uuid
+        bindingVersion: '0.4.0'
+    channel:
+      $ref: "#/channels/eh.saf.mandate.out.v1"
+  consumeClaimsExperienceEvent:
+    action: receive
+    bindings:
+      kafka:
+        groupId:
+          type: string
+          pattern: ^CG-(\d{5,6})-IDP(\d{6})$
+        clientId:
+          type: string
+          format: uuid
+        bindingVersion: '0.4.0'
+    channel:
+      $ref: "#/channels/eh.saf.claimsExperience.out.v1"
 components:
   securitySchemes:
     X509:

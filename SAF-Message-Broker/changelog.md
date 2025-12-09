@@ -9,6 +9,8 @@
   - added operation to consume commission topic
   - added operation to consume invoice topic
   - added operation to consume contract topic
+  - added operation to consume mandate topic
+  - added operation to consume claimsExperience topic
 
 ### Version 1.0.0
   - ProcessNameType

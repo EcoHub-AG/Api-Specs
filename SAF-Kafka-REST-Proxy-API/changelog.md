@@ -11,6 +11,8 @@
   - added endpoint to consume commission topic
   - added endpoint to consume invoice topic
   - added endpoint to consume contract topic
+  - added endpoint to consume mandate topic
+  - added endpoint to consume claimsExperience topic
 
 ### Version 1.0.0
   - added version prefix to all endpoints
