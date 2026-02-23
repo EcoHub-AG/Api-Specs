@@ -95,7 +95,8 @@ channels:
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
-        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page."
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
@@ -121,7 +122,8 @@ channels:
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
-        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page."
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
@@ -145,7 +147,8 @@ channels:
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
-        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page."
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
@@ -169,7 +172,8 @@ channels:
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
-        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page."
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
@@ -193,7 +197,8 @@ channels:
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
-        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page."
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
@@ -217,7 +222,8 @@ channels:
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
-        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page."
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
