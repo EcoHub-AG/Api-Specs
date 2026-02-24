@@ -9,6 +9,7 @@ on:
       - 'saf-message-broker-v*'
       - 'saf-general-api-v*'
       - 'pki-api-v*'
+      - 'private-key-api-v*'
       - 'compliance-service-api-v*'
 
   # Allows you to run this workflow manually from the Actions tab
@@ -77,6 +78,10 @@ jobs:
             echo "complianceServiceApi=true" >> $GITHUB_OUTPUT
             echo "API_NAME=Compliance-Service-Api" >> $GITHUB_OUTPUT
             echo "API_VERSION=${TAG_NAME#compliance-service-api-v}" >> $GITHUB_OUTPUT
+          elif [[ $TAG_NAME == private-key-api-v* ]]; then
+            echo "privateKeyApi=true" >> $GITHUB_OUTPUT
+            echo "API_NAME=Private-Key-Api" >> $GITHUB_OUTPUT
+            echo "API_VERSION=${TAG_NAME#private-key-api-v}" >> $GITHUB_OUTPUT
           else
             echo "Unknown API tag format"
             exit 1
@@ -110,7 +115,14 @@ jobs:
           API_VERSION=${{ steps.api_info.outputs.API_VERSION }}
           redoc-cli bundle -o docs/SAF-Kafka-REST-Proxy-API/$API_VERSION/index.html ./SAF-Kafka-REST-Proxy-API/OAS3.0-SAF-Kafka-REST-Proxy.yaml
 
-      # SAF Rest API documentation generation
+      # Private Key API documentation generation
+      - name: Generate Private Key API documentation
+        if: steps.api_info.outputs.privateKeyApi == 'true'
+        run: |
+          API_VERSION=${{ steps.api_info.outputs.API_VERSION }}
+          redoc-cli bundle -o docs/Private-Key-API/$API_VERSION/index.html ./PKI-Api/OAS-PrivateKeyAPI.yaml
+
+      # Compliance Service API documentation generation
       - name: Generate Compliance Service API documentation
         if: steps.api_info.outputs.complianceServiceApi == 'true'
         run: |
