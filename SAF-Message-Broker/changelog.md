@@ -1,5 +1,6 @@
 ### Version 1.1.0
   - Improved documentation
+  - increased max.message.bytes to 8388608 bytes (8MB) for all topics
   - ProcessNameType
     - renamed the enum values for proxy standards. These values were not yet supported by the platform and could not be used yet, therefore this change is treated as MINOR, not MAJOR.
     - added enum values for remaining legacy standards
