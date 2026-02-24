@@ -6,7 +6,7 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework: General API"
-  version: 1.2.0
+  version: 2.0.0
   x-ecohub-license: >
     © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   description: >
@@ -16,38 +16,21 @@ info:
     bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
     the /techUserEnrolment endpoint of this API.
     
-    ## Changelog
+    ### Changes in Version 2.0.0
+      - Adjusted url path segment from /v1 to /v2
+      - Replaced usages of GeneralErrorResponse with SAFErrorResponse for all endpoints. 
+      - Restricted requestId parameter in all requests to be a UUID.
+      - Restricted requestTime parameter in all requests to use UTC zimezone.
+      - SupportedProcesses:
+        - Renamed  processNames for Invoices, Commission and Contract
+        - Added processNames for mandate and claimsExperience.
     
-    ### Version 1.2.0
-      - added orgId and membershipId to the /saf-receivers and /saf-insurers response
-      - explicitly set additionalProperties to true where it was implicitly implied by JSON schema defaults (helps with code generation)
-    
-    ### Version 1.1.0
-      - added parameter "onBehalfOf" to the saf-receivers request
-    
-    ### Version 1.0.0
-      - SAFSupportedStandards
-        - Renamed and restructured type to align with processName and processVersion in SAF events and PKI API
-      - Only allow application/json as content type
-      - add version prefix to all endpoints
-      - removed 404 response from /saf-receivers and /saf-insurers endpoint
-      - correctly marked required attributes in all types
-      - allowed additionalProperties in GeneralErrorResponse and SAFErrorResponse
-      - Enhanced documentation
-    
-    ### Version 0.3.2
-      - Enhanced documentation
-    
-    ### Version 0.3.1
-      - Enhanced documentation
-
-    ### Version 0.3.0
-      - Initial public release
+    *changes in previous versions are available in the changelog file in GitHub*
 servers:
-  - url: https://services.test-myecohub.ch/general/v1
+  - url: https://services.test-myecohub.ch/general/v2
     variables: {}
     description: EcoHub IAT Environment
-  - url: https://services.myecohub.ch/general/v1
+  - url: https://services.myecohub.ch/general/v2
     variables: {}
     description: EcoHub PROD Environment
 paths:
@@ -71,9 +54,7 @@ paths:
                 - $ref: '#/components/schemas/SAFReceiverRequest'
       responses:
         '200':
-          description: Returns a list of the available receivers. The IDP numbers contained in the response can
-            be used to specify the eventReceiver in the event json and for further API calls which require the
-            IDP number of the receiver as a parameter.
+          description: List of the available receivers.
           content:
             application/json:
               schema:
@@ -81,17 +62,20 @@ paths:
                 items:
                   $ref: '#/components/schemas/SAFReceiverResponse'
         '400':
-          description: If saf-receiver operation is unsuccessful
+          description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SAFErrorResponse'
         '500':
-          description: Unexpected error
+          description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GeneralErrorResponse'
+                $ref: '#/components/schemas/SAFErrorResponse'
+              example:
+                errorCode: "ERROR"
+                errorMessage: "An unexpected error occured"
   /saf-insurers:
     post:
       tags:
@@ -117,29 +101,32 @@ paths:
                 items:
                   $ref: '#/components/schemas/SAFInsurersResponse'
         '400':
-          description: If saf-insurers operation is unsuccessful
+          description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SAFErrorResponse'
         '500':
-          description: Unexpected error
+          description: Server error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GeneralErrorResponse'
+                $ref: '#/components/schemas/SAFErrorResponse'
+              example:
+                errorCode: "ERROR"
+                errorMessage: "An unexpected error occured"
   /techUserEnrolment:
     post:
       tags:
-        - "TechUser Enrollment"
-      summary: Retrieve techUser credentials for SAF
+        - "SAF TechUser Enrollment"
+      summary: Retrieve SAF techUser credentials
       description: This endpoint provides the necessary credentials (certificate and OAuth2 credentials) for 
         the specified SAF techUser, enabling further API calls. To interact with other APIs or endpoints, the 
         client must supply either the certificate or the bearer token obtained via OAuth2.
       operationId: EnrolTechUser
       requestBody:
         description: To authenticate the request, the IDP number, password and a one-time activate code for the SAF
-          techUser must be provided. These can be retrieved by logging into EcoHub and navigating to the SAF techUsers
+          techUser must be provided. These can be retrieved by logging into EcoHub and navigating to the SAF TechUsers
           section. Note that SAF techUsers are separate from DXP techUsers. They are not interchangeable, and each has 
           its own set of credentials. Ensure you provide the correct SAF techUser credentials, as this endpoint is 
           specifically designed for SAF techUsers.
@@ -158,7 +145,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TechUserEnrolmentResponse'
         '400':
-          description: If TechUserEnrolment operation is unsuccessful
+          description: Bad request
           content:
             application/json:
               schema:
@@ -168,13 +155,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GeneralErrorResponse'
+                $ref: '#/components/schemas/SAFErrorResponse'
         '500':
           description: Unexpected error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GeneralErrorResponse'
+                $ref: '#/components/schemas/SAFErrorResponse'
+              example:
+                errorCode: "ERROR"
+                errorMessage: "An unexpected error occured"
 components:
   schemas:
     GeneralRequestData:
@@ -192,11 +182,12 @@ components:
           maxLength: 100
         requestId:
           type: string
+          format: uuid
           example: 486ebf73-8306-4dd2-96bf-82ce4b15444f
           description: Unique request ID. This is created by the caller and provided to help with troubleshooting.
         requestTime:
           type: string
-          description: Time of the request at the client as timestamp (date and time, each UTC without corresponding specification). YYYY-MM-DDThh:mm:ss RFC 3339 formatted datetime.
+          description: Timestamp of the request. Must be formatted as YYYY-MM-DDThh:mm:ssZ according to RFC 3339.
           format: date-time
         userAgent:
           $ref: '#/components/schemas/UserAgent'
@@ -207,29 +198,6 @@ components:
         - requestId
         - requestTime
         - userAgent
-    GeneralErrorResponse:
-      type: object
-      properties:
-        errorCode:
-          $ref: '#/components/schemas/GeneralErrorReturnCode'
-        errorMessageId:
-          type: string
-          format: uuid
-          description: "Unique ID for the provided error message"
-        errorMessage:
-          type: string
-          description: "Error message in english, that belongs to the errorMessageId"
-          example: "The requested resource is not available"
-      additionalProperties: true
-      required:
-        - errorCode
-        - errorMessageId
-        - errorMessage
-    GeneralErrorReturnCode:
-      enum:
-        - ERROR
-      type: string
-      example: ERROR
     SAFInsurersResponse:
       type : object
       properties:
@@ -272,7 +240,7 @@ components:
         onBehalfOf:
           type: string
           description: The IDP number of the broker's techUser if the event is
-            send on behalf.
+            send by a software provider on behalf of the broker.
           pattern: "^IDP(\\d{7})$"
     SAFReceiverResponse:
       type : object
@@ -321,9 +289,11 @@ components:
             type: string
             enum:
               - offer.nlpi
-              - Invoices
-              - Commission
-              - Contract
+              - invoice
+              - commission
+              - contract
+              - mandate
+              - claimsExperience
           processVersion:
             description: Version of the used core process
             type: string

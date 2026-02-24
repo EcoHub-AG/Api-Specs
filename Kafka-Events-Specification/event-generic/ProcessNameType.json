@@ -1,10 +1,12 @@
 {
-  "description": "Name of the core process",
+  "description": "Identifier of the core process",
   "type": "string",
   "enum": [
     "offer.nlpi",
-    "Invoices",
-    "Commission",
-    "Contract"
+    "invoice",
+    "commission",
+    "contract",
+    "mandate",
+    "claimsExperience"
   ]
 }
