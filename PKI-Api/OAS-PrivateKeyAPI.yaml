@@ -1,8 +1,21 @@
+# © 2025 EcoHub AG. All rights reserved.
+# Publicly accessible for informational purposes only.
+# No rights to use, implement, modify, reproduce, distribute, or create derivative works without prior written authorization.
+# Swiss law applies. Jurisdiction: Zurich.
+
 openapi: 3.0.3
 info:
-  title: SAF Proxy Key Store
-  version: 0.1.0
+  title: DXP-SAF Proxy Private Key Store
+  version: 1.0.0
+  x-ecohub-license: >
+    © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   description: >
+    This API is used to upload your private encryption and signature keys to EcoHub. This is necessary
+    if you want to receive the same files in both SAF and DXP, for data standards which are available
+    in both technologies.
+    
+    
+    
     ## Security
     
     All endpoints are protected and a TechUser certificate (mTLS) or 
@@ -12,27 +25,19 @@ info:
     
     ## Changelog
     
-    ### Version 0.1.0 (03.09.2024)
+    ### Version 1.0.0 (03.09.2024)
     
-    - Initial public release of the saf proxy key store api, that is needed to upload the private encryption and signature keys that EcoHub uses to Proxy data from SAF to DXP and vice versa.
-    
-    
-    There are two groups of APIs in this OAS:
-    
-    1. SAF Proxy Key API: This API can be used by all members, to upload their own private key, in case the receiver, wants to receive DATA in both Frameworks: SAF and DXP
-    
-    2. Internal APIs, that are used by the SAF Event Processing Module, to receive the proxy private key, to either decrypt or encrypt the payload data.
-    
+    Initial release.
 servers:
-  - url: 'https://services.test-myecohub.ch/privatekeystore'
+  - url: 'https://services.test-myecohub.ch/proxykeystore'
     description: EcoHub IAT Enviroment
-  - url: 'https://services.myecohub.ch/privatekeystore'
+  - url: 'https://services.myecohub.ch/proxykeystore'
     description: EcoHub PROD Enviroment
 paths:
   /keys:
     post:
       tags:
-        - SAFProxyKeyAPI
+        - Private Key API
       summary: Upload a new private key for your membership.
       description: Upload the matching private key for one of your existing public keys.
       operationId: UploadKey
@@ -69,112 +74,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /members/{idpNumber}/key:
-    get:
-      tags:
-        - Internal SAF Proxy Key API (only usable by EcoHub service account)
-      summary: Get the private keys for a member.
-      description: Get the private keys, for encryption and signing, of a member by idp-number.
-      operationId: GetActiveProxyPrivateKeyOfMemberByIdpNumber
-      parameters:
-        - name: idpNumber
-          in: path
-          description: IdpNumber.
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProxyPrivateKeyListResponse'
-        '204':
-          description: No private keys are uploaded.
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authorization (mTLS) missing
-        '404':
-          description: IDP number does not exist
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-  /members/{idpNumber}/key/{keyType}:
-    get:
-      tags:
-        - Internal SAF Proxy Key API (only usable by EcoHub service account)
-      summary: Get the private encryption or signature key of a member.
-      description: Get the private key of a member by idp-number and keyType.
-      operationId: GetActiveProxyPrivateKeyOfMemberByOperationAndIdpNumber
-      parameters:
-        - name: idpNumber
-          in: path
-          description: IdpNumber.
-          required: true
-          schema:
-            type: string
-        - name: keyType
-          in: path
-          required: true
-          schema:
-            $ref: "#/components/schemas/ProxyPrivateKeyTypeType"
-      responses:
-        '200':
-          description: Success.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProxyPrivateKeyResponse'
-        '204':
-          description: No private key uploaded
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '401':
-          description: Authorization (mTLS) missing
-        '404':
-          description: IDP number does not exist
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    ProxyPrivateKeyListResponse:
-      type: array
-      items:
-        $ref: '#/components/schemas/ProxyPrivateKeyResponse'
-      example:
-        - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
-          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
-          version: "string"
-          operation: "encryption"
-          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
-          createdAt: "2024-09-03T09:16:37.327Z"
-          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
-          activatedAt: "2024-09-03T09:16:37.327Z"
-          expiryDate: "2024-09-03T09:16:37.327Z"
-          ecoHubStatus: "Created"
-        - keyId: "0e84035f-d211-4fbd-9ce0-ecc259d7814då"
-          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
-          version: "string"
-          operation: "signature"
-          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
-          createdAt: "2024-09-03T09:16:37.327Z"
-          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
-          activatedAt: "2024-09-03T09:16:37.327Z"
-          expiryDate: "2024-09-03T09:16:37.327Z"
-          ecoHubStatus: "Created"
     ProxyPrivateKeyResponse:
       type: object
       properties:
@@ -192,18 +93,15 @@ components:
           $ref: "#/components/schemas/CreatedAtType"
         expiryDate:
           $ref: "#/components/schemas/ExpiryDateType"
-      additionalProperties: false
+      additionalProperties: true
       example:
         - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
           membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
           version: "string"
-          operation: "encryption"
-          key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/ KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4 24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO 0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt tQIDAQAB"
+          keyType: "encryption"
+          key: "-----BEGIN PRIVATE KEY-----\nMIG2AgEAMBAGByqGSM49AgEGBSuBBAAiBIGeMIGbAgEBBDCTO1TmLcJN2VkLafoA\nma91u0E8h1FnjzpsknVzSp4MopVwics+bU2Rj8URKAb200ShZANiAASnZv0F2goE\n//pAzhi0rr6v5qyZhwm3CqWeUr2oIwyQV2O8q70r+G80+Veu9oJLifgtStVVzIk1\nvdlcNThGQjNxxnZ9FfJ/AuAqZ408VwiACzRatHOlg02lONcePRS6TKA=\n-----END PRIVATE KEY-----"
           createdAt: "2024-09-03T09:16:37.327Z"
-          lastUpdatedAt: "2024-09-03T09:16:37.327Z"
-          activatedAt: "2024-09-03T09:16:37.327Z"
-          expiryDate: "2024-09-03T09:16:37.327Z"
-          ecoHubStatus: "Created"
+          expiryDate: "2025-09-03T09:16:37.327Z"
     ProxyPrivateKeyUploadRequest:
       type: object
       properties:
@@ -219,16 +117,13 @@ components:
       additionalProperties: false
     ProxyPrivateKeyDataType:
       minLength: 1
-      description: Base64-encoded representation of the private key portion of an RSA key pair in PEM format
+      description: For encryption keys, this is the 2048-bit RSA private key using the PKCS#8 structure, formatted in PEM.
+        For signature keys, this is an Elliptic Curve (EC) private key using the secp384r1 curve, also using the PKCS#8 structure and formatted in PEM.
+        In both cases, the key must be a plain string, including the full PEM headers and footers and all original line breaks. The supplied private key
+        must match the public key with the specified version.
       type: string
       nullable: false
-      example: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkKefPUqWrHGCuSn0Db/L
-iZL3YTDenI7LTZwsG4aBApy6DvCuOsnZyVEPAcwu05FHNQoZeSRhI3wblbDDWjww
-Atjx6C7hwiDJOzeJHmalGno7Jbsi/AadzwYQ4iIci+uQLDKOko+xrOPopvhONDb/
-KMy4UKTE97WOsiwZECRuegjBMoh7FqI0UP5vw/PMmRhwpcctn7f7vMR13zb2SgY4
-24W3kw4S/tnO5gGgvhIxVZFTmUSei2sPGUt+WvG59+qFGpmPSzeMMyKdt28VwAKO
-0vvfm2mOgoOZkcdx2FVtUKfm+HLGzVAU1JhFPCHUdTnlREUlzdRrO0nQ8hpgxfOt
-tQIDAQAB"
+      example: "-----BEGIN PRIVATE KEY-----\nMIG2AgEAMBAGByqGSM49AgEGBSuBBAAiBIGeMIGbAgEBBDCTO1TmLcJN2VkLafoA\nma91u0E8h1FnjzpsknVzSp4MopVwics+bU2Rj8URKAb200ShZANiAASnZv0F2goE\n//pAzhi0rr6v5qyZhwm3CqWeUr2oIwyQV2O8q70r+G80+Veu9oJLifgtStVVzIk1\nvdlcNThGQjNxxnZ9FfJ/AuAqZ408VwiACzRatHOlg02lONcePRS6TKA=\n-----END PRIVATE KEY-----"
     ProxyPrivateKeyIdType:
       description: Unique identifier of the private key stored in EcoHub
       type: string
@@ -254,7 +149,7 @@ tQIDAQAB"
       format: date-time
       nullable: false
     ProxyPrivateKeyTypeType:
-      description: Specifies the type of operation for which the private key will be used. The following operations are supported
+      description: Specifies the type of operation for which the private key will be used.
       type: string
       enum: ["encryption", "signature"]
       default: "encryption"
@@ -267,8 +162,8 @@ tQIDAQAB"
                  "KEY_MISMATCH", "KEY_NOT_FOUND",
                   "UNAUTHORIZED", "ERROR"]
           description: Code identifying the type of error
-          example: "KEY_NOT_FOUND"
+          example: "KEY_MISMATCH"
         errorMessage:
           type: string
           description: Message detailing the error
-          example: "The public key with the specified version does not exist"
+          example: "Matching public key not found"
