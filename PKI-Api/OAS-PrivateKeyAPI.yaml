@@ -1,0 +1,169 @@
+# © 2025 EcoHub AG. All rights reserved.
+# Publicly accessible for informational purposes only.
+# No rights to use, implement, modify, reproduce, distribute, or create derivative works without prior written authorization.
+# Swiss law applies. Jurisdiction: Zurich.
+
+openapi: 3.0.3
+info:
+  title: DXP-SAF Proxy Private Key Store
+  version: 1.0.0
+  x-ecohub-license: >
+    © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
+  description: >
+    This API is used to upload your private encryption and signature keys to EcoHub. This is necessary
+    if you want to receive the same files in both SAF and DXP, for data standards which are available
+    in both technologies.
+    
+    
+    
+    ## Security
+    
+    All endpoints are protected and a TechUser certificate (mTLS) or 
+    bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
+    the /techUserEnrolment endpoint of the general API.
+    
+    
+    ## Changelog
+    
+    ### Version 1.0.0 (03.09.2024)
+    
+    Initial release.
+servers:
+  - url: 'https://services.test-myecohub.ch/proxykeystore'
+    description: EcoHub IAT Enviroment
+  - url: 'https://services.myecohub.ch/proxykeystore'
+    description: EcoHub PROD Enviroment
+paths:
+  /keys:
+    post:
+      tags:
+        - Private Key API
+      summary: Upload a new private key for your membership.
+      description: Upload the matching private key for one of your existing public keys.
+      operationId: UploadKey
+      requestBody:
+        description: Request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProxyPrivateKeyUploadRequest'
+      responses:
+        '200':
+          description: Private key has been uploaded with success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProxyPrivateKeyResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Authorization (mTLS or JWT) missing
+        '409':
+          description: Private key does not match the uploaded public key with the specified version
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '424':
+          description: The matching public key with the specified version does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ProxyPrivateKeyResponse:
+      type: object
+      properties:
+        keyId:
+          $ref: "#/components/schemas/ProxyPrivateKeyIdType"
+        membershipId:
+          $ref: "#/components/schemas/MembershipIdType"
+        version:
+          $ref: "#/components/schemas/ProxyPrivateKeyVersionType"
+        keyType:
+          $ref: "#/components/schemas/ProxyPrivateKeyTypeType"
+        key:
+          $ref: "#/components/schemas/ProxyPrivateKeyDataType"
+        createdAt:
+          $ref: "#/components/schemas/CreatedAtType"
+        expiryDate:
+          $ref: "#/components/schemas/ExpiryDateType"
+      additionalProperties: true
+      example:
+        - keyId: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          membershipId: "cc76eebc-e6df-4232-9aa2-95a979d596c6"
+          version: "string"
+          keyType: "encryption"
+          key: "-----BEGIN PRIVATE KEY-----\nMIG2AgEAMBAGByqGSM49AgEGBSuBBAAiBIGeMIGbAgEBBDCTO1TmLcJN2VkLafoA\nma91u0E8h1FnjzpsknVzSp4MopVwics+bU2Rj8URKAb200ShZANiAASnZv0F2goE\n//pAzhi0rr6v5qyZhwm3CqWeUr2oIwyQV2O8q70r+G80+Veu9oJLifgtStVVzIk1\nvdlcNThGQjNxxnZ9FfJ/AuAqZ408VwiACzRatHOlg02lONcePRS6TKA=\n-----END PRIVATE KEY-----"
+          createdAt: "2024-09-03T09:16:37.327Z"
+          expiryDate: "2025-09-03T09:16:37.327Z"
+    ProxyPrivateKeyUploadRequest:
+      type: object
+      properties:
+        version:
+          $ref: "#/components/schemas/ProxyPrivateKeyVersionType"
+        keyType:
+          $ref: "#/components/schemas/ProxyPrivateKeyTypeType"
+        key:
+          $ref: "#/components/schemas/ProxyPrivateKeyDataType"
+      required:
+        - key
+        - version
+      additionalProperties: false
+    ProxyPrivateKeyDataType:
+      minLength: 1
+      description: For encryption keys, this is the 2048-bit RSA private key using the PKCS#8 structure, formatted in PEM.
+        For signature keys, this is an Elliptic Curve (EC) private key using the secp384r1 curve, also using the PKCS#8 structure and formatted in PEM.
+        In both cases, the key must be a plain string, including the full PEM headers and footers and all original line breaks. The supplied private key
+        must match the public key with the specified version.
+      type: string
+      nullable: false
+      example: "-----BEGIN PRIVATE KEY-----\nMIG2AgEAMBAGByqGSM49AgEGBSuBBAAiBIGeMIGbAgEBBDCTO1TmLcJN2VkLafoA\nma91u0E8h1FnjzpsknVzSp4MopVwics+bU2Rj8URKAb200ShZANiAASnZv0F2goE\n//pAzhi0rr6v5qyZhwm3CqWeUr2oIwyQV2O8q70r+G80+Veu9oJLifgtStVVzIk1\nvdlcNThGQjNxxnZ9FfJ/AuAqZ408VwiACzRatHOlg02lONcePRS6TKA=\n-----END PRIVATE KEY-----"
+    ProxyPrivateKeyIdType:
+      description: Unique identifier of the private key stored in EcoHub
+      type: string
+      format: uuid
+      nullable: false
+    ProxyPrivateKeyVersionType:
+      type: string
+      description: Version of the already uploaded public key that matches this private key
+      nullable: false
+    MembershipIdType:
+      description: Membership id the private key belongs to
+      type: string
+      format: uuid
+      nullable: false
+    CreatedAtType:
+      description: Timestamp when the private key has been created
+      type: string
+      format: date-time
+      nullable: false
+    ExpiryDateType:
+      description: Timestamp when the public key will expire
+      type: string
+      format: date-time
+      nullable: false
+    ProxyPrivateKeyTypeType:
+      description: Specifies the type of operation for which the private key will be used.
+      type: string
+      enum: ["encryption", "signature"]
+      default: "encryption"
+    ErrorResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+          enum: ["KEY_INVALID", "REQUEST_INVALID",
+                 "KEY_MISMATCH", "KEY_NOT_FOUND",
+                  "UNAUTHORIZED", "ERROR"]
+          description: Code identifying the type of error
+          example: "KEY_MISMATCH"
+        errorMessage:
+          type: string
+          description: Message detailing the error
+          example: "Matching public key not found"
