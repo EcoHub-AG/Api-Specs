@@ -19,6 +19,7 @@ info:
     
     ### Changes in Version 1.1.0
       - Improved documentation
+      - increased max.message.bytes to 8388608 bytes (8MB) for all topics
       - ProcessNameType
         - renamed the enum values for proxy standards. These values were not yet supported by the platform and could not be used yet, therefore this change is treated as MINOR, not MAJOR.
         - added enum values for remaining legacy standards
@@ -68,7 +69,7 @@ channels:
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
-          max.message.bytes: 5242880
+          max.message.bytes: 8338608
         bindingVersion: '0.4.0'
     messages:
       produceSAFEvent:
@@ -91,7 +92,7 @@ channels:
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
-          max.message.bytes: 5242880
+          max.message.bytes: 8388608
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
@@ -118,7 +119,7 @@ channels:
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
-          max.message.bytes: 5242880
+          max.message.bytes: 8388608
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
@@ -143,7 +144,7 @@ channels:
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
-          max.message.bytes: 5242880
+          max.message.bytes: 8388608
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
@@ -168,7 +169,7 @@ channels:
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
-          max.message.bytes: 5242880
+          max.message.bytes: 8388608
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
@@ -193,7 +194,7 @@ channels:
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
-          max.message.bytes: 5242880
+          max.message.bytes: 8388608
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
@@ -218,7 +219,7 @@ channels:
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
-          max.message.bytes: 5242880
+          max.message.bytes: 8388608
         bindingVersion: '0.4.0'
     parameters:
       ecohubId:
