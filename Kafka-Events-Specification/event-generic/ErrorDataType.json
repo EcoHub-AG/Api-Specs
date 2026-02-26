@@ -16,6 +16,7 @@
         "data-not-readable",
         "data-decryption-failed",
         "data-decompression-failed",
+        "ai-data-service-not-allowed",
         "other"
       ],
       "minLength": 3,

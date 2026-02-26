@@ -1,5 +1,8 @@
 ## Changelog
 
+### Version 3.0.0
+  - Added new SupportedProcesses for SAF AI Data Structuring "aiDataStructuring" to SAFInsurersResponse and SAFReceiverResponse
+
 ### Version 2.0.0
   - Adjusted url path segment from /v1 to /v2
   - Replaced usages of GeneralErrorResponse with SAFErrorResponse for all endpoints. 

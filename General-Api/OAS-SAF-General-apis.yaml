@@ -6,7 +6,7 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework: General API"
-  version: 2.0.0
+  version: 3.0.0
   x-ecohub-license: >
     © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   description: >
@@ -15,6 +15,9 @@ info:
     All endpoints except the techUserEnrolment are protected and a TechUser certificate (mTLS) or 
     bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
     the /techUserEnrolment endpoint of this API.
+
+    ### Changes in Version 3.0.0
+      - Added new SupportedProcesses for SAF AI Data Structuring "aiDataStructuring" to SAFInsurersResponse and SAFReceiverResponse
     
     ### Changes in Version 2.0.0
       - Adjusted url path segment from /v1 to /v2
@@ -27,10 +30,10 @@ info:
     
     *changes in previous versions are available in the changelog file in GitHub*
 servers:
-  - url: https://services.test-myecohub.ch/general/v2
+  - url: https://services.test-myecohub.ch/general/v3
     variables: {}
     description: EcoHub IAT Environment
-  - url: https://services.myecohub.ch/general/v2
+  - url: https://services.myecohub.ch/general/v3
     variables: {}
     description: EcoHub PROD Environment
 paths:
@@ -294,6 +297,7 @@ components:
               - contract
               - mandate
               - claimsExperience
+              - aiDataStructuring
           processVersion:
             description: Version of the used core process
             type: string

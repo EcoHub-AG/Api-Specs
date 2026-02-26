@@ -6,6 +6,7 @@
     "ch.ecohub.saf.data",
     "ch.ecohub.saf.inquiry",
     "ch.ecohub.saf.standard-error",
-    "ch.ecohub.saf.saf-error"
+    "ch.ecohub.saf.saf-error",
+    "ch.ecohub.saf.ai-data"
   ]
 }
