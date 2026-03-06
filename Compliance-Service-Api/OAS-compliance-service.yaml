@@ -11,15 +11,30 @@ info:
 
     ## Security
     
-    All endpoints are protected and a TechUser certificate (mTLS) or 
-    bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
-    the /techUserEnrolment endpoint of the general API.
-    
-    
+    - All endpoints are protected and a TechUser certificate (mTLS) or bearer token must be provided 
+    as well as the 'ocp-apim-subscription-key' header, that contains the associated subscription key for the used TechUser. 
+
+    - The certificate or oAuth2 credentials can be acquired using the /techUserEnrolment endpoint of the general API.
+
+    - The subscription key needs to be requested from EcoHub (mailto:integration@myecohub.ch) and is associated with the TechUser.
+
+    - It is used for API management, monitoring, and access control purposes.
+
+    - The 'ocp-apim-subscription-key' header is required for all requests, including those with valid mTLS or bearer token credentials. 
+
+    - Requests missing the subscription key will be rejected with a 401 Unauthorized error, even if valid mTLS or bearer token credentials are provided.
+
+    - Requests with valid mTLS or bearer token credentials but an invalid subscription key will also be rejected with a 401 Unauthorized error.
+
+    - Requests with valid mTLS or bearer token credentials and a valid subscription key that doesn't belong to the TechUser will be rejected with a 403 Forbidden error.
+        
     ## Changelog
 
+    - Corrected the entityId parameter location in the search endpoint from path to query (documentation only, implementation was correct).
+
     ## Note on Swagger UI
-    'Try it out' does not support client certificates (mTLS). Use the code samples with your client cert and the required ''ocp-apim-subscription-key'' header.
+
+    - 'Try it out' does not support client certificates (mTLS). Use the code samples with your client cert and the required ''ocp-apim-subscription-key'' header.
 
 security:
   - mtls: []
