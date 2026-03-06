@@ -7,7 +7,20 @@ openapi: 3.1.0
 info:
   title: EcoHub Compliance Service API
   version: 1.0.4-rc
-  description: 'Note: Swagger UI ''Try it out'' does not support client certificates (mTLS). Use the code samples with your client cert and the required ''ocp-apim-subscription-key'' header.'
+  description: >
+
+    ## Security
+    
+    All endpoints are protected and a TechUser certificate (mTLS) or 
+    bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
+    the /techUserEnrolment endpoint of the general API.
+    
+    
+    ## Changelog
+
+    ## Note on Swagger UI
+    'Try it out' does not support client certificates (mTLS). Use the code samples with your client cert and the required ''ocp-apim-subscription-key'' header.
+
 security:
   - mtls: []
     ApiKeyHeader: []
@@ -460,7 +473,17 @@ paths:
           schema:
             $ref: '#/components/schemas/EntityType'
           description: Restrict search to a single type. If omitted, both are searched.
-        - $ref: '#/components/parameters/entityId'
+        - name: entityId
+          in: query
+          required: true
+          schema:
+            type: string
+            title: entity id
+            examples:
+              - F12345678
+            minLength: 9
+            maxLength: 9
+            pattern: ^(F\d{8})$
         - name: status
           in: query
           required: false
