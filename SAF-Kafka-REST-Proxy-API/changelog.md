@@ -1,5 +1,8 @@
 # SAF Kafka REST Proxy API Changelog
 
+### Version 1.1.1
+  - Fixed schemaVersionId header value (value in 1.1.0 was incorrect)
+
 ### Version 1.1.0
   - Improved documentation
   - ProcessNameType
