@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Generic data event type for transmitting unstructured or semi-structured data across SAF ecosystem. The payload can contain metadata, binary attachments (base64 encoded), or mixed content types.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../CloudEventsType.json#/definitions/iddef"
+    },
+    "source": {
+      "$ref": "../CloudEventsType.json#/definitions/sourcedef"
+    },
+    "specversion": {
+      "$ref": "../CloudEventsType.json#/definitions/specversiondef"
+    },
+    "type": {
+      "$ref": "../event-generic/EventType.json"
+    },
+    "datacontenttype": {
+      "$ref": "../CloudEventsType.json#/definitions/datacontenttypedef"
+    },
+    "dataschema": {
+      "$ref": "../CloudEventsType.json#/definitions/dataschemadef"
+    },
+    "subject": {
+      "$ref": "../CloudEventsType.json#/definitions/subjectdef"
+    },
+    "time": {
+      "$ref": "../CloudEventsType.json#/definitions/timedef"
+    },
+    "licenceKey": {
+      "$ref": "../event-generic/LicenceKeyType.json"
+    },
+    "userAgent": {
+      "$ref": "../event-generic/UserAgentType.json"
+    },
+    "eventReceiver": {
+      "$ref": "../event-generic/SenderReceiverType.json"
+    },
+    "eventReceiverPerson": {
+      "$ref": "../event-generic/PersonContactType.json",
+      "description": "Optional: Direct recipient person. When specified, the payload data MUST be encrypted with the person's public key using end-to-end encryption. Only the specified person can decrypt the payload using their private key (held exclusively on their device). EcoHub infrastructure maintains encrypted key backups and metadata but cannot decrypt content. Recovery requires user-controlled factors independent of EcoHub-mediated identity proof."
+    },
+    "eventSender": {
+      "$ref": "../event-generic/SenderReceiverType.json"
+    },
+    "eventSenderPerson": {
+      "$ref": "../event-generic/PersonContactType.json"
+    },
+     "data": {
+      "$ref": "GenericDataEventDataType.json"
+    },
+    "processGroupId": {
+      "$ref": "../event-generic/ProcessGroupIdType.json"
+    },
+    "processId": {
+      "$ref": "../event-generic/ProcessIdType.json"
+    },
+    "processName": {
+      "$ref": "../event-generic/ProcessNameType.json"
+    },
+    "processVersion": {
+      "$ref": "../event-generic/ProcessVersionType.json"
+    },
+    "processStatus": {
+      "$ref": "../event-generic/ProcessStatusType.json"
+    },
+    "subProcessName": {
+      "$ref": "../event-generic/SubProcessNameGenericProcessType.json"
+    },
+    "subProcessStatus": {
+      "$ref": "../event-generic/SubProcessStatusType.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "source",
+    "specversion",
+    "type",
+    "processId",
+    "processName",
+    "processVersion",
+    "subProcessName",
+    "processStatus",
+    "subProcessStatus",
+    "eventReceiver",
+    "eventSender",
+    "userAgent",
+    "licenceKey"
+  ],
+  "examples": [
+    {
+      "name": "genericDataWithMetadataAndPdfExample",
+      "summary": "SAFGenericDataEvent with metadata and base64-encoded PDF",
+      "payload": {
+        "id": "144e3f61-23e7-54f5-cc2c-8c65952d0d93",
+        "source": "http://www.myecohub.ch/ecoHub-document-processor",
+        "specversion": "1.0",
+        "type": "ch.ecohub.saf.generic-data",
+        "datacontenttype": "application/json",
+        "dataschema": "https://raw.githubusercontent.com/EcoHub-AG/Standards/schemas/generic-data-transfer/GenericDataTransferType.json",
+        "subject": "insurance claim document submission",
+        "time": "2026-03-12T10:30:00.000Z",
+        "licenceKey": "REcxZEVMZWV1UXFwOUZwaz...",
+        "userAgent": {
+          "name": "DocumentGateway",
+          "version": "2.1"
+        },
+        "eventReceiver": {
+          "category": "insurer",
+          "id": "IDP1234567"
+        },
+        "eventReceiverPerson": {
+          "id": "claims.handler@insurer.ch",
+          "idType": "email",
+          "firstName": "John",
+          "lastName": "Doe",
+          "role": "claims handler",
+          "organizationId": "IDP1234567"
+        },
+        "eventSender": {
+          "category": "broker",
+          "id": "IDP7654321"
+        },
+        "data": {
+          "documentType": "claim-form",
+          "description": "Insurance claim with attachments",
+          "metadata": {
+            "claimId": "CLM-2026-0012345",
+            "submissionDate": "2026-03-12",
+            "priority": "high"
+          },
+          "attachments": [
+            {
+              "filename": "claim-form.pdf",
+              "mimeType": "application/pdf",
+              "size": 245876,
+              "content": "JVBERi0xLjQKJeLjz..."
+            },
+            {
+              "filename": "supporting-document.json",
+              "mimeType": "application/json",
+              "content": "{\"claimDetails\": {...}}"
+            }
+          ]
+        },
+        "processId": "aa1385cf-6c46-593f-cee3-d328f162e446",
+        "processName": "claims.submission",
+        "processVersion": "1.0.0",
+        "processStatus": "active",
+        "subProcessName": "Initiate",
+        "subProcessStatus": "InProgress"
+      }
+    },
+    {
+      "name": "genericDataToPersonExample",
+      "summary": "SAFGenericDataEvent sent directly to a person",
+      "payload": {
+        "id": "254e4f62-34e8-65g6-dd3d-9d76063e1e04",
+        "source": "http://www.myecohub.ch/ecoHub-notification-service",
+        "specversion": "1.0",
+        "type": "ch.ecohub.saf.generic-data",
+        "datacontenttype": "application/json",
+        "subject": "policy renewal notification",
+        "time": "2026-03-12T14:20:00.000Z",
+        "licenceKey": "REcxZEVMZWV1UXFwOUZwaz...",
+        "userAgent": {
+          "name": "NotificationService",
+          "version": "1.0"
+        },
+        "eventSender": {
+          "category": "insurer",
+          "id": "IDP9876543"
+        },
+        "eventReceiverPerson": {
+          "id": "policy.holder@personal.ch",
+          "idType": "email",
+          "firstName": "Jane",
+          "lastName": "Smith",
+          "role": "policy holder"
+        },
+        "data": {
+          "messageType": "notification",
+          "subject": "Your policy renewal is due",
+          "htmlContent": "<html>...</html>",
+          "plainTextContent": "Your policy renewal is due on..."
+        },
+        "processId": "bb2496df-7d57-604g-dff4-e439g272f557",
+        "processName": "policy.management",
+        "processVersion": "1.0.0",
+        "processStatus": "active",
+        "subProcessName": "Provide",
+        "subProcessStatus": "Sent"
+      }
+    }
+  ]
+}

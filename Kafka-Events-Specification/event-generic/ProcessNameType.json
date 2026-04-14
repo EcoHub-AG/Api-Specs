@@ -2,12 +2,20 @@
   "description": "Identifier of the core process",
   "type": "string",
   "enum": [
-    "offer.nlpi",
-    "invoice",
-    "commission",
-    "contract",
+    "customerInformation",
     "mandate",
+    "offer.nlpi",
     "claimsExperience",
+    "claimsNotification",
+    "contract",
+    "invoice",
+    "paymentReminder",
+    "commission",
+    "salaryDeclaration",
+    "bvgMembershipChange",
+    "mvInsuranceCertificate",
+    "generalRequest",
+    "errorReport",
     "aiDataStructuring"
   ]
 }

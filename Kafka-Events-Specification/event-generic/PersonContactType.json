@@ -1,0 +1,47 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "description": "Unique identifier for the person (e.g., email, phone, or internal user ID)",
+      "minLength": 1,
+      "type": "string",
+      "example": "person@example.com"
+    },
+    "idType": {
+      "description": "The type of identifier used (email, phone, userId)",
+      "enum": [
+        "email",
+        "phone",
+        "userId"
+      ],
+      "type": "string",
+      "example": "email"
+    },
+    "firstName": {
+      "description": "First name of the person",
+      "minLength": 1,
+      "type": "string"
+    },
+    "lastName": {
+      "description": "Last name of the person",
+      "minLength": 1,
+      "type": "string"
+    },
+    "role": {
+      "description": "Role or function of the person in their organization",
+      "minLength": 1,
+      "type": "string",
+      "example": "claims handler"
+    },
+    "organizationId": {
+      "description": "IDP number of the organization the person belongs to (optional link to legal entity)",
+      "pattern": "^IDP(\\d{7})$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "idType"
+  ]
+}

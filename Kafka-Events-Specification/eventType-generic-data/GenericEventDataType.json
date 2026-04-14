@@ -1,0 +1,67 @@
+{
+  "description": "The data transmitted with the event and relevant attributes for signing and encryption.",
+  "type": "object",
+  "properties": {
+    "payload": {
+      "description": "The base64 representation of the first g-zipped and then encrypted original payload. For encryption, the AES-GCM algorithm with a 256-bit key, a 96-bit initialization vector (IV), and a 128-bit authentication tag must be used.",
+      "minLength": 3,
+      "type": "string"
+    },
+    "payloadSignature": {
+      "description": "A digital signature used to verify the origin of the encrypted payload. The signature is created by signing the content of the payload attribute using the elliptic curve algorithm secp384r1 with a SHA-384 hash, and your active signature key. The resulting signature must be ASN.1 encoded and transmitted in Base64.",
+      "minLength": 3,
+      "type": "string"
+    },
+    "links": {
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "description": "Description of the purpose of the link",
+            "type": "string"
+          },
+          "href": {
+            "description": "the- encrypted URL that should be called, to receive additional encrypted unstructured data, such as pdf, pictures, etc.",
+            "example": "https://services.test-myecohub.ch/offer/nlpi/{offerId}/{attachmentId} (unencrypted example)",
+            "minLength": 3,
+            "type": "string"
+          },
+          "rel": {
+            "description": "The IG B2B Standard the links belongs to.",
+            "example": "offer-nlpi",
+            "minLength": 3,
+            "type": "string"
+          }
+        },
+        "required": [
+          "href",
+          "rel"
+        ],
+        "additionalProperties": false
+      },
+      "type": "array",
+      "minItems": 1
+    },
+    "encryptionKey": {
+      "description": "The encrypted AES key, which was used to symmetrically encrypt the transmitted data. The key must be encrypted with the public key of the eventReceiver using RSA with OAEP padding with a SHA256 hash.",
+      "minLength": 3,
+      "type": "string"
+    },
+    "publicKeyVersion": {
+      "description": "The version of the receiver's public key that was used to encrypt the encryptionKey.",
+      "type": "string"
+    },
+    "signatureKeyVersion": {
+      "description": "The version of your signature key, that was used to sign the payload.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "payload",
+    "payloadSignature",
+    "encryptionKey",
+    "publicKeyVersion",
+    "signatureKeyVersion"
+  ],
+  "additionalProperties": false
+}

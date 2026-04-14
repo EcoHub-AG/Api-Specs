@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "IDS encrypted data payload type - CloudEvents compliant. Contains only encrypted business content (structured extracted data) and security envelope following CloudEvents v1.0 specification. Processing metadata is exposed as root-level extension attributes on SAFIDSEventType.",
+  "type": "object",
+  "properties": {
+    "payload": {
+      "description": "Base64 representation of gzip-compressed and encrypted data. Contains structured output from document processing. Uses AES-GCM algorithm with 256-bit key, 96-bit initialization vector (IV), and 128-bit authentication tag.",
+      "minLength": 3,
+      "type": "string"
+    },
+    "payloadSignature": {
+      "description": "Digital signature for integrity verification of encrypted payload. Created by signing payload using ECDSA with secp384r1 curve and SHA-384 hash. Encoded in ASN.1 format and transmitted as Base64.",
+      "minLength": 3,
+      "type": "string"
+    },
+    "encryptionKey": {
+      "description": "Encrypted AES symmetric key used to decrypt the payload. Key was encrypted with eventReceiver's public key using RSA with OAEP padding and SHA-256 hash. Transmitted as Base64.",
+      "minLength": 3,
+      "type": "string"
+    },
+    "publicKeyVersion": {
+      "description": "Version identifier of the recipient's public key used to encrypt the encryptionKey. Determines which private key can decrypt the key.",
+      "type": "string"
+    },
+    "signatureKeyVersion": {
+      "description": "Version identifier of the sender's signature key used to sign the payload. Determines which public key can verify the signature.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "payload",
+    "payloadSignature",
+    "encryptionKey",
+    "publicKeyVersion",
+    "signatureKeyVersion"
+  ],
+  "additionalProperties": false
+}
