@@ -6,7 +6,7 @@
 openapi: 3.0.1
 info:
   title: 'SAF Kafka REST Proxy API'
-  version: 1.1.0
+  version: 1.1.1
   x-ecohub-license: >
     © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   contact:
@@ -22,6 +22,9 @@ info:
     All endpoints are protected and a TechUser certificate (mTLS) or 
     bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
     the /techUserEnrolment endpoint of the General API.
+    
+    ### Changes in Version 1.1.1
+      - Fixed schemaVersionId header value (value in 1.1.0 was incorrect)
     
     ### Changes in Version 1.1.0
       - Improved documentation
@@ -56,7 +59,7 @@ paths:
           description: The id of the schema which is used to serialize the event value
           schema:
             type: integer
-            enum: [ 100044 ]
+            enum: [ 100060 ]
           required: true
         - name: keySchemaVersionId
           in: header
