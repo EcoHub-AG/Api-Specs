@@ -6,7 +6,7 @@
 openapi: 3.0.3
 info:
   title: "Standard API Framework: General API"
-  version: 2.0.0
+  version: 3.0.0
   x-ecohub-license: >
     © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   description: >
@@ -16,21 +16,16 @@ info:
     bearer token must be provided. The certificate or oAuth2 credentials can be acquired using 
     the /techUserEnrolment endpoint of this API.
     
-    ### Changes in Version 2.0.0
-      - Adjusted url path segment from /v1 to /v2
-      - Replaced usages of GeneralErrorResponse with SAFErrorResponse for all endpoints. 
-      - Restricted requestId parameter in all requests to be a UUID.
-      - Restricted requestTime parameter in all requests to use UTC zimezone.
-      - SupportedProcesses:
-        - Renamed  processNames for Invoices, Commission and Contract
-        - Added processNames for mandate and claimsExperience.
+    ### Changes in Version 3.0.0
+      - Adjusted url path segment from /v2 to /v3
+      - Added `generic` to `supportedProcesses` to indicate support for Generic Exchange events.
     
     *changes in previous versions are available in the changelog file in GitHub*
 servers:
-  - url: https://services.test-myecohub.ch/general/v2
+  - url: https://services.test-myecohub.ch/general/v3
     variables: {}
     description: EcoHub IAT Environment
-  - url: https://services.myecohub.ch/general/v2
+  - url: https://services.myecohub.ch/general/v3
     variables: {}
     description: EcoHub PROD Environment
 paths:
@@ -38,8 +33,9 @@ paths:
     post:
       tags:
         - "General APIs"
-      summary: Retrieve all SAF receivers which are available to the caller
-      description: This endpoint returns a list of all SAF receivers available to the calling member. A receiver will 
+      summary: Retrieve all SAF receivers which are available to the caller along with the SAF processes they support
+      description: This endpoint returns a list of all SAF receivers available to the calling member and the SAF processes
+        they support. A receiver will 
         be included in the list if they are connected to the Standard API Framework (SAF), and if the calling member 
         has an active service agreement with that receiver. The calling member is determined through the techUser
         used for the API request.
@@ -80,11 +76,11 @@ paths:
     post:
       tags:
         - "General APIs"
-      summary: Retrieve a list of all insurers in SAF along with the standards they support.
+      summary: Retrieve a list of all insurers in SAF along with the SAF processes they support.
       description: This endpoint returns a list of all insurers on EcoHub that are connected to the Standard API 
-        Framework, along with the specific standards they support. This endpoint is informational only and does not 
-        guarantee that the listed insurers are valid recipients for the API caller. To obtain the appropriate receiver
-        information for sending a SAF event, use the /saf-receivers endpoint.
+        Framework, along with the specific SAF processes they support. This endpoint is
+        informational only and does not guarantee that the listed insurers are valid recipients for the API caller.
+        To obtain the appropriate receiver information for sending a SAF event, use the /saf-receivers endpoint.
       operationId: SafInsurers
       requestBody:
         content:
@@ -279,13 +275,13 @@ components:
         - memberType
         - supportedProcesses
     SupportedProcessesType:
-      description: The standards supported by the receiver.
+      description: The SAF processes supported by the receiver.
       type: array
       items:
         type: object
         properties:
           processName:
-            description: The identifier of the core process
+            description: The identifier of the supported SAF process.
             type: string
             enum:
               - offer.nlpi
@@ -294,6 +290,7 @@ components:
               - contract
               - mandate
               - claimsExperience
+              - generic
           processVersion:
             description: Version of the used core process
             type: string

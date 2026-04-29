@@ -1,12 +1,16 @@
 ## Changelog
 
+### Version 3.0.0
+  - Adjusted url path segment from /v2 to /v3
+  - Added `generic` to `supportedProcesses` to indicate support for Generic Exchange events.
+
 ### Version 2.0.0
   - Adjusted url path segment from /v1 to /v2
   - Replaced usages of GeneralErrorResponse with SAFErrorResponse for all endpoints. 
   - Restricted requestId parameter in all requests to be a UUID.
   - Restricted requestTime parameter in all requests to use UTC zimezone.
   - SupportedProcesses:
-    - Renamed  processNames for Invoices, Commission and Contract
+    - Renamed processNames for Invoices, Commission and Contract
     - Added processNames for mandate and claimsExperience.
 
 ### Version 1.2.0
