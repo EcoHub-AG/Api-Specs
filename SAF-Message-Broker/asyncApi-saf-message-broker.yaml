@@ -7,7 +7,7 @@ asyncapi: 3.0.0
 id: 'https://www.myecohub.ch'
 info:
   title: 'Standard API Framework: Message Broker System'
-  version: 1.1.0
+  version: 1.2.0
   x-ecohub-license: >
     © 2025 EcoHub AG. Usage restricted. Prior written authorization required. Swiss law applies.
   contact:
@@ -16,6 +16,15 @@ info:
     url: 'https://www.myecohub.ch'
   description: >
     API to connect to the SAF Kafka cluster using the kafka native protocol.
+    
+    ### Changes in Version 1.2.0
+      - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on the IN topic
+      - Added channel and operation to consume the generic OUT topic
+      - Added dedicated Generic Exchange processName schema
+      - Aligned schema documentation with the actual implementation; this does not change the SAF Message Broker API behavior
+        - Fix max.message.bytes of the `IN` topic to be 8388608 instead of 8338608
+        - Optional CloudEvents attributes are no longer documented as explicitly nullable; if not set, they should be omitted
+        - Normalized the `processId` format annotation to `uuid`
     
     ### Changes in Version 1.1.0
       - Improved documentation
@@ -69,11 +78,13 @@ channels:
           retention.ms: 604800000
           retention.bytes: -1
           delete.retention.ms: 86400000
-          max.message.bytes: 8338608
+          max.message.bytes: 8388608
         bindingVersion: '0.4.0'
     messages:
       produceSAFEvent:
         $ref: '#/components/messages/safEvent'
+      produceSAFGenericEvent:
+        $ref: '#/components/messages/safGenericEvent'
       produceSAFInquiryEvent:
         $ref: '#/components/messages/safInquiryEvent'
       safErrorEvent:
@@ -97,7 +108,7 @@ channels:
     parameters:
       ecohubId:
         description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
-          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
+          names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
@@ -124,7 +135,7 @@ channels:
     parameters:
       ecohubId:
         description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
-          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
+          names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
@@ -149,7 +160,7 @@ channels:
     parameters:
       ecohubId:
         description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
-          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
+          names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
@@ -174,7 +185,7 @@ channels:
     parameters:
       ecohubId:
         description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
-          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
+          names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
@@ -199,7 +210,7 @@ channels:
     parameters:
       ecohubId:
         description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
-          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
+          names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
@@ -224,10 +235,35 @@ channels:
     parameters:
       ecohubId:
         description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
-          names, which follow the pattern 'eh.saf.{ecohubId}.{standard}.out.{version}'."
+          names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
     messages:
       consumeSAFEvent:
         $ref: '#/components/messages/safEvent'
+      consumeSAFInquiryEvent:
+        $ref: '#/components/messages/safInquiryEvent'
+      safErrorEvent:
+        $ref: '#/components/messages/safErrorEvent'
+  eh.saf.generic.out.v1:
+    address: eh.saf.{ecohubId}.generic.out.v1
+    bindings:
+      kafka:
+        topic: 'eh.saf.{ecohubId}.generic.out.v1'
+        partitions: 3
+        replicas: 2
+        topicConfiguration:
+          cleanup.policy: [ "delete" ]
+          retention.ms: 604800000
+          retention.bytes: -1
+          delete.retention.ms: 86400000
+          max.message.bytes: 8388608
+        bindingVersion: '0.4.0'
+    parameters:
+      ecohubId:
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+          names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
+    messages:
+      consumeSAFGenericEvent:
+        $ref: '#/components/messages/safGenericEvent'
       consumeSAFInquiryEvent:
         $ref: '#/components/messages/safInquiryEvent'
       safErrorEvent:
@@ -315,6 +351,19 @@ operations:
         bindingVersion: '0.4.0'
     channel:
       $ref: "#/channels/eh.saf.claimsExperience.out.v1"
+  consumeGenericEvent:
+    action: receive
+    bindings:
+      kafka:
+        groupId:
+          type: string
+          pattern: ^CG-(\d{5,6})-IDP(\d{6})$
+        clientId:
+          type: string
+          format: uuid
+        bindingVersion: '0.4.0'
+    channel:
+      $ref: "#/channels/eh.saf.generic.out.v1"
 components:
   securitySchemes:
     X509:
@@ -363,6 +412,72 @@ components:
           $ref: '#/components/schemas/processStatusType'
         subProcessName:
           $ref: '#/components/schemas/subProcessNameType'
+        subProcessStatus:
+          $ref: '#/components/schemas/subProcessStatusType'
+      additionalProperties: false
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - processId
+        - processName
+        - processVersion
+        - subProcessName
+        - processStatus
+        - subProcessStatus
+        - eventReceiver
+        - eventSender
+        - userAgent
+        - licenceKey
+    SAFGenericEventType:
+      description: Generic Exchange SAF event used to exchange non-standardized business information and documents.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/cloudEvents/iddef'
+        source:
+          $ref: '#/components/schemas/cloudEvents/sourcedef'
+        specversion:
+          $ref: '#/components/schemas/cloudEvents/specversiondef'
+        type:
+          description: Reverse DNS entry defining the Generic Exchange SAF event type..
+          type: string
+          enum:
+            - ch.ecohub.saf.generic
+        datacontenttype:
+          $ref: '#/components/schemas/cloudEvents/datacontenttypedef'
+        dataschema:
+          $ref: '#/components/schemas/cloudEvents/dataschemadef'
+        subject:
+          $ref: '#/components/schemas/cloudEvents/subjectdef'
+        time:
+          $ref: '#/components/schemas/cloudEvents/timedef'
+        licenceKey:
+          $ref: '#/components/schemas/licenceKeyType'
+        userAgent:
+          $ref: '#/components/schemas/userAgentType'
+        eventReceiver:
+          $ref: '#/components/schemas/senderReceiverType'
+        eventSender:
+          $ref: '#/components/schemas/senderReceiverType'
+        data:
+          $ref: '#/components/schemas/eventDataType'
+        processGroupId:
+          $ref: '#/components/schemas/processGroupIdType'
+        processId:
+          $ref: '#/components/schemas/processIdType'
+        processName:
+          $ref: '#/components/schemas/genericProcessNameType'
+        processVersion:
+          $ref: '#/components/schemas/processVersionType'
+        processStatus:
+          $ref: '#/components/schemas/processStatusType'
+        subProcessName:
+          description: Identifier for the single generic exchange subprocess step.
+          type: string
+          enum:
+            - provide
         subProcessStatus:
           $ref: '#/components/schemas/subProcessStatusType'
       additionalProperties: false
@@ -599,6 +714,19 @@ components:
         - contract
         - mandate
         - claimsExperience
+    genericProcessNameType:
+      description: Identifier of the generic exchange business context.
+      type: string
+      enum:
+        - offer
+        - invoice
+        - commission
+        - contract
+        - mandate
+        - claimsExperience
+        - claims
+        - customerInformation
+        - brokerInformation
     processVersionType:
       description: Version of the used core process
       type: string
@@ -723,7 +851,7 @@ components:
       description: Defines status of the overall process.
     processIdType:
       type: string
-      format: UUID
+      format: uuid
       description: UUID, that won't change during the offer processes. The UUID is set by the party, that starts the process.
     senderReceiverType:
       type: object
@@ -854,9 +982,7 @@ components:
           - text/xml
           - application/json
         minLength: 1
-        type:
-          - 'null'
-          - string
+        type: string
       dataschemadef:
         description: Identifies the schema that data adheres to. Must point to the respective raw schema in
           the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).
@@ -873,18 +999,14 @@ components:
           - Billing november 2024
           - MF offer company A
         minLength: 1
-        type:
-          - 'null'
-          - string
+        type: string
       timedef:
         description: Timestamp of when the occurrence happened. Must adhere to RFC 3339.
         examples:
           - '2018-04-05T17:31:03.526Z'
         format: date-time
         minLength: 1
-        type:
-          - 'null'
-          - string
+        type: string
     licenceKeyType:
       description: The license key for the requesting SC application.
       type: string
@@ -998,6 +1120,53 @@ components:
             processStatus: active
             subProcessName: request
             subProcessStatus: Received
+    safGenericEvent:
+      name: safGenericEvent
+      title: SAF Generic Exchange Event
+      summary: Generic Exchange event used to exchange non-standardized business information and documents.
+      payload:
+        $ref: '#/components/schemas/SAFGenericEventType'
+      bindings:
+        kafka:
+          key:
+            $ref: '#/components/schemas/SAFKeyType'
+          schemaIdLocation: 'payload'
+          schemaIdPayloadEncoding: 'confluent'
+          bindingVersion: '0.4.0'
+      examples:
+        - name: genericEventWithPayloadExample
+          summary: Generic Exchange event with business payload
+          payload:
+            id: 044d2e50-12d6-43e4-bb1b-7b54841c9c82
+            source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
+            specversion: '1.0'
+            type: ch.ecohub.saf.generic
+            datacontenttype: application/json
+            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/GenericExchange_v1.0.0/schemas/GenericExchange/GenericExchange.json
+            subject: generic offer transfer
+            time: '2023-08-17T14:15:22.000Z'
+            licenceKey: REcxZEVMZWV1UXFwOUZwaz...
+            userAgent:
+              name: BS1
+              version: '1.0'
+            eventReceiver:
+              category: insurer
+              id: IDP1234567
+            eventSender:
+              category: broker
+              id: IDP7654321
+            data:
+              payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZ...
+              payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
+              encryptionKey: urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...
+              publicKeyVersion: '1.1'
+              signatureKeyVersion: '1.3'
+            processId: ff9275bf-5b35-492e-bdd2-c217e151d335
+            processName: customerInformation
+            processVersion: 1.0.0
+            processStatus: active
+            subProcessName: provide
+            subProcessStatus: Created
     safInquiryEvent:
       name: safInquiryEvent
       title: SAF Inquiry Event

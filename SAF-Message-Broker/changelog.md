@@ -1,3 +1,12 @@
+### Version 1.2.0
+  - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on the IN topic
+  - Added channel and operation to consume the generic OUT topic
+  - Added dedicated Generic Exchange processName schema
+  - Aligned schema documentation with the actual implementation; this does not change the SAF Message Broker API behavior
+    - Fix max.message.bytes of the `IN` topic to be 8388608 instead of 8338608
+    - Optional CloudEvents attributes are no longer documented as explicitly nullable; if not set, they should be omitted
+    - Normalized the `processId` format annotation to `uuid`
+
 ### Version 1.1.0
   - Improved documentation
   - increased max.message.bytes to 8388608 bytes (8MB) for all topics
