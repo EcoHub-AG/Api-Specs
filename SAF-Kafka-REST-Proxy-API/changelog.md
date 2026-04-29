@@ -1,5 +1,16 @@
 # SAF Kafka REST Proxy API Changelog
 
+### Version 1.2.0
+  - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on /in
+  - Added endpoint to consume the generic OUT topic
+  - Added dedicated Generic Exchange processName schema
+  - Aligned API documentation with the actual implementation; this does not change API behavior
+    - Events produced to the `IN` topic can by `anyOf` insteaf of `oneOf` the specified schemas
+    - Narrowed consume response schemas per topic type to match the events actually returned by each endpoint
+    - removed unused 'typedef' schema
+  - removed explicit definition of Content-Type header for requests to /in as the allowed values are already defined by `requestBody.content.<media-type>`
+
+
 ### Version 1.1.1
   - Fixed schemaVersionId header value (value in 1.1.0 was incorrect)
 
