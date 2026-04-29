@@ -40,10 +40,7 @@
         "application/json"
       ],
       "minLength": 1,
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": "string"
     },
     "dataschemadef": {
       "description": "Identifies the schema that data adheres to. Must point to the respective raw schema in the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).",
@@ -62,10 +59,7 @@
         "MF offer company A"
       ],
       "minLength": 1,
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": "string"
     },
     "timedef": {
       "description": "Timestamp of when the occurrence happened. Must adhere to RFC 3339.",
@@ -74,10 +68,7 @@
       ],
       "format": "date-time",
       "minLength": 1,
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": "string"
     }
   }
 }

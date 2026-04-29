@@ -4,6 +4,9 @@
       "$ref": "SAFEventType.json"
     },
     {
+      "$ref": "SAFGenericEventType.json"
+    },
+    {
       "$ref": "SAFInquiryEventType.json"
     },
     {

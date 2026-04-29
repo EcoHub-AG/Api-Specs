@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Generic Exchange SAF event used to exchange non-standardized business information and documents.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "CloudEventsType.json#/definitions/iddef"
+    },
+    "source": {
+      "$ref": "CloudEventsType.json#/definitions/sourcedef"
+    },
+    "specversion": {
+      "$ref": "CloudEventsType.json#/definitions/specversiondef"
+    },
+    "type": {
+      "description": "Reverse DNS entry defining the Generic Exchange SAF event type.",
+      "type": "string",
+      "const": "ch.ecohub.saf.generic"
+    },
+    "datacontenttype": {
+      "$ref": "CloudEventsType.json#/definitions/datacontenttypedef"
+    },
+    "dataschema": {
+      "$ref": "CloudEventsType.json#/definitions/dataschemadef"
+    },
+    "subject": {
+      "$ref": "CloudEventsType.json#/definitions/subjectdef"
+    },
+    "time": {
+      "$ref": "CloudEventsType.json#/definitions/timedef"
+    },
+    "licenceKey": {
+      "$ref": "event-generic/LicenceKeyType.json"
+    },
+    "userAgent": {
+      "$ref": "event-generic/UserAgentType.json"
+    },
+    "eventReceiver": {
+      "$ref": "event-generic/SenderReceiverType.json"
+    },
+    "eventSender": {
+      "$ref": "event-generic/SenderReceiverType.json"
+    },
+    "data": {
+      "$ref": "event-generic/EventDataType.json"
+    },
+    "processGroupId": {
+      "$ref": "event-generic/ProcessGroupIdType.json"
+    },
+    "processId": {
+      "$ref": "event-generic/ProcessIdType.json"
+    },
+    "processName": {
+      "$ref": "event-generic/GenericProcessNameType.json"
+    },
+    "processVersion": {
+      "$ref": "event-generic/ProcessVersionType.json"
+    },
+    "processStatus": {
+      "$ref": "event-generic/ProcessStatusType.json"
+    },
+    "subProcessName": {
+      "description": "Identifier for the single generic exchange subprocess step.",
+      "type": "string",
+      "const": "provide"
+    },
+    "subProcessStatus": {
+      "$ref": "event-generic/SubProcessStatusType.json"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "source",
+    "specversion",
+    "type",
+    "processId",
+    "processName",
+    "processVersion",
+    "subProcessName",
+    "processStatus",
+    "subProcessStatus",
+    "eventReceiver",
+    "eventSender",
+    "userAgent",
+    "licenceKey"
+  ],
+  "examples": [
+    {
+      "name": "genericEventWithPayloadExample",
+      "summary": "Generic Exchange SAF event",
+      "payload": {
+        "id": "044d2e50-12d6-43e4-bb1b-7b54841c9c82",
+        "source": "http://www.myecohub.ch/ecoHub-mock-broker-producer1",
+        "specversion": "1.0",
+        "type": "ch.ecohub.saf.generic",
+        "datacontenttype": "application/json",
+        "dataschema": "https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/GenericExchange_v1.0.0/schemas/GenericExchange/GenericExchange.json",
+        "subject": "Change of customer address",
+        "time": "2023-08-17T14:15:22.000Z",
+        "licenceKey": "REcxZEVMZWV1UXFwOUZwaz...",
+        "userAgent": {
+          "name": "BS1",
+          "version": "1.0"
+        },
+        "eventReceiver": {
+          "category": "insurer",
+          "id": "IDP1234567"
+        },
+        "eventSender": {
+          "category": "broker",
+          "id": "IDP7654321"
+        },
+        "data": {
+          "payload": "V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZ...",
+          "payloadSignature": "MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP",
+          "encryptionKey": "urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...",
+          "publicKeyVersion": "1.1",
+          "signatureKeyVersion": "1.3"
+        },
+        "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
+        "processName": "customerInformation",
+        "processVersion": "1.0.0",
+        "processStatus": "active",
+        "subProcessName": "provide",
+        "subProcessStatus": "Created"
+      }
+    }
+  ]
+}
