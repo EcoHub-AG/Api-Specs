@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "LLM token usage counters for IDS processing.",
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": ["integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
+    },
+    "inputCached": {
+      "type": ["integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
+    },
+    "output": {
+      "type": ["integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
+    },
+    "total": {
+      "type": ["integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
+    }
+  },
+  "additionalProperties": false
+}

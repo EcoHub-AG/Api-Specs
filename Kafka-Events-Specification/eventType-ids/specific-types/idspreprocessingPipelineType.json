@@ -1,49 +1,52 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "Detailed log of all preprocessing operations applied to the document before AI extraction. Shows sequence, parameters, quality metrics, and execution status for each step.",
+  "description": "Detailed log of preprocessing operations applied to the document before AI extraction.",
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
       "sequence": {
-        "description": "Order in which this preprocessing step was executed (1-indexed)",
-        "type": "integer",
-        "minimum": 1
+        "description": "Order in which this preprocessing step was executed.",
+        "type": ["null", "integer", "string"],
+        "minimum": 1,
+        "pattern": "^(0|[1-9]\\d*)$"
       },
       "operation": {
-        "description": "Type of preprocessing operation applied",
+        "description": "Type of preprocessing operation applied.",
         "type": "string",
         "enum": ["rotation", "deskew", "enhancement", "noise-reduction", "binarization", "contrast-adjustment", "sharpening", "custom"]
       },
       "parameters": {
-        "description": "Parameters passed to this preprocessing operation",
-        "type": "object",
+        "description": "Parameters passed to this preprocessing operation.",
+        "type": ["null", "object"],
         "additionalProperties": true
       },
       "qualityBefore": {
-        "description": "Document quality metric before applying this step (0-1)",
-        "type": "number",
+        "description": "Document quality metric before applying this step.",
+        "type": ["null", "number", "string"],
         "minimum": 0,
-        "maximum": 1
+        "maximum": 1,
+        "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
       },
       "qualityAfter": {
-        "description": "Document quality metric after applying this step (0-1)",
-        "type": "number",
+        "description": "Document quality metric after applying this step.",
+        "type": ["null", "number", "string"],
         "minimum": 0,
-        "maximum": 1
+        "maximum": 1,
+        "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
       },
       "durationMs": {
-        "description": "Time spent executing this preprocessing step in milliseconds",
-        "type": "number",
-        "minimum": 0
+        "description": "Time spent executing this preprocessing step in milliseconds.",
+        "type": ["null", "number", "string"],
+        "minimum": 0,
+        "pattern": "^(0|[1-9]\\d*)(\\.\\d+)?([eE][+-]?\\d+)?$"
       },
       "status": {
-        "description": "Execution status of this preprocessing step",
+        "description": "Execution status of this preprocessing step.",
         "type": "string",
         "enum": ["applied", "skipped", "failed"]
       }
     },
-    "required": ["sequence", "operation", "status"],
     "additionalProperties": false
   }
 }

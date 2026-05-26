@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Source document and OCR/extraction quality metrics aligned with OAS IdsDocumentQualityMetrics.",
+  "type": "object",
+  "properties": {
+    "idsdocumentType": {
+      "type": ["null", "string"]
+    },
+    "idssourceFormat": {
+      "type": ["null", "string"]
+    },
+    "idspageCount": {
+      "type": ["null", "integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
+    },
+    "idspagesEvaluated": {
+      "type": ["null", "integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
+    },
+    "idsocrQuality": {
+      "type": ["null", "number", "string"],
+      "minimum": 0,
+      "maximum": 1,
+      "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+    },
+    "idsagbExtraction": {
+      "type": "boolean"
+    },
+    "idsagbPagesRemoved": {
+      "type": ["null", "array"],
+      "items": {
+        "type": ["integer", "string"],
+        "minimum": 0,
+        "pattern": "^(0|[1-9]\\d*)$"
+      }
+    },
+    "idspostprocessingInformation": {
+      "type": ["null", "array"],
+      "items": {
+        "$ref": "idspostprocessingInformationType.json"
+      }
+    },
+    "idsdocumentQuality": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "idsdocumentQualityType.json"
+        }
+      ]
+    },
+    "idscompletenessScore": {
+      "type": ["null", "number", "string"],
+      "minimum": 0,
+      "maximum": 1,
+      "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+    },
+    "idssourceDocumentHash": {
+      "type": ["null", "string"],
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,228 +1,197 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "Multi-level action recommendations for the receiver: field-level, document-level, and decision matrices",
+  "description": "Multi-level action recommendations for the receiver: field-level, document-level, and decision matrices.",
   "type": "object",
   "properties": {
     "summary": {
-      "description": "Quick summary of recommendations across all fields",
-      "type": "object",
-      "properties": {
-        "fieldsCount": {
-          "description": "Total number of fields extracted",
-          "type": "integer",
-          "minimum": 0
+      "oneOf": [
+        {
+          "type": "null"
         },
-        "fieldsAccept": {
-          "description": "Number of fields recommended to ACCEPT without review",
-          "type": "integer",
-          "minimum": 0
-        },
-        "fieldsReview": {
-          "description": "Number of fields recommended for REVIEW (spot-check)",
-          "type": "integer",
-          "minimum": 0
-        },
-        "fieldsVerify": {
-          "description": "Number of fields recommended to VERIFY (manual validation)",
-          "type": "integer",
-          "minimum": 0
-        },
-        "documentLevelIssues": {
-          "description": "Count of document-level issues identified",
-          "type": "integer",
-          "minimum": 0
-        },
-        "estimatedManualReviewMinutes": {
-          "description": "Total estimated time for manual review of recommended fields",
-          "type": "integer",
-          "minimum": 0
-        },
-        "overallStrategy": {
-          "description": "Suggested overall review strategy based on field-level recommendations",
-          "type": "string",
-          "enum": ["full-review", "targeted-review", "spot-check", "accept"]
+        {
+          "type": "object",
+          "properties": {
+            "fieldsCount": {
+              "type": ["null", "integer", "string"],
+              "minimum": 0,
+              "pattern": "^(0|[1-9]\\d*)$"
+            },
+            "fieldsAccept": {
+              "type": ["null", "integer", "string"],
+              "minimum": 0,
+              "pattern": "^(0|[1-9]\\d*)$"
+            },
+            "fieldsReview": {
+              "type": ["null", "integer", "string"],
+              "minimum": 0,
+              "pattern": "^(0|[1-9]\\d*)$"
+            },
+            "fieldsVerify": {
+              "type": ["null", "integer", "string"],
+              "minimum": 0,
+              "pattern": "^(0|[1-9]\\d*)$"
+            },
+            "documentLevelIssues": {
+              "type": ["null", "integer", "string"],
+              "minimum": 0,
+              "pattern": "^(0|[1-9]\\d*)$"
+            },
+            "estimatedManualReviewMinutes": {
+              "type": ["null", "integer", "string"],
+              "minimum": 0,
+              "pattern": "^(0|[1-9]\\d*)$"
+            },
+            "overallStrategy": {
+              "type": "string",
+              "enum": ["accept", "spot-check", "targeted-review", "full-review"]
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "required": ["fieldsCount", "fieldsAccept", "fieldsReview", "fieldsVerify"],
-      "additionalProperties": false
+      ]
     },
     "fieldRecommendations": {
-      "description": "Per-field action recommendations with reasons and guidance",
-      "type": "array",
+      "type": ["null", "array"],
       "items": {
         "type": "object",
         "properties": {
           "fieldPath": {
-            "description": "Identifier of the field",
-            "type": "string"
+            "type": ["null", "string"]
           },
           "recommendation": {
-            "description": "Recommended action for receiver",
             "type": "string",
             "enum": ["ACCEPT", "REVIEW", "VERIFY", "REJECT"]
           },
           "priority": {
-            "description": "Priority ranking (1=highest, 4=lowest) for executing recommendations",
-            "type": "integer",
+            "type": ["null", "integer", "string"],
             "minimum": 1,
-            "maximum": 4
+            "pattern": "^(0|[1-9]\\d*)$"
           },
           "reasons": {
-            "description": "List of reasons why this recommendation was made",
-            "type": "array",
+            "type": ["null", "array"],
             "items": {
-              "type": "string",
-              "enum": ["confidence_below_threshold", "confidence_near_threshold", "handwritten_text", "ocr_quality_low", "validation_failed", "validation_warning", "high_risk_field", "readability_issue", "format_mismatch", "business_rule_violation"]
+              "type": "string"
             }
           },
           "confidenceScore": {
-            "description": "Extraction confidence for this field (0-1)",
-            "type": "number",
+            "type": ["null", "number", "string"],
             "minimum": 0,
-            "maximum": 1
+            "maximum": 1,
+            "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
           },
           "threshold": {
-            "description": "The confidence threshold used to make this recommendation",
-            "type": "number",
+            "type": ["null", "number", "string"],
             "minimum": 0,
-            "maximum": 1
+            "maximum": 1,
+            "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
           },
           "whatToCheckFor": {
-            "description": "Specific actionable guidance for manual verification",
-            "type": "string"
+            "type": ["null", "string"]
           },
           "alternativeValues": {
-            "description": "Other values considered by the model for this field",
-            "type": "array",
-            "items": {}
+            "type": ["null", "array"],
+            "items": {
+              "type": "string"
+            }
           },
           "estimatedTimeMinutes": {
-            "description": "Estimated time for manual review of this field",
-            "type": "integer",
-            "minimum": 0
+            "type": ["null", "integer", "string"],
+            "minimum": 0,
+            "pattern": "^(0|[1-9]\\d*)$"
           }
         },
-        "required": ["fieldPath", "recommendation"],
         "additionalProperties": false
       }
     },
     "documentLevelRecommendations": {
-      "description": "Cross-cutting issues affecting multiple fields or the entire document",
-      "type": "array",
+      "type": ["null", "array"],
       "items": {
         "type": "object",
         "properties": {
           "recommendation": {
-            "description": "Type of document-level issue",
-            "type": "string",
-            "enum": ["HIGH_OCR_RISK", "HANDWRITING_DETECTED", "LOW_DOCUMENT_QUALITY", "STRUCTURE_UNRECOGNIZED", "MISSING_PAGES", "CUSTOM_ISSUE"]
+            "type": ["null", "string"]
           },
           "affectedPages": {
-            "description": "Page numbers affected by this issue (1-indexed)",
-            "type": "array",
+            "type": ["null", "array"],
             "items": {
-              "type": "integer",
-              "minimum": 1
+              "type": ["integer", "string"],
+              "minimum": 1,
+              "pattern": "^(0|[1-9]\\d*)$"
             }
           },
           "affectedFields": {
-            "description": "Field paths affected by this issue",
-            "type": "array",
+            "type": ["null", "array"],
             "items": {
               "type": "string"
             }
           },
           "whatToDo": {
-            "description": "Actionable guidance for addressing this issue",
-            "type": "string"
+            "type": ["null", "string"]
           },
           "estimatedTimeMinutes": {
-            "description": "Estimated time to address this issue",
-            "type": "integer",
-            "minimum": 0
+            "type": ["null", "integer", "string"],
+            "minimum": 0,
+            "pattern": "^(0|[1-9]\\d*)$"
           }
         },
-        "required": ["recommendation", "whatToDo"],
         "additionalProperties": false
       }
     },
     "receiverDecisionMatrix": {
-      "description": "Grouped summary for quick action planning by the receiver",
-      "type": "object",
-      "properties": {
-        "acceptWithoutReview": {
-          "description": "Fields with high confidence that require no manual verification",
-          "type": "object",
-          "properties": {
-            "count": {
-              "type": "integer",
-              "minimum": 0
-            },
-            "action": {
-              "type": "string"
-            },
-            "fields": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "required": ["count"],
-          "additionalProperties": false
+      "oneOf": [
+        {
+          "type": "null"
         },
-        "spotCheckRecommended": {
-          "description": "Fields requiring quick verification or spot-checking",
+        {
           "type": "object",
           "properties": {
-            "count": {
-              "type": "integer",
-              "minimum": 0
+            "acceptWithoutReview": {
+              "$ref": "#/definitions/receiverDecisionGroup"
             },
-            "action": {
-              "type": "string"
+            "spotCheckRecommended": {
+              "$ref": "#/definitions/receiverDecisionGroup"
             },
-            "estimatedMinutes": {
-              "type": "integer",
-              "minimum": 0
-            },
-            "fields": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
+            "manualVerificationRequired": {
+              "$ref": "#/definitions/receiverDecisionGroup"
             }
           },
-          "required": ["count"],
-          "additionalProperties": false
-        },
-        "manualVerificationRequired": {
-          "description": "Fields requiring full manual verification",
-          "type": "object",
-          "properties": {
-            "count": {
-              "type": "integer",
-              "minimum": 0
-            },
-            "action": {
-              "type": "string"
-            },
-            "estimatedMinutes": {
-              "type": "integer",
-              "minimum": 0
-            },
-            "fields": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "required": ["count"],
           "additionalProperties": false
         }
-      },
-      "additionalProperties": false
+      ]
+    }
+  },
+  "definitions": {
+    "receiverDecisionGroup": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "count": {
+              "type": ["null", "integer", "string"],
+              "minimum": 0,
+              "pattern": "^(0|[1-9]\\d*)$"
+            },
+            "action": {
+              "type": ["null", "string"]
+            },
+            "estimatedMinutes": {
+              "type": ["null", "integer", "string"],
+              "minimum": 0,
+              "pattern": "^(0|[1-9]\\d*)$"
+            },
+            "fields": {
+              "type": ["null", "array"],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
     }
   },
   "additionalProperties": false

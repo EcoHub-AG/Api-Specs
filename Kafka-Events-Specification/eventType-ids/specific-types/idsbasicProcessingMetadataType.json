@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Fundamental IDS processing metadata aligned with OAS IdsBasicProcessingMetadata.",
+  "type": "object",
+  "properties": {
+    "idsprocessingModel": {
+      "type": "string"
+    },
+    "idsmodelVersion": {
+      "type": "string"
+    },
+    "idsextractionMode": {
+      "type": ["null", "string"]
+    },
+    "idsllmCallCount": {
+      "type": ["null", "integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
+    },
+    "idsmajorityVoting": {
+      "type": ["null", "boolean"]
+    },
+    "idspromptRepetition": {
+      "type": ["null", "boolean"]
+    },
+    "idsdpi": {
+      "type": ["null", "integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
+    },
+    "idsimageQuality": {
+      "type": ["null", "integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
+    },
+    "idspsm": {
+      "type": ["null", "integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
+    },
+    "idsocrEngineMode": {
+      "type": ["null", "string"]
+    },
+    "idsprocessingTimeMs": {
+      "type": ["null", "number", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)(\\.\\d+)?([eE][+-]?\\d+)?$"
+    },
+    "idspostprocessingTimeMs": {
+      "type": ["null", "number", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)(\\.\\d+)?([eE][+-]?\\d+)?$"
+    },
+    "idsllmResponseTimeMs": {
+      "type": ["null", "number", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)(\\.\\d+)?([eE][+-]?\\d+)?$"
+    },
+    "idstokenUsage": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "idstokenUsageType.json"
+        }
+      ]
+    },
+    "idsconfidenceScore": {
+      "type": ["null", "number", "string"],
+      "minimum": 0,
+      "maximum": 1,
+      "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+    }
+  },
+  "additionalProperties": false
+}

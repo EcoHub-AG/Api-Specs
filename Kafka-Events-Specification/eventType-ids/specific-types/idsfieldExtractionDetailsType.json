@@ -1,125 +1,160 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "Per-field extraction metadata showing confidence, location, alternatives, and validation status for each extracted field",
+  "description": "Per-field extraction metadata showing confidence, location, alternatives, and validation status for each extracted field.",
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
       "fieldPath": {
-        "description": "JSON path or identifier representing the field location in the structured output",
-        "type": "string"
+        "description": "JSON path or identifier representing the field location in the structured output.",
+        "type": ["null", "string"]
       },
       "confidence": {
-        "description": "Overall confidence score for this field extraction (0-1)",
-        "type": "number",
+        "description": "Overall confidence score for this field extraction (0-1).",
+        "type": ["null", "number", "string"],
         "minimum": 0,
-        "maximum": 1
+        "maximum": 1,
+        "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
       },
       "confidenceBreakdown": {
-        "description": "Decomposition of confidence into constituent factors to explain the overall score",
-        "type": "object",
-        "properties": {
-          "formatValidity": {
-            "description": "Confidence that extracted value matches expected format (0-1)",
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
+        "description": "Decomposition of confidence into constituent factors. OAS v2.1 currently leaves this object under-specified, so additional factor names are allowed.",
+        "oneOf": [
+          {
+            "type": "null"
           },
-          "modelCertainty": {
-            "description": "AI model's internal certainty about the extraction (0-1)",
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
-          },
-          "contextAppropiateness": {
-            "description": "Confidence that value fits contextual requirements (0-1)",
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
-          },
-          "readability": {
-            "description": "Quality of source text readability in document (0-1)",
-            "type": "number",
-            "minimum": 0,
-            "maximum": 1
+          {
+            "type": "object",
+            "properties": {
+              "formatValidity": {
+                "type": ["null", "number", "string"],
+                "minimum": 0,
+                "maximum": 1,
+                "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+              },
+              "modelCertainty": {
+                "type": ["null", "number", "string"],
+                "minimum": 0,
+                "maximum": 1,
+                "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+              },
+              "contextAppropriateness": {
+                "type": ["null", "number", "string"],
+                "minimum": 0,
+                "maximum": 1,
+                "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+              },
+              "contextAppropiateness": {
+                "description": "Deprecated misspelling retained for backward compatibility.",
+                "type": ["null", "number", "string"],
+                "minimum": 0,
+                "maximum": 1,
+                "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+              },
+              "readability": {
+                "type": ["null", "number", "string"],
+                "minimum": 0,
+                "maximum": 1,
+                "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+              }
+            },
+            "additionalProperties": true
           }
-        },
-        "additionalProperties": false
+        ]
       },
       "confidenceRationale": {
-        "description": "Explanation of why confidence is at this level (e.g., 'Model uncertain due to handwriting', 'Format mismatch')",
-        "type": "string"
+        "description": "Explanation of why confidence is at this level.",
+        "type": ["null", "string"]
       },
       "receiverGuidance": {
-        "description": "Actionable guidance for receiver if manual verification is needed",
-        "type": "string"
+        "description": "Actionable guidance for receiver if manual verification is needed.",
+        "type": ["null", "string"]
       },
       "extractionMethod": {
-        "description": "Method used to obtain this field value",
+        "description": "Method used to obtain this field value.",
         "type": "string",
         "enum": ["extracted", "calculated", "default", "manual-input"]
       },
       "sourceLocation": {
-        "description": "Location in the source document where this field was found",
-        "type": "object",
-        "properties": {
-          "page": {
-            "description": "Page number in document where field appears (1-indexed)",
-            "type": "integer",
-            "minimum": 1
+        "oneOf": [
+          {
+            "type": "null"
           },
-          "boundingBox": {
-            "description": "Normalized bounding box coordinates [x, y, width, height] as fractions of page dimensions (0-1 range)",
-            "type": "array",
-            "items": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1
+          {
+            "type": "object",
+            "properties": {
+              "page": {
+                "description": "Page number in document where field appears, 1-indexed.",
+                "type": ["null", "integer", "string"],
+                "minimum": 1,
+                "pattern": "^(0|[1-9]\\d*)$"
+              },
+              "boundingBox": {
+                "description": "Normalized bounding box coordinates [x, y, width, height] as fractions of page dimensions.",
+                "type": ["null", "array"],
+                "items": {
+                  "type": ["number", "string"],
+                  "minimum": 0,
+                  "maximum": 1,
+                  "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+                },
+                "minItems": 4,
+                "maxItems": 4
+              },
+              "text": {
+                "description": "Raw text extracted from this location before any transformation.",
+                "type": ["null", "string"]
+              },
+              "contextAppropriateness": {
+                "type": ["null", "number", "string"],
+                "minimum": 0,
+                "maximum": 1,
+                "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+              },
+              "readability": {
+                "type": ["null", "number", "string"],
+                "minimum": 0,
+                "maximum": 1,
+                "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+              }
             },
-            "minItems": 4,
-            "maxItems": 4
-          },
-          "text": {
-            "description": "Raw text extracted from this location before any transformation",
-            "type": "string"
+            "additionalProperties": false
           }
-        },
-        "additionalProperties": false
+        ]
       },
       "extractedValue": {
-        "description": "The raw extracted value before transformations (any type)"
+        "description": "The raw extracted value before transformations."
       },
       "alternatives": {
-        "description": "Alternative values considered by the AI model for this field",
-        "type": "array",
+        "description": "Alternative values considered by the AI model for this field.",
+        "type": ["null", "array"],
         "items": {
           "type": "object",
           "properties": {
             "value": {
-              "description": "Alternative value candidate"
+              "description": "Alternative value candidate.",
+              "type": ["null", "string"]
             },
             "confidence": {
-              "description": "Confidence score for this alternative (0-1)",
-              "type": "number",
+              "description": "Confidence score for this alternative.",
+              "type": ["null", "number", "string"],
               "minimum": 0,
-              "maximum": 1
+              "maximum": 1,
+              "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
             }
           },
-          "required": ["value", "confidence"],
           "additionalProperties": false
         }
       },
       "validationStatus": {
-        "description": "Validation result for this specific field",
+        "description": "Validation result for this specific field.",
         "type": "string",
         "enum": ["valid", "invalid", "warning", "not-validated"]
       },
       "validationMessage": {
-        "description": "Details or explanation of validation status",
+        "description": "Details or explanation of validation status.",
         "type": "string"
       }
     },
-    "required": ["fieldPath", "confidence"],
     "additionalProperties": false
   }
 }

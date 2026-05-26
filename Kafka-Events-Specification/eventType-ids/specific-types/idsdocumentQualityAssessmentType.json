@@ -1,78 +1,89 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "Document-level quality assessment that guides receiver's review strategy and time budgets",
+  "description": "Document-level quality assessment that guides receiver review strategy and time budgets.",
   "type": "object",
   "properties": {
     "overallQuality": {
-      "description": "Overall quality assessment of the document for processing",
-      "type": "string",
-      "enum": ["excellent", "high", "medium", "low", "poor"]
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "idsdocumentQualityType.json"
+        }
+      ]
     },
     "qualityFactors": {
-      "description": "Breakdown of quality across different dimensions",
-      "type": "object",
-      "properties": {
-        "documentReadability": {
-          "description": "Legibility and clarity of text in document (0-1)",
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1
+      "oneOf": [
+        {
+          "type": "null"
         },
-        "structureRecognition": {
-          "description": "How well document structure (forms, tables, fields) is recognized (0-1)",
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1
-        },
-        "handwritingPresence": {
-          "description": "Whether document contains handwritten content",
-          "type": "boolean"
-        },
-        "imageQuality": {
-          "description": "Quality of scanned/photographed image (0-1)",
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1
-        },
-        "ocrQuality": {
-          "description": "Accuracy of character recognition on document (0-1)",
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1
+        {
+          "type": "object",
+          "properties": {
+            "documentReadability": {
+              "type": ["null", "number", "string"],
+              "minimum": 0,
+              "maximum": 1,
+              "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+            },
+            "structureRecognition": {
+              "type": ["null", "number", "string"],
+              "minimum": 0,
+              "maximum": 1,
+              "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+            },
+            "handwritingPresence": {
+              "type": ["null", "boolean"]
+            },
+            "imageQuality": {
+              "type": ["null", "number", "string"],
+              "minimum": 0,
+              "maximum": 1,
+              "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+            },
+            "ocrQuality": {
+              "type": ["null", "number", "string"],
+              "minimum": 0,
+              "maximum": 1,
+              "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "additionalProperties": false
+      ]
     },
     "receiverRecommendedStrategy": {
-      "description": "Recommended review approach for the receiver based on document quality",
-      "type": "object",
-      "properties": {
-        "approachSuggested": {
-          "description": "Type of review strategy recommended",
-          "type": "string",
-          "enum": ["full-review", "targeted-review", "spot-check", "accept"]
+      "oneOf": [
+        {
+          "type": "null"
         },
-        "reasoning": {
-          "description": "Explanation of why this strategy is recommended",
-          "type": "string"
-        },
-        "fieldsRequiringExtraAttention": {
-          "description": "List of field paths that require extra verification due to document quality issues",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        {
+          "type": "object",
+          "properties": {
+            "approachSuggested": {
+              "type": ["null", "string"],
+              "enum": ["full-review", "targeted-review", "spot-check", "accept", null]
+            },
+            "reasoning": {
+              "type": ["null", "string"]
+            },
+            "fieldsRequiringExtraAttention": {
+              "type": ["null", "array"],
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false
         }
-      },
-      "required": ["approachSuggested"],
-      "additionalProperties": false
+      ]
     },
     "estimatedManualReviewMinutes": {
-      "description": "Estimated time in minutes for manual review at recommended thoroughness level",
-      "type": "integer",
-      "minimum": 0
+      "type": ["null", "integer", "string"],
+      "minimum": 0,
+      "pattern": "^(0|[1-9]\\d*)$"
     }
   },
-  "required": ["overallQuality"],
   "additionalProperties": false
 }

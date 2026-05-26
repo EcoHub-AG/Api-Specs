@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "The main event type which can either be used to transmit business data according to a data standard or to send an acknowledge event.",
+  "description": "SAF Intelligent Data Structuring event. The root contains CloudEvents attributes and scalar SAF/IDS extension attributes for filtering, routing, and search. Complex processing metadata is carried under data.",
   "type": "object",
   "properties": {
     "id": {
@@ -37,71 +37,48 @@
     "licenceKey": {
       "$ref": "../event-generic/LicenceKeyType.json"
     },
-    "userAgent": {
-      "$ref": "../event-generic/UserAgentType.json"
+    "userAgentName": {
+      "description": "Name of the client application that produced or requested the event. Full userAgent object is available under data.userAgent.",
+      "type": "string",
+      "minLength": 1
     },
-    "eventReceiver": {
-      "$ref": "../event-generic/SenderReceiverType.json"
+    "userAgentVersion": {
+      "description": "Version of the client application that produced or requested the event. Full userAgent object is available under data.userAgent.",
+      "type": "string",
+      "minLength": 1
     },
-    "eventSender": {
-      "$ref": "../event-generic/SenderReceiverType.json"
+    "eventReceiverCategory": {
+      "description": "Receiver organisation category used for filtering and routing. Full eventReceiver object is available under data.eventReceiver.",
+      "type": "string",
+      "enum": ["broker", "insurer", "serviceprovider"]
+    },
+    "eventReceiverId": {
+      "description": "Receiver IDP identifier used for filtering and routing. Full eventReceiver object is available under data.eventReceiver.",
+      "type": "string",
+      "minLength": 3
+    },
+    "eventReceiverOnBehalfBy": {
+      "description": "Optional IDP number of the software provider's techUser if the event is received on behalf.",
+      "type": "string",
+      "pattern": "^IDP(\\d{7})$"
+    },
+    "eventSenderCategory": {
+      "description": "Sender organisation category used for filtering and routing. Full eventSender object is available under data.eventSender.",
+      "type": "string",
+      "enum": ["broker", "insurer", "serviceprovider"]
+    },
+    "eventSenderId": {
+      "description": "Sender IDP identifier used for filtering and routing. Full eventSender object is available under data.eventSender.",
+      "type": "string",
+      "minLength": 3
+    },
+    "eventSenderOnBehalfBy": {
+      "description": "Optional IDP number of the software provider's techUser if the event is sent on behalf.",
+      "type": "string",
+      "pattern": "^IDP(\\d{7})$"
     },
     "data": {
       "$ref": "IDSEventDataType.json"
-    },
-    "idsprocessingModel": {
-      "$ref": "./specific-types/idsprocessingModelType.json"
-    },
-    "idsmodelVersion": {
-      "$ref": "./specific-types/idsmodelVersionType.json"
-    },
-    "idsconfidenceScore": {
-      "$ref": "./specific-types/idsconfidenceScoreType.json"
-    },
-    "idsprocessingTimeMs": {
-      "$ref": "./specific-types/idsprocessingTimeMsType.json"
-    },
-    "idsdocumentType": {
-      "$ref": "./specific-types/idsdocumentTypeType.json"
-    },
-    "idssourceFormat": {
-      "$ref": "./specific-types/idssourceFormatType.json"
-    },
-    "idspageCount": {
-      "$ref": "./specific-types/idspageCountType.json"
-    },
-    "idsocrQuality": {
-      "$ref": "./specific-types/idsocrQualityType.json"
-    },
-    "idsdocumentQuality": {
-      "$ref": "./specific-types/idsdocumentQualityType.json"
-    },
-    "idscompletenessScore": {
-      "$ref": "./specific-types/idscompletenessScoreType.json"
-    },
-    "idssourceDocumentHash": {
-      "$ref": "./specific-types/idssourceDocumentHashType.json"
-    },
-    "idspreprocessingPipeline": {
-      "$ref": "./specific-types/idspreprocessingPipelineType.json"
-    },
-    "idspreprocessingImpactAnalysis": {
-      "$ref": "./specific-types/idspreprocessingImpactAnalysisType.json"
-    },
-    "idsfieldExtractionDetails": {
-      "$ref": "./specific-types/idsfieldExtractionDetailsType.json"
-    },
-    "idsfieldTransformationRecord": {
-      "$ref": "./specific-types/idsfieldTransformationRecordType.json"
-    },
-    "idsdocumentQualityAssessment": {
-      "$ref": "./specific-types/idsdocumentQualityAssessmentType.json"
-    },
-    "idsreceiverRecommendations": {
-      "$ref": "./specific-types/idsreceiverRecommendationsType.json"
-    },
-    "idsvalidationResults": {
-      "$ref": "./specific-types/idsvalidationResultsType.json"
     },
     "processGroupId": {
       "$ref": "../event-generic/ProcessGroupIdType.json"
@@ -123,6 +100,36 @@
     },
     "subProcessStatus": {
       "$ref": "../event-generic/SubProcessStatusType.json"
+    },
+    "idsconfidenceScore": {
+      "description": "Scalar projection of data.idsbasicProcessingMetadata.idsconfidenceScore for routing and quality gating.",
+      "$ref": "./specific-types/idsconfidenceScoreType.json"
+    },
+    "idsdocumentQuality": {
+      "description": "Scalar projection of data.idsdocumentQualityMetrics.idsdocumentQuality for routing and quality tier signals.",
+      "$ref": "./specific-types/idsdocumentQualityType.json"
+    },
+    "idsisValid": {
+      "description": "Scalar projection of data.idsvalidationResults.isValid for routing and filtering.",
+      "type": "boolean"
+    },
+    "idsroutingDecision": {
+      "description": "Scalar projection of data.idsvalidationResults.routingDecision for routing and filtering.",
+      "type": "string",
+      "enum": ["auto-approve", "manual-review", "reject", "re-process"]
+    },
+    "idsrequiresHumanReview": {
+      "description": "Scalar projection of data.idsvalidationResults.requiresHumanReview for routing and filtering.",
+      "type": "boolean"
+    },
+    "idsreviewReason": {
+      "description": "Scalar projection of data.idsvalidationResults.reviewReason for search and operational triage.",
+      "type": "string"
+    },
+    "idstokenUsageTotal": {
+      "description": "Scalar projection of data.idsbasicProcessingMetadata.idstokenUsage.total for search, reporting, and cost analysis.",
+      "type": "integer",
+      "minimum": 0
     }
   },
   "additionalProperties": false,
@@ -137,81 +144,102 @@
     "subProcessName",
     "processStatus",
     "subProcessStatus",
-    "eventReceiver",
-    "eventSender",
-    "userAgent",
+    "eventReceiverCategory",
+    "eventReceiverId",
+    "eventSenderCategory",
+    "eventSenderId",
+    "userAgentName",
+    "userAgentVersion",
     "licenceKey"
   ],
   "examples": [
     {
-      "name": "eventWithPayloadExample",
-      "summary": "SAFEvent with offer.nlpi payload",
+      "name": "idsProcessingResponseExample",
+      "summary": "SAF IDS processing response with scalar root projections and grouped IDS metadata under data",
       "payload": {
         "id": "044d2e50-12d6-43e4-bb1b-7b54841c9c82",
-        "source": "http://www.myecohub.ch/ecoHub-mock-broker-producer1",
+        "source": "http://www.myecohub.ch/ecoHub-ids-service",
         "specversion": "1.0",
-        "type": "ch.ecohub.saf.data",
+        "type": "ch.ecohub.saf.ids",
         "datacontenttype": "application/json",
-        "dataschema": "https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json",
-        "subject": "offer nlpi request",
-        "time": "2023-08-17T14:15:22.000Z",
+        "subject": "ai data structuring result",
+        "time": "2026-04-15T14:30:45Z",
         "licenceKey": "REcxZEVMZWV1UXFwOUZwaz...",
-        "userAgent": {
-          "name": "BS1",
-          "version": "1.0"
-        },
-        "eventReceiver": {
-          "category": "insurer",
-          "id": "IDP1234567"
-        },
-        "eventSender": {
-          "category": "broker",
-          "id": "IDP7654321"
-        },
+        "userAgentName": "SAF-IDS-Client",
+        "userAgentVersion": "1.0.2",
+        "eventReceiverCategory": "insurer",
+        "eventReceiverId": "IDP1234567",
+        "eventSenderCategory": "broker",
+        "eventSenderId": "IDP7654321",
+        "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
+        "processName": "aiDataStructuring",
+        "processVersion": "2.1.0",
+        "processStatus": "active",
+        "subProcessName": "Provide",
+        "subProcessStatus": "Responded",
+        "idsconfidenceScore": 0.87,
+        "idsdocumentQuality": "high",
+        "idsisValid": true,
+        "idsroutingDecision": "auto-approve",
+        "idsrequiresHumanReview": false,
+        "idstokenUsageTotal": 4821,
         "data": {
           "payload": "V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZ...",
           "payloadSignature": "MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP",
           "encryptionKey": "urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...",
           "publicKeyVersion": "1.1",
-          "signatureKeyVersion": "1.3"
-        },
-        "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
-        "processName": "offer.nlpi",
-        "processVersion": "0.3.0",
-        "processStatus": "active",
-        "subProcessName": "Initiate",
-        "subProcessStatus": "Created"
-      }
-    },
-    {
-      "name": "acknowledgeEventExample",
-      "summary": "Acknowledge Event",
-      "payload": {
-        "id": "044d2e50-12d6-43e4-bb1b-7b54841c9c82",
-        "source": "http://www.myecohub.ch/ecoHub-mock-broker-producer1",
-        "specversion": "1.0",
-        "type": "ch.ecohub.saf.data",
-        "subject": "offer nlpi request acknowledgement",
-        "time": "2023-08-17T14:15:22.000Z",
-        "licenceKey": "REcxZEVMZWV1UXFwOUZwaz...",
-        "userAgent": {
-          "name": "BS1",
-          "version": "1.0"
-        },
-        "eventReceiver": {
-          "category": "insurer",
-          "id": "IDP1234567"
-        },
-        "eventSender": {
-          "category": "broker",
-          "id": "IDP7654321"
-        },
-        "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
-        "processName": "offer.nlpi",
-        "processVersion": "0.3.0",
-        "processStatus": "active",
-        "subProcessName": "request",
-        "subProcessStatus": "Received"
+          "signatureKeyVersion": "1.3",
+          "userAgent": {
+            "name": "SAF-IDS-Client",
+            "version": "1.0.2"
+          },
+          "eventReceiver": {
+            "category": "insurer",
+            "id": "IDP1234567"
+          },
+          "eventSender": {
+            "category": "broker",
+            "id": "IDP7654321"
+          },
+          "idsbasicProcessingMetadata": {
+            "idsprocessingModel": "Claude-3.5-Sonnet",
+            "idsmodelVersion": "1.2.0",
+            "idsprocessingTimeMs": 2450,
+            "idspostprocessingTimeMs": 320,
+            "idsllmResponseTimeMs": 1850,
+            "idsllmCallCount": 3,
+            "idsmajorityVoting": true,
+            "idspromptRepetition": false,
+            "idsextractionMode": "digital",
+            "idsdpi": 300,
+            "idsimageQuality": 85,
+            "idspsm": 3,
+            "idsocrEngineMode": "LSTM_ONLY",
+            "idsconfidenceScore": 0.87,
+            "idstokenUsage": {
+              "input": 3200,
+              "inputCached": 1200,
+              "output": 621,
+              "total": 4821
+            }
+          },
+          "idsdocumentQualityMetrics": {
+            "idsdocumentType": "claim-form",
+            "idssourceFormat": "application/pdf",
+            "idspageCount": 4,
+            "idspagesEvaluated": 4,
+            "idsocrQuality": 0.94,
+            "idsagbExtraction": false,
+            "idsdocumentQuality": "high",
+            "idscompletenessScore": 0.92,
+            "idssourceDocumentHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          "idsvalidationResults": {
+            "isValid": true,
+            "routingDecision": "auto-approve",
+            "requiresHumanReview": false
+          }
+        }
       }
     }
   ]

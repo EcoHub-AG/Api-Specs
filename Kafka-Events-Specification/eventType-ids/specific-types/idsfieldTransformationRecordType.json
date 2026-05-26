@@ -1,66 +1,66 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "Log of value transformations and normalizations applied to extracted fields during processing",
+  "description": "Log of value transformations and normalizations applied to extracted fields during processing.",
   "type": "array",
   "items": {
     "type": "object",
     "properties": {
       "fieldPath": {
-        "description": "Identifier of the field that was transformed",
+        "description": "Identifier of the field that was transformed.",
         "type": "string"
       },
       "rawExtractedValue": {
-        "description": "Original raw value as extracted by AI (before transformations)"
+        "description": "Original raw value as extracted by AI before transformations."
       },
       "finalStoredValue": {
-        "description": "Final value after all transformations have been applied"
+        "description": "Final value after all transformations have been applied."
       },
       "originalConfidence": {
-        "description": "Confidence score of the raw extraction before transformation (0-1)",
-        "type": "number",
+        "description": "Confidence score of the raw extraction before transformation.",
+        "type": ["null", "number", "string"],
         "minimum": 0,
-        "maximum": 1
+        "maximum": 1,
+        "pattern": "^(0(\\.\\d+)?|1(\\.0+)?)$"
       },
       "transformationsApplied": {
-        "description": "Sequence of transformations applied to convert raw to final value",
-        "type": "array",
+        "description": "Sequence of transformations applied to convert raw to final value.",
+        "type": ["null", "array"],
         "items": {
           "type": "object",
           "properties": {
             "type": {
-              "description": "Category of transformation applied",
+              "description": "Category of transformation applied.",
               "type": "string",
               "enum": ["format-normalization", "year-expansion", "unit-conversion", "whitespace-trimming", "case-normalization", "custom"]
             },
             "from": {
-              "description": "Source format or pattern",
+              "description": "Source format or pattern.",
               "type": "string"
             },
             "to": {
-              "description": "Target format or pattern",
+              "description": "Target format or pattern.",
               "type": "string"
             },
             "reasoning": {
-              "description": "Explanation of why this transformation was applied",
+              "description": "Explanation of why this transformation was applied.",
               "type": "string"
             },
             "isMeaningPreserving": {
-              "description": "Whether transformation preserves the semantic meaning of the original value",
+              "description": "Whether transformation preserves the semantic meaning of the original value.",
               "type": "boolean"
             },
             "confidenceAfterTransform": {
-              "description": "Confidence in the transformed value (0-1)",
+              "description": "Confidence in the transformed value.",
               "type": "number",
               "minimum": 0,
               "maximum": 1
             }
           },
-          "required": ["type", "isMeaningPreserving"],
+          "required": ["type", "reasoning", "isMeaningPreserving", "confidenceAfterTransform"],
           "additionalProperties": false
         }
       }
     },
-    "required": ["fieldPath", "isMeaningPreserving"],
     "additionalProperties": false
   }
 }
