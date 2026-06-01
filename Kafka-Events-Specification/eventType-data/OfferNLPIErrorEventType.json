@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Offer NLPI error event, i.e. an event for errors which related to the event payload.",
   "type": "object",
-  "description": "SAF error event, i.e. an event for errors which are unrelated to the event payload.",
   "properties": {
     "id": {
       "$ref": "CloudEventsType.json#/definitions/iddef"
@@ -13,7 +13,9 @@
       "$ref": "CloudEventsType.json#/definitions/specversiondef"
     },
     "type": {
-      "$ref": "event-generic/EventType.json"
+      "description": "Reverse DNS entry defining the Standard error SAF event type. Restricted to ch.ecohub.saf.standard-error for Standard process error events (member of EventType).",
+      "type": "string",
+      "enum": ["ch.ecohub.saf.standard-error"]
     },
     "datacontenttype": {
       "$ref": "CloudEventsType.json#/definitions/datacontenttypedef"
@@ -34,7 +36,7 @@
       "$ref": "event-generic/UserAgentType.json"
     },
     "data": {
-      "$ref": "event-generic/ErrorDataType.json"
+      "$ref": "#/definitions/offerNLPIErrorType"
     },
     "eventReceiver": {
       "$ref": "event-generic/SenderReceiverType.json"
@@ -64,11 +66,45 @@
       "$ref": "event-generic/SubProcessStatusType.json"
     }
   },
+  "definitions": {
+    "offerNLPIErrorType": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "description": "The code best describing the occured error.",
+            "minLength": 3,
+            "type": "string",
+            "enum": [
+              "other"
+            ]
+          },
+          "errorMessage": {
+            "description": "Error message",
+            "minLength": 3,
+            "type": "string"
+          },
+          "path": {
+            "description": "xPath or JsonPath to the property where the error occurred.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "errorCode",
+          "errorMessage"
+        ]
+      }
+    }
+  },
   "required": [
     "id",
     "source",
     "specversion",
     "type",
+    "data",
     "processId",
     "processName",
     "processVersion",

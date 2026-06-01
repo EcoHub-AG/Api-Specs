@@ -4,64 +4,91 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "CloudEventsType.json#/definitions/iddef"
+      "$ref": "../CloudEventsType.json#/definitions/iddef"
     },
     "source": {
-      "$ref": "CloudEventsType.json#/definitions/sourcedef"
+      "$ref": "../CloudEventsType.json#/definitions/sourcedef"
     },
     "specversion": {
-      "$ref": "CloudEventsType.json#/definitions/specversiondef"
+      "$ref": "../CloudEventsType.json#/definitions/specversiondef"
     },
     "type": {
-      "$ref": "event-generic/EventType.json"
+      "description": "Reverse DNS entry defining the Intelligent Data Structuring (IDS) SAF event type. Restricted to ch.ecohub.saf.ids for IDS events (member of EventType).",
+      "type": "string",
+      "enum": ["ch.ecohub.saf.ids"]
     },
     "datacontenttype": {
-      "$ref": "CloudEventsType.json#/definitions/datacontenttypedef"
+      "$ref": "../CloudEventsType.json#/definitions/datacontenttypedef"
     },
     "dataschema": {
-      "$ref": "CloudEventsType.json#/definitions/dataschemadef"
+      "$ref": "../CloudEventsType.json#/definitions/dataschemadef"
     },
     "subject": {
-      "$ref": "CloudEventsType.json#/definitions/subjectdef"
+      "$ref": "../CloudEventsType.json#/definitions/subjectdef"
     },
     "time": {
-      "$ref": "CloudEventsType.json#/definitions/timedef"
+      "$ref": "../CloudEventsType.json#/definitions/timedef"
     },
     "licenceKey": {
-      "$ref": "event-generic/LicenceKeyType.json"
+      "$ref": "../event-generic/LicenceKeyType.json"
     },
     "userAgent": {
-      "$ref": "event-generic/UserAgentType.json"
+      "$ref": "../event-generic/UserAgentType.json"
     },
     "eventReceiver": {
-      "$ref": "event-generic/SenderReceiverType.json"
+      "$ref": "../event-generic/SenderReceiverType.json"
     },
     "eventSender": {
-      "$ref": "event-generic/SenderReceiverType.json"
+      "$ref": "../event-generic/SenderReceiverType.json"
     },
     "data": {
-      "$ref": "event-generic/EventDataType.json"
+      "$ref": "IDSEventDataType.json"
     },
     "processGroupId": {
-      "$ref": "event-generic/ProcessGroupIdType.json"
+      "$ref": "../event-generic/ProcessGroupIdType.json"
     },
     "processId": {
-      "$ref": "event-generic/ProcessIdType.json"
+      "$ref": "../event-generic/ProcessIdType.json"
     },
     "processName": {
-      "$ref": "event-generic/ProcessNameType.json"
+      "$ref": "../event-generic/ProcessNameType.json"
     },
     "processVersion": {
-      "$ref": "event-generic/ProcessVersionType.json"
+      "$ref": "../event-generic/ProcessVersionType.json"
     },
     "processStatus": {
-      "$ref": "event-generic/ProcessStatusType.json"
+      "$ref": "../event-generic/ProcessStatusType.json"
     },
     "subProcessName": {
-      "$ref": "event-generic/SubProcessNameType.json"
+      "$ref": "../event-generic/SubProcessNameType.json"
     },
     "subProcessStatus": {
-      "$ref": "event-generic/SubProcessStatusType.json"
+      "$ref": "../event-generic/SubProcessStatusType.json"
+    },
+    "idsconfidenceScore": {
+      "description": "Scalar projection of data.idsbasicProcessingMetadata.idsconfidenceScore for routing and quality gating.",
+      "$ref": "./specific-types/idsconfidenceScoreType.json"
+    },
+    "idsdocumentQuality": {
+      "description": "Scalar projection of data.idsdocumentQualityMetrics.idsdocumentQuality for routing and quality tier signals.",
+      "$ref": "./specific-types/idsdocumentQualityType.json"
+    },
+    "idsisValid": {
+      "description": "Scalar projection of data.idsvalidationResults.isValid for routing and filtering.",
+      "type": "boolean"
+    },
+    "idsroutingDecision": {
+      "description": "Scalar projection of data.idsvalidationResults.routingDecision for routing and filtering.",
+      "type": "string",
+      "enum": ["auto-approve", "manual-review", "reject", "re-process"]
+    },
+    "idsrequiresHumanReview": {
+      "description": "Scalar projection of data.idsvalidationResults.requiresHumanReview for routing and filtering.",
+      "type": "boolean"
+    },
+    "idsreviewReason": {
+      "description": "Scalar projection of data.idsvalidationResults.reviewReason for search and operational triage.",
+      "type": "string"
     }
   },
   "additionalProperties": false,
@@ -89,9 +116,9 @@
         "id": "044d2e50-12d6-43e4-bb1b-7b54841c9c82",
         "source": "http://www.myecohub.ch/ecoHub-mock-broker-producer1",
         "specversion": "1.0",
-        "type": "ch.ecohub.saf.data",
+        "type": "ch.ecohub.saf.ids",
         "datacontenttype": "application/json",
-        "dataschema": "https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json",
+        "dataschema": "",
         "subject": "offer nlpi request",
         "time": "2023-08-17T14:15:22.000Z",
         "licenceKey": "REcxZEVMZWV1UXFwOUZwaz...",
@@ -129,7 +156,7 @@
         "id": "044d2e50-12d6-43e4-bb1b-7b54841c9c82",
         "source": "http://www.myecohub.ch/ecoHub-mock-broker-producer1",
         "specversion": "1.0",
-        "type": "ch.ecohub.saf.data",
+        "type": "ch.ecohub.saf.ids",
         "subject": "offer nlpi request acknowledgement",
         "time": "2023-08-17T14:15:22.000Z",
         "licenceKey": "REcxZEVMZWV1UXFwOUZwaz...",

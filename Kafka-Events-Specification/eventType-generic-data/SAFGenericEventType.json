@@ -4,60 +4,60 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "CloudEventsType.json#/definitions/iddef"
+      "$ref": "../CloudEventsType.json#/definitions/iddef"
     },
     "source": {
-      "$ref": "CloudEventsType.json#/definitions/sourcedef"
+      "$ref": "../CloudEventsType.json#/definitions/sourcedef"
     },
     "specversion": {
-      "$ref": "CloudEventsType.json#/definitions/specversiondef"
+      "$ref": "../CloudEventsType.json#/definitions/specversiondef"
     },
     "type": {
-      "description": "Reverse DNS entry defining the Generic Exchange SAF event type.",
+      "description": "Reverse DNS entry defining the Generic Exchange SAF event type. Restricted to ch.ecohub.saf.generic for Generic events (member of EventType).",
       "type": "string",
-      "const": "ch.ecohub.saf.generic"
+      "enum": ["ch.ecohub.saf.generic"]
     },
     "datacontenttype": {
-      "$ref": "CloudEventsType.json#/definitions/datacontenttypedef"
+      "$ref": "../CloudEventsType.json#/definitions/datacontenttypedef"
     },
     "dataschema": {
-      "$ref": "CloudEventsType.json#/definitions/dataschemadef"
+      "$ref": "../CloudEventsType.json#/definitions/dataschemadef"
     },
     "subject": {
-      "$ref": "CloudEventsType.json#/definitions/subjectdef"
+      "$ref": "../CloudEventsType.json#/definitions/subjectdef"
     },
     "time": {
-      "$ref": "CloudEventsType.json#/definitions/timedef"
+      "$ref": "../CloudEventsType.json#/definitions/timedef"
     },
     "licenceKey": {
-      "$ref": "event-generic/LicenceKeyType.json"
+      "$ref": "../event-generic/LicenceKeyType.json"
     },
     "userAgent": {
-      "$ref": "event-generic/UserAgentType.json"
+      "$ref": "../event-generic/UserAgentType.json"
     },
     "eventReceiver": {
-      "$ref": "event-generic/SenderReceiverType.json"
+      "$ref": "../event-generic/SenderReceiverType.json"
     },
     "eventSender": {
-      "$ref": "event-generic/SenderReceiverType.json"
+      "$ref": "../event-generic/SenderReceiverType.json"
     },
     "data": {
-      "$ref": "event-generic/EventDataType.json"
+      "$ref": "../event-generic/EventDataType.json"
     },
     "processGroupId": {
-      "$ref": "event-generic/ProcessGroupIdType.json"
+      "$ref": "../event-generic/ProcessGroupIdType.json"
     },
     "processId": {
-      "$ref": "event-generic/ProcessIdType.json"
+      "$ref": "../event-generic/ProcessIdType.json"
     },
     "processName": {
-      "$ref": "event-generic/GenericProcessNameType.json"
+      "$ref": "../event-generic/GenericProcessNameType.json"
     },
     "processVersion": {
-      "$ref": "event-generic/ProcessVersionType.json"
+      "$ref": "../event-generic/ProcessVersionType.json"
     },
     "processStatus": {
-      "$ref": "event-generic/ProcessStatusType.json"
+      "$ref": "../event-generic/ProcessStatusType.json"
     },
     "subProcessName": {
       "description": "Identifier for the single generic exchange subprocess step.",

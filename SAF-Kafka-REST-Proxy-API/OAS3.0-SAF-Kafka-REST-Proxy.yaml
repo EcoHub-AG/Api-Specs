@@ -970,6 +970,92 @@ components:
         - eventSender
         - userAgent
         - licenceKey
+    SAFIDSEventType:
+      description: 'The main event type which can either be used to transmit business data according to a data standard or to send an acknowledge event.'
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/iddef'
+        source:
+          $ref: '#/components/schemas/sourcedef'
+        specversion:
+          $ref: '#/components/schemas/specversiondef'
+        type:
+          description: CloudEvents event type. Restricted to ch.ecohub.saf.ids for IDS events (member of EventType).
+          type: string
+          enum:
+            - ch.ecohub.saf.ids
+        datacontenttype:
+          $ref: '#/components/schemas/datacontenttypedef'
+        dataschema:
+          $ref: '#/components/schemas/dataschemadef'
+        subject:
+          $ref: '#/components/schemas/subjectdef'
+        time:
+          $ref: '#/components/schemas/timedef'
+        licenceKey:
+          $ref: '#/components/schemas/LicenceKeyType'
+        userAgent:
+          $ref: '#/components/schemas/UserAgentType'
+        eventReceiver:
+          $ref: '#/components/schemas/SenderReceiverType'
+        eventSender:
+          $ref: '#/components/schemas/SenderReceiverType'
+        data:
+          $ref: '#/components/schemas/IDSEventDataType'
+        processGroupId:
+          $ref: '#/components/schemas/ProcessGroupIdType'
+        processId:
+          $ref: '#/components/schemas/ProcessIdType'
+        processName:
+          $ref: '#/components/schemas/ProcessNameType'
+        processVersion:
+          $ref: '#/components/schemas/ProcessVersionType'
+        processStatus:
+          $ref: '#/components/schemas/ProcessStatusType'
+        subProcessName:
+          $ref: '#/components/schemas/SubProcessNameType'
+        subProcessStatus:
+          $ref: '#/components/schemas/SubProcessStatusType'
+        idsconfidenceScore:
+          description: Scalar projection of data.idsbasicProcessingMetadata.idsconfidenceScore for routing and quality gating.
+          $ref: '#/components/schemas/IDSConfidenceScoreType'
+        idsdocumentQuality:
+          description: Scalar projection of data.idsdocumentQualityMetrics.idsdocumentQuality for routing and quality tier signals.
+          $ref: '#/components/schemas/IDSDocumentQualityType'
+        idsisValid:
+          description: Scalar projection of data.idsvalidationResults.isValid for routing and filtering.
+          type: boolean
+        idsroutingDecision:
+          description: Scalar projection of data.idsvalidationResults.routingDecision for routing and filtering.
+          type: string
+          enum:
+            - auto-approve
+            - manual-review
+            - reject
+            - re-process
+        idsrequiresHumanReview:
+          description: Scalar projection of data.idsvalidationResults.requiresHumanReview for routing and filtering.
+          type: boolean
+        idsreviewReason:
+          description: Scalar projection of data.idsvalidationResults.reviewReason for search and operational triage.
+          type: string
+      additionalProperties: false
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - processId
+        - processName
+        - processVersion
+        - subProcessName
+        - processStatus
+        - subProcessStatus
+        - eventReceiver
+        - eventSender
+        - userAgent
+        - licenceKey
     SAFGenericEventType:
       description: Generic Exchange SAF event used to exchange non-standardized business information and documents.
       type: object
@@ -1211,6 +1297,60 @@ components:
         - publicKeyVersion
         - signatureKeyVersion
       additionalProperties: false
+    IDSEventDataType:
+      description: IDS event data payload. Contains the encrypted structured extraction result and optional IDS processing metadata grouped by function.
+      type: object
+      properties:
+        payload:
+          description: Base64 representation of the gzip-compressed and encrypted structured output from document processing.
+          type: string
+          minLength: 3
+        payloadSignature:
+          description: Digital signature for integrity verification of encrypted payload. ECDSA secp384r1/SHA-384, ASN.1 encoded, transmitted as Base64.
+          type: string
+          minLength: 3
+        encryptionKey:
+          description: Encrypted AES symmetric key. Encrypted with eventReceiver's public key using RSA/OAEP/SHA-256, transmitted as Base64.
+          type: string
+          minLength: 3
+        publicKeyVersion:
+          description: Version identifier of the recipient's public key used to encrypt the encryptionKey.
+          type: string
+        signatureKeyVersion:
+          description: Version identifier of the sender's signature key used to sign the payload.
+          type: string
+        idsbasicProcessingMetadata:
+          description: Model, processing mode, timing and aggregate confidence score. Source of root projections idsconfidenceScore.
+          $ref: '#/components/schemas/IDSBasicProcessingMetadataType'
+        idsdocumentQualityMetrics:
+          description: Source document properties, OCR quality, AGB handling, completeness, and document hash. Source of root projection idsdocumentQuality.
+          $ref: '#/components/schemas/IDSDocumentQualityMetricsType'
+        idsdetailedExtractionData:
+          description: Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.
+          $ref: '#/components/schemas/IDSDetailedExtractionDataType'
+          nullable: true
+        idsdocumentQualityAssessment:
+          description: Quality-factor breakdown and recommended review strategy.
+          $ref: '#/components/schemas/IDSDocumentQualityAssessmentType'
+          nullable: true
+        idsreceiverRecommendations:
+          description: Field-level, document-level, and decision-matrix recommendations.
+          $ref: '#/components/schemas/IDSReceiverRecommendationsType'
+          nullable: true
+        idsvalidationResults:
+          description: Validation result, routing decision, human-review flag, and business-rule results. Source of root projections idsisValid, idsroutingDecision, idsrequiresHumanReview, and idsreviewReason.
+          $ref: '#/components/schemas/IDSValidationResultsType'
+        idsfieldExtractionAudit:
+          description: Field provenance source audit trail.
+          $ref: '#/components/schemas/IDSFieldExtractionAuditType'
+          nullable: true
+      required:
+        - payload
+        - payloadSignature
+        - encryptionKey
+        - publicKeyVersion
+        - signatureKeyVersion
+      additionalProperties: false
     EventType:
       description: 'Reverse DNS entry to defines the type of event: data, inquiry, standard-error
         or saf-error'
@@ -1219,6 +1359,8 @@ components:
       enum:
         - ch.ecohub.saf.data
         - ch.ecohub.saf.inquiry
+        - ch.ecohub.saf.generic
+        - ch.ecohub.saf.ids
         - ch.ecohub.saf.standard-error
         - ch.ecohub.saf.saf-error
     LicenceKeyType:
@@ -1706,3 +1848,803 @@ components:
           - value
           - partition
           - offset
+    IDSConfidenceScoreType:
+      type: number
+      minimum: 0
+      maximum: 1
+      format: double
+      description: |
+        Overall confidence score indicating aggregate confidence in extraction results.
+        
+        **Range:** 0.0 (no confidence) to 1.0 (high confidence)
+        
+        **Calculation:** Derived from field-level confidence scores and document quality metrics:
+        - Accounts for OCR quality, document clarity, and field extraction confidence
+        - Provides single metric for receivers to assess extraction reliability
+        - Used by validation engine and receiver recommendations
+        
+        **Purpose:**
+        - Quick assessment of overall extraction quality
+        - Input for routing decisions (auto-approve vs. review vs. verify)
+        - Compliance and audit trail documentation
+        
+        **Mapping to SAFIDSEventType:** Maps to `idsconfidenceScore` property in Kafka event
+      example: 0.87
+    IDSDocumentQualityType:
+      description: Overall assessment of document quality for processing.
+      type: string
+      enum:
+        - excellent
+        - high
+        - medium
+        - low
+        - poor
+    IDSPostprocessingInformationType:
+      description: Postprocessing change applied to a field after AI extraction.
+      type: object
+      properties:
+        message:
+          type: string
+        field:
+          type: string
+        oldValue:
+          type: string
+          nullable: true
+        newValue:
+          type: string
+          nullable: true
+      required:
+        - message
+        - field
+        - oldValue
+        - newValue
+      additionalProperties: false
+    IDSBasicProcessingMetadataType:
+      description: Fundamental IDS processing metadata aligned with OAS IdsBasicProcessingMetadata. Model, processing mode, timing and aggregate confidence score.
+      type: object
+      properties:
+        idsprocessingModel:
+          type: string
+          description: AI/ML model used to process the document (e.g., 'Claude-3.5-Sonnet', 'GPT-4-Vision', 'Azure-Document-Intelligence')
+        idsmodelVersion:
+          type: string
+          description: Version identifier of the AI model
+        idsextractionMode:
+          type: string
+          nullable: true
+        idsllmCallCount:
+          type: integer
+          minimum: 0
+          format: int32
+          nullable: true
+        idsmajorityVoting:
+          type: boolean
+          nullable: true
+        idspromptRepetition:
+          type: boolean
+          nullable: true
+        idsdpi:
+          type: integer
+          minimum: 0
+          format: int32
+          nullable: true
+        idsimageQuality:
+          type: integer
+          minimum: 0
+          format: int32
+          nullable: true
+        idspsm:
+          type: integer
+          minimum: 0
+          format: int32
+          nullable: true
+        idsocrEngineMode:
+          type: string
+          nullable: true
+        idsprocessingTimeMs:
+          type: number
+          minimum: 0
+          format: double
+          nullable: true
+          description: Elapsed time for document processing in milliseconds
+        idspostprocessingTimeMs:
+          type: number
+          minimum: 0
+          format: double  
+          nullable: true
+        idsllmResponseTimeMs:
+          type: number
+          minimum: 0
+          format: double
+          nullable: true
+        idsconfidenceScore:
+          type: number
+          minimum: 0
+          maximum: 1
+          format: double
+          nullable: true
+      additionalProperties: false
+    IDSDocumentQualityMetricsType:
+      description: Source document and OCR/extraction quality metrics aligned with OAS IdsDocumentQualityMetrics. Source document properties, OCR quality, AGB handling, completeness, and document hash.
+      type: object
+      properties:
+        idsdocumentType:
+          type: string
+          nullable: true
+          description: Document category (e.g., 'insurance-application', 'claim-form', 'policy-document')
+        idssourceFormat:
+          type: string
+          nullable: true
+          description: Original document MIME type (e.g., 'application/pdf', 'image/jpeg', 'image/png')
+        idspageCount:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Total number of pages in the document
+        idspagesEvaluated:
+          type: integer
+          minimum: 0
+          nullable: true
+        idsocrQuality:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+          description: Optical Character Recognition quality score (0.0 = illegible, 1.0 = perfect)
+        idsagbExtraction:
+          type: boolean
+        idsagbPagesRemoved:
+          type: array
+          nullable: true
+          items:
+            type: integer
+            minimum: 0
+        idspostprocessingInformation:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/IDSPostprocessingInformationType'
+        idsdocumentQuality:
+          $ref: '#/components/schemas/IDSDocumentQualityType'
+        idscompletenessScore:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+          description: Percentage of expected/required fields successfully extracted (0.0-1.0)
+        idssourceDocumentHash:
+          type: string
+          pattern: '^[a-f0-9]{64}$'
+          nullable: true
+          description: SHA-256 cryptographic hash of original source document
+      additionalProperties: false
+    IDSPreprocessingPipelineType:
+      description: Detailed log of preprocessing operations applied to the document before AI extraction.
+      type: array
+      items:
+        type: object
+        properties:
+          sequence:
+            type: integer
+            minimum: 1
+            nullable: true
+          operation:
+            type: string
+            enum:
+              - rotation
+              - deskew
+              - enhancement
+              - noise-reduction
+              - binarization
+              - contrast-adjustment
+              - sharpening
+              - custom
+          parameters:
+            type: object
+            nullable: true
+            additionalProperties: true
+            description: Operation-specific configuration parameters
+          qualityBefore:
+            type: number
+            minimum: 0
+            maximum: 1
+            nullable: true
+            description: Document quality score before this operation
+          qualityAfter:
+            type: number
+            minimum: 0
+            maximum: 1
+            nullable: true
+            description: Document quality score after this operation
+          durationMs:
+            type: number
+            minimum: 0
+            nullable: true
+            description: Execution time for this step in milliseconds
+          status:
+            type: string
+            enum:
+              - applied
+              - skipped
+              - failed
+        additionalProperties: false
+    IDSPreprocessingImpactAnalysisType:
+      description: Summary analysis of the overall impact of preprocessing on document quality.
+      type: object
+      properties:
+        documentQualityBefore:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+        documentQualityAfter:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+        improvementFromPreprocessing:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+        mostImpactfulStep:
+          type: string
+          nullable: true
+        receiverNote:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IDSFieldExtractionDetailsType:
+      description: Per-field extraction metadata showing confidence, location, alternatives, and validation status for each extracted field.
+      type: array
+      items:
+        type: object
+        properties:
+          fieldPath:
+            type: string
+            nullable: true
+          confidence:
+            type: number
+            minimum: 0
+            maximum: 1
+            nullable: true
+          confidenceBreakdown:
+            type: object
+            nullable: true
+            properties:
+              formatValidity:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+              modelCertainty:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+              contextAppropriateness:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+              readability:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+            additionalProperties: true
+          confidenceRationale:
+            type: string
+            nullable: true
+          receiverGuidance:
+            type: string
+            nullable: true
+          extractionMethod:
+            type: string
+            enum:
+              - extracted
+              - calculated
+              - default
+              - manual-input
+          sourceLocation:
+            type: object
+            nullable: true
+            properties:
+              page:
+                type: integer
+                minimum: 1
+                nullable: true
+              boundingBox:
+                type: array
+                nullable: true
+                items:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                minItems: 4
+                maxItems: 4
+              text:
+                type: string
+                nullable: true
+              contextAppropriateness:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+              readability:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+            additionalProperties: false
+          extractedValue: {}
+          alternatives:
+            type: array
+            nullable: true
+            items:
+              type: object
+              properties:
+                value:
+                  type: string
+                  nullable: true
+                confidence:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  nullable: true
+              additionalProperties: false
+          validationStatus:
+            type: string
+            enum:
+              - valid
+              - invalid
+              - warning
+              - not-validated
+          validationMessage:
+            type: string
+        additionalProperties: false
+    IDSFieldTransformationRecordType:
+      description: Log of value transformations and normalizations applied to extracted fields during processing.
+      type: array
+      items:
+        type: object
+        properties:
+          fieldPath:
+            type: string
+          rawExtractedValue: {}
+          finalStoredValue: {}
+          originalConfidence:
+            type: number
+            minimum: 0
+            maximum: 1
+            nullable: true
+          transformationsApplied:
+            type: array
+            nullable: true
+            items:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - format-normalization
+                    - year-expansion
+                    - unit-conversion
+                    - whitespace-trimming
+                    - case-normalization
+                    - custom
+                from:
+                  type: string
+                to:
+                  type: string
+                reasoning:
+                  type: string
+                isMeaningPreserving:
+                  type: boolean
+                confidenceAfterTransform:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+              required:
+                - type
+                - reasoning
+                - isMeaningPreserving
+                - confidenceAfterTransform
+              additionalProperties: false
+        additionalProperties: false
+    IDSDetailedExtractionDataType:
+      description: Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.
+      type: object
+      properties:
+        idspreprocessingPipeline:
+          $ref: '#/components/schemas/IDSPreprocessingPipelineType'
+          nullable: true
+        idspreprocessingImpactAnalysis:
+          $ref: '#/components/schemas/IDSPreprocessingImpactAnalysisType'
+          nullable: true
+        idsfieldExtractionDetails:
+          $ref: '#/components/schemas/IDSFieldExtractionDetailsType'
+          nullable: true
+        idsfieldTransformationRecord:
+          $ref: '#/components/schemas/IDSFieldTransformationRecordType'
+          nullable: true
+      additionalProperties: false
+    IDSDocumentQualityAssessmentType:
+      description: Document-level quality assessment that guides receiver review strategy and time budgets.
+      type: object
+      properties:
+        overallQuality:
+          $ref: '#/components/schemas/IDSDocumentQualityType'
+          nullable: true
+        qualityFactors:
+          type: object
+          nullable: true
+          properties:
+            documentReadability:
+              type: number
+              minimum: 0
+              maximum: 1
+              nullable: true
+              description: Document text legibility score
+            structureRecognition:
+              type: number
+              minimum: 0
+              maximum: 1
+              nullable: true
+              description: Form/table structure recognition score
+            handwritingPresence:
+              type: boolean
+              nullable: true
+            imageQuality:
+              type: number
+              minimum: 0
+              maximum: 1
+              nullable: true
+              description: Image quality score (for scanned documents)
+            ocrQuality:
+              type: number
+              minimum: 0
+              maximum: 1
+              nullable: true
+              description: OCR accuracy score
+          additionalProperties: false
+        receiverRecommendedStrategy:
+          type: object
+          nullable: true
+          properties:
+            approachSuggested:
+              type: string
+              nullable: true
+              enum:
+                - full-review
+                - targeted-review
+                - spot-check
+                - accept
+            reasoning:
+              type: string
+              nullable: true
+              description: Explanation for the recommended strategy
+            fieldsRequiringExtraAttention:
+              type: array
+              nullable: true
+              items:
+                type: string
+              description: List of field paths requiring extra scrutiny
+          additionalProperties: false
+        estimatedManualReviewMinutes:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Estimated time in minutes for manual review
+      additionalProperties: false
+    IDSReceiverDecisionGroupType:
+      description: A group of fields sharing the same receiver decision (accept, spot-check, or manual-verify).
+      type: object
+      nullable: true
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Number of fields in this group
+        action:
+          type: string
+          nullable: true
+          description: Recommended action for this group
+        estimatedMinutes:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Estimated time in minutes for this group
+        fields:
+          type: array
+          nullable: true
+          items:
+            type: string
+          description: List of field paths in this group
+      additionalProperties: false
+    IDSReceiverRecommendationsType:
+      description: Multi-level action recommendations for the receiver — field-level, document-level, and decision matrices.
+      type: object
+      properties:
+        summary:
+          type: object
+          nullable: true
+          properties:
+            fieldsCount:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Total number of fields extracted
+            fieldsAccept:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Number of high-confidence fields (ACCEPT)
+            fieldsReview:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Number of medium-confidence fields (REVIEW)
+            fieldsVerify:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Number of low-confidence fields (VERIFY)
+            documentLevelIssues:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Number of document-level issues detected
+            estimatedManualReviewMinutes:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Total estimated time for manual review
+            overallStrategy:
+              type: string
+              enum:
+                - accept
+                - spot-check
+                - targeted-review
+                - full-review
+          additionalProperties: false
+        fieldRecommendations:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              fieldPath:
+                type: string
+                nullable: true
+                description: JSON path to the field
+              recommendation:
+                type: string
+                enum:
+                  - ACCEPT
+                  - REVIEW
+                  - VERIFY
+                  - REJECT
+              priority:
+                type: integer
+                minimum: 1
+                nullable: true
+                description: Priority order (1 = highest, higher number = lower priority)
+              reasons:
+                type: array
+                nullable: true
+                items:
+                  type: string
+                description: Reasons for this recommendation
+              confidenceScore:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+                description: Current confidence score for this field
+              threshold:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+                description: Confidence threshold applicable to this field
+              whatToCheckFor:
+                type: string
+                nullable: true
+                description: Guidance on what to verify for this field
+              alternativeValues:
+                type: array
+                nullable: true
+                items:
+                  type: string
+                description: Alternative values that could replace the current value
+              estimatedTimeMinutes:
+                type: integer
+                minimum: 0
+                nullable: true
+                description: Estimated time in minutes to review this field
+            additionalProperties: false
+        documentLevelRecommendations:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              recommendation:
+                type: string
+                nullable: true
+                description: "Type of recommendation (e.g., 'HANDWRITING_DETECTED', 'LOW_OCR_QUALITY')"
+              affectedPages:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 1
+              affectedFields:
+                type: array
+                nullable: true
+                items:
+                  type: string
+                description: List of affected field paths
+              whatToDo:
+                type: string
+                nullable: true
+              estimatedTimeMinutes:
+                type: integer
+                minimum: 0
+                nullable: true
+                description: Estimated time in minutes to address this issue
+            additionalProperties: false
+        receiverDecisionMatrix:
+          type: object
+          nullable: true
+          properties:
+            acceptWithoutReview:
+              $ref: '#/components/schemas/IDSReceiverDecisionGroupType'
+            spotCheckRecommended:
+              $ref: '#/components/schemas/IDSReceiverDecisionGroupType'
+            manualVerificationRequired:
+              $ref: '#/components/schemas/IDSReceiverDecisionGroupType'
+          additionalProperties: false
+      additionalProperties: false
+    IDSValidationResultsType:
+      description: Validation outcomes including format validation, business rules, and routing decisions aligned with OAS IdsValidationResults.
+      type: object
+      properties:
+        isValid:
+          description: Overall validation result for the extracted data.
+          type: boolean
+        validationErrors:
+          description: List of validation errors or warnings encountered.
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field path where error occurred
+              errorType:
+                type: string
+                description: "Error type identifier (e.g., 'ENUM_MISMATCH', 'FORMAT_ERROR', 'TYPE_MISMATCH')"
+              message:
+                type: string
+              severity:
+                type: string
+                description: Impact level of this validation issue.
+                enum:
+                  - error
+                  - warning
+                  - info
+              suggestedFix:
+                type: string
+            required:
+              - message
+            additionalProperties: false
+        routingDecision:
+          description: Suggested routing or next action based on validation results.
+          type: string
+          enum:
+            - auto-approve
+            - manual-review
+            - reject
+            - re-process
+        requiresHumanReview:
+          description: Whether human review is recommended before proceeding.
+          type: boolean
+        reviewReason:
+          description: Explanation of why human review is needed.
+          type: string
+          nullable: true
+        businessRuleValidations:
+          description: Business rule validation results as ProblemDetails-style entries aligned with OAS IdsBusinessRuleValidation.
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                nullable: true
+              title:
+                type: string
+                nullable: true
+              status:
+                type: integer
+                minimum: 0
+                nullable: true
+              detail:
+                type: string
+                nullable: true
+              instance:
+                type: string
+                nullable: true
+            additionalProperties: false
+        dataCompletenessCheck:
+          type: object
+          nullable: true
+          properties:
+            requiredFieldsPresent:
+              type: integer
+              minimum: 0
+              nullable: true
+            requiredFieldsTotal:
+              type: integer
+              minimum: 0
+              nullable: true
+            missingRequiredFields:
+              type: array
+              nullable: true
+              items:
+                type: string
+            lowConfidenceFields:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  fieldPath:
+                    type: string
+                    nullable: true
+                  confidence:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                    nullable: true
+                additionalProperties: false
+          additionalProperties: false
+      required:
+        - isValid
+        - routingDecision
+        - requiresHumanReview
+      additionalProperties: false
+    IDSFieldExtractionAuditType:
+      description: Field provenance audit entries aligned with OAS idsfieldExtractionAudit.
+      type: array
+      items:
+        type: object
+        properties:
+          fieldName:
+            type: string
+          xPath:
+            type: string
+          sources:
+            type: array
+            items:
+              type: string
+              enum:
+                - ApiGenerated
+                - Generated
+                - DefaultValue
+                - LlmGenerated
+                - PostProcessed
+                - PostLlmCalculated
+          description:
+            type: string
+            nullable: true
+        required:
+          - fieldName
+          - xPath
+          - sources
+          - description
+        additionalProperties: false
