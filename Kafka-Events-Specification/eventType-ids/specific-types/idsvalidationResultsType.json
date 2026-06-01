@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Validation outcomes including format validation, business rules, and routing decisions aligned with OAS IdsValidationResults.",
+  "type": "object",
+  "properties": {
+    "isValid": {
+      "description": "Overall validation result for the extracted data.",
+      "type": "boolean"
+    },
+    "validationErrors": {
+      "description": "List of validation errors or warnings encountered.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "description": "Field path where error occurred.",
+            "type": "string"
+          },
+          "errorType": {
+            "description": "Error type identifier (e.g., 'ENUM_MISMATCH', 'FORMAT_ERROR', 'TYPE_MISMATCH')",
+            "type": "string"
+          },
+          "message": {
+            "description": "Human-readable error description.",
+            "type": "string"
+          },
+          "severity": {
+            "description": "Impact level of this validation issue.",
+            "type": "string",
+            "enum": ["error", "warning", "info"]
+          },
+          "suggestedFix": {
+            "description": "Optional suggestion for correcting the issue.",
+            "type": "string"
+          }
+        },
+        "required": ["message"],
+        "additionalProperties": false
+      }
+    },
+    "routingDecision": {
+      "description": "Suggested routing or next action based on validation results.",
+      "type": "string",
+      "enum": ["auto-approve", "manual-review", "reject", "re-process"]
+    },
+    "requiresHumanReview": {
+      "description": "Whether human review is recommended before proceeding.",
+      "type": "boolean"
+    },
+    "reviewReason": {
+      "description": "Explanation of why human review is needed.",
+      "type": ["null", "string"]
+    },
+    "businessRuleValidations": {
+      "description": "Business rule validation results as ProblemDetails-style entries aligned with the OAS IdsBusinessRuleValidation schema.",
+      "type": ["null", "array"],
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": ["null", "string"]
+          },
+          "title": {
+            "type": ["null", "string"]
+          },
+          "status": {
+            "type": ["null", "integer"],
+            "minimum": 0
+          },
+          "detail": {
+            "type": ["null", "string"]
+          },
+          "instance": {
+            "type": ["null", "string"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "dataCompletenessCheck": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "requiredFieldsPresent": {
+              "description": "Number of required fields successfully extracted.",
+              "type": ["null", "integer"],
+              "minimum": 0
+            },
+            "requiredFieldsTotal": {
+              "description": "Total number of required fields expected.",
+              "type": ["null", "integer"],
+              "minimum": 0
+            },
+            "missingRequiredFields": {
+              "description": "List of required fields that were not found.",
+              "type": ["null", "array"],
+              "items": {
+                "type": "string"
+              }
+            },
+            "lowConfidenceFields": {
+              "description": "Fields with confidence below acceptable threshold.",
+              "type": ["null", "array"],
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldPath": {
+                    "type": ["null", "string"]
+                  },
+                  "confidence": {
+                    "type": ["null", "number"],
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "required": ["isValid", "routingDecision", "requiresHumanReview"],
+  "additionalProperties": false
+}

@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Source document and OCR/extraction quality metrics aligned with OAS IdsDocumentQualityMetrics.",
+  "type": "object",
+  "properties": {
+    "idsdocumentType": {
+      "description": "Document category (e.g., 'insurance-application', 'claim-form', 'policy-document')",
+      "type": ["null", "string"]
+    },
+    "idssourceFormat": {
+      "description": "Original document MIME type (e.g., 'application/pdf', 'image/jpeg', 'image/png')",
+      "type": ["null", "string"]
+    },
+    "idspageCount": {
+      "description": "Total number of pages in the document",
+      "type": ["null", "integer"],
+      "minimum": 0
+    },
+    "idspagesEvaluated": {
+      "type": ["null", "integer"],
+      "minimum": 0
+    },
+    "idsocrQuality": {
+      "description": "Optical Character Recognition quality score (0.0 = illegible, 1.0 = perfect)",
+      "type": ["null", "number"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "idsagbExtraction": {
+      "type": "boolean"
+    },
+    "idsagbPagesRemoved": {
+      "type": ["null", "array"],
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "idspostprocessingInformation": {
+      "type": ["null", "array"],
+      "items": {
+        "$ref": "idspostprocessingInformationType.json"
+      }
+    },
+    "idsdocumentQuality": {
+      "$ref": "idsdocumentQualityType.json"
+    },
+    "idscompletenessScore": {
+      "description": "Percentage of expected/required fields successfully extracted (0.0-1.0)",
+      "type": ["null", "number"],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "idssourceDocumentHash": {
+      "description": "SHA-256 cryptographic hash of original source document",
+      "type": ["null", "string"],
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "additionalProperties": false
+}
