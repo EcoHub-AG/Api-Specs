@@ -10,6 +10,11 @@
     "claimsExperience",
     "claims",
     "customerInformation",
-    "brokerInformation"
+    "brokerInformation",
+    "salaryDeclaration",
+    "bvgMembershipChange",
+    "mvInsuranceCertificate",
+    "generalRequest",
+    "errorReport"
   ]
 }
