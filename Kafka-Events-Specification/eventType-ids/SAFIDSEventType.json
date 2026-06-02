@@ -60,7 +60,7 @@
       "$ref": "../event-generic/ProcessStatusType.json"
     },
     "subProcessName": {
-      "$ref": "../event-generic/SubProcessNameType.json"
+      "$ref": "../event-generic/GenericSubProcessNameType.json"
     },
     "subProcessStatus": {
       "$ref": "../event-generic/SubProcessStatusType.json"

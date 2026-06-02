@@ -32,6 +32,12 @@ info:
         - Narrowed consume response schemas per topic type to match the events actually returned by each endpoint
         - removed unused 'typedef' schema
       - removed explicit definition of Content-Type header for requests to /in as the allowed values are already defined by `requestBody.content.<media-type>`
+      - Added `SAFIDSEventType` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
+      - Root-level scalar projections for Kafka-level filtering and routing: `idsconfidenceScore`, `idsdocumentQuality`, `idsisValid`, `idsroutingDecision`, `idsrequiresHumanReview`, `idsreviewReason`
+      - `idsdocumentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
+      - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `IDSBasicProcessingMetadataType`, `IDSDocumentQualityMetricsType`, `IDSDetailedExtractionDataType`, `IDSDocumentQualityAssessmentType`, `IDSReceiverRecommendationsType`, `IDSValidationResultsType`, `IDSFieldExtractionAuditType` and their supporting sub-types
+      - `idsdetailedExtractionData`, `idsdocumentQualityAssessment`, `idsreceiverRecommendations`, and `idsfieldExtractionAudit` are nullable (optional processing output)
+      - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
     
     *changes in previous versions are available in the changelog file in GitHub*
 servers:
@@ -922,7 +928,7 @@ components:
         processStatus:
           $ref: '#/components/schemas/ProcessStatusType'
         subProcessName:
-          $ref: '#/components/schemas/SubProcessNameType'
+          $ref: '#/components/schemas/GenericSubProcessNameType'
         subProcessStatus:
           $ref: '#/components/schemas/SubProcessStatusType'
         idsconfidenceScore:
@@ -2545,3 +2551,13 @@ components:
           - sources
           - description
         additionalProperties: false
+    GenericSubProcessNameType:
+      description: Sub process name, that is used to specify the sub process of the event. The exact usage is specified in each data standard.
+      type: string
+      enum: 
+        - "Initiate"
+        - "Provide"
+        - "Review"
+        - "Decide"
+        - "Execute"
+        - "Close"

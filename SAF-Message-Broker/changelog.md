@@ -6,6 +6,12 @@
     - Fix max.message.bytes of the `IN` topic to be 8388608 instead of 8338608
     - Optional CloudEvents attributes are no longer documented as explicitly nullable; if not set, they should be omitted
     - Normalized the `processId` format annotation to `uuid`
+  - Added `SAFIDSEventType` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
+  - Root-level scalar projections for Kafka-level filtering and routing: `idsconfidenceScore`, `idsdocumentQuality`, `idsisValid`, `idsroutingDecision`, `idsrequiresHumanReview`, `idsreviewReason`
+  - `idsdocumentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
+  - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `IDSBasicProcessingMetadataType`, `IDSDocumentQualityMetricsType`, `IDSDetailedExtractionDataType`, `IDSDocumentQualityAssessmentType`, `IDSReceiverRecommendationsType`, `IDSValidationResultsType`, `IDSFieldExtractionAuditType` and their supporting sub-types
+  - `idsdetailedExtractionData`, `idsdocumentQualityAssessment`, `idsreceiverRecommendations`, and `idsfieldExtractionAudit` are nullable (optional processing output)
+  - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
 
 ### Version 1.1.0
   - Improved documentation
