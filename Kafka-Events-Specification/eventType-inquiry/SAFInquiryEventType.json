@@ -42,7 +42,7 @@
       "$ref": "../event-generic/SenderReceiverType.json"
     },
     "data": {
-      "$ref": "../event-generic/EventMessageDataType.json"
+      "$ref": "EventMessageDataType.json"
     },
     "processGroupId": {
       "$ref": "../event-generic/ProcessGroupIdType.json"

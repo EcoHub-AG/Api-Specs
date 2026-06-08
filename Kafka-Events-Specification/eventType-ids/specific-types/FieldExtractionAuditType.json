@@ -4,6 +4,7 @@
   "type": "array",
   "items": {
     "type": "object",
+    "minimum": 1,
     "properties": {
       "fieldName": {
         "type": "string"
@@ -13,6 +14,7 @@
       },
       "sources": {
         "type": "array",
+        "minimum": 1,
         "items": {
           "type": "string",
           "enum": [
@@ -26,7 +28,7 @@
         }
       },
       "description": {
-        "type": ["null", "string"]
+        "type": "string"
       }
     },
     "required": ["fieldName", "xPath", "sources", "description"],

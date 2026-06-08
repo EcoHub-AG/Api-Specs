@@ -62,7 +62,16 @@
     "subProcessName": {
       "description": "Identifier for the single generic exchange subprocess step.",
       "type": "string",
-      "const": "provide"
+      "allOf": [
+        {
+          "$ref": "../event-generic/GenericSubProcessNameType.json"
+        },
+        {
+          "enum": [
+            "Provide"
+          ]
+        }
+      ]
     },
     "subProcessStatus": {
       "$ref": "../event-generic/SubProcessStatusType.json"

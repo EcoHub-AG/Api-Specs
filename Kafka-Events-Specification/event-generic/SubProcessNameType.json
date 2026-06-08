@@ -1,17 +1,25 @@
 {
   "description": "Identifier for the current subprocess / process step within the core process.",
   "type": "string",
-  "enum": [
-    "request",
-    "offer",
-    "feedback",
-    "conclusionDecision",
-    "billing",
-    "reminder",
-    "contract",
-    "commission",
-    "submission",
-    "cancellation",
-    "claimsExperience"
+  "allOf": [
+    {
+      "$ref": "SubProcessNameAllType.json"
+    },
+    {
+      "enum": [
+        "request",
+        "offer",
+        "feedback",
+        "conclusionDecision",
+        "billing",
+        "reminder",
+        "contract",
+        "commission",
+        "submission",
+        "cancellation",
+        "claimsExperience"
+      ]
+    }
   ]
+  
 }

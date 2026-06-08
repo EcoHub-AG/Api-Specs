@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Document-level quality assessment that guides receiver review strategy and time budgets.",
+  "type": "object",
+  "properties": {
+    "overallQuality": {
+      "$ref": "DocumentQualityType.json"
+    },
+    "qualityFactors": {
+      "type": "object",
+      "description": "Specific quality factors contributing to the overall assessment.",
+      "properties": {
+        "documentReadability": {
+          "description": "Document text legibility score",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "structureRecognition": {
+          "description": "Form/table structure recognition score",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "handwritingPresence": {
+          "description": "Indicates presence of handwriting (which may require special handling)",
+          "type": "boolean"
+        },
+        "imageQuality": {
+          "description": "Image quality score (for scanned documents)",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "ocrQuality": {
+          "description": "OCR accuracy score",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "receiverRecommendedStrategy": {
+     
+          "type": "object",
+          "properties": {
+            "approachSuggested": {
+              "description": "Recommended review approach for the receiver based on document quality assessment.",
+              "$ref": "ReviewStrategyType.json"
+            },
+            "reasoning": {
+              "description": "Explanation for the recommended strategy",
+              "type": "string"
+            },
+            "fieldsRequiringExtraAttention": {
+              "description": "List of field paths requiring extra scrutiny",
+              "type": "array",
+              "minimum": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "nullable": true
+    },
+    "estimatedManualReviewMinutes": {
+      "description": "Estimated time in minutes for manual review",
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false
+}

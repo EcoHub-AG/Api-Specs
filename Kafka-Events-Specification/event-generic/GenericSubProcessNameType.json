@@ -1,5 +1,5 @@
-{
-  "description": "Identifier for the current subprocess / process step within the core process. For generic data events, use the generic subprocess names that represent the workflow stage (Initiate, Provide, Review, Decide, Execute, Close). For standard processes, use process-specific subprocess names.",
+{ 
+  "description": "Identifier for the current subprocess step within the core process. For generic data events, use the generic subprocess names that represent the workflow stage (Initiate, Provide, Review, Decide, Execute, Close). For standard processes, use SubProcessNameType.",
   "type": "string",
   "allOf": [
     {
@@ -15,5 +15,5 @@
         "Close"
       ]
     }
-  ]  
-}
+  ]
+}  

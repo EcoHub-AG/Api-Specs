@@ -7,7 +7,7 @@
     "properties": {
       "sequence": {
         "description": "Order in which this preprocessing step was executed.",
-        "type": ["null", "integer"],
+        "type": "integer",
         "minimum": 1
       },
       "operation": {
@@ -17,24 +17,24 @@
       },
       "parameters": {
         "description": "Operation-specific configuration parameters",
-        "type": ["null", "object"],
+        "type": "object",
         "additionalProperties": true
       },
       "qualityBefore": {
         "description": "Document quality score before this operation",
-        "type": ["null", "number"],
+        "type": "number",
         "minimum": 0,
         "maximum": 1
       },
       "qualityAfter": {
         "description": "Document quality score after this operation",
-        "type": ["null", "number"],
+        "type": "number",
         "minimum": 0,
         "maximum": 1
       },
       "durationMs": {
         "description": "Execution time for this step in milliseconds",
-        "type": ["null", "number"],
+        "type": "number",
         "minimum": 0
       },
       "status": {

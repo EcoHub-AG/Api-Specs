@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Suggested routing or next action based on validation results.",
+  "type": "string",
+  "enum": ["auto-approve", "manual-review", "reject", "re-process"]
+}

@@ -17,13 +17,14 @@
       },
       "originalConfidence": {
         "description": "Confidence score of the raw extraction before transformation.",
-        "type": ["null", "number"],
+        "type": "number",
         "minimum": 0,
         "maximum": 1
       },
       "transformationsApplied": {
         "description": "Sequence of transformations applied to convert raw to final value.",
-        "type": ["null", "array"],
+        "type": "array",
+        "minimum": 1,
         "items": {
           "type": "object",
           "properties": {

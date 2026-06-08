@@ -10,6 +10,7 @@
     "validationErrors": {
       "description": "List of validation errors or warnings encountered.",
       "type": "array",
+      "minimum": 1,
       "items": {
         "type": "object",
         "properties": {
@@ -40,9 +41,8 @@
       }
     },
     "routingDecision": {
-      "description": "Suggested routing or next action based on validation results.",
-      "type": "string",
-      "enum": ["auto-approve", "manual-review", "reject", "re-process"]
+      "$ref": "../specific-types/RoutingDecisionType.json",
+      "description": "Suggested routing or next action based on validation results."
     },
     "requiresHumanReview": {
       "description": "Whether human review is recommended before proceeding.",
@@ -50,81 +50,77 @@
     },
     "reviewReason": {
       "description": "Explanation of why human review is needed.",
-      "type": ["null", "string"]
+      "type": "string"
     },
     "businessRuleValidations": {
       "description": "Business rule validation results as ProblemDetails-style entries aligned with the OAS IdsBusinessRuleValidation schema.",
-      "type": ["null", "array"],
+      "type": "array",
+      "minimum": 1,
       "items": {
         "type": "object",
         "properties": {
           "type": {
-            "type": ["null", "string"]
+            "type": "string"
           },
           "title": {
-            "type": ["null", "string"]
+            "type": "string"
           },
           "status": {
-            "type": ["null", "integer"],
+            "type": "integer",
             "minimum": 0
           },
           "detail": {
-            "type": ["null", "string"]
+            "type": "string"
           },
           "instance": {
-            "type": ["null", "string"]
+            "type": "string"
           }
         },
         "additionalProperties": false
       }
     },
     "dataCompletenessCheck": {
-      "oneOf": [
-        {
-          "type": "null"
+      "type": "object",
+      "properties": {
+        "requiredFieldsPresent": {
+          "description": "Number of required fields successfully extracted.",
+          "type": "integer",
+          "minimum": 0
         },
-        {
-          "type": "object",
-          "properties": {
-            "requiredFieldsPresent": {
-              "description": "Number of required fields successfully extracted.",
-              "type": ["null", "integer"],
-              "minimum": 0
-            },
-            "requiredFieldsTotal": {
-              "description": "Total number of required fields expected.",
-              "type": ["null", "integer"],
-              "minimum": 0
-            },
-            "missingRequiredFields": {
-              "description": "List of required fields that were not found.",
-              "type": ["null", "array"],
-              "items": {
+        "requiredFieldsTotal": {
+          "description": "Total number of required fields expected.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "missingRequiredFields": {
+          "description": "List of required fields that were not found.",
+          "type": "array",
+          "minimum": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "lowConfidenceFields": {
+          "description": "Fields with confidence below acceptable threshold.",
+          "type": "array",
+          "minimum": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "fieldPath": {
                 "type": "string"
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
               }
             },
-            "lowConfidenceFields": {
-              "description": "Fields with confidence below acceptable threshold.",
-              "type": ["null", "array"],
-              "items": {
-                "type": "object",
-                "properties": {
-                  "fieldPath": {
-                    "type": ["null", "string"]
-                  },
-                  "confidence": {
-                    "type": ["null", "number"],
-                    "minimum": 0,
-                    "maximum": 1
-                  }
-                },
-                "additionalProperties": false
-              }
-            }
-          },
-          "additionalProperties": false
+            "additionalProperties": false
+          }
         }
-      ]
+      },
+      "additionalProperties": false
     }
   },
   "required": ["isValid", "routingDecision", "requiresHumanReview"],

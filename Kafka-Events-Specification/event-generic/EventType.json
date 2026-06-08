@@ -5,6 +5,8 @@
   "enum": [
     "ch.ecohub.saf.data",
     "ch.ecohub.saf.inquiry",
+    "ch.ecohub.saf.generic",
+    "ch.ecohub.saf.ids",
     "ch.ecohub.saf.standard-error",
     "ch.ecohub.saf.saf-error"
   ]

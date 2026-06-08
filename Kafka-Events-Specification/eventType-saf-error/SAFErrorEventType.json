@@ -51,7 +51,7 @@
       "$ref": "../event-generic/ProcessIdType.json"
     },
     "processName": {
-      "$ref": "../event-generic/ProcessNameType.json"
+      "$ref": "../event-generic/ProcessNameAllType.json"
     },
     "processVersion": {
       "$ref": "../event-generic/ProcessVersionType.json"
@@ -60,7 +60,7 @@
       "$ref": "../event-generic/ProcessStatusType.json"
     },
     "subProcessName": {
-      "$ref": "../event-generic/SubProcessNameType.json"
+      "$ref": "../event-generic/SubProcessNameAllType.json"
     },
     "subProcessStatus": {
       "$ref": "../event-generic/SubProcessStatusType.json"

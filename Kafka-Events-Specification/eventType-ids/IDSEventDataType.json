@@ -28,55 +28,31 @@
     },
     "idsbasicProcessingMetadata": {
       "description": "Model, processing mode, timing and aggregate confidence score. Source of root projections idsconfidenceScore.",
-      "$ref": "./specific-types/idsbasicProcessingMetadataType.json"
+      "$ref": "./specific-types/BasicProcessingMetadataType.json"
     },
     "idsdocumentQualityMetrics": {
       "description": "Source document properties, OCR quality, AGB handling, completeness, and document hash. Source of root projection idsdocumentQuality.",
-      "$ref": "./specific-types/idsdocumentQualityMetricsType.json"
+      "$ref": "./specific-types/DocumentQualityMetricsType.json"
     },
     "idsdetailedExtractionData": {
       "description": "Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.",
-      "oneOf": [
-        {
-          "type": "null"
-        },
-        {
-          "$ref": "./specific-types/idsdetailedExtractionDataType.json"
-        }
-      ]
+      "$ref": "./specific-types/DetailedExtractionDataType.json"
     },
     "idsdocumentQualityAssessment": {
       "description": "Quality-factor breakdown and recommended review strategy.",
-      "oneOf": [
-        { "type": "null" },
-        { "$ref": "./specific-types/idsdocumentQualityAssessmentType.json" }
-      ]
+      "$ref": "./specific-types/DocumentQualityAssessmentType.json"
     },
     "idsreceiverRecommendations": {
       "description": "Field-level, document-level, and decision-matrix recommendations.",
-      "oneOf": [
-        {
-          "type": "null"
-        },
-        {
-          "$ref": "./specific-types/idsreceiverRecommendationsType.json"
-        }
-      ]
+      "$ref": "./specific-types/ReceiverRecommendationsType.json"
     },
     "idsvalidationResults": {
       "description": "Validation result, routing decision, human-review flag, and business-rule results. Source of root projections idsisValid, idsroutingDecision, idsrequiresHumanReview, and idsreviewReason.",
-      "$ref": "./specific-types/idsvalidationResultsType.json"
+      "$ref": "./specific-types/ValidationResultsType.json"
     },
     "idsfieldExtractionAudit": {
       "description": "Field provenance source audit trail.",
-      "oneOf": [
-        {
-          "type": "null"
-        },
-        {
-          "$ref": "./specific-types/idsfieldExtractionAuditType.json"
-        }
-      ]
+      "$ref": "./specific-types/FieldExtractionAuditType.json"
     }
   },
   "required": [

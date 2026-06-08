@@ -14,7 +14,7 @@
   - `idsdocumentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
   - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `IDSBasicProcessingMetadataType`, `IDSDocumentQualityMetricsType`, `IDSDetailedExtractionDataType`, `IDSDocumentQualityAssessmentType`, `IDSReceiverRecommendationsType`, `IDSValidationResultsType`, `IDSFieldExtractionAuditType` and their supporting sub-types
   - `idsdetailedExtractionData`, `idsdocumentQualityAssessment`, `idsreceiverRecommendations`, and `idsfieldExtractionAudit` are nullable (optional processing output)
-- Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
+  - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
 
 
 

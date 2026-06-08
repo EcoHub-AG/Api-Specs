@@ -5,29 +5,29 @@
   "properties": {
     "documentQualityBefore": {
       "description": "Document quality score before any preprocessing.",
-      "type": ["null", "number"],
+      "type": "number",
       "minimum": 0,
       "maximum": 1
     },
     "documentQualityAfter": {
       "description": "Document quality score after all preprocessing.",
-      "type": ["null", "number"],
+      "type": "number",
       "minimum": 0,
       "maximum": 1
     },
     "improvementFromPreprocessing": {
       "description": "Calculated improvement in document quality from preprocessing.",
-      "type": ["null", "number"],
+      "type": "number",
       "minimum": 0,
       "maximum": 1
     },
     "mostImpactfulStep": {
       "description": "Name of the preprocessing operation that had the greatest positive impact on quality.",
-      "type": ["null", "string"]
+      "type": "string"
     },
     "receiverNote": {
       "description": "Human-readable note explaining the preprocessing impact for the receiver.",
-      "type": ["null", "string"]
+      "type": "string"
     }
   },
   "additionalProperties": false

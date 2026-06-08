@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Source document and OCR/extraction quality metrics aligned with OAS IdsDocumentQualityMetrics.",
+  "type": "object",
+  "properties": {
+    "documentType": {
+      "description": "Document category (e.g., 'insurance-application', 'claim-form', 'policy-document')",
+      "type": "string"
+    },
+    "sourceFormat": {
+      "description": "Original document MIME type (e.g., 'application/pdf', 'image/jpeg', 'image/png')",
+      "type": "string"
+    },
+    "pageCount": {
+      "description": "Total number of pages in the document",
+      "type": "integer",
+      "minimum": 0
+    },
+    "pagesEvaluated": {
+      "description": "Number of pages evaluated for quality metrics",
+      "type": "integer",
+      "minimum": 0
+    },
+    "ocrQuality": {
+      "description": "Optical Character Recognition quality score (0.0 = illegible, 1.0 = perfect)",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "agbExtraction": {
+      "type": "boolean",
+      "description": "Indicates whether the document is an AGB (Allgemeine Geschäftsbedingungen) which may require special handling."
+    },
+    "agbPagesRemoved": {
+      "type": "array",
+      "minimum": 1,
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "description": "List of page numbers removed from the document due to AGB extraction."
+    },
+    "postprocessingInformation": {
+      "type": "array",
+      "minimum": 1,
+      "items": {
+        "$ref": "PostprocessingInformationType.json"
+      },
+      "description": "Information about post-processing steps applied to the document after initial extraction, which may impact quality assessment."
+    },
+    "documentQuality": {
+      "$ref": "DocumentQualityType.json"
+    },
+    "completenessScore": {
+      "description": "Percentage of expected/required fields successfully extracted (0.0-1.0)",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "sourceDocumentHash": {
+      "description": "SHA-256 cryptographic hash of original source document",
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

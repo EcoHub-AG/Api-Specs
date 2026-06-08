@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Fundamental IDS processing metadata aligned with OAS IdsBasicProcessingMetadata.",
+  "type": "object",
+  "properties": {
+    "processingModel": {
+      "description": "AI/ML model used to process the document (e.g., 'Claude-3.5-Sonnet', 'GPT-4-Vision', 'Azure-Document-Intelligence')",
+      "type": "string"
+    },
+    "modelVersion": {
+      "description": "Version identifier of the AI model",
+      "type": "string"
+    },
+    "extractionMode": {
+      "type": "string",
+      "description": "Mode of field extraction (e.g., 'zero-shot', 'few-shot', 'template-based')",
+      "nullable": true
+    },
+    "llmCallCount": {
+      "type": "integer",
+      "minimum": 0,
+      "nullable": true
+    },
+    "majorityVoting": {
+      "type": "boolean",
+      "nullable": true
+    },
+    "promptRepetition": {
+      "type": "boolean",
+      "nullable": true
+    },
+    "dpi": {
+      "type": "integer",
+      "minimum": 0,
+      "nullable": true
+    },
+    "imageQuality": {
+      "type": "integer",
+      "minimum": 0,
+      "nullable": true
+    },
+    "psm": {
+      "type": "integer",
+      "minimum": 0,
+      "nullable": true
+    },
+    "ocrEngineMode": {
+      "type": "string",
+      "nullable": true
+    },
+    "processingTimeMs": {
+      "description": "Elapsed time for document processing in milliseconds",
+      "type": "number",
+      "minimum": 0,
+      "nullable": true
+    },
+    "postprocessingTimeMs": {
+      "type": "number",
+      "minimum": 0,
+      "nullable": true
+    },
+    "llmResponseTimeMs": {
+      "type": "number",
+      "minimum": 0,
+      "nullable": true
+    },
+    "confidenceScore": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "nullable": true
+    }
+  },
+  "additionalProperties": false
+}
