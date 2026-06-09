@@ -19,6 +19,7 @@ info:
     ### Changes in Version 3.0.0
       - Adjusted url path segment from /v2 to /v3
       - Added `generic` to `supportedProcesses` to indicate support for Generic Exchange events.
+      - Added `informationService.nlpi` to `supportedProcesses` to indicate support for the information service NLPI standard..
 
     
     *changes in previous versions are available in the changelog file in GitHub*
@@ -765,3 +766,4 @@ components:
         - mandate
         - claimsExperience
         - generic
+        - informationService.nlpi
