@@ -21,6 +21,8 @@ info:
       - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on the IN topic
       - Added channel and operation to consume the generic OUT topic
       - Added dedicated Generic Exchange processName schema
+      - ProcessNameType: added new value for informationService.nlpi
+      - Added channel and operation to consume the informationService.nlpi OUT topic
       - Aligned schema documentation with the actual implementation; this does not change the SAF Message Broker API behavior
         - Fix max.message.bytes of the `IN` topic to be 8388608 instead of 8338608
         - Optional CloudEvents attributes are no longer documented as explicitly nullable; if not set, they should be omitted
@@ -268,6 +270,31 @@ channels:
         $ref: '#/components/messages/safInquiryEvent'
       safErrorEvent:
         $ref: '#/components/messages/safErrorEvent'
+  eh.saf.informationService.nlpi.out.v1:
+    address: eh.saf.{ecohubId}.informationService.nlpi.out.v1
+    bindings:
+      kafka:
+        topic: 'eh.saf.{ecohubId}.informationService.nlpi.out.v1'
+        partitions: 3
+        replicas: 2
+        topicConfiguration:
+          cleanup.policy: [ "delete" ]
+          retention.ms: 604800000
+          retention.bytes: -1
+          delete.retention.ms: 86400000
+          max.message.bytes: 8388608
+        bindingVersion: '0.4.0'
+    parameters:
+      ecohubId:
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+          names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
+    messages:
+      consumeSAFEvent:
+        $ref: '#/components/messages/safEvent'
+      consumeSAFInquiryEvent:
+        $ref: '#/components/messages/safInquiryEvent'
+      safErrorEvent:
+        $ref: '#/components/messages/safErrorEvent'
 operations:
   produceSAFEvent:
     action: send
@@ -364,6 +391,19 @@ operations:
         bindingVersion: '0.4.0'
     channel:
       $ref: "#/channels/eh.saf.generic.out.v1"
+  consumeInformationServiceNlpiEvent:
+    action: receive
+    bindings:
+      kafka:
+        groupId:
+          type: string
+          pattern: ^CG-(\d{5,6})-IDP(\d{6})$
+        clientId:
+          type: string
+          format: uuid
+        bindingVersion: '0.4.0'
+    channel:
+      $ref: "#/channels/eh.saf.informationService.nlpi.out.v1"
 components:
   securitySchemes:
     X509:
@@ -714,6 +754,7 @@ components:
         - contract
         - mandate
         - claimsExperience
+        - informationService.nlpi
     genericProcessNameType:
       description: Identifier of the generic exchange business context.
       type: string
