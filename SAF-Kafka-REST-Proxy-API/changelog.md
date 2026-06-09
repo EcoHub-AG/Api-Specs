@@ -4,6 +4,8 @@
   - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on /in
   - Added endpoint to consume the generic OUT topic
   - Added dedicated Generic Exchange processName schema
+  - ProcessNameType: added new value for informationService.nlpi
+  - added endpoint to consume informationService.nlpi topic
   - Aligned API documentation with the actual implementation; this does not change API behavior
     - Events produced to the `IN` topic can by `anyOf` insteaf of `oneOf` the specified schemas
     - Narrowed consume response schemas per topic type to match the events actually returned by each endpoint
