@@ -2,8 +2,8 @@
   - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on the IN topic
   - Added channel and operation to consume the generic OUT topic
   - Added dedicated Generic Exchange processName schema
-  - ProcessNameType: added new value for claimsExpierence.nlpi
-  - Added channel and operation to consume the claimsExpierence.nlpi OUT topic
+  - ProcessNameType: added new value for claimsExperience.nlpi
+  - Added channel and operation to consume the claimsExperience.nlpi OUT topic
   - Aligned schema documentation with the actual implementation; this does not change the SAF Message Broker API behavior
     - Fix max.message.bytes of the `IN` topic to be 8388608 instead of 8338608
     - Optional CloudEvents attributes are no longer documented as explicitly nullable; if not set, they should be omitted
