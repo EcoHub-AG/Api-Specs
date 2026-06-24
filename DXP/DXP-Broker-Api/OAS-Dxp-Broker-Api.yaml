@@ -357,18 +357,24 @@ components:
           $ref: '#/components/schemas/AckFileErrorReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The file you tried to ackknowledge couldn't be found
       additionalProperties: false
     AckFileErrorReturnCode:
+      description: |
+        * FILE_NOT_FOUND
+        * INSURER_NOT_FOUND
+        * INSURER_NOT_AVAILABLE
+        * LICENCE_KEY_NOT_VALID
       enum:
-        - FILE_NOT_FOUND
-        - INSURER_NOT_FOUND
-        - INSURER_NOT_AVAILABLE
-        - LICENCE_KEY_NOT_VALID
-        - ERROR
+        - 0 = FILE_NOT_FOUND
+        - 1 = INSURER_NOT_FOUND
+        - 2 = INSURER_NOT_AVAILABLE
+        - 3 = LICENCE_KEY_NOT_VALID
+        - 4 = ERROR
       type: string
-      example: FILE_NOT_FOUND
+      example: "1"
       nullable: false
     GetFileRequest:
       type: object
@@ -415,14 +421,18 @@ components:
           $ref: '#/components/schemas/GetFileErrorReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The file you tried to receive couldn't be found.
       additionalProperties: false
     GetFileErrorReturnCode:
+      description: |
+       * FILE_NOT_FOUND
+       * IDP_USER_NOT_FOUND
       enum:
-        - FILE_NOT_FOUND
-        - IDP_USER_NOT_FOUND
-        - ERROR
+        - 0 = FILE_NOT_FOUND
+        - 1 = IDP_USER_NOT_FOUND
+        - 2 = ERROR
       type: string
       example: FILE_NOT_FOUND
       nullable: false
@@ -468,6 +478,7 @@ components:
           $ref: '#/components/schemas/PutFileErrorReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The provided document type is not support.
       additionalProperties: false
@@ -478,13 +489,13 @@ components:
         * DOCUMENT_TYPE_NOT_SUPPORTED: The specified document type is not supported by the Merchant.
         * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
-        - NOK
-        - DOCUMENT_TYPE_NOT_FOUND
-        - DOCUMENT_TYPE_NOT_SUPPORTED
-        - IDP_USER_NOT_FOUND
-        - ERROR
+        - 0 = NOK
+        - 1 = DOCUMENT_TYPE_NOT_FOUND
+        - 2 = DOCUMENT_TYPE_NOT_SUPPORTED
+        - 3 = IDP_USER_NOT_FOUND
+        - 4 = ERROR
       type: string
-      example: DOCUMENT_TYPE_NOT_FOUND
+      example: "1"
       nullable: false
     GetFileListRequest:
       type: object
@@ -573,19 +584,24 @@ components:
       type: object
       properties:
         returnCode:
-          description: Indicates the type of error which occurred. Beware: The value 0 also represent an error scenario.
-          enum:
-            - 0 = DOCUMENT_TYPE_NOT_FOUND
-            - 1 = IDP_USER_NOT_FOUND
-            - 2 = ERROR
-          type: string
-          example: ERROR
-          nullable: false
+          $ref: '#/components/schemas/GetFileListErrorReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The requested document type couldn't be found.
       additionalProperties: false
+    GetFileListErrorReturnCode:
+      description: |
+        * DOCUMENT_TYPE_NOT_FOUND: One of the specified document types is unknown.
+        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+      enum:
+        - 0 = DOCUMENT_TYPE_NOT_FOUND
+        - 1 = IDP_USER_NOT_FOUND
+        - 2 = ERROR
+      type: string
+      example: "1"
+      nullable: false
     GetAvailableInsurersRequest:
       type: object
       properties:
@@ -623,13 +639,10 @@ components:
       type: object
       properties:
         returnCode:
-          enum:
-            - ERROR
-          type: string
-          example: ERROR
-          nullable: false
+          $ref: '#/components/schema/MissingLicenceKeyReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The given license key is invalid.
       additionalProperties: false
@@ -672,13 +685,10 @@ components:
       type: object
       properties:
         returnCode:
-          enum:
-            - ERROR
-          type: string
-          example: ERROR
-          nullable: false
+          $ref: '#/components/schema/MissingLicenceKeyReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The given license key is invalid.
       additionalProperties: false
@@ -716,18 +726,22 @@ components:
       type: object
       properties:
         returnCode:
-          enum:
-            - ERROR
-          type: string
-          example: ERROR
-          nullable: false
+          $ref: '#/components/schema/MissingLicenceKeyReturnCode'
         errorMessage:
-          description: Optional information in case of error. Should facilitate finding the cause of the error and 
-            contains textual (not further structured) data.
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The given license key is invalid.
       additionalProperties: false
+    MissingLicenceKeyReturnCode:
+      description: |
+        * LICENCE_KEY_NOT_VALID
+      enum:
+        - 0 = LICENCE_KEY_NOT_VALID
+        - 1 = ERROR
+      type: string
+      example: "1"
+      nullable: false
     FileInfoDownload:
       type: object
       description: Metadata about the transferred file.
