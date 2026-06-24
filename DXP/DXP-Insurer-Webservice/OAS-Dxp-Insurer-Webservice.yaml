@@ -225,12 +225,12 @@ components:
       additionalProperties: false
     AckFileErrorReturnCode:
       description: |
-        * FILE_NOT_FOUND
-        * IDP_USER_NOT_FOUND
-      enum:
-        - 0 = FILE_NOT_FOUND
-        - 1 = IDP_USER_NOT_FOUND
-        - 2 = ERROR
+        * 0 = FILE_NOT_FOUND: The document with ID fileId could not be found.
+        * 1 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+      eenum:
+        - 0
+        - 1
+        - ERROR
       type: string
       example: "1"
       nullable: false
@@ -284,12 +284,12 @@ components:
       additionalProperties: false
     GetFileErrorReturnCode:
       description: |
-        * FILE_NOT_FOUND: The document with ID fileId could not be found.
-        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+        * 0 = FILE_NOT_FOUND: The document with ID fileId could not be found.
+        * 1 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
-        - 0 = FILE_NOT_FOUND
-        - 1 = IDP_USER_NOT_FOUND
-        - 2 = ERROR
+        - 0
+        - 1
+        - ERROR
       type: string
       example: "1"
       nullable: false
@@ -337,16 +337,16 @@ components:
       additionalProperties: false
     PutFileErrorReturnCode:
       description: |
-        * NOK: The file was not transmitted to the Merchant.
-        * DOCUMENT_TYPE_NOT_FOUND: The specified document type is unknown.
-        * DOCUMENT_TYPE_NOT_SUPPORTED: The specified document type is not supported by the Merchant.
-        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+        * 0 = NOK: The file was not transmitted to the Merchant.
+        * 1 = DOCUMENT_TYPE_NOT_FOUND: The specified document type is unknown.
+        * 2 = DOCUMENT_TYPE_NOT_SUPPORTED: The specified document type is not supported by the Merchant.
+        * 3 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
-        - 0 = NOK
-        - 1 = DOCUMENT_TYPE_NOT_FOUND
-        - 2 = DOCUMENT_TYPE_NOT_SUPPORTED
-        - 3 = IDP_USER_NOT_FOUND
-        - 4 = ERROR
+        - 0
+        - 1
+        - 2
+        - 3
+        - ERROR
       type: string
       example: "1"
       nullable: false
@@ -442,12 +442,12 @@ components:
       additionalProperties: false
     GetFileListErrorReturnCode:
       description: |
-        * DOCUMENT_TYPE_NOT_FOUND: One of the specified document types is unknown.
-        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+        * 0 = DOCUMENT_TYPE_NOT_FOUND: One of the specified document types is unknown.
+        * 1 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
-        - 0 = DOCUMENT_TYPE_NOT_FOUND
-        - 1 = IDP_USER_NOT_FOUND
-        - 2 = ERROR
+        - 0
+        - 1
+        - ERROR
       type: string
       example: "1"
       nullable: false
