@@ -573,8 +573,11 @@ components:
       type: object
       properties:
         returnCode:
+          description: Indicates the type of error which occurred. Beware: The value 0 also represent an error scenario.
           enum:
-            - ERROR
+            - 0 = DOCUMENT_TYPE_NOT_FOUND
+            - 1 = IDP_USER_NOT_FOUND
+            - 2 = ERROR
           type: string
           example: ERROR
           nullable: false
