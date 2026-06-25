@@ -740,7 +740,7 @@ components:
         - 0
         - ERROR
       type: string
-      example: "1"
+      example: "ERROR"
       nullable: false
     FileInfoDownload:
       type: object
