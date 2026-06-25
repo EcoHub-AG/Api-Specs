@@ -1295,6 +1295,7 @@ components:
         - contract
         - mandate
         - claimsExperience
+        - claimsExperience.nlpi
     GenericProcessNameType:
       description: Identifier of the generic exchange business context.
       type: string

@@ -12,7 +12,8 @@
         "commission",
         "contract",
         "mandate",
-        "claimsExperience"
+        "claimsExperience",
+        "claimsExperience.nlpi"
       ]
     }
   ]

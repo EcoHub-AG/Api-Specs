@@ -251,6 +251,44 @@ channels:
         $ref: '#/components/messages/safInquiryEvent'
       safErrorEvent:
         $ref: '#/components/messages/safErrorEvent'
+  eh.saf.claimsExperience.nlpi.out.v1:
+    address: eh.saf.{ecohubId}.claimsExperience.nlpi.out.v1
+    bindings:
+      kafka:
+        topic: 'eh.saf.{ecohubId}.claimsExperience.nlpi.out.v1'
+        partitions: 3
+        replicas: 2
+        topicConfiguration:
+          cleanup.policy: [ "delete" ]
+          retention.ms: 604800000
+          retention.bytes: -1
+          delete.retention.ms: 86400000
+          max.message.bytes: 8388608
+        bindingVersion: '0.4.0'
+    parameters:
+      ecohubId:
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+              names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
+    messages:
+      consumeSAFEvent:
+        $ref: '#/components/messages/safEvent'
+      consumeSAFInquiryEvent:
+        $ref: '#/components/messages/safInquiryEvent'
+      safErrorEvent:
+        $ref: '#/components/messages/safErrorEvent'
+      consumeClaimsExperienceNlpiEvent:
+        action: receive
+        bindings:
+          kafka:
+            groupId:
+              type: string
+              pattern: ^CG-(\d{5,6})-IDP(\d{6})$
+            clientId:
+              type: string
+              format: uuid
+            bindingVersion: '0.4.0'
+        channel:
+          $ref: "#/channels/eh.saf.claimsExperience.nlpi.out.v1"
   eh.saf.generic.out.v1:
     address: eh.saf.{ecohubId}.generic.out.v1
     bindings:
