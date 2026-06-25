@@ -364,8 +364,8 @@ components:
     AckFileErrorReturnCode:
       description: |
         * 0 = FILE_NOT_FOUND: The document with ID fileId could not be found.
-        * 1 = INSURER_NOT_FOUND
-        * 2 = INSURER_NOT_AVAILABLE
+        * 1 = INSURER_NOT_FOUND: Provided insurer does not exist.
+        * 2 = INSURER_NOT_AVAILABLE: No service agreement exists with the provided insurer.
         * 3 = LICENCE_KEY_NOT_VALID: The provided licence key does not exist, is malformed or is invalid for another reason.
       enum:
         - 0
