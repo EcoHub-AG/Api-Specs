@@ -26,31 +26,31 @@
       "description": "Version identifier of the sender's signature key used to sign the payload. Determines which public key can verify the signature.",
       "type": "string"
     },
-    "idsbasicProcessingMetadata": {
+    "basicProcessingMetadata": {
       "description": "Model, processing mode, timing and aggregate confidence score. Source of root projections idsconfidenceScore.",
       "$ref": "./specific-types/BasicProcessingMetadataType.json"
     },
-    "idsdocumentQualityMetrics": {
+    "documentQualityMetrics": {
       "description": "Source document properties, OCR quality, AGB handling, completeness, and document hash. Source of root projection idsdocumentQuality.",
       "$ref": "./specific-types/DocumentQualityMetricsType.json"
     },
-    "idsdetailedExtractionData": {
+    "detailedExtractionData": {
       "description": "Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.",
       "$ref": "./specific-types/DetailedExtractionDataType.json"
     },
-    "idsdocumentQualityAssessment": {
+    "documentQualityAssessment": {
       "description": "Quality-factor breakdown and recommended review strategy.",
       "$ref": "./specific-types/DocumentQualityAssessmentType.json"
     },
-    "idsreceiverRecommendations": {
+    "receiverRecommendations": {
       "description": "Field-level, document-level, and decision-matrix recommendations.",
       "$ref": "./specific-types/ReceiverRecommendationsType.json"
     },
-    "idsvalidationResults": {
+    "validationResults": {
       "description": "Validation result, routing decision, human-review flag, and business-rule results. Source of root projections idsisValid, idsroutingDecision, idsrequiresHumanReview, and idsreviewReason.",
       "$ref": "./specific-types/ValidationResultsType.json"
     },
-    "idsfieldExtractionAudit": {
+    "fieldExtractionAudit": {
       "description": "Field provenance source audit trail.",
       "$ref": "./specific-types/FieldExtractionAuditType.json"
     }

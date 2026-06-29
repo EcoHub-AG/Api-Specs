@@ -35,10 +35,10 @@ info:
         - removed unused 'typedef' schema
       - removed explicit definition of Content-Type header for requests to /in as the allowed values are already defined by `requestBody.content.<media-type>`
       - Added `SAFIDSEventType` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
-      - Root-level scalar projections for Kafka-level filtering and routing: `idsconfidenceScore`, `idsdocumentQuality`, `idsisValid`, `idsroutingDecision`, `idsrequiresHumanReview`, `idsreviewReason`
-      - `idsdocumentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
-      - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `IDSBasicProcessingMetadataType`, `IDSDocumentQualityMetricsType`, `IDSDetailedExtractionDataType`, `IDSDocumentQualityAssessmentType`, `IDSReceiverRecommendationsType`, `IDSValidationResultsType`, `IDSFieldExtractionAuditType` and their supporting sub-types
-      - `idsdetailedExtractionData`, `idsdocumentQualityAssessment`, `idsreceiverRecommendations`, and `idsfieldExtractionAudit` are nullable (optional processing output)
+      - Root-level scalar projections for Kafka-level filtering and routing: `confidenceScore`, `documentQuality`, `isValid`, `routingDecision`, `requiresHumanReview`, `reviewReason`
+      - `documentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
+      - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `basicProcessingMetadataType`, `documentQualityMetricsType`, `detailedExtractionDataType`, `documentQualityAssessmentType`, `receiverRecommendationsType`, `validationResultsType`, `fieldExtractionAuditType` and their supporting sub-types
+      - `detailedExtractionData`, `documentQualityAssessment`, `receiverRecommendations`, and `fieldExtractionAudit` are nullable (optional processing output)
       - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
     
     *changes in previous versions are available in the changelog file in GitHub*
@@ -1319,28 +1319,28 @@ components:
         signatureKeyVersion:
           description: Version identifier of the sender's signature key used to sign the payload.
           type: string
-        idsbasicProcessingMetadata:
+        basicProcessingMetadata:
           description: Model, processing mode, timing and aggregate confidence score. Source of root projections idsconfidenceScore.
           $ref: '#/components/schemas/IDSBasicProcessingMetadataType'
-        idsdocumentQualityMetrics:
+        documentQualityMetrics:
           description: Source document properties, OCR quality, AGB handling, completeness, and document hash. Source of root projection idsdocumentQuality.
           $ref: '#/components/schemas/IDSDocumentQualityMetricsType'
-        idsdetailedExtractionData:
+        detailedExtractionData:
           description: Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.
           $ref: '#/components/schemas/IDSDetailedExtractionDataType'
           nullable: true
-        idsdocumentQualityAssessment:
+        documentQualityAssessment:
           description: Quality-factor breakdown and recommended review strategy.
           $ref: '#/components/schemas/IDSDocumentQualityAssessmentType'
           nullable: true
-        idsreceiverRecommendations:
+        receiverRecommendations:
           description: Field-level, document-level, and decision-matrix recommendations.
           $ref: '#/components/schemas/IDSReceiverRecommendationsType'
           nullable: true
-        idsvalidationResults:
+        validationResults:
           description: Validation result, routing decision, human-review flag, and business-rule results. Source of root projections idsisValid, idsroutingDecision, idsrequiresHumanReview, and idsreviewReason.
           $ref: '#/components/schemas/IDSValidationResultsType'
-        idsfieldExtractionAudit:
+        fieldExtractionAudit:
           description: Field provenance source audit trail.
           $ref: '#/components/schemas/IDSFieldExtractionAuditType'
           nullable: true

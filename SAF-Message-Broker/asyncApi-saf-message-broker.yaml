@@ -30,8 +30,8 @@ info:
       - Added `SAFIDSEvent` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
       - Root-level scalar projections for Kafka-level filtering and routing: `idsconfidenceScore`, `idsdocumentQuality`, `idsisValid`, `idsroutingDecision`, `idsrequiresHumanReview`, `idsreviewReason`
       - `idsdocumentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
-      - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `idsBasicProcessingMetadataType`, `idsDocumentQualityMetricsType`, `idsDetailedExtractionDataType`, `idsDocumentQualityAssessmentType`, `idsReceiverRecommendationsType`, `idsValidationResultsType`, `idsFieldExtractionAuditType` and their supporting sub-types
-      - `idsdetailedExtractionData`, `idsdocumentQualityAssessment`, `idsreceiverRecommendations`, and `idsfieldExtractionAudit` are nullable (optional processing output)
+      - `idsEventDataType` with fully typed component schemas for all IDS metadata groups: `basicProcessingMetadataType`, `documentQualityMetricsType`, `detailedExtractionDataType`, `documentQualityAssessmentType`, `receiverRecommendationsType`, `validationResultsType`, `fieldExtractionAuditType` and their supporting sub-types
+      - `detailedExtractionData`, `documentQualityAssessment`, `receiverRecommendations`, and `fieldExtractionAudit` are nullable (optional processing output)
       - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
     
     ### Changes in Version 1.1.0
@@ -1252,28 +1252,28 @@ components:
         signatureKeyVersion:
           description: Version identifier of the sender's signature key used to sign the payload.
           type: string
-        idsbasicProcessingMetadata:
+        basicProcessingMetadata:
           description: Model, processing mode, timing and aggregate confidence score. Source of root projections idsconfidenceScore.
           $ref: '#/components/schemas/idsBasicProcessingMetadataType'
-        idsdocumentQualityMetrics:
+        documentQualityMetrics:
           description: Source document properties, OCR quality, AGB handling, completeness, and document hash. Source of root projection idsdocumentQuality.
           $ref: '#/components/schemas/idsDocumentQualityMetricsType'
-        idsdetailedExtractionData:
+        detailedExtractionData:
           description: Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.
           $ref: '#/components/schemas/idsDetailedExtractionDataType'
           nullable: true
-        idsdocumentQualityAssessment:
+        documentQualityAssessment:
           description: Quality-factor breakdown and recommended review strategy.
           $ref: '#/components/schemas/idsDocumentQualityAssessmentType'
           nullable: true
-        idsreceiverRecommendations:
+        receiverRecommendations:
           description: Field-level, document-level, and decision-matrix recommendations.
           $ref: '#/components/schemas/idsReceiverRecommendationsType'
           nullable: true
-        idsvalidationResults:
-          description: Validation result, routing decision, human-review flag, and business-rule results. Source of root projections idsisValid, idsroutingDecision, idsrequiresHumanReview, and idsreviewReason.
+        validationResults:
+          description: Validation result, routing decision, human-review flag, and business-rule results. Source of root projections isValid, routingDecision, requiresHumanReview, and reviewReason.
           $ref: '#/components/schemas/idsValidationResultsType'
-        idsfieldExtractionAudit:
+        fieldExtractionAudit:
           description: Field provenance source audit trail.
           $ref: '#/components/schemas/idsFieldExtractionAuditType'
           nullable: true
