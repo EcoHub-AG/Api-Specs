@@ -219,20 +219,16 @@ components:
           $ref: '#/components/schemas/AckFileErrorReturnCode'
         errorMessage:
           type: string
-          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The file you tried to ackknowledge couldn't be found
       additionalProperties: false
     AckFileErrorReturnCode:
-      description: |
-        * 0 = FILE_NOT_FOUND: The document with ID fileId could not be found.
-        * 1 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
-      eenum:
-        - 0
-        - 1
+      enum:
+        - FILE_NOT_FOUND
+        - IDP_USER_NOT_FOUND
         - ERROR
       type: string
-      example: "1"
+      example: FILE_NOT_FOUND
       nullable: false
     GetFileRequest:
       type: object
@@ -278,20 +274,19 @@ components:
           $ref: '#/components/schemas/GetFileErrorReturnCode'
         errorMessage:
           type: string
-          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The file you tried to receive couldn't be found.
       additionalProperties: false
     GetFileErrorReturnCode:
       description: |
-        * 0 = FILE_NOT_FOUND: The document with ID fileId could not be found.
-        * 1 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+        * FILE_NOT_FOUND: The document with ID fileId could not be found.
+        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
-        - 0
-        - 1
+        - FILE_NOT_FOUND
+        - IDP_USER_NOT_FOUND
         - ERROR
       type: string
-      example: "1"
+      example: FILE_NOT_FOUND
       nullable: false
     PutFileRequest:
       type: object
@@ -331,24 +326,23 @@ components:
           $ref: '#/components/schemas/PutFileErrorReturnCode'
         errorMessage:
           type: string
-          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The provided document type is not support.
       additionalProperties: false
     PutFileErrorReturnCode:
       description: |
-        * 0 = NOK: The file was not transmitted to the Merchant.
-        * 1 = DOCUMENT_TYPE_NOT_FOUND: The specified document type is unknown.
-        * 2 = DOCUMENT_TYPE_NOT_SUPPORTED: The specified document type is not supported by the Merchant.
-        * 3 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+        * NOK: The file was not transmitted to the Merchant.
+        * DOCUMENT_TYPE_NOT_FOUND: The specified document type is unknown.
+        * DOCUMENT_TYPE_NOT_SUPPORTED: The specified document type is not supported by the Merchant.
+        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
-        - 0
-        - 1
-        - 2
-        - 3
+        - NOK
+        - DOCUMENT_TYPE_NOT_FOUND
+        - DOCUMENT_TYPE_NOT_SUPPORTED
+        - IDP_USER_NOT_FOUND
         - ERROR
       type: string
-      example: "1"
+      example: DOCUMENT_TYPE_NOT_FOUND
       nullable: false
     GetFileListRequest:
       type: object
@@ -442,14 +436,14 @@ components:
       additionalProperties: false
     GetFileListErrorReturnCode:
       description: |
-        * 0 = DOCUMENT_TYPE_NOT_FOUND: One of the specified document types is unknown.
-        * 1 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+        * DOCUMENT_TYPE_NOT_FOUND: One of the specified document types is unknown.
+        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
-        - 0
-        - 1
+        - DOCUMENT_TYPE_NOT_FOUND
+        - IDP_USER_NOT_FOUND
         - ERROR
       type: string
-      example: "1"
+      example: DOCUMENT_TYPE_NOT_FOUND
       nullable: false
     FileInfoDownload:
       type: object
