@@ -65,28 +65,28 @@
     "subProcessStatus": {
       "$ref": "../event-generic/SubProcessStatusType.json"
     },
-    "idsconfidenceScore": {
-      "description": "Scalar projection of data.idsbasicProcessingMetadata.idsconfidenceScore for routing and quality gating.",
+    "confidenceScore": {
+      "description": "Scalar projection of data.basicProcessingMetadata.confidenceScore for routing and quality gating.",
       "$ref": "./specific-types/ConfidenceScoreType.json"
     },
-    "idsdocumentQuality": {
-      "description": "Scalar projection of data.idsdocumentQualityMetrics.idsdocumentQuality for routing and quality tier signals.",
+    "documentQuality": {
+      "description": "Scalar projection of data.documentQualityMetrics.documentQuality for routing and quality tier signals.",
       "$ref": "./specific-types/DocumentQualityType.json"
     },
-    "idsisValid": {
-      "description": "Scalar projection of data.idsvalidationResults.isValid for routing and filtering.",
+    "isValid": {
+      "description": "Scalar projection of data.validationResults.isValid for routing and filtering.",
       "type": "boolean"
     },
-    "idsroutingDecision": {
-      "description": "Scalar projection of data.idsvalidationResults.routingDecision for routing and filtering.",
+    "routingDecision": {
+      "description": "Scalar projection of data.validationResults.routingDecision for routing and filtering.",
       "$ref": "../specific-types/RoutingDecisionType.json"
     },
-    "idsrequiresHumanReview": {
-      "description": "Scalar projection of data.idsvalidationResults.requiresHumanReview for routing and filtering.",
+    "requiresHumanReview": {
+      "description": "Scalar projection of data.validationResults.requiresHumanReview for routing and filtering.",
       "type": "boolean"
     },
-    "idsreviewReason": {
-      "description": "Scalar projection of data.idsvalidationResults.reviewReason for search and operational triage.",
+    "reviewReason": {
+      "description": "Scalar projection of data.validationResults.reviewReason for search and operational triage.",
       "type": "string"
     }
   },
