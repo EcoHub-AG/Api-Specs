@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: DxpBrokerService
-  version: "1.3"
+  version: "1.3.1"
   description: "API for Brokers to interact with the DXP"
 servers:
   - url: https://test-brokergate.igb2b.ch/dxpService/dxp-v1.3
@@ -357,18 +357,24 @@ components:
           $ref: '#/components/schemas/AckFileErrorReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The file you tried to ackknowledge couldn't be found
       additionalProperties: false
     AckFileErrorReturnCode:
+      description: |
+        * 0 = FILE_NOT_FOUND: The document with ID fileId could not be found.
+        * 1 = INSURER_NOT_FOUND: Provided insurer does not exist.
+        * 2 = INSURER_NOT_AVAILABLE: No service agreement exists with the provided insurer.
+        * 3 = LICENCE_KEY_NOT_VALID: The provided licence key does not exist, is malformed or is invalid for another reason.
       enum:
-        - FILE_NOT_FOUND
-        - INSURER_NOT_FOUND
-        - INSURER_NOT_AVAILABLE
-        - LICENCE_KEY_NOT_VALID
+        - 0
+        - 1
+        - 2
+        - 3
         - ERROR
       type: string
-      example: FILE_NOT_FOUND
+      example: "1"
       nullable: false
     GetFileRequest:
       type: object
@@ -415,13 +421,17 @@ components:
           $ref: '#/components/schemas/GetFileErrorReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The file you tried to receive couldn't be found.
       additionalProperties: false
     GetFileErrorReturnCode:
+      description: |
+        * 0 = FILE_NOT_FOUND: The document with ID fileId could not be found.
+        * 1 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
-        - FILE_NOT_FOUND
-        - IDP_USER_NOT_FOUND
+        - 0
+        - 1
         - ERROR
       type: string
       example: FILE_NOT_FOUND
@@ -468,23 +478,24 @@ components:
           $ref: '#/components/schemas/PutFileErrorReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The provided document type is not support.
       additionalProperties: false
     PutFileErrorReturnCode:
       description: |
-        * NOK: The file was not transmitted to the Merchant.
-        * DOCUMENT_TYPE_NOT_FOUND: The specified document type is unknown.
-        * DOCUMENT_TYPE_NOT_SUPPORTED: The specified document type is not supported by the Merchant.
-        * IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+        * 0 = NOK: The file was not transmitted to the Merchant.
+        * 1 = DOCUMENT_TYPE_NOT_FOUND: The specified document type is unknown.
+        * 2 = DOCUMENT_TYPE_NOT_SUPPORTED: The specified document type is not supported by the Merchant.
+        * 3 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
       enum:
-        - NOK
-        - DOCUMENT_TYPE_NOT_FOUND
-        - DOCUMENT_TYPE_NOT_SUPPORTED
-        - IDP_USER_NOT_FOUND
+        - 0
+        - 1
+        - 2
+        - 3
         - ERROR
       type: string
-      example: DOCUMENT_TYPE_NOT_FOUND
+      example: "1"
       nullable: false
     GetFileListRequest:
       type: object
@@ -567,22 +578,33 @@ components:
           type: string
           nullable: false
           enum:
+            - 0
             - OK
       additionalProperties: false
     GetFileListErrorResponse:
       type: object
       properties:
         returnCode:
-          enum:
-            - ERROR
-          type: string
-          example: ERROR
-          nullable: false
+          $ref: '#/components/schemas/GetFileListErrorReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The requested document type couldn't be found.
       additionalProperties: false
+    GetFileListErrorReturnCode:
+      description: |
+        * 0 = DOCUMENT_TYPE_NOT_FOUND: One of the specified document types is unknown.
+        * 1 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+        * 2 = INSURER_NOT_AVAILABLE: No service agreement exists with the provided insurer.
+      enum:
+        - 0
+        - 1
+        - 2
+        - ERROR
+      type: string
+      example: "1"
+      nullable: false
     GetAvailableInsurersRequest:
       type: object
       properties:
@@ -620,13 +642,10 @@ components:
       type: object
       properties:
         returnCode:
-          enum:
-            - ERROR
-          type: string
-          example: ERROR
-          nullable: false
+          $ref: '#/components/schema/MissingLicenceKeyReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The given license key is invalid.
       additionalProperties: false
@@ -669,13 +688,10 @@ components:
       type: object
       properties:
         returnCode:
-          enum:
-            - ERROR
-          type: string
-          example: ERROR
-          nullable: false
+          $ref: '#/components/schema/MissingLicenceKeyReturnCode'
         errorMessage:
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The given license key is invalid.
       additionalProperties: false
@@ -713,18 +729,22 @@ components:
       type: object
       properties:
         returnCode:
-          enum:
-            - ERROR
-          type: string
-          example: ERROR
-          nullable: false
+          $ref: '#/components/schema/MissingLicenceKeyReturnCode'
         errorMessage:
-          description: Optional information in case of error. Should facilitate finding the cause of the error and 
-            contains textual (not further structured) data.
           type: string
+          description: Optional information in case of error. Should facilitate finding the cause of the error and contains textual (not further structured) data.
           nullable: true
           example: The given license key is invalid.
       additionalProperties: false
+    MissingLicenceKeyReturnCode:
+      description: |
+        * 0 = LICENCE_KEY_NOT_VALID: The provided licence key does not exist, is malformed or is invalid for another reason
+      enum:
+        - 0
+        - ERROR
+      type: string
+      example: "ERROR"
+      nullable: false
     FileInfoDownload:
       type: object
       description: Metadata about the transferred file.
