@@ -79,7 +79,7 @@
     },
     "routingDecision": {
       "description": "Scalar projection of data.validationResults.routingDecision for routing and filtering.",
-      "$ref": "../specific-types/RoutingDecisionType.json"
+      "$ref": "./specific-types/RoutingDecisionType.json"
     },
     "requiresHumanReview": {
       "description": "Scalar projection of data.validationResults.requiresHumanReview for routing and filtering.",
