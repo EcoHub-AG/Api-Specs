@@ -2,13 +2,23 @@
   "$schema": "https://json-schema.org/draft/2019-09/schema",
   "$id": "https://raw.githubusercontent.com/EcoHub-AG/Api-Specs/main/Kafka-Events-Specification/event-generic/SubProcessName-All.json",
   "title": "All ProcessName Types (Union)",
-  "description": "Union of ALL process names (both process-specific and generic workflow stages). ONLY use this for SAFErrorEventType which must support errors from any source event type. For specific event types, use either ProcessNameType or GenericProcessNameType.",
-  "allOf": [
-    {
-      "$ref": "ProcessNameType.json"
-    },
-    {
-      "$ref": "GenericProcessNameType.json"
-    }
-  ]
+  "type": "string",
+  "enum": [
+        "offer.nlpi",
+        "invoice",
+        "commission",
+        "contract",
+        "mandate",
+        "claimsExperience",
+        "claimsExperience.nlpi",
+        "offer",
+        "invoice",
+        "commission",
+        "contract",
+        "mandate",
+        "claimsExperience",
+        "claims",
+        "customerInformation",
+        "brokerInformation"
+      ]
 }
