@@ -578,6 +578,7 @@ components:
           type: string
           nullable: false
           enum:
+            - 0
             - OK
       additionalProperties: false
     GetFileListErrorResponse:
@@ -595,9 +596,11 @@ components:
       description: |
         * 0 = DOCUMENT_TYPE_NOT_FOUND: One of the specified document types is unknown.
         * 1 = IDP_USER_NOT_FOUND: This IDP user is not known to Merchant or does not have sufficient rights for the requested transaction.
+        * 2 = INSURER_NOT_AVAILABLE: No service agreement exists with the provided insurer.
       enum:
         - 0
         - 1
+        - 2
         - ERROR
       type: string
       example: "1"
