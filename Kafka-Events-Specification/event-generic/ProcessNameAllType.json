@@ -1,6 +1,4 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "$id": "https://raw.githubusercontent.com/EcoHub-AG/Api-Specs/main/Kafka-Events-Specification/event-generic/SubProcessName-All.json",
   "title": "All ProcessName Types (Union)",
   "type": "string",
   "enum": [
