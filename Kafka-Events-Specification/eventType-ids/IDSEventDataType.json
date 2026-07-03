@@ -27,11 +27,11 @@
       "type": "string"
     },
     "basicProcessingMetadata": {
-      "description": "Model, processing mode, timing and aggregate confidence score. Source of root projections idsconfidenceScore.",
+      "description": "Model, processing mode, timing and aggregate confidence score. Source of root projection confidenceScore.",
       "$ref": "./specific-types/BasicProcessingMetadataType.json"
     },
     "documentQualityMetrics": {
-      "description": "Source document properties, OCR quality, AGB handling, completeness, and document hash. Source of root projection idsdocumentQuality.",
+      "description": "Source document properties, OCR quality, AGB handling, completeness, and document hash. Source of root projection documentQuality.",
       "$ref": "./specific-types/DocumentQualityMetricsType.json"
     },
     "detailedExtractionData": {
@@ -47,7 +47,7 @@
       "$ref": "./specific-types/ReceiverRecommendationsType.json"
     },
     "validationResults": {
-      "description": "Validation result, routing decision, human-review flag, and business-rule results. Source of root projections idsisValid, idsroutingDecision, idsrequiresHumanReview, and idsreviewReason.",
+      "description": "Validation result, routing decision, human-review flag, and business-rule results. Source of root projections isValid, routingDecision, requiresHumanReview, and reviewReason.",
       "$ref": "./specific-types/ValidationResultsType.json"
     },
     "fieldExtractionAudit": {

@@ -1,0 +1,1519 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "The main event type which can either be used to transmit business data according to a data standard or to send an acknowledge event.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Identifies the event. Producers MUST ensure that source + id is unique for each distinct event. If a duplicate event is re-sent (e.g. due to a network error) it MAY have the same id. Consumers MAY assume that Events with identical source and id are duplicates.",
+      "examples": [
+        "A234-1234-1234"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "source": {
+      "description": "Uniquely identifies the producer of the event. Must be globally unique, including across environments.",
+      "examples": [
+        "http://www.myecohub.ch/iat/ecohub-processes",
+        "http://www.myecohub.ch/prod/ecohub-processes"
+      ],
+      "format": "uri-reference",
+      "minLength": 1,
+      "type": "string"
+    },
+    "specversion": {
+      "description": "The version of the CloudEvents specification which the event uses. MUST be set to 1.0",
+      "examples": [
+        "1.0"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "type": {
+      "description": "Reverse DNS entry defining the Intelligent Data Structuring (IDS) SAF event type. Restricted to ch.ecohub.saf.ids for IDS events (member of EventType).",
+      "type": "string",
+      "enum": [
+        "ch.ecohub.saf.ids"
+      ]
+    },
+    "datacontenttype": {
+      "description": "Content type of the data value. Must adhere to RFC 2046 format.",
+      "examples": [
+        "text/xml",
+        "application/json"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "dataschema": {
+      "description": "Identifies the schema that data adheres to. Must point to the respective raw schema in the EcoHub GitHub schema repository (https://github.com/EcoHub-AG/Standards).",
+      "format": "uri",
+      "minLength": 1,
+      "type": "string",
+      "examples": [
+        "https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiRequestDataType.json",
+        "https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Offer_NLPI_v0.3.0/schemas/Offer-NLPI/v0.3.0/offer-nlpi-root/OfferNlpiDataType.json"
+      ]
+    },
+    "subject": {
+      "description": "Describes the subject of the event to provide additional context about the event.",
+      "examples": [
+        "Billing november 2024",
+        "MF offer company A"
+      ],
+      "minLength": 1,
+      "type": "string"
+    },
+    "time": {
+      "description": "Timestamp of when the occurrence happened. Must adhere to RFC 3339.",
+      "examples": [
+        "2018-04-05T17:31:00Z"
+      ],
+      "format": "date-time",
+      "minLength": 1,
+      "type": "string"
+    },
+    "licenceKey": {
+      "description": "The license key for the requesting SC application.",
+      "type": "string",
+      "maxLength": 200,
+      "minLength": 3,
+      "examples": [
+        "fdsaf346t54grthe65euz467jhz7r"
+      ]
+    },
+    "userAgent": {
+      "type": "object",
+      "description": "Identifies the software that was used to produce the event",
+      "properties": {
+        "name": {
+          "description": "Name of the application",
+          "example": "Client software XYZ",
+          "maxLength": 100,
+          "minLength": 3,
+          "type": "string"
+        },
+        "version": {
+          "description": "Used version of the application",
+          "example": "Version 1.0",
+          "maxLength": 30,
+          "minLength": 3,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ],
+      "additionalProperties": false
+    },
+    "eventReceiver": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "description": "The category of the organisation",
+          "enum": [
+            "broker",
+            "insurer",
+            "serviceprovider"
+          ],
+          "example": "broker",
+          "type": "string"
+        },
+        "id": {
+          "description": "The IDP number of the member's techUser. The IDP number of the eventReceiver can be determined through the /saf-receivers endpoint of the General API.",
+          "examples": [
+            "IDP1239856"
+          ],
+          "minLength": 3,
+          "type": "string"
+        },
+        "onBehalfBy": {
+          "type": "string",
+          "description": "The IDP number of the software provider's techUser if the event is send on behalf.",
+          "pattern": "^IDP(\\d{7})$"
+        }
+      },
+      "required": [
+        "category",
+        "id"
+      ]
+    },
+    "eventSender": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "description": "The category of the organisation",
+          "enum": [
+            "broker",
+            "insurer",
+            "serviceprovider"
+          ],
+          "example": "broker",
+          "type": "string"
+        },
+        "id": {
+          "description": "The IDP number of the member's techUser. The IDP number of the eventReceiver can be determined through the /saf-receivers endpoint of the General API.",
+          "examples": [
+            "IDP1239856"
+          ],
+          "minLength": 3,
+          "type": "string"
+        },
+        "onBehalfBy": {
+          "type": "string",
+          "description": "The IDP number of the software provider's techUser if the event is send on behalf.",
+          "pattern": "^IDP(\\d{7})$"
+        }
+      },
+      "required": [
+        "category",
+        "id"
+      ]
+    },
+    "data": {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
+      "description": "IDS event data payload. Contains the encrypted structured extraction result plus grouped IDS processing metadata aligned with the AIDataStructure process-document response. Scalar projections needed for event filtering, routing, and search are exposed at the SAFIDSEventType root.",
+      "type": "object",
+      "properties": {
+        "payload": {
+          "description": "Base64 representation of gzip-compressed and encrypted structured output from document processing. This is the encrypted SAF event equivalent of the OAS DocumentExtractionResponse.result value.",
+          "minLength": 3,
+          "type": "string"
+        },
+        "payloadSignature": {
+          "description": "Digital signature for integrity verification of encrypted payload. Created by signing payload using ECDSA with secp384r1 curve and SHA-384 hash. Encoded in ASN.1 format and transmitted as Base64.",
+          "minLength": 3,
+          "type": "string"
+        },
+        "encryptionKey": {
+          "description": "Encrypted AES symmetric key used to decrypt the payload. Key was encrypted with eventReceiver's public key using RSA with OAEP padding and SHA-256 hash. Transmitted as Base64.",
+          "minLength": 3,
+          "type": "string"
+        },
+        "publicKeyVersion": {
+          "description": "Version identifier of the recipient's public key used to encrypt the encryptionKey. Determines which private key can decrypt the key.",
+          "type": "string"
+        },
+        "signatureKeyVersion": {
+          "description": "Version identifier of the sender's signature key used to sign the payload. Determines which public key can verify the signature.",
+          "type": "string"
+        },
+        "basicProcessingMetadata": {
+          "description": "Model, processing mode, timing and aggregate confidence score. Source of root projections idsconfidenceScore.",
+          "$schema": "https://json-schema.org/draft/2019-09/schema",
+          "type": "object",
+          "properties": {
+            "processingModel": {
+              "description": "AI/ML model used to process the document (e.g., 'Claude-3.5-Sonnet', 'GPT-4-Vision', 'Azure-Document-Intelligence')",
+              "type": "string"
+            },
+            "modelVersion": {
+              "description": "Version identifier of the AI model",
+              "type": "string"
+            },
+            "extractionMode": {
+              "type": "string",
+              "description": "Mode of field extraction (e.g., 'zero-shot', 'few-shot', 'template-based')",
+              "nullable": true
+            },
+            "llmCallCount": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            },
+            "majorityVoting": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "promptRepetition": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "dpi": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            },
+            "imageQuality": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            },
+            "psm": {
+              "type": "integer",
+              "minimum": 0,
+              "nullable": true
+            },
+            "ocrEngineMode": {
+              "type": "string",
+              "nullable": true
+            },
+            "processingTimeMs": {
+              "description": "Elapsed time for document processing in milliseconds",
+              "type": "number",
+              "minimum": 0,
+              "nullable": true
+            },
+            "postprocessingTimeMs": {
+              "type": "number",
+              "minimum": 0,
+              "nullable": true
+            },
+            "llmResponseTimeMs": {
+              "type": "number",
+              "minimum": 0,
+              "nullable": true
+            },
+            "confidenceScore": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "documentQualityMetrics": {
+          "description": "Source document properties, OCR quality, AGB handling, completeness, and document hash. Source of root projection idsdocumentQuality.",
+          "$schema": "https://json-schema.org/draft/2019-09/schema",
+          "type": "object",
+          "properties": {
+            "documentType": {
+              "description": "Document category (e.g., 'insurance-application', 'claim-form', 'policy-document')",
+              "type": "string"
+            },
+            "sourceFormat": {
+              "description": "Original document MIME type (e.g., 'application/pdf', 'image/jpeg', 'image/png')",
+              "type": "string"
+            },
+            "pageCount": {
+              "description": "Total number of pages in the document",
+              "type": "integer",
+              "minimum": 0
+            },
+            "pagesEvaluated": {
+              "description": "Number of pages evaluated for quality metrics",
+              "type": "integer",
+              "minimum": 0
+            },
+            "ocrQuality": {
+              "description": "Optical Character Recognition quality score (0.0 = illegible, 1.0 = perfect)",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "agbExtraction": {
+              "type": "boolean",
+              "description": "Indicates whether the document is an AGB (Allgemeine Geschäftsbedingungen) which may require special handling."
+            },
+            "agbPagesRemoved": {
+              "type": "array",
+              "minimum": 1,
+              "items": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "description": "List of page numbers removed from the document due to AGB extraction."
+            },
+            "postprocessingInformation": {
+              "type": "array",
+              "minimum": 1,
+              "items": {
+                "$schema": "https://json-schema.org/draft/2019-09/schema",
+                "description": "Postprocessing change information aligned with OAS PostProcessingInformation.",
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "description": "Description of the post-processing change that was applied.",
+                    "type": "string"
+                  },
+                  "field": {
+                    "description": "Name of the field that was changed during post-processing.",
+                    "type": "string"
+                  },
+                  "oldValue": {
+                    "description": "Original value of the field before post-processing changes were applied. Null if the field was not previously set.",
+                    "type": "string"
+                  },
+                  "newValue": {
+                    "description": "New value of the field after post-processing changes were applied. Null if the field was removed or not set.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message",
+                  "field",
+                  "oldValue",
+                  "newValue"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Information about post-processing steps applied to the document after initial extraction, which may impact quality assessment."
+            },
+            "documentQuality": {
+              "$schema": "https://json-schema.org/draft/2019-09/schema",
+              "description": "Overall assessment of document quality for processing",
+              "type": "string",
+              "enum": [
+                "excellent",
+                "high",
+                "medium",
+                "low",
+                "poor"
+              ]
+            },
+            "completenessScore": {
+              "description": "Percentage of expected/required fields successfully extracted (0.0-1.0)",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "sourceDocumentHash": {
+              "description": "SHA-256 cryptographic hash of original source document",
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "detailedExtractionData": {
+          "description": "Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.",
+          "$schema": "https://json-schema.org/draft/2019-09/schema",
+          "type": "object",
+          "properties": {
+            "preprocessingPipeline": {
+              "description": "Structured representation of the preprocessing steps applied to the document before field extraction.",
+              "$schema": "https://json-schema.org/draft/2019-09/schema",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "sequence": {
+                    "description": "Order in which this preprocessing step was executed.",
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "operation": {
+                    "description": "Type of preprocessing operation applied.",
+                    "type": "string",
+                    "enum": [
+                      "rotation",
+                      "deskew",
+                      "enhancement",
+                      "noise-reduction",
+                      "binarization",
+                      "contrast-adjustment",
+                      "sharpening",
+                      "custom"
+                    ]
+                  },
+                  "parameters": {
+                    "description": "Operation-specific configuration parameters",
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "qualityBefore": {
+                    "description": "Document quality score before this operation",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "qualityAfter": {
+                    "description": "Document quality score after this operation",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "durationMs": {
+                    "description": "Execution time for this step in milliseconds",
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "status": {
+                    "description": "Execution status of this preprocessing step.",
+                    "type": "string",
+                    "enum": [
+                      "applied",
+                      "skipped",
+                      "failed"
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "preprocessingImpactAnalysis": {
+              "description": "Analysis of how preprocessing steps impacted field extraction outcomes.",
+              "$schema": "https://json-schema.org/draft/2019-09/schema",
+              "type": "object",
+              "properties": {
+                "documentQualityBefore": {
+                  "description": "Document quality score before any preprocessing.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "documentQualityAfter": {
+                  "description": "Document quality score after all preprocessing.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "improvementFromPreprocessing": {
+                  "description": "Calculated improvement in document quality from preprocessing.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "mostImpactfulStep": {
+                  "description": "Name of the preprocessing operation that had the greatest positive impact on quality.",
+                  "type": "string"
+                },
+                "receiverNote": {
+                  "description": "Human-readable note explaining the preprocessing impact for the receiver.",
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            "fieldExtractionDetails": {
+              "description": "Detailed information about the field extraction process.",
+              "$schema": "https://json-schema.org/draft/2019-09/schema",
+              "type": "array",
+              "minimum": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldPath": {
+                    "description": "JSON path or identifier representing the field location in the structured output.",
+                    "type": "string"
+                  },
+                  "confidence": {
+                    "description": "Overall confidence score for this field extraction (0-1).",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "confidenceBreakdown": {
+                    "description": "Decomposition of confidence into constituent factors. OAS v2.1 currently leaves this object under-specified, so additional factor names are allowed.",
+                    "type": "object",
+                    "properties": {
+                      "formatValidity": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "modelCertainty": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "contextAppropriateness": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "readability": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    },
+                    "additionalProperties": true
+                  },
+                  "confidenceRationale": {
+                    "description": "Explanation of why confidence is at this level.",
+                    "type": "string"
+                  },
+                  "receiverGuidance": {
+                    "description": "Actionable guidance for receiver if manual verification is needed.",
+                    "type": "string"
+                  },
+                  "extractionMethod": {
+                    "description": "Method used to obtain this field value.",
+                    "type": "string",
+                    "enum": [
+                      "extracted",
+                      "calculated",
+                      "default",
+                      "manual-input"
+                    ]
+                  },
+                  "sourceLocation": {
+                    "type": "object",
+                    "properties": {
+                      "page": {
+                        "description": "Page number in document where field appears, 1-indexed.",
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "boundingBox": {
+                        "description": "Normalized bounding box coordinates [x, y, width, height] as fractions of page dimensions.",
+                        "type": "array",
+                        "items": {
+                          "type": [
+                            "number"
+                          ],
+                          "minimum": 0,
+                          "maximum": 1
+                        },
+                        "minItems": 4,
+                        "maxItems": 4
+                      },
+                      "text": {
+                        "description": "Raw text extracted from this location before any transformation.",
+                        "type": "string"
+                      },
+                      "contextAppropriateness": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      },
+                      "readability": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "extractedValue": {
+                    "description": "The raw extracted value before transformations."
+                  },
+                  "alternatives": {
+                    "description": "Alternative values considered by the AI model for this field.",
+                    "type": "array",
+                    "minimum": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "value": {
+                          "description": "Alternative value candidate.",
+                          "type": "string"
+                        },
+                        "confidence": {
+                          "description": "Confidence score for this alternative.",
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "validationStatus": {
+                    "description": "Validation result for this specific field.",
+                    "type": "string",
+                    "enum": [
+                      "valid",
+                      "invalid",
+                      "warning",
+                      "not-validated"
+                    ]
+                  },
+                  "validationMessage": {
+                    "description": "Details or explanation of validation status.",
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "fieldTransformationRecord": {
+              "description": "Record of field transformations applied during processing.",
+              "$schema": "https://json-schema.org/draft/2019-09/schema",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldPath": {
+                    "description": "Identifier of the field that was transformed.",
+                    "type": "string"
+                  },
+                  "rawExtractedValue": {
+                    "description": "Original raw value as extracted by AI before transformations."
+                  },
+                  "finalStoredValue": {
+                    "description": "Final value after all transformations have been applied."
+                  },
+                  "originalConfidence": {
+                    "description": "Confidence score of the raw extraction before transformation.",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "transformationsApplied": {
+                    "description": "Sequence of transformations applied to convert raw to final value.",
+                    "type": "array",
+                    "minimum": 1,
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "description": "Category of transformation applied.",
+                          "type": "string",
+                          "enum": [
+                            "format-normalization",
+                            "year-expansion",
+                            "unit-conversion",
+                            "whitespace-trimming",
+                            "case-normalization",
+                            "custom"
+                          ]
+                        },
+                        "from": {
+                          "description": "Source format or pattern.",
+                          "type": "string"
+                        },
+                        "to": {
+                          "description": "Target format or pattern.",
+                          "type": "string"
+                        },
+                        "reasoning": {
+                          "description": "Explanation of why this transformation was applied.",
+                          "type": "string"
+                        },
+                        "isMeaningPreserving": {
+                          "description": "Whether transformation preserves the semantic meaning of the original value.",
+                          "type": "boolean"
+                        },
+                        "confidenceAfterTransform": {
+                          "description": "Confidence in the transformed value.",
+                          "type": "number",
+                          "minimum": 0,
+                          "maximum": 1
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "reasoning",
+                        "isMeaningPreserving",
+                        "confidenceAfterTransform"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "documentQualityAssessment": {
+          "description": "Quality-factor breakdown and recommended review strategy.",
+          "$schema": "https://json-schema.org/draft/2019-09/schema",
+          "type": "object",
+          "properties": {
+            "overallQuality": {
+              "$schema": "https://json-schema.org/draft/2019-09/schema",
+              "description": "Overall assessment of document quality for processing",
+              "type": "string",
+              "enum": [
+                "excellent",
+                "high",
+                "medium",
+                "low",
+                "poor"
+              ]
+            },
+            "qualityFactors": {
+              "type": "object",
+              "description": "Specific quality factors contributing to the overall assessment.",
+              "properties": {
+                "documentReadability": {
+                  "description": "Document text legibility score",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "structureRecognition": {
+                  "description": "Form/table structure recognition score",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "handwritingPresence": {
+                  "description": "Indicates presence of handwriting (which may require special handling)",
+                  "type": "boolean"
+                },
+                "imageQuality": {
+                  "description": "Image quality score (for scanned documents)",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "ocrQuality": {
+                  "description": "OCR accuracy score",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "receiverRecommendedStrategy": {
+              "type": "object",
+              "properties": {
+                "approachSuggested": {
+                  "description": "Recommended review approach for the receiver based on document quality assessment.",
+                  "$schema": "https://json-schema.org/draft/2019-09/schema",
+                  "type": "string",
+                  "enum": [
+                    "full-review",
+                    "targeted-review",
+                    "spot-check",
+                    "accept"
+                  ]
+                },
+                "reasoning": {
+                  "description": "Explanation for the recommended strategy",
+                  "type": "string"
+                },
+                "fieldsRequiringExtraAttention": {
+                  "description": "List of field paths requiring extra scrutiny",
+                  "type": "array",
+                  "minimum": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "nullable": true
+            },
+            "estimatedManualReviewMinutes": {
+              "description": "Estimated time in minutes for manual review",
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        },
+        "receiverRecommendations": {
+          "description": "Field-level, document-level, and decision-matrix recommendations.",
+          "$schema": "https://json-schema.org/draft/2019-09/schema",
+          "type": "object",
+          "properties": {
+            "summary": {
+              "type": "object",
+              "properties": {
+                "fieldsCount": {
+                  "description": "Total number of fields extracted",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "fieldsAccept": {
+                  "description": "Number of high-confidence fields (ACCEPT)",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "fieldsReview": {
+                  "description": "Number of medium-confidence fields (REVIEW)",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "fieldsVerify": {
+                  "description": "Number of low-confidence fields (VERIFY)",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "documentLevelIssues": {
+                  "description": "Number of document-level issues detected",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "estimatedManualReviewMinutes": {
+                  "description": "Total estimated time for manual review",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "overallStrategy": {
+                  "$schema": "https://json-schema.org/draft/2019-09/schema",
+                  "description": "Recommended review approach for the receiver based on document quality assessment.",
+                  "type": "string",
+                  "enum": [
+                    "full-review",
+                    "targeted-review",
+                    "spot-check",
+                    "accept"
+                  ]
+                }
+              },
+              "additionalProperties": false
+            },
+            "fieldRecommendations": {
+              "type": "array",
+              "minimum": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "fieldPath": {
+                    "description": "JSON path to the field",
+                    "type": "string"
+                  },
+                  "recommendation": {
+                    "type": "string",
+                    "enum": [
+                      "ACCEPT",
+                      "REVIEW",
+                      "VERIFY",
+                      "REJECT"
+                    ]
+                  },
+                  "priority": {
+                    "description": "Priority order (1 = highest, higher number = lower priority)",
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "reasons": {
+                    "description": "Reasons for this recommendation",
+                    "type": "array",
+                    "minimum": 1,
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "confidenceScore": {
+                    "description": "Current confidence score for this field",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "threshold": {
+                    "description": "Confidence threshold applicable to this field",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  },
+                  "whatToCheckFor": {
+                    "description": "Guidance on what to verify for this field",
+                    "type": "string"
+                  },
+                  "alternativeValues": {
+                    "description": "Alternative values that could replace the current value",
+                    "type": "array",
+                    "minimum": 1,
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "estimatedTimeMinutes": {
+                    "description": "Estimated time in minutes to review this field",
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "documentLevelRecommendations": {
+              "type": "array",
+              "minimum": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "recommendation": {
+                    "description": "Type of recommendation (e.g., 'HANDWRITING_DETECTED', 'LOW_OCR_QUALITY')",
+                    "type": "string"
+                  },
+                  "affectedPages": {
+                    "type": "array",
+                    "minimum": 1,
+                    "items": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "affectedFields": {
+                    "description": "List of affected field paths",
+                    "type": "array",
+                    "minimum": 1,
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "whatToDo": {
+                    "type": "string"
+                  },
+                  "estimatedTimeMinutes": {
+                    "description": "Estimated time in minutes to address this issue",
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "receiverDecisionMatrix": {
+              "type": "object",
+              "properties": {
+                "acceptWithoutReview": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "description": "Number of fields in this group",
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "action": {
+                      "description": "Recommended action for this group",
+                      "type": "string"
+                    },
+                    "estimatedMinutes": {
+                      "description": "Estimated time in minutes for this group",
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "fields": {
+                      "description": "List of field paths in this group",
+                      "type": "array",
+                      "minimum": 1,
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "spotCheckRecommended": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "description": "Number of fields in this group",
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "action": {
+                      "description": "Recommended action for this group",
+                      "type": "string"
+                    },
+                    "estimatedMinutes": {
+                      "description": "Estimated time in minutes for this group",
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "fields": {
+                      "description": "List of field paths in this group",
+                      "type": "array",
+                      "minimum": 1,
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                "manualVerificationRequired": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "description": "Number of fields in this group",
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "action": {
+                      "description": "Recommended action for this group",
+                      "type": "string"
+                    },
+                    "estimatedMinutes": {
+                      "description": "Estimated time in minutes for this group",
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "fields": {
+                      "description": "List of field paths in this group",
+                      "type": "array",
+                      "minimum": 1,
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "definitions": {
+            "ReceiverDecisionGroup": {
+              "type": "object",
+              "properties": {
+                "count": {
+                  "description": "Number of fields in this group",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "action": {
+                  "description": "Recommended action for this group",
+                  "type": "string"
+                },
+                "estimatedMinutes": {
+                  "description": "Estimated time in minutes for this group",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "fields": {
+                  "description": "List of field paths in this group",
+                  "type": "array",
+                  "minimum": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false
+            },
+            "additionalProperties": false
+          }
+        },
+        "validationResults": {
+          "description": "Validation result, routing decision, human-review flag, and business-rule results. Source of root projections idsisValid, idsroutingDecision, idsrequiresHumanReview, and idsreviewReason.",
+          "$schema": "https://json-schema.org/draft/2019-09/schema",
+          "type": "object",
+          "properties": {
+            "isValid": {
+              "description": "Overall validation result for the extracted data.",
+              "type": "boolean"
+            },
+            "validationErrors": {
+              "description": "List of validation errors or warnings encountered.",
+              "type": "array",
+              "minimum": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "field": {
+                    "description": "Field path where error occurred.",
+                    "type": "string"
+                  },
+                  "errorType": {
+                    "description": "Error type identifier (e.g., 'ENUM_MISMATCH', 'FORMAT_ERROR', 'TYPE_MISMATCH')",
+                    "type": "string"
+                  },
+                  "message": {
+                    "description": "Human-readable error description.",
+                    "type": "string"
+                  },
+                  "severity": {
+                    "description": "Impact level of this validation issue.",
+                    "type": "string",
+                    "enum": [
+                      "error",
+                      "warning",
+                      "info"
+                    ]
+                  },
+                  "suggestedFix": {
+                    "description": "Optional suggestion for correcting the issue.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "routingDecision": {
+              "description": "Suggested routing or next action based on validation results.",
+              "$schema": "https://json-schema.org/draft/2019-09/schema",
+              "type": "string",
+              "enum": [
+                "auto-approve",
+                "manual-review",
+                "reject",
+                "re-process"
+              ]
+            },
+            "requiresHumanReview": {
+              "description": "Whether human review is recommended before proceeding.",
+              "type": "boolean"
+            },
+            "reviewReason": {
+              "description": "Explanation of why human review is needed.",
+              "type": "string"
+            },
+            "businessRuleValidations": {
+              "description": "Business rule validation results as ProblemDetails-style entries aligned with the OAS IdsBusinessRuleValidation schema.",
+              "type": "array",
+              "minimum": 1,
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "detail": {
+                    "type": "string"
+                  },
+                  "instance": {
+                    "type": "string"
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "dataCompletenessCheck": {
+              "type": "object",
+              "properties": {
+                "requiredFieldsPresent": {
+                  "description": "Number of required fields successfully extracted.",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "requiredFieldsTotal": {
+                  "description": "Total number of required fields expected.",
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "missingRequiredFields": {
+                  "description": "List of required fields that were not found.",
+                  "type": "array",
+                  "minimum": 1,
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "lowConfidenceFields": {
+                  "description": "Fields with confidence below acceptable threshold.",
+                  "type": "array",
+                  "minimum": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "fieldPath": {
+                        "type": "string"
+                      },
+                      "confidence": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "isValid",
+            "routingDecision",
+            "requiresHumanReview"
+          ],
+          "additionalProperties": false
+        },
+        "fieldExtractionAudit": {
+          "description": "Field provenance source audit trail.",
+          "$schema": "https://json-schema.org/draft/2019-09/schema",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "minimum": 1,
+            "properties": {
+              "fieldName": {
+                "type": "string"
+              },
+              "xPath": {
+                "type": "string"
+              },
+              "sources": {
+                "type": "array",
+                "minimum": 1,
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "ApiGenerated",
+                    "Generated",
+                    "DefaultValue",
+                    "LlmGenerated",
+                    "PostProcessed",
+                    "PostLlmCalculated"
+                  ]
+                }
+              },
+              "description": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "fieldName",
+              "xPath",
+              "sources",
+              "description"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "payload",
+        "payloadSignature",
+        "encryptionKey",
+        "publicKeyVersion",
+        "signatureKeyVersion"
+      ],
+      "additionalProperties": false
+    },
+    "processGroupId": {
+      "description": "UUID, that is used to associate multiple processes. The exact usage is specified in each data standard.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "processId": {
+      "description": "UUID, that won't change during the offer processes. The UUID is set by the party, that starts the process.",
+      "type": "string",
+      "format": "uuid"
+    },
+    "processName": {
+      "description": "Identifier of the core process",
+      "type": "string",
+      "allOf": [
+        {
+          "$schema": "https://json-schema.org/draft/2019-09/schema",
+          "$id": "https://raw.githubusercontent.com/EcoHub-AG/Api-Specs/main/Kafka-Events-Specification/event-generic/SubProcessName-All.json",
+          "title": "All ProcessName Types (Union)",
+          "type": "string",
+          "enum": [
+            "offer.nlpi",
+            "invoice",
+            "commission",
+            "contract",
+            "mandate",
+            "claimsExperience",
+            "claimsExperience.nlpi",
+            "offer",
+            "claims",
+            "customerInformation",
+            "brokerInformation"
+          ]
+        },
+        {
+          "enum": [
+            "offer.nlpi",
+            "invoice",
+            "commission",
+            "contract",
+            "mandate",
+            "claimsExperience",
+            "claimsExperience.nlpi"
+          ]
+        }
+      ]
+    },
+    "processVersion": {
+      "description": "Version of the used core process",
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "processStatus": {
+      "description": "Defines status of the overall process.",
+      "type": "string",
+      "enum": [
+        "active",
+        "closed"
+      ]
+    },
+    "subProcessName": {
+      "description": "Identifier for the current subprocess step within the core process. For generic data events, use the generic subprocess names that represent the workflow stage (Initiate, Provide, Review, Decide, Execute, Close). For standard processes, use SubProcessNameType.",
+      "type": "string",
+      "allOf": [
+        {
+          "$schema": "https://json-schema.org/draft/2019-09/schema",
+          "$id": "https://raw.githubusercontent.com/EcoHub-AG/Api-Specs/main/Kafka-Events-Specification/event-generic/SubProcessName-All.json",
+          "title": "All SubProcessName Types (Union)",
+          "description": "Union of ALL subprocess names (both process-specific and generic workflow stages). ONLY use this for SAFErrorEventType which must support errors from any source event type. For specific event types, use either SubProcessNameType or GenericSubProcessNameType.",
+          "type": "string",
+          "enum": [
+            "request",
+            "offer",
+            "feedback",
+            "conclusionDecision",
+            "billing",
+            "reminder",
+            "contract",
+            "commission",
+            "submission",
+            "cancellation",
+            "claimsExperience",
+            "Initiate",
+            "Provide",
+            "Review",
+            "Decide",
+            "Execute",
+            "Close"
+          ]
+        },
+        {
+          "enum": [
+            "Initiate",
+            "Provide",
+            "Review",
+            "Decide",
+            "Execute",
+            "Close"
+          ]
+        }
+      ]
+    },
+    "subProcessStatus": {
+      "type": "string",
+      "enum": [
+        "Created",
+        "Received",
+        "InProgress",
+        "Responded",
+        "Updated",
+        "Error",
+        "Inquiry",
+        "Inquiry_Answer",
+        "Closed"
+      ]
+    },
+    "confidenceScore": {
+      "description": "Scalar projection of data.basicProcessingMetadata.confidenceScore for routing and quality gating.",
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "documentQuality": {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
+      "description": "Overall assessment of document quality for processing",
+      "type": "string",
+      "enum": [
+        "excellent",
+        "high",
+        "medium",
+        "low",
+        "poor"
+      ]
+    },
+    "isValid": {
+      "description": "Scalar projection of data.validationResults.isValid for routing and filtering.",
+      "type": "boolean"
+    },
+    "routingDecision": {
+      "description": "Scalar projection of data.validationResults.routingDecision for routing and filtering.",
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
+      "type": "string",
+      "enum": [
+        "auto-approve",
+        "manual-review",
+        "reject",
+        "re-process"
+      ]
+    },
+    "requiresHumanReview": {
+      "description": "Scalar projection of data.validationResults.requiresHumanReview for routing and filtering.",
+      "type": "boolean"
+    },
+    "reviewReason": {
+      "description": "Scalar projection of data.validationResults.reviewReason for search and operational triage.",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "source",
+    "specversion",
+    "type",
+    "processId",
+    "processName",
+    "processVersion",
+    "subProcessName",
+    "processStatus",
+    "subProcessStatus",
+    "eventReceiver",
+    "eventSender",
+    "userAgent",
+    "licenceKey"
+  ],
+  "examples": [
+    {
+      "name": "eventWithPayloadExample",
+      "summary": "SAFEvent with offer.nlpi payload",
+      "payload": {
+        "id": "044d2e50-12d6-43e4-bb1b-7b54841c9c82",
+        "source": "http://www.myecohub.ch/ecoHub-mock-broker-producer1",
+        "specversion": "1.0",
+        "type": "ch.ecohub.saf.ids",
+        "datacontenttype": "application/json",
+        "dataschema": "",
+        "subject": "offer nlpi request",
+        "time": "2023-08-17T14:15:22.000Z",
+        "licenceKey": "REcxZEVMZWV1UXFwOUZwaz...",
+        "userAgent": {
+          "name": "BS1",
+          "version": "1.0"
+        },
+        "eventReceiver": {
+          "category": "insurer",
+          "id": "IDP1234567"
+        },
+        "eventSender": {
+          "category": "broker",
+          "id": "IDP7654321"
+        },
+        "data": {
+          "payload": "V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZ...",
+          "payloadSignature": "MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP",
+          "encryptionKey": "urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...",
+          "publicKeyVersion": "1.1",
+          "signatureKeyVersion": "1.3"
+        },
+        "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
+        "processName": "offer.nlpi",
+        "processVersion": "0.3.0",
+        "processStatus": "active",
+        "subProcessName": "request",
+        "subProcessStatus": "Created"
+      }
+    },
+    {
+      "name": "acknowledgeEventExample",
+      "summary": "Acknowledge Event",
+      "payload": {
+        "id": "044d2e50-12d6-43e4-bb1b-7b54841c9c82",
+        "source": "http://www.myecohub.ch/ecoHub-mock-broker-producer1",
+        "specversion": "1.0",
+        "type": "ch.ecohub.saf.ids",
+        "subject": "offer nlpi request acknowledgement",
+        "time": "2023-08-17T14:15:22.000Z",
+        "licenceKey": "REcxZEVMZWV1UXFwOUZwaz...",
+        "userAgent": {
+          "name": "BS1",
+          "version": "1.0"
+        },
+        "eventReceiver": {
+          "category": "insurer",
+          "id": "IDP1234567"
+        },
+        "eventSender": {
+          "category": "broker",
+          "id": "IDP7654321"
+        },
+        "processId": "ff9275bf-5b35-492e-bdd2-c217e151d335",
+        "processName": "offer.nlpi",
+        "processVersion": "0.3.0",
+        "processStatus": "active",
+        "subProcessName": "request",
+        "subProcessStatus": "Received"
+      }
+    }
+  ]
+}
