@@ -11,6 +11,7 @@ on:
       - 'pki-api-v*'
       - 'private-key-api-v*'
       - 'compliance-service-api-v*'
+      - 'marketplace-partner-api-v*'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -82,6 +83,10 @@ jobs:
             echo "privateKeyApi=true" >> $GITHUB_OUTPUT
             echo "API_NAME=Private-Key-Api" >> $GITHUB_OUTPUT
             echo "API_VERSION=${TAG_NAME#private-key-api-v}" >> $GITHUB_OUTPUT
+          elif [[ $TAG_NAME == marketplace-partner-api-v* ]]; then
+            echo "marketplacePartnerApi=true" >> $GITHUB_OUTPUT
+            echo "API_NAME=Marketplace-Partner-Api" >> $GITHUB_OUTPUT
+            echo "API_VERSION=${TAG_NAME#marketplace-partner-api-v}" >> $GITHUB_OUTPUT
           else
             echo "Unknown API tag format"
             exit 1
@@ -128,6 +133,13 @@ jobs:
         run: |
           API_VERSION=${{ steps.api_info.outputs.API_VERSION }}
           redoc-cli bundle -o docs/Compliance-Service-Api/$API_VERSION/index.html ./Compliance-Service-Api/OAS-compliance-service.yaml
+
+      # Marketplace Partner API documentation generation
+      - name: Generate Marketplace Partner API documentation
+        if: steps.api_info.outputs.marketplacePartnerApi == 'true'
+        run: |
+          API_VERSION=${{ steps.api_info.outputs.API_VERSION }}
+          redoc-cli bundle -o docs/Marketplace-Partner-Api/$API_VERSION/index.html ./Marketplace-Partner-Api/OAS-Marketplace-Partner-API.yaml
 
       # Commit all changed files back to the repository
       - name: Commit generated OpenApi spec html output
