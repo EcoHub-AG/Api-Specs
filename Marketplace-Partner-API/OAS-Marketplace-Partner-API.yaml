@@ -1,0 +1,424 @@
+# © 2025 EcoHub AG. All rights reserved.
+# Publicly accessible for informational purposes only.
+# No rights to use, implement, modify, reproduce, distribute, or create derivative works without prior written authorization.
+# Swiss law applies. Jurisdiction: Zurich.
+
+openapi: 3.1.0
+info:
+  title: EcoHub Marketplace Partner API
+  version: 1.0.0
+  description: |
+    Partner-facing API specification for:
+
+    - Marketplace SaaS subscription onboarding webhooks
+    - Affiliated application OIDC configuration
+    - OIDC ID Token claim definitions
+servers:
+  - url: https://api.ecohub.example.com
+    description: Production
+  - url: https://api.dev.ecohub.example.com
+    description: Development
+tags:
+  - name: Affiliated Apps
+  - name: Marketplace Webhooks
+security:
+  - mtls: []
+    ApiKeyHeader: []
+  - oauth2: []
+    ApiKeyHeader: []
+paths:
+  /affiliated-app/publisher/{publisherId}/product/{productId}:
+    get:
+      tags:
+        - Affiliated Apps
+      summary: Get affiliated application OIDC configuration
+      operationId: getAffiliatedAppConfigurationByPublisher
+
+      parameters:
+        - $ref: '#/components/parameters/PublisherId'
+        - $ref: '#/components/parameters/ProductId'
+
+      responses:
+        "200":
+          description: OIDC configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OidcApplicationConfiguration'
+
+  /affiliated-app/product/{productId}:
+    get:
+      tags:
+        - Affiliated Apps
+      summary: Get affiliated application OIDC configuration
+      operationId: getAffiliatedAppConfiguration
+
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+
+      responses:
+        "200":
+          description: OIDC configuration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OidcApplicationConfiguration'
+
+  /affiliated-app/product-update/{productId}:
+    put:
+      tags:
+        - Affiliated Apps
+      summary: Update affiliated application OIDC configuration
+      operationId: updateAffiliatedAppConfiguration
+
+      parameters:
+        - $ref: '#/components/parameters/ProductId'
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOidcApplicationRequest'
+
+      responses:
+        "200":
+          description: Configuration updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OidcApplicationConfiguration'
+
+  /marketplace/on-boarding:
+    post:
+      tags:
+        - Marketplace Webhooks
+      summary: Marketplace onboarding webhook endpoint
+      description: |
+        Vendor-implemented webhook endpoint used by EcoHub
+        to notify subscription lifecycle events.
+      operationId: onboardingWebhook
+      parameters:
+        - name: action
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/WebhookAction'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/SubscriptionCreatedPayload'
+                - $ref: '#/components/schemas/SubscriptionUpgradedPayload'
+                - $ref: '#/components/schemas/SubscriptionDowngradedPayload'
+                - $ref: '#/components/schemas/SubscriptionCancellationInitiatedPayload'
+                - $ref: '#/components/schemas/SubscriptionCancelledPayload'
+                - $ref: '#/components/schemas/SubscriptionSuspendedPayload'
+                - $ref: '#/components/schemas/SubscriptionReactivatedPayload'
+                - $ref: '#/components/schemas/SubscriptionTerminatedPayload'
+                - $ref: '#/components/schemas/SubscriptionRenewedPayload'
+                - $ref: '#/components/schemas/SeatUsersSubscriptionPayload'
+      responses:
+        "200":
+          description: Webhook successfully processed
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: APIKey
+  parameters:
+    PublisherId:
+      name: publisherId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    ProductId:
+      name: productId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+
+  schemas:
+    WebhookAction:
+      type: string
+      enum:
+        - SubscriptionCreated
+        - SubscriptionUpgraded
+        - SubscriptionDowngraded
+        - SubscriptionCancelationInitiated
+        - SubscriptionCancelled
+        - SubscriptionSuspended
+        - SubscriptionReactivated
+        - SubscriptionTerminated
+        - SubscriptionRenewed
+        - SeatUsersSubscriptionUpdated
+
+    BillingPeriod:
+      type: string
+      enum:
+        - monthly
+        - yearly
+
+    InitiatorParty:
+      type: string
+      enum:
+        - customer
+        - publisher
+
+    ApplicationCredential:
+      type: object
+      additionalProperties: true
+
+    OidcApplicationConfiguration:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        appRegistrationName:
+          type: string
+        applicationId:
+          type: string
+          format: uuid
+        clientID:
+          type: string
+        sloUrl:
+          type:
+            - string
+            - "null"
+          format: uri
+        redirectUrls:
+          type: array
+          items:
+            type: string
+            format: uri
+        appRegistrationObjectID:
+          type: string
+          format: uuid
+        isPrivateApplication:
+          type: boolean
+        credential:
+          oneOf:
+            - type: "null"
+            - $ref: '#/components/schemas/ApplicationCredential'
+
+    UpdateOidcApplicationRequest:
+      type: object
+      properties:
+        redirectUrls:
+          type: array
+          items:
+            type: string
+            format: uri
+        sloUrl:
+          type:
+            - string
+            - "null"
+          format: uri
+        isPrivateApplication:
+          type: boolean
+
+    CommonPayload:
+      type: object
+      required:
+        - activityId
+        - subscriptionId
+        - customerId
+        - publisherId
+        - productId
+        - action
+        - timeStamp
+      properties:
+        activityId:
+          type: string
+          format: uuid
+        subscriptionId:
+          type: string
+          format: uuid
+        customerId:
+          type: string
+          format: uuid
+        customerName:
+          type: string
+        initiatedById:
+          type: string
+          format: uuid
+        initiatedByName:
+          type: string
+        initiatedByEmail:
+          type: string
+          format: email
+        publisherId:
+          type: string
+          format: uuid
+        publisherName:
+          type: string
+        productId:
+          type: string
+          format: uuid
+        productSlug:
+          type: string
+        productName:
+          type: string
+        timeStamp:
+          type: string
+          format: date-time
+        action:
+          $ref: '#/components/schemas/WebhookAction'
+
+    SubscriptionCreatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/CommonPayload'
+        - type: object
+          properties:
+            planId:
+              type: string
+              format: uuid
+            planName:
+              type: string
+            seats:
+              type: integer
+            billingPeriod:
+              $ref: '#/components/schemas/BillingPeriod'
+
+    SubscriptionRenewedPayload:
+      allOf:
+        - $ref: '#/components/schemas/CommonPayload'
+        - type: object
+          properties:
+            planId:
+              type: string
+              format: uuid
+            planName:
+              type: string
+            seats:
+              type: integer
+            billingPeriod:
+              $ref: '#/components/schemas/BillingPeriod'
+            renewedAt:
+              type: string
+              format: date-time
+
+    SubscriptionUpgradedPayload:
+      allOf:
+        - $ref: '#/components/schemas/CommonPayload'
+        - type: object
+          properties:
+            oldPlanId:
+              type: string
+              format: uuid
+            oldPlanName:
+              type: string
+            newPlanId:
+              type: string
+              format: uuid
+            newPlanName:
+              type: string
+            seats:
+              type: integer
+            billingPeriod:
+              $ref: '#/components/schemas/BillingPeriod'
+
+    SubscriptionDowngradedPayload:
+      allOf:
+        - $ref: '#/components/schemas/CommonPayload'
+        - type: object
+          properties:
+            oldPlanId:
+              type: string
+              format: uuid
+            oldPlanName:
+              type: string
+            newPlanId:
+              type: string
+              format: uuid
+            newPlanName:
+              type: string
+            seats:
+              type: integer
+            billingPeriod:
+              $ref: '#/components/schemas/BillingPeriod'
+
+    SubscriptionCancellationInitiatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/CommonPayload'
+        - type: object
+          properties:
+            initiatorParty:
+              $ref: '#/components/schemas/InitiatorParty'
+            cancellationInitiatedAt:
+              type: string
+              format: date-time
+
+    SubscriptionCancelledPayload:
+      allOf:
+        - $ref: '#/components/schemas/CommonPayload'
+        - type: object
+          properties:
+            initiatorParty:
+              $ref: '#/components/schemas/InitiatorParty'
+            cancelledAt:
+              type: string
+              format: date-time
+
+    SubscriptionSuspendedPayload:
+      allOf:
+        - $ref: '#/components/schemas/CommonPayload'
+        - type: object
+          properties:
+            suspendedAt:
+              type: string
+              format: date-time
+
+    SubscriptionReactivatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/CommonPayload'
+        - type: object
+          properties:
+            reactivatedAt:
+              type: string
+              format: date-time
+
+    SubscriptionTerminatedPayload:
+      allOf:
+        - $ref: '#/components/schemas/CommonPayload'
+        - type: object
+          properties:
+            terminatedAt:
+              type: string
+              format: date-time
+            terminationReason:
+              type: string
+
+    Seat:
+      type: object
+      properties:
+        name:
+          type: string
+        userId:
+          type: string
+        email:
+          type: string
+          format: email
+
+    SeatUsersSubscriptionPayload:
+      allOf:
+        - $ref: '#/components/schemas/CommonPayload'
+        - type: object
+          properties:
+            add:
+              type: array
+              items:
+                $ref: '#/components/schemas/Seat'
+            remove:
+              type: array
+              items:
+                $ref: '#/components/schemas/Seat'
