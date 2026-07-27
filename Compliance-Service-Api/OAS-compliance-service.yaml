@@ -342,8 +342,8 @@ paths:
        #   schema:
        #     $ref: '#/components/schemas/RegistryStatus'
        #   description: Search by current registry status
-       # - $ref: '#/components/parameters/page'
-       # - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
       responses:
         '200':
           description: Change list
