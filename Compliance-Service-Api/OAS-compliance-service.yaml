@@ -6,7 +6,7 @@
 openapi: 3.1.0
 info:
   title: EcoHub Compliance Service API
-  version: 1.0.3-rc
+  version: 1.0.4-rc
   description: 'Note: Swagger UI ''Try it out'' does not support client certificates (mTLS). Use the code samples with your client cert and the required ''ocp-apim-subscription-key'' header.'
 security:
   - mtls: []
@@ -342,8 +342,8 @@ paths:
        #   schema:
        #     $ref: '#/components/schemas/RegistryStatus'
        #   description: Search by current registry status
-       # - $ref: '#/components/parameters/page'
-       # - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
       responses:
         '200':
           description: Change list
@@ -837,7 +837,7 @@ components:
         type: integer
         minimum: 1
         maximum: 1000
-        default: 100
+        default: 10
       description: Items per page
     rangeFromDate:
       name: from
