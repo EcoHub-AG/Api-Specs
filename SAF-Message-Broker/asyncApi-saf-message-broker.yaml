@@ -766,8 +766,9 @@ components:
         - mandate
         - claimsExperience
         - claims
-        - customerInformation
-        - brokerInformation
+        - information
+        - customer
+        - broker
     processVersionType:
       description: Version of the used core process
       type: string
