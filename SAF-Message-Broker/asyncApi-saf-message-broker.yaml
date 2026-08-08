@@ -21,6 +21,7 @@ info:
       - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on the IN topic
       - Added channel and operation to consume the generic OUT topic
       - Added dedicated Generic Exchange processName schema
+      - Added BusinessDomainType
       - ProcessNameType: added new value for claimsExperience.nlpi
       - Added channel and operation to consume the claimsExperience.nlpi OUT topic
       - Aligned schema documentation with the actual implementation; this does not change the SAF Message Broker API behavior
@@ -520,6 +521,8 @@ components:
             - provide
         subProcessStatus:
           $ref: '#/components/schemas/subProcessStatusType'
+        businessDomain:
+          $ref: '#/components/schemas/businessDomainType'
       additionalProperties: false
       required:
         - id
@@ -536,6 +539,7 @@ components:
         - eventSender
         - userAgent
         - licenceKey
+        - businessDomain
     SAFInquiryEventType:
       $id: SAFInquiryEventType
       description: 'SAF inquiry event, i.e. an event containing a generic message.'
@@ -885,6 +889,12 @@ components:
         - Inquiry
         - Inquiry_Answer
         - Closed
+    businessDomainType:
+      type: string
+      description: Identifier of the business context of the interaction.
+      enum:
+        - insurance
+        - occupationalPension
     processStatusType:
       type: string
       enum:
@@ -1209,6 +1219,7 @@ components:
             processStatus: active
             subProcessName: provide
             subProcessStatus: Created
+            businessDomain: insurance
     safInquiryEvent:
       name: safInquiryEvent
       title: SAF Inquiry Event
