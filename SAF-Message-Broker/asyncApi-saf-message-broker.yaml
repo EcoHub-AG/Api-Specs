@@ -760,7 +760,7 @@ components:
         - claimsExperience
         - claimsExperience.nlpi
     genericProcessNameType:
-      description: Identifier of the generic exchange business context.
+      description: Identifier of the generic exchange business process.
       type: string
       enum:
         - offer
