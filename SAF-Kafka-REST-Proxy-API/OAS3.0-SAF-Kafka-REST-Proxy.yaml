@@ -1257,7 +1257,6 @@ components:
         - information
         - customer
         - broker
-        - administration
     ProcessVersionType:
       description: Version of the used core process
       type: string
