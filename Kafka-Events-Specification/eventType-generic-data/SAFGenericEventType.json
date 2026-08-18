@@ -74,11 +74,10 @@
       ]
     },
     "subProcessStatus": {
-
-      "$ref": "event-generic/SubProcessStatusType.json"
+      "$ref": "../event-generic/SubProcessStatusType.json"
     },
     "businessDomain": {
-        "$ref": "event-generic/BusinessDomainType.json"
+        "$ref": "../event-generic/BusinessDomainType.json"
     }
   },
   "additionalProperties": false,
