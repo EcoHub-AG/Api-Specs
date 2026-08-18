@@ -21,6 +21,7 @@ info:
       - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on the IN topic
       - Added channel and operation to consume the generic OUT topic
       - Added dedicated Generic Exchange processName schema
+      - Added BusinessDomainType
       - ProcessNameType: added new value for claimsExperience.nlpi
       - Added channel and operation to consume the claimsExperience.nlpi OUT topic
       - Aligned schema documentation with the actual implementation; this does not change the SAF Message Broker API behavior
@@ -564,6 +565,8 @@ components:
             - provide
         subProcessStatus:
           $ref: '#/components/schemas/subProcessStatusType'
+        businessDomain:
+          $ref: '#/components/schemas/businessDomainType'
       additionalProperties: false
       required:
         - id
@@ -886,7 +889,7 @@ components:
         - claimsExperience
         - claimsExperience.nlpi
     genericProcessNameType:
-      description: Identifier of the generic exchange business context.
+      description: Identifier of the generic exchange business process.
       type: string
       enum:
         - offer
@@ -896,8 +899,9 @@ components:
         - mandate
         - claimsExperience
         - claims
-        - customerInformation
-        - brokerInformation
+        - information
+        - customer
+        - broker
     processVersionType:
       description: Version of the used core process
       type: string
@@ -1016,6 +1020,12 @@ components:
         - Inquiry
         - Inquiry_Answer
         - Closed
+    businessDomainType:
+      type: string
+      description: Identifier of the business context of the interaction.
+      enum:
+        - insurance
+        - occupationalPension
     processStatusType:
       type: string
       enum:
@@ -2204,6 +2214,7 @@ components:
             processStatus: active
             subProcessName: provide
             subProcessStatus: Created
+            businessDomain: insurance
     safIDSEvent:
       name: safIDSEvent
       title: SAF Intelligent Data Structuring (IDS) Event

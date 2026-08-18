@@ -1,0 +1,8 @@
+{
+  "description": "Identifier of the business context of the interaction.",
+  "type": "string",
+  "enum": [
+    "insurance",
+    "occupationalPension"
+  ]
+}

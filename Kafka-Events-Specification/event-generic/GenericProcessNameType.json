@@ -1,22 +1,16 @@
 {
-  "description": "Identifier of the generic exchange business context.",
+  "description": "Identifier of the generic exchange business process.",
   "type": "string",
-  "allOf": [
-    {
-      "$ref": "ProcessNameAllType.json"
-    },
-    {
-      "enum": [
-        "offer",
-        "invoice",
-        "commission",
-        "contract",
-        "mandate",
-        "claimsExperience",
-        "claims",
-        "customerInformation",
-        "brokerInformation"
-      ]
-    }
+  "enum": [
+    "offer",
+    "invoice",
+    "commission",
+    "contract",
+    "mandate",
+    "claimsExperience",
+    "claims",
+    "information",
+    "customer",
+    "broker"
   ]
 }

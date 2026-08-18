@@ -2,6 +2,7 @@
   - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on the IN topic
   - Added channel and operation to consume the generic OUT topic
   - Added dedicated Generic Exchange processName schema
+  - Added BusinessDomainType
   - ProcessNameType: added new value for claimsExperience.nlpi
   - Added channel and operation to consume the claimsExperience.nlpi OUT topic
   - Aligned schema documentation with the actual implementation; this does not change the SAF Message Broker API behavior

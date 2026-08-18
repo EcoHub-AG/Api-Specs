@@ -74,7 +74,11 @@
       ]
     },
     "subProcessStatus": {
-      "$ref": "../event-generic/SubProcessStatusType.json"
+
+      "$ref": "event-generic/SubProcessStatusType.json"
+    },
+    "businessDomain": {
+        "$ref": "event-generic/BusinessDomainType.json"
     }
   },
   "additionalProperties": false,
@@ -92,7 +96,8 @@
     "eventReceiver",
     "eventSender",
     "userAgent",
-    "licenceKey"
+    "licenceKey",
+    "businessDomain"
   ],
   "examples": [
     {
@@ -132,7 +137,8 @@
         "processVersion": "1.0.0",
         "processStatus": "active",
         "subProcessName": "provide",
-        "subProcessStatus": "Created"
+        "subProcessStatus": "Created",
+        "businessDomain": "insurance"
       }
     }
   ]

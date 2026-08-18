@@ -4,6 +4,7 @@
   - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on /in
   - Added endpoint to consume the generic OUT topic
   - Added dedicated Generic Exchange processName schema
+  - Added BusinessDomainType
   - ProcessNameType: added new value for claimsExperience.nlpi
   - added endpoint to consume claimsExperience.nlpi topic
   - Aligned API documentation with the actual implementation; this does not change API behavior

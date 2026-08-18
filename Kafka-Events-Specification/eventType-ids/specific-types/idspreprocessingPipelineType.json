@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Detailed log of preprocessing operations applied to the document before AI extraction.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "sequence": {
+        "description": "Order in which this preprocessing step was executed.",
+        "type": ["null", "integer"],
+        "minimum": 1
+      },
+      "operation": {
+        "description": "Type of preprocessing operation applied.",
+        "type": "string",
+        "enum": ["rotation", "deskew", "enhancement", "noise-reduction", "binarization", "contrast-adjustment", "sharpening", "custom"]
+      },
+      "parameters": {
+        "description": "Operation-specific configuration parameters",
+        "type": ["null", "object"],
+        "additionalProperties": true
+      },
+      "qualityBefore": {
+        "description": "Document quality score before this operation",
+        "type": ["null", "number"],
+        "minimum": 0,
+        "maximum": 1
+      },
+      "qualityAfter": {
+        "description": "Document quality score after this operation",
+        "type": ["null", "number"],
+        "minimum": 0,
+        "maximum": 1
+      },
+      "durationMs": {
+        "description": "Execution time for this step in milliseconds",
+        "type": ["null", "number"],
+        "minimum": 0
+      },
+      "status": {
+        "description": "Execution status of this preprocessing step.",
+        "type": "string",
+        "enum": ["applied", "skipped", "failed"]
+      }
+    },
+    "additionalProperties": false
+  }
+}
