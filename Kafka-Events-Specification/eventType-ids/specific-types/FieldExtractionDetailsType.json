@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Per-field extraction metadata showing confidence, location, alternatives, and validation status for each extracted field.",
   "type": "array",
   "minimum": 1,

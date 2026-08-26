@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Detailed preprocessing, field extraction, and transformation data aligned with OAS IdsDetailedExtractionData.",
   "type": "object",
   "properties": {

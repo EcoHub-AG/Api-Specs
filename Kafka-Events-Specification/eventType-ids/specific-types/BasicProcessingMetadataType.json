@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Fundamental IDS processing metadata aligned with OAS IdsBasicProcessingMetadata.",
   "type": "object",
   "properties": {

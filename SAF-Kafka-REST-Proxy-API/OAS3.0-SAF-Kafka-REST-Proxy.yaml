@@ -31,7 +31,7 @@ info:
       - ProcessNameType: added new value for claimsExperience.nlpi
       - added endpoint to consume claimsExperience.nlpi topic
       - Aligned API documentation with the actual implementation; this does not change API behavior
-        - Events produced to the `IN` topic can by `anyOf` insteaf of `oneOf` the specified schemas
+        - Events produced to the `IN` topic can by `anyOf` instead of `oneOf` the specified schemas
         - Narrowed consume response schemas per topic type to match the events actually returned by each endpoint
         - removed unused 'typedef' schema
       - removed explicit definition of Content-Type header for requests to /in as the allowed values are already defined by `requestBody.content.<media-type>`
@@ -77,6 +77,7 @@ paths:
               anyOf:
                 - $ref: '#/components/schemas/SAFEventType'
                 - $ref: '#/components/schemas/SAFGenericEventType'
+                - $ref: '#/components/schemas/SAFIDSEventType'
                 - $ref: '#/components/schemas/SAFInquiryEventType'
                 - $ref: '#/components/schemas/SAFErrorEventType'
                 - $ref: '#/components/schemas/OfferNLPIErrorEventType'
@@ -309,7 +310,7 @@ paths:
       tags:
         - Consuming Messages
       summary: Consume messages from the commission topic.
-      description: Returns unread mesassages from the commission topic
+      description: Returns unread messages from the commission topic
       operationId: get-eh-saf-ecohubid-commission-out
       parameters:
         - name: ecohubId
@@ -913,7 +914,99 @@ paths:
                 $ref: '#/components/schemas/ErrorResponseType'
               example:
                 error_code: 40301
-                message: 'Not authorized to access topics: [eh.saf.329050.generic.out.v1]'
+                message: 'Not authorized to access topics: [eh.saf.329050.claimsExperience.nlpi.out.v1]'
+  '/{ecohubId}/ids/out':
+    get:
+      tags:
+        - Consuming Messages
+      summary: Consume messages from the IDS OUT topic.
+      description: Returns unread Intelligent Data Structuring (IDS) messages from the IDS OUT topic.
+      operationId: get-eh-saf-ecohubid-ids-out
+      parameters:
+        - name: ecohubId
+          in: path
+          description: >-
+            The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+            names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'.
+          required: true
+          schema:
+            type: string
+        - name: auto.offset.reset
+          in: header
+          description: The auto offset that should be used to retrieve records
+          required: true
+          schema:
+            enum:
+              - earliest
+              - latest
+            type: string
+      responses:
+        '200':
+          description: "All unread messages in the topic"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDSTopicResponseType'
+              example:
+                - topic: eh.saf.329050.ids.out.v1
+                  key:
+                    processId: 'ff9275bf-5b35-492e-bdd2-c217e151d335'
+                  value:
+                    id: 044d2e50-12d6-43e4-bb1b-7b54841c9c82
+                    source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
+                    specversion: '1.0'
+                    type: ch.ecohub.saf.ids
+                    datacontenttype: application/json
+                    dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/contract-v5.4.1/schemas/legacy/5.4.1/contractGeneric_V5.4.1.xsd
+                    subject: IDS document structuring result
+                    time: '2023-08-17T14:15:22.000Z'
+                    licenceKey: REcxZEVMZWV1UXFwOUZwaz...
+                    userAgent:
+                      name: BS1
+                      version: '1.0'
+                    eventReceiver:
+                      category: broker
+                      id: IDP1234567
+                    eventSender:
+                      category: insurer
+                      id: IDP7654321
+                    data:
+                      payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZ...
+                      payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
+                      encryptionKey: urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...
+                      publicKeyVersion: '1.1'
+                      signatureKeyVersion: '1.3'
+                    processId: ff9275bf-5b35-492e-bdd2-c217e151d335
+                    processName: contract
+                    processVersion: 1.0.0
+                    processStatus: active
+                    subProcessName: provide
+                    subProcessStatus: Created
+                    confidenceScore: 0.87
+                    documentQuality: high
+                    isValid: true
+                    routingDecision: auto-approve
+                    requiresHumanReview: false
+                  partition: 1
+                  offset: 4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneralErrorResponseType'
+              example:
+                statusCode: 401
+                message: 'Invalid Azure AD JWT'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseType'
+              example:
+                error_code: 40301
+                message: 'Not authorized to access topics: [eh.saf.329050.ids.out.v1]'
 components:
   schemas:
     SAFEventType:
@@ -977,7 +1070,7 @@ components:
         - userAgent
         - licenceKey
     SAFIDSEventType:
-      description: 'The main event type which can either be used to transmit business data according to a data standard or to send an acknowledge event.'
+      description: 'IDS event type for Intelligent Data Structuring events (ch.ecohub.saf.ids). Extends the base SAF event with root-level scalar projections for Kafka-level routing and quality gating: confidenceScore, documentQuality, isValid, routingDecision, requiresHumanReview, and reviewReason.'
       type: object
       properties:
         id:
@@ -1367,8 +1460,6 @@ components:
         - ch.ecohub.saf.inquiry
         - ch.ecohub.saf.generic
         - ch.ecohub.saf.ids
-        - ch.ecohub.saf.generic
-        - ch.ecohub.saf.ids
         - ch.ecohub.saf.standard-error
         - ch.ecohub.saf.saf-error
     LicenceKeyType:
@@ -1671,11 +1762,11 @@ components:
             - data-decompression-failed
             - other
         errorMessage:
-          description: ""
+          description: Human-readable message describing the error.
           type: string
           minLength: 3
         errorDateTime:
-          description: ""
+          description: ISO 8601 date-time at which the error occurred.
           type: string
           format: date-time
       required:
@@ -1908,7 +1999,7 @@ components:
         - newValue
       additionalProperties: false
     basicProcessingMetadataType:
-      description: Fundamental IDS processing metadata aligned with OAS BasicProcessingMetadata. Model, processing mode, timing and aggregate confidence score.
+      description: Fundamental IDS processing metadata. Model, processing mode, timing and aggregate confidence score.
       type: object
       properties:
         processingModel:
@@ -1973,7 +2064,7 @@ components:
           nullable: true
       additionalProperties: false
     documentQualityMetricsType:
-      description: Source document and OCR/extraction quality metrics aligned with OAS IdsDocumentQualityMetrics. Source document properties, OCR quality, AGB handling, completeness, and document hash.
+      description: Source document and OCR/extraction quality metrics. Source document properties, OCR quality, AGB handling, completeness, and document hash.
       type: object
       properties:
         documentType:
@@ -2517,7 +2608,7 @@ components:
           additionalProperties: false
       additionalProperties: false
     validationResultsType:
-      description: Validation outcomes including format validation, business rules, and routing decisions aligned with OAS IdsValidationResults.
+      description: Validation outcomes including format validation, business rules, and routing decisions.
       type: object
       properties:
         isValid:
@@ -2565,7 +2656,7 @@ components:
           type: string
           nullable: true
         businessRuleValidations:
-          description: Business rule validation results as ProblemDetails-style entries aligned with OAS IdsBusinessRuleValidation.
+          description: Business rule validation results as ProblemDetails-style entries.
           type: array
           nullable: true
           items:
@@ -2627,7 +2718,7 @@ components:
         - requiresHumanReview
       additionalProperties: false
     fieldExtractionAuditType:
-      description: Field provenance audit entries aligned with OAS fieldExtractionAudit.
+      description: Field provenance audit entries.
       type: array
       items:
         type: object
@@ -2659,10 +2750,34 @@ components:
     GenericSubProcessNameType:
       description: Sub process name, that is used to specify the sub process of the event. The exact usage is specified in each data standard.
       type: string
-      enum: 
+      enum:
         - "initiate"
         - "provide"
         - "review"
         - "decide"
         - "execute"
         - "close"
+    IDSTopicResponseType:
+      type: array
+      items:
+        type: object
+        properties:
+          topic:
+            type: string
+          key:
+            $ref: '#/components/schemas/SAFKeyType'
+          value:
+            type: object
+            anyOf:
+              - $ref: '#/components/schemas/SAFIDSEventType'
+              - $ref: '#/components/schemas/SAFErrorEventType'
+          partition:
+            type: integer
+          offset:
+            type: integer
+        required:
+          - topic
+          - key
+          - value
+          - partition
+          - offset

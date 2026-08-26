@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Summary analysis of the overall impact of preprocessing on document quality.",
   "type": "object",
   "properties": {

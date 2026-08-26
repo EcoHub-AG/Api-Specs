@@ -117,7 +117,7 @@
         "specversion": "1.0",
         "type": "ch.ecohub.saf.ids",
         "datacontenttype": "application/json",
-        "dataschema": "",
+        "dataschema": "https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/heads/main/schemas/legacy/5.4.1/contractGeneric_V5.4.1.xsd",
         "subject": "offer nlpi request",
         "time": "2023-08-17T14:15:22.000Z",
         "licenceKey": "REcxZEVMZWV1UXFwOUZwaz...",
@@ -144,7 +144,7 @@
         "processName": "offer.nlpi",
         "processVersion": "0.3.0",
         "processStatus": "active",
-        "subProcessName": "request",
+        "subProcessName": "provide",
         "subProcessStatus": "Created"
       }
     },
@@ -175,7 +175,7 @@
         "processName": "offer.nlpi",
         "processVersion": "0.3.0",
         "processStatus": "active",
-        "subProcessName": "request",
+        "subProcessName": "provide",
         "subProcessStatus": "Received"
       }
     }

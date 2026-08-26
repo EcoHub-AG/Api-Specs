@@ -1,7 +1,0 @@
-{
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
-  "description": "Overall confidence score of extraction (range 0-1, where 1 is highest confidence)",
-  "type": "number",
-  "minimum": 0,
-  "maximum": 1
-}

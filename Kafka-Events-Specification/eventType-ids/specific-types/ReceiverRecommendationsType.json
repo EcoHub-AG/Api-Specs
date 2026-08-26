@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Multi-level action recommendations for the receiver: field-level, document-level, and decision matrices.",
   "type": "object",
   "properties": {

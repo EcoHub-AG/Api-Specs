@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Detailed log of preprocessing operations applied to the document before AI extraction.",
   "type": "array",
   "items": {

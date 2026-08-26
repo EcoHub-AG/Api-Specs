@@ -279,19 +279,7 @@ channels:
         $ref: '#/components/messages/safInquiryEvent'
       safErrorEvent:
         $ref: '#/components/messages/safErrorEvent'
-      consumeClaimsExperienceNlpiEvent:
-        action: receive
-        bindings:
-          kafka:
-            groupId:
-              type: string
-              pattern: ^CG-(\d{5,6})-IDP(\d{6})$
-            clientId:
-              type: string
-              format: uuid
-            bindingVersion: '0.4.0'
-        channel:
-          $ref: "#/channels/eh.saf.claimsExperience.nlpi.out.v1"
+      
   eh.saf.generic.out.v1:
     address: eh.saf.{ecohubId}.generic.out.v1
     bindings:
@@ -423,6 +411,19 @@ operations:
         bindingVersion: '0.4.0'
     channel:
       $ref: "#/channels/eh.saf.claimsExperience.out.v1"
+  consumeClaimsExperienceNlpiEvent:
+    action: receive
+    bindings:
+      kafka:
+        groupId:
+          type: string
+          pattern: ^CG-(\d{5,6})-IDP(\d{6})$
+        clientId:
+          type: string
+          format: uuid
+        bindingVersion: '0.4.0'
+    channel:
+      $ref: "#/channels/eh.saf.claimsExperience.nlpi.out.v1"
   consumeGenericEvent:
     action: receive
     bindings:
@@ -526,7 +527,7 @@ components:
         specversion:
           $ref: '#/components/schemas/cloudEvents/specversiondef'
         type:
-          description: Reverse DNS entry defining the Generic Exchange SAF event type..
+          description: Reverse DNS entry defining the Generic Exchange SAF event type.
           type: string
           enum:
             - ch.ecohub.saf.generic
@@ -584,7 +585,7 @@ components:
         - userAgent
         - licenceKey
     SAFIDSEventType:
-      description: 'The main event type which can either be used to transmit business data according to a data standard or to send an acknowledge event.'
+      description: 'IDS event type for Intelligent Data Structuring events (ch.ecohub.saf.ids). Extends the base SAF event with root-level scalar projections for Kafka-level routing and quality gating: confidenceScore, documentQuality, isValid, routingDecision, requiresHumanReview, and reviewReason.'
       type: object
       properties:
         id:
@@ -631,10 +632,10 @@ components:
         subProcessStatus:
           $ref: '#/components/schemas/subProcessStatusType'
         confidenceScore:
-          description: Scalar projection of data.confidenceScoreType.confidenceScore for routing and quality gating.
+          description: Scalar projection of data.basicProcessingMetadata.confidenceScore for routing and quality gating.
           $ref: '#/components/schemas/confidenceScoreType'
         documentQuality:
-          description: Scalar projection of data.documentQualityMetrics.documentQuality for routing and quality tier signals.
+          description: Scalar projection of data.basicProcessingMetadata.documentQualityMetrics.documentQuality for routing and quality tier signals.
           $ref: '#/components/schemas/documentQualityType'
         isValid:
           description: Scalar projection of data.validationResults.isValid for routing and filtering.
@@ -670,7 +671,6 @@ components:
         - userAgent
         - licenceKey
     SAFInquiryEventType:
-      $id: SAFInquiryEventType
       description: 'SAF inquiry event, i.e. an event containing a generic message.'
       type: object
       properties:
@@ -731,7 +731,6 @@ components:
         - userAgent
         - licenceKey
     SAFErrorEventType:
-      $id: SAFErrorEventType
       description: SAF error event, i.e. an event for errors which are unrelated to the event payload.
       type: object
       properties:
@@ -856,11 +855,9 @@ components:
       type: array
       minItems: 1
       items:
-        $id: offerNLPIErrorItemType
         type: object
         properties:
           errorCode:
-            $id: OfferNLPIErrorCodeEnum
             description: The code best describing the occured error.
             minLength: 3
             type: string
@@ -963,7 +960,6 @@ components:
       type: object
       properties:
         errorCode:
-          $id: SafErrorCodeEnum
           description: 'Categorizes the type of error'
           type: string
           minLength: 3
@@ -1041,7 +1037,6 @@ components:
       additionalProperties: false
       properties:
         category:
-          $id: SenderReceiverCategoryEnum
           description: The category of the organisation
           enum:
             - broker
@@ -1086,7 +1081,6 @@ components:
           type: string
         links:
           items:
-            $id: LinkType
             type: object
             properties:
               description:
@@ -1346,7 +1340,7 @@ components:
         - newValue
       additionalProperties: false
     basicProcessingMetadataType:
-      description: Fundamental IDS processing metadata aligned with OAS IdsBasicProcessingMetadata. Model, processing mode, timing and aggregate confidence score.
+      description: Fundamental IDS processing metadata. Model, processing mode, timing and aggregate confidence score.
       type: object
       properties:
         processingModel:
@@ -1411,7 +1405,7 @@ components:
           nullable: true
       additionalProperties: false
     documentQualityMetricsType:
-      description: Source document and OCR/extraction quality metrics aligned with OAS DocumentQualityMetrics. Source document properties, OCR quality, AGB handling, completeness, and document hash.
+      description: Source document and OCR/extraction quality metrics. Source document properties, OCR quality, AGB handling, completeness, and document hash.
       type: object
       properties:
         documentType:
@@ -1955,7 +1949,7 @@ components:
           additionalProperties: false
       additionalProperties: false
     validationResultsType:
-      description: Validation outcomes including format validation, business rules, and routing decisions aligned with OAS idsValidationResults.
+      description: Validation outcomes including format validation, business rules, and routing decisions.
       type: object
       properties:
         isValid:
@@ -2003,7 +1997,7 @@ components:
           type: string
           nullable: true
         businessRuleValidations:
-          description: Business rule validation results as ProblemDetails-style entries aligned with OAS idsBusinessRuleValidation.
+          description: Business rule validation results as ProblemDetails-style entries.
           type: array
           nullable: true
           items:
@@ -2065,7 +2059,7 @@ components:
         - requiresHumanReview
       additionalProperties: false
     fieldExtractionAuditType:
-      description: Field provenance audit entries aligned with OAS idsFieldExtractionAudit.
+      description: Field provenance audit entries.
       type: array
       items:
         type: object
@@ -2230,7 +2224,7 @@ components:
           bindingVersion: '0.4.0'
       examples:
         - name: idsEventWithPayloadExample
-          summary: Inteligent Data Structuring event with unstructured data payload
+          summary: Intelligent Data Structuring event with unstructured data payload
           payload:
             id: 044d2e50-12d6-43e4-bb1b-7b54841c9c82
             source: http://www.myecohub.ch/ecoHub-mock-broker-producer1

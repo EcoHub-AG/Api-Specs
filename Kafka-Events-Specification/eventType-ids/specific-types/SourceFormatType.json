@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Original source document format (MIME type)",
   "type": "string",
   "examples": ["application/pdf", "image/jpeg", "image/png"]

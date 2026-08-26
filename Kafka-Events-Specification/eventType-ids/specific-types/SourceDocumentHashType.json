@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "SHA-256 cryptographic hash of the original source document for integrity verification and traceability",
   "type": "string",
   "pattern": "^[a-f0-9]{64}$"
