@@ -2660,9 +2660,9 @@ components:
       description: Sub process name, that is used to specify the sub process of the event. The exact usage is specified in each data standard.
       type: string
       enum: 
-        - "Initiate"
-        - "Provide"
-        - "Review"
-        - "Decide"
-        - "Execute"
-        - "Close"
+        - "initiate"
+        - "provide"
+        - "review"
+        - "decide"
+        - "execute"
+        - "close"
