@@ -1,24 +1,8 @@
 {
   "title": "All SubProcessName Types (Union)",
-  "description": "Union of ALL subprocess names (both process-specific and generic workflow stages). ONLY use this for SAFErrorEventType which must support errors from any source event type. For specific event types, use either SubProcessNameType or GenericSubProcessNameType.",
-  "type": "string",
-  "enum": [
-        "request",
-        "offer",
-        "feedback",
-        "conclusionDecision",
-        "billing",
-        "reminder",
-        "contract",
-        "commission",
-        "submission",
-        "cancellation",
-        "claimsExperience",
-        "initiate",
-        "provide",
-        "review",
-        "decide",
-        "execute",
-        "close"
-      ]
+  "description": "Union of SubProcessNameType and GenericSubProcessNameType. Use only for contexts where any subprocess name must be accepted (e.g. SAFErrorEventType, which may originate from any event type). For specific event types use SubProcessNameType or GenericSubProcessNameType directly.",
+  "anyOf": [
+    { "$ref": "SubProcessNameType.json" },
+    { "$ref": "GenericSubProcessNameType.json" }
+  ]
 }

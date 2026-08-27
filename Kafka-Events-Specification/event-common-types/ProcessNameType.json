@@ -1,20 +1,13 @@
 {
   "description": "Identifier of the core process",
   "type": "string",
-  "allOf": [
-    {
-      "$ref": "ProcessNameAllType.json"
-    },
-    {
-      "enum": [
-        "offer.nlpi",
-        "invoice",
-        "commission",
-        "contract",
-        "mandate",
-        "claimsExperience",
-        "claimsExperience.nlpi"
-      ]
-    }
+  "enum": [
+    "offer.nlpi",
+    "invoice",
+    "commission",
+    "contract",
+    "mandate",
+    "claimsExperience",
+    "claimsExperience.nlpi"
   ]
 }

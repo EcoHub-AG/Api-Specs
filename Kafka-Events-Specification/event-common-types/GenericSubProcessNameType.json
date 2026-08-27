@@ -1,19 +1,12 @@
-{ 
-  "description": "Identifier for the current subprocess step within the core process. For generic data events, use the generic subprocess names that represent the workflow stage (Initiate, Provide, Review, Decide, Execute, Close). For standard processes, use SubProcessNameType.",
+{
+  "description": "Identifier for the current subprocess step within the core process. For generic data events, use the generic subprocess names that represent the workflow stage (initiate, provide, review, decide, execute, close). For standard processes, use SubProcessNameType.",
   "type": "string",
-  "allOf": [
-    {
-      "$ref": "SubProcessNameAllType.json"
-    },
-    {
-      "enum": [
-        "initiate",
-        "provide",
-        "review",
-        "decide",
-        "execute",
-        "close"
-      ]
-    }
+  "enum": [
+    "initiate",
+    "provide",
+    "review",
+    "decide",
+    "execute",
+    "close"
   ]
-}  
+}

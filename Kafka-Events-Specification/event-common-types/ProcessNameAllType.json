@@ -1,17 +1,8 @@
 {
   "title": "All ProcessName Types (Union)",
-  "type": "string",
-  "enum": [
-        "offer.nlpi",
-        "invoice",
-        "commission",
-        "contract",
-        "mandate",
-        "claimsExperience",
-        "claimsExperience.nlpi",
-        "offer",
-        "claims",
-        "customerInformation",
-        "brokerInformation"
-      ]
+  "description": "Union of ProcessNameType and GenericProcessNameType. Use only for contexts where any process name must be accepted (e.g. SAFErrorEventType, which may originate from any process type). For specific event types use ProcessNameType or GenericProcessNameType directly.",
+  "anyOf": [
+    { "$ref": "ProcessNameType.json" },
+    { "$ref": "GenericProcessNameType.json" }
+  ]
 }
