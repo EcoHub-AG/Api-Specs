@@ -30,41 +30,41 @@
       "$ref": "../CloudEventsType.json#/definitions/timedef"
     },
     "licenceKey": {
-      "$ref": "../event-generic/LicenceKeyType.json"
+      "$ref": "../event-common-types/LicenceKeyType.json"
     },
     "userAgent": {
-      "$ref": "../event-generic/UserAgentType.json"
+      "$ref": "../event-common-types/UserAgentType.json"
     },
     "eventReceiver": {
-      "$ref": "../event-generic/SenderReceiverType.json"
+      "$ref": "../event-common-types/SenderReceiverType.json"
     },
     "eventSender": {
-      "$ref": "../event-generic/SenderReceiverType.json"
+      "$ref": "../event-common-types/SenderReceiverType.json"
     },
     "data": {
-      "$ref": "../event-generic/EventDataType.json"
+      "$ref": "../event-common-types/EventDataType.json"
     },
     "processGroupId": {
-      "$ref": "../event-generic/ProcessGroupIdType.json"
+      "$ref": "../event-common-types/ProcessGroupIdType.json"
     },
     "processId": {
-      "$ref": "../event-generic/ProcessIdType.json"
+      "$ref": "../event-common-types/ProcessIdType.json"
     },
     "processName": {
-      "$ref": "../event-generic/GenericProcessNameType.json"
+      "$ref": "../event-common-types/GenericProcessNameType.json"
     },
     "processVersion": {
-      "$ref": "../event-generic/ProcessVersionType.json"
+      "$ref": "../event-common-types/ProcessVersionType.json"
     },
     "processStatus": {
-      "$ref": "../event-generic/ProcessStatusType.json"
+      "$ref": "../event-common-types/ProcessStatusType.json"
     },
     "subProcessName": {
       "description": "Identifier for the single generic exchange subprocess step.",
       "type": "string",
       "allOf": [
         {
-          "$ref": "../event-generic/GenericSubProcessNameType.json"
+          "$ref": "../event-common-types/GenericSubProcessNameType.json"
         },
         {
           "enum": [
@@ -74,10 +74,10 @@
       ]
     },
     "subProcessStatus": {
-      "$ref": "../event-generic/SubProcessStatusType.json"
+      "$ref": "../event-common-types/SubProcessStatusType.json"
     },
     "businessDomain": {
-        "$ref": "../event-generic/BusinessDomainType.json"
+        "$ref": "../event-common-types/BusinessDomainType.json"
     }
   },
   "additionalProperties": false,

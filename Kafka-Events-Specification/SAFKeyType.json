@@ -4,7 +4,7 @@
   "type": "object",
   "properties": {
     "processId": {
-      "$ref": "event-generic/ProcessIdType.json"
+      "$ref": "event-common-types/ProcessIdType.json"
     }
   },
   "additionalProperties": false,

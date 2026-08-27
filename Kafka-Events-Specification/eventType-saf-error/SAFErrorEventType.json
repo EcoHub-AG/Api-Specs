@@ -30,40 +30,40 @@
       "$ref": "../CloudEventsType.json#/definitions/timedef"
     },
     "licenceKey": {
-      "$ref": "../event-generic/LicenceKeyType.json"
+      "$ref": "../event-common-types/LicenceKeyType.json"
     },
     "userAgent": {
-      "$ref": "../event-generic/UserAgentType.json"
+      "$ref": "../event-common-types/UserAgentType.json"
     },
     "data": {
-      "$ref": "../event-generic/ErrorDataType.json"
+      "$ref": "../event-common-types/ErrorDataType.json"
     },
     "eventReceiver": {
-      "$ref": "../event-generic/SenderReceiverType.json"
+      "$ref": "../event-common-types/SenderReceiverType.json"
     },
     "eventSender": {
-      "$ref": "../event-generic/SenderReceiverType.json"
+      "$ref": "../event-common-types/SenderReceiverType.json"
     },
     "processGroupId": {
-      "$ref": "../event-generic/ProcessGroupIdType.json"
+      "$ref": "../event-common-types/ProcessGroupIdType.json"
     },
     "processId": {
-      "$ref": "../event-generic/ProcessIdType.json"
+      "$ref": "../event-common-types/ProcessIdType.json"
     },
     "processName": {
-      "$ref": "../event-generic/ProcessNameAllType.json"
+      "$ref": "../event-common-types/ProcessNameAllType.json"
     },
     "processVersion": {
-      "$ref": "../event-generic/ProcessVersionType.json"
+      "$ref": "../event-common-types/ProcessVersionType.json"
     },
     "processStatus": {
-      "$ref": "../event-generic/ProcessStatusType.json"
+      "$ref": "../event-common-types/ProcessStatusType.json"
     },
     "subProcessName": {
-      "$ref": "../event-generic/SubProcessNameAllType.json"
+      "$ref": "../event-common-types/SubProcessNameAllType.json"
     },
     "subProcessStatus": {
-      "$ref": "../event-generic/SubProcessStatusType.json"
+      "$ref": "../event-common-types/SubProcessStatusType.json"
     }
   },
   "required": [

@@ -1,22 +1,22 @@
 {
   "anyOf": [
     {
-      "$ref": "SAFEventType.json"
+      "$ref": "../eventType-data/SAFEventType.json"
     },
     {
-      "$ref": "SAFGenericEventType.json"
+      "$ref": "../eventType-generic-data/SAFGenericEventType.json"
     },
     {
-      "$ref": "SAFIDSEventType.json"
+      "$ref": "../eventType-ids/SAFIDSEventType.json"
     },
     {
-      "$ref": "SAFInquiryEventType.json"
+      "$ref": "../eventType-inquiry/SAFInquiryEventType.json"
     },
     {
-      "$ref": "SAFErrorEventType.json"
+      "$ref": "../eventType-saf-error/SAFErrorEventType.json"
     },
     {
-      "$ref": "OfferNLPIErrorEventType.json"
+      "$ref": "../eventType-standard-error/OfferNLPIErrorEventType.json"
     }
   ]
 }
