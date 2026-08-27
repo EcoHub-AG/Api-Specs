@@ -1118,10 +1118,10 @@ components:
           $ref: '#/components/schemas/SubProcessStatusType'
         confidenceScore:
           description: Scalar projection of data.basicProcessingMetadata.confidenceScore for routing and quality gating.
-          $ref: '#/components/schemas/confidenceScoreType'
+          $ref: '#/components/schemas/ConfidenceScoreType'
         documentQuality:
           description: Scalar projection of data.documentQualityMetrics.documentQuality for routing and quality tier signals.
-          $ref: '#/components/schemas/documentQualityType'
+          $ref: '#/components/schemas/DocumentQualityType'
         isValid:
           description: Scalar projection of data.validationResults.isValid for routing and filtering.
           type: boolean
@@ -1420,28 +1420,28 @@ components:
           type: string
         basicProcessingMetadata:
           description: Model, processing mode, timing and aggregate confidence score. Source of root projection confidenceScore.
-          $ref: '#/components/schemas/basicProcessingMetadataType'
+          $ref: '#/components/schemas/BasicProcessingMetadataType'
         documentQualityMetrics:
           description: Source document properties, OCR quality, AGB handling, completeness, and document hash. Source of root projection documentQuality.
-          $ref: '#/components/schemas/documentQualityMetricsType'
+          $ref: '#/components/schemas/DocumentQualityMetricsType'
         detailedExtractionData:
           description: Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.
-          $ref: '#/components/schemas/detailedExtractionDataType'
+          $ref: '#/components/schemas/DetailedExtractionDataType'
           nullable: true
         documentQualityAssessment:
           description: Quality-factor breakdown and recommended review strategy.
-          $ref: '#/components/schemas/documentQualityAssessmentType'
+          $ref: '#/components/schemas/DocumentQualityAssessmentType'
           nullable: true
         receiverRecommendations:
           description: Field-level, document-level, and decision-matrix recommendations.
-          $ref: '#/components/schemas/receiverRecommendationsType'
+          $ref: '#/components/schemas/ReceiverRecommendationsType'
           nullable: true
         validationResults:
           description: Validation result, routing decision, human-review flag, and business-rule results. Source of root projections isValid, routingDecision, requiresHumanReview, and reviewReason.
-          $ref: '#/components/schemas/validationResultsType'
+          $ref: '#/components/schemas/ValidationResultsType'
         fieldExtractionAudit:
           description: Field provenance source audit trail.
-          $ref: '#/components/schemas/fieldExtractionAuditType'
+          $ref: '#/components/schemas/FieldExtractionAuditType'
           nullable: true
       required:
         - payload
@@ -1947,7 +1947,7 @@ components:
           - value
           - partition
           - offset
-    confidenceScoreType:
+    ConfidenceScoreType:
       type: number
       minimum: 0
       maximum: 1
@@ -1969,7 +1969,7 @@ components:
         
         **Mapping to SAFIDSEventType:** Maps to `confidenceScore` property in Kafka event
       example: 0.87
-    documentQualityType:
+    DocumentQualityType:
       description: Overall assessment of document quality for processing.
       type: string
       enum:
@@ -1978,7 +1978,7 @@ components:
         - medium
         - low
         - poor
-    postprocessingInformationType:
+    PostprocessingInformationType:
       description: Postprocessing change applied to a field after AI extraction.
       type: object
       properties:
@@ -1998,7 +1998,7 @@ components:
         - oldValue
         - newValue
       additionalProperties: false
-    basicProcessingMetadataType:
+    BasicProcessingMetadataType:
       description: Fundamental IDS processing metadata. Model, processing mode, timing and aggregate confidence score.
       type: object
       properties:
@@ -2063,7 +2063,7 @@ components:
           format: double
           nullable: true
       additionalProperties: false
-    documentQualityMetricsType:
+    DocumentQualityMetricsType:
       description: Source document and OCR/extraction quality metrics. Source document properties, OCR quality, AGB handling, completeness, and document hash.
       type: object
       properties:
@@ -2102,9 +2102,9 @@ components:
           type: array
           nullable: true
           items:
-            $ref: '#/components/schemas/postprocessingInformationType'
+            $ref: '#/components/schemas/PostprocessingInformationType'
         documentQuality:
-          $ref: '#/components/schemas/documentQualityType'
+          $ref: '#/components/schemas/DocumentQualityType'
         completenessScore:
           type: number
           minimum: 0
@@ -2117,7 +2117,7 @@ components:
           nullable: true
           description: SHA-256 cryptographic hash of original source document
       additionalProperties: false
-    preprocessingPipelineType:
+    PreprocessingPipelineType:
       description: Detailed log of preprocessing operations applied to the document before AI extraction.
       type: array
       items:
@@ -2167,7 +2167,7 @@ components:
               - skipped
               - failed
         additionalProperties: false
-    preprocessingImpactAnalysisType:
+    PreprocessingImpactAnalysisType:
       description: Summary analysis of the overall impact of preprocessing on document quality.
       type: object
       properties:
@@ -2193,7 +2193,7 @@ components:
           type: string
           nullable: true
       additionalProperties: false
-    fieldExtractionDetailsType:
+    FieldExtractionDetailsType:
       description: Per-field extraction metadata showing confidence, location, alternatives, and validation status for each extracted field.
       type: array
       items:
@@ -2302,7 +2302,7 @@ components:
           validationMessage:
             type: string
         additionalProperties: false
-    fieldTransformationRecordType:
+    FieldTransformationRecordType:
       description: Log of value transformations and normalizations applied to extracted fields during processing.
       type: array
       items:
@@ -2351,29 +2351,29 @@ components:
                 - confidenceAfterTransform
               additionalProperties: false
         additionalProperties: false
-    detailedExtractionDataType:
+    DetailedExtractionDataType:
       description: Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.
       type: object
       properties:
         preprocessingPipeline:
-          $ref: '#/components/schemas/preprocessingPipelineType'
+          $ref: '#/components/schemas/PreprocessingPipelineType'
           nullable: true
         preprocessingImpactAnalysis:
-          $ref: '#/components/schemas/preprocessingImpactAnalysisType'
+          $ref: '#/components/schemas/PreprocessingImpactAnalysisType'
           nullable: true
         fieldExtractionDetails:
-          $ref: '#/components/schemas/fieldExtractionDetailsType'
+          $ref: '#/components/schemas/FieldExtractionDetailsType'
           nullable: true
         fieldTransformationRecord:
-          $ref: '#/components/schemas/fieldTransformationRecordType'
+          $ref: '#/components/schemas/FieldTransformationRecordType'
           nullable: true
       additionalProperties: false
-    documentQualityAssessmentType:
+    DocumentQualityAssessmentType:
       description: Document-level quality assessment that guides receiver review strategy and time budgets.
       type: object
       properties:
         overallQuality:
-          $ref: '#/components/schemas/documentQualityType'
+          $ref: '#/components/schemas/DocumentQualityType'
           nullable: true
         qualityFactors:
           type: object
@@ -2436,7 +2436,7 @@ components:
           nullable: true
           description: Estimated time in minutes for manual review
       additionalProperties: false
-    receiverDecisionGroupType:
+    ReceiverDecisionGroupType:
       description: A group of fields sharing the same receiver decision (accept, spot-check, or manual-verify).
       type: object
       nullable: true
@@ -2462,7 +2462,7 @@ components:
             type: string
           description: List of field paths in this group
       additionalProperties: false
-    receiverRecommendationsType:
+    ReceiverRecommendationsType:
       description: Multi-level action recommendations for the receiver — field-level, document-level, and decision matrices.
       type: object
       properties:
@@ -2600,14 +2600,14 @@ components:
           nullable: true
           properties:
             acceptWithoutReview:
-              $ref: '#/components/schemas/receiverDecisionGroupType'
+              $ref: '#/components/schemas/ReceiverDecisionGroupType'
             spotCheckRecommended:
-              $ref: '#/components/schemas/receiverDecisionGroupType'
+              $ref: '#/components/schemas/ReceiverDecisionGroupType'
             manualVerificationRequired:
-              $ref: '#/components/schemas/receiverDecisionGroupType'
+              $ref: '#/components/schemas/ReceiverDecisionGroupType'
           additionalProperties: false
       additionalProperties: false
-    validationResultsType:
+    ValidationResultsType:
       description: Validation outcomes including format validation, business rules, and routing decisions.
       type: object
       properties:
@@ -2717,7 +2717,7 @@ components:
         - routingDecision
         - requiresHumanReview
       additionalProperties: false
-    fieldExtractionAuditType:
+    FieldExtractionAuditType:
       description: Field provenance audit entries.
       type: array
       items:

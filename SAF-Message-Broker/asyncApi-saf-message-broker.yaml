@@ -584,6 +584,7 @@ components:
         - eventSender
         - userAgent
         - licenceKey
+        - businessDomain
     SAFIDSEventType:
       description: 'IDS event type for Intelligent Data Structuring events (ch.ecohub.saf.ids). Extends the base SAF event with root-level scalar projections for Kafka-level routing and quality gating: confidenceScore, documentQuality, isValid, routingDecision, requiresHumanReview, and reviewReason.'
       type: object
