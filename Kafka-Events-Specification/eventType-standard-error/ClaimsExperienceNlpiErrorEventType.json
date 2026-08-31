@@ -4,64 +4,66 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "CloudEventsType.json#/definitions/iddef"
+      "$ref": "../CloudEventsType.json#/definitions/iddef"
     },
     "source": {
-      "$ref": "CloudEventsType.json#/definitions/sourcedef"
+      "$ref": "../CloudEventsType.json#/definitions/sourcedef"
     },
     "specversion": {
-      "$ref": "CloudEventsType.json#/definitions/specversiondef"
+      "$ref": "../CloudEventsType.json#/definitions/specversiondef"
     },
     "type": {
-      "$ref": "event-generic/EventType.json"
+      "description": "Reverse DNS entry defining the Standard error SAF event type. Restricted to ch.ecohub.saf.standard-error for Standard process error events (member of EventType).",
+      "type": "string",
+      "enum": ["ch.ecohub.saf.standard-error"]
     },
     "datacontenttype": {
-      "$ref": "CloudEventsType.json#/definitions/datacontenttypedef"
+      "$ref": "../CloudEventsType.json#/definitions/datacontenttypedef"
     },
     "dataschema": {
-      "$ref": "CloudEventsType.json#/definitions/dataschemadef"
+      "$ref": "../CloudEventsType.json#/definitions/dataschemadef"
     },
     "subject": {
-      "$ref": "CloudEventsType.json#/definitions/subjectdef"
+      "$ref": "../CloudEventsType.json#/definitions/subjectdef"
     },
     "time": {
-      "$ref": "CloudEventsType.json#/definitions/timedef"
+      "$ref": "../CloudEventsType.json#/definitions/timedef"
     },
     "licenceKey": {
-      "$ref": "event-generic/LicenceKeyType.json"
+      "$ref": "../event-common-types/LicenceKeyType.json"
     },
     "userAgent": {
-      "$ref": "event-generic/UserAgentType.json"
+      "$ref": "../event-common-types/UserAgentType.json"
     },
     "data": {
       "$ref": "#/definitions/claimsExperienceNlpiErrorType"
     },
     "eventReceiver": {
-      "$ref": "event-generic/SenderReceiverType.json"
+      "$ref": "../event-common-types/SenderReceiverType.json"
     },
     "eventSender": {
-      "$ref": "event-generic/SenderReceiverType.json"
+      "$ref": "../event-common-types/SenderReceiverType.json"
     },
     "processGroupId": {
-      "$ref": "event-generic/ProcessGroupIdType.json"
+      "$ref": "../event-common-types/ProcessGroupIdType.json"
     },
     "processId": {
-      "$ref": "event-generic/ProcessIdType.json"
+      "$ref": "../event-common-types/ProcessIdType.json"
     },
     "processName": {
-      "$ref": "event-generic/ProcessNameType.json"
+      "$ref": "../event-common-types/ProcessNameType.json"
     },
     "processVersion": {
-      "$ref": "event-generic/ProcessVersionType.json"
+      "$ref": "../event-common-types/ProcessVersionType.json"
     },
     "processStatus": {
-      "$ref": "event-generic/ProcessStatusType.json"
+      "$ref": "../event-common-types/ProcessStatusType.json"
     },
     "subProcessName": {
-      "$ref": "event-generic/SubProcessNameType.json"
+      "$ref": "../event-common-types/SubProcessNameType.json"
     },
     "subProcessStatus": {
-      "$ref": "event-generic/SubProcessStatusType.json"
+      "$ref": "../event-common-types/SubProcessStatusType.json"
     }
   },
   "definitions": {
