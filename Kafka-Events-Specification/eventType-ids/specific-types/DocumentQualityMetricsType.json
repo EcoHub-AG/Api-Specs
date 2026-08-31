@@ -3,28 +3,19 @@
   "type": "object",
   "properties": {
     "documentType": {
-      "description": "Document category (e.g., 'insurance-application', 'claim-form', 'policy-document')",
-      "type": "string"
+      "$ref": "./DocumentTypeType.json"
     },
     "sourceFormat": {
-      "description": "Original document MIME type (e.g., 'application/pdf', 'image/jpeg', 'image/png')",
-      "type": "string"
+      "$ref": "./SourceFormatType.json"
     },
     "pageCount": {
-      "description": "Total number of pages in the document",
-      "type": "integer",
-      "minimum": 0
+      "$ref": "./PageCountType.json"
     },
     "pagesEvaluated": {
-      "description": "Number of pages evaluated for quality metrics",
-      "type": "integer",
-      "minimum": 0
+      "$ref": "./PageCountType.json"
     },
     "ocrQuality": {
-      "description": "Optical Character Recognition quality score (0.0 = illegible, 1.0 = perfect)",
-      "type": "number",
-      "minimum": 0,
-      "maximum": 1
+      "$ref": "./OcrQualityType.json"
     },
     "agbExtraction": {
       "type": "boolean",
@@ -43,23 +34,18 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "$ref": "PostprocessingInformationType.json"
+        "$ref": "./PostprocessingInformationType.json"
       },
       "description": "Information about post-processing steps applied to the document after initial extraction, which may impact quality assessment."
     },
     "documentQuality": {
-      "$ref": "DocumentQualityType.json"
+      "$ref": "./DocumentQualityType.json"
     },
     "completenessScore": {
-      "description": "Percentage of expected/required fields successfully extracted (0.0-1.0)",
-      "type": "number",
-      "minimum": 0,
-      "maximum": 1
+      "$ref": "./CompletenessScoreType.json"
     },
     "sourceDocumentHash": {
-      "description": "SHA-256 cryptographic hash of original source document",
-      "type": "string",
-      "pattern": "^[a-f0-9]{64}$"
+      "$ref": "./SourceDocumentHashType.json"
     }
   },
   "additionalProperties": false

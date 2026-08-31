@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "overallQuality": {
-      "$ref": "DocumentQualityType.json"
+      "$ref": "./DocumentQualityType.json"
     },
     "qualityFactors": {
       "type": "object",
@@ -32,10 +32,7 @@
           "maximum": 1
         },
         "ocrQuality": {
-          "description": "OCR accuracy score",
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1
+          "$ref": "./OcrQualityType.json"
         }
       },
       "additionalProperties": false
@@ -46,7 +43,7 @@
           "properties": {
             "approachSuggested": {
               "description": "Recommended review approach for the receiver based on document quality assessment.",
-              "$ref": "ReviewStrategyType.json"
+              "$ref": "./ReviewStrategyType.json"
             },
             "reasoning": {
               "description": "Explanation for the recommended strategy",

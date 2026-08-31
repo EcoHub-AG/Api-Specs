@@ -3,12 +3,10 @@
   "type": "object",
   "properties": {
     "processingModel": {
-      "description": "AI/ML model used to process the document (e.g., 'Claude-3.5-Sonnet', 'GPT-4-Vision', 'Azure-Document-Intelligence')",
-      "type": "string"
+      "$ref": "./ProcessingModelType.json"
     },
     "modelVersion": {
-      "description": "Version identifier of the AI model",
-      "type": "string"
+      "$ref": "./ModelVersionType.json"
     },
     "extractionMode": {
       "type": "string",
@@ -48,26 +46,16 @@
       "nullable": true
     },
     "processingTimeMs": {
-      "description": "Elapsed time for document processing in milliseconds",
-      "type": "number",
-      "minimum": 0,
-      "nullable": true
+      "$ref": "./ProcessingTimeMsType.json"
     },
     "postprocessingTimeMs": {
-      "type": "number",
-      "minimum": 0,
-      "nullable": true
+      "$ref": "./ProcessingTimeMsType.json"
     },
     "llmResponseTimeMs": {
-      "type": "number",
-      "minimum": 0,
-      "nullable": true
+      "$ref": "./ProcessingTimeMsType.json"
     },
     "confidenceScore": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 1,
-      "nullable": true
+      "$ref": "./ConfidenceScoreType.json"
     }
   },
   "additionalProperties": false

@@ -32,9 +32,7 @@
         "maximum": 1
       },
       "durationMs": {
-        "description": "Execution time for this step in milliseconds",
-        "type": "number",
-        "minimum": 0
+        "$ref": "./ProcessingTimeMsType.json"
       },
       "status": {
         "description": "Execution status of this preprocessing step.",

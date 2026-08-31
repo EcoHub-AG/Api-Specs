@@ -98,7 +98,7 @@
       "alternatives": {
         "description": "Alternative values considered by the AI model for this field.",
         "type": "array",
-        "minimum": 1,
+        "minItems": 1,
         "items": {
           "type": "object",
           "properties": {
