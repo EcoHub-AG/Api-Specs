@@ -43,7 +43,7 @@
     },
     "fieldRecommendations": {
       "type": "array",
-      "minimum": 1,
+      "minItems": 1,
       "items": {
         "type": "object",
         "properties": {
@@ -63,7 +63,7 @@
           "reasons": {
             "description": "Reasons for this recommendation",
             "type": "array",
-            "minimum": 1,
+            "minItems": 1,
              "items": {
                "type": "string"
              }
@@ -87,7 +87,7 @@
           "alternativeValues": {
             "description": "Alternative values that could replace the current value",
             "type": "array",
-            "minimum": 1,
+            "minItems": 1,
             "items": {
               "type": "string"
             }
@@ -103,7 +103,7 @@
     },
     "documentLevelRecommendations": {
       "type": "array",
-      "minimum": 1,
+      "minItems": 1,
       "items": {
         "type": "object",
         "properties": {
@@ -113,7 +113,7 @@
           },
           "affectedPages": {
             "type": "array",
-            "minimum": 1,
+            "minItems": 1,
             "items": {
               "type": "integer",
               "minimum": 1
@@ -122,7 +122,7 @@
           "affectedFields": {
             "description": "List of affected field paths",
             "type": "array",
-            "minimum": 1,
+            "minItems": 1,
             "items": {
               "type": "string"
             }
@@ -176,7 +176,7 @@
         "fields": {
           "description": "List of field paths in this group",
           "type": "array",
-          "minimum": 1,
+          "minItems": 1,
           "items": {
             "type": "string"
           }

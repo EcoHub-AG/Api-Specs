@@ -23,7 +23,7 @@
       "transformationsApplied": {
         "description": "Sequence of transformations applied to convert raw to final value.",
         "type": "array",
-        "minimum": 1,
+        "minItems": 1,
         "items": {
           "type": "object",
           "properties": {

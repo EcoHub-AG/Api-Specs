@@ -55,7 +55,7 @@
             "fieldsRequiringExtraAttention": {
               "description": "List of field paths requiring extra scrutiny",
               "type": "array",
-              "minimum": 1,
+              "minItems": 1,
               "items": {
                 "type": "string"
               }

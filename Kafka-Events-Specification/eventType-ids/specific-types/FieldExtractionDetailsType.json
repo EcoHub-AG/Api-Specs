@@ -1,7 +1,7 @@
 {
   "description": "Per-field extraction metadata showing confidence, location, alternatives, and validation status for each extracted field.",
   "type": "array",
-  "minimum": 1,
+  "minItems": 1,
   "items": {
     "type": "object",
     "properties": {

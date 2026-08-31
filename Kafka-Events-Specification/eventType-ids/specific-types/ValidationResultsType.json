@@ -9,7 +9,7 @@
     "validationErrors": {
       "description": "List of validation errors or warnings encountered.",
       "type": "array",
-      "minimum": 1,
+      "minItems": 1,
       "items": {
         "type": "object",
         "properties": {
@@ -54,7 +54,7 @@
     "businessRuleValidations": {
       "description": "Business rule validation results as ProblemDetails-style entries aligned with the OAS IdsBusinessRuleValidation schema.",
       "type": "array",
-      "minimum": 1,
+      "minItems": 1,
       "items": {
         "type": "object",
         "properties": {
@@ -94,7 +94,7 @@
         "missingRequiredFields": {
           "description": "List of required fields that were not found.",
           "type": "array",
-          "minimum": 1,
+          "minItems": 1,
           "items": {
             "type": "string"
           }
@@ -102,7 +102,7 @@
         "lowConfidenceFields": {
           "description": "Fields with confidence below acceptable threshold.",
           "type": "array",
-          "minimum": 1,
+          "minItems": 1,
           "items": {
             "type": "object",
             "properties": {

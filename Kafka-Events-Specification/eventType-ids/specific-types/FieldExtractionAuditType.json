@@ -1,9 +1,10 @@
 {
   "description": "Field provenance audit entries aligned with OAS idsfieldExtractionAudit.",
   "type": "array",
+  "minItems": 1,
   "items": {
     "type": "object",
-    "minimum": 1,
+  
     "properties": {
       "fieldName": {
         "type": "string"
@@ -13,7 +14,7 @@
       },
       "sources": {
         "type": "array",
-        "minimum": 1,
+        "minItems": 1,
         "items": {
           "type": "string",
           "enum": [

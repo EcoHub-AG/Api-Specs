@@ -32,7 +32,7 @@
     },
     "agbPagesRemoved": {
       "type": "array",
-      "minimum": 1,
+      "minItems": 1,
       "items": {
         "type": "integer",
         "minimum": 0
@@ -41,7 +41,7 @@
     },
     "postprocessingInformation": {
       "type": "array",
-      "minimum": 1,
+      "minItems": 1,
       "items": {
         "$ref": "PostprocessingInformationType.json"
       },
