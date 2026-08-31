@@ -7,6 +7,7 @@
   - Added BusinessDomainType
   - ProcessNameType: added new value for claimsExperience.nlpi
   - added endpoint to consume claimsExperience.nlpi topic
+  - Added ClaimsExperienceNlpiErrorEventType on /in and the claimsExperience.nlpi OUT topic
   - Aligned API documentation with the actual implementation; this does not change API behavior
     - Events produced to the `IN` topic can by `anyOf` insteaf of `oneOf` the specified schemas
     - Narrowed consume response schemas per topic type to match the events actually returned by each endpoint

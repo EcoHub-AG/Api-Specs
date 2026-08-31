@@ -24,6 +24,7 @@ info:
       - Added BusinessDomainType
       - ProcessNameType: added new value for claimsExperience.nlpi
       - Added channel and operation to consume the claimsExperience.nlpi OUT topic
+      - Added ClaimsExperienceNlpiErrorEventType on the IN topic and the claimsExperience.nlpi OUT topic
       - Aligned schema documentation with the actual implementation; this does not change the SAF Message Broker API behavior
         - Fix max.message.bytes of the `IN` topic to be 8388608 instead of 8338608
         - Optional CloudEvents attributes are no longer documented as explicitly nullable; if not set, they should be omitted
@@ -102,6 +103,8 @@ channels:
         $ref: '#/components/messages/safErrorEvent'
       offerNlpiErrorEvent:
         $ref: '#/components/messages/offerNlpiErrorEvent'
+      claimsExperienceNlpiErrorEvent:
+        $ref: '#/components/messages/claimsExperienceNlpiErrorEvent'
   eh.saf.offer.out.v1:
     address: eh.saf.{ecohubId}.offer.nlpi.out.v1
     bindings:
@@ -328,6 +331,8 @@ channels:
         $ref: '#/components/messages/safIDSEvent'
       safErrorEvent:
         $ref: '#/components/messages/safErrorEvent'
+      claimsExperienceNlpiErrorEvent:
+        $ref: '#/components/messages/claimsExperienceNlpiErrorEvent'
 operations:
   produceSAFEvent:
     action: send
@@ -863,6 +868,99 @@ components:
             minLength: 3
             type: string
             enum:
+              - other
+          errorMessage:
+            description: Error message
+            minLength: 3
+            type: string
+          path:
+            description: xPath or JsonPath to the property where the error occurred.
+            type: string
+        additionalProperties: false
+        required:
+          - errorCode
+          - errorMessage
+    ClaimsExperienceNlpiErrorEventType:
+      description: Claims Experience NLPI error event, i.e. an event for business errors which are related to the event payload.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/cloudEvents/iddef'
+        source:
+          $ref: '#/components/schemas/cloudEvents/sourcedef'
+        specversion:
+          $ref: '#/components/schemas/cloudEvents/specversiondef'
+        type:
+          $ref: '#/components/schemas/eventType'
+        datacontenttype:
+          $ref: '#/components/schemas/cloudEvents/datacontenttypedef'
+        dataschema:
+          $ref: '#/components/schemas/cloudEvents/dataschemadef'
+        subject:
+          $ref: '#/components/schemas/cloudEvents/subjectdef'
+        time:
+          $ref: '#/components/schemas/cloudEvents/timedef'
+        licenceKey:
+          $ref: '#/components/schemas/licenceKeyType'
+        userAgent:
+          $ref: '#/components/schemas/userAgentType'
+        data:
+          $ref: "#/components/schemas/claimsExperienceNlpiErrorType"
+        eventReceiver:
+          $ref: "#/components/schemas/senderReceiverType"
+        eventSender:
+          $ref: "#/components/schemas/senderReceiverType"
+        processGroupId:
+          $ref: '#/components/schemas/processGroupIdType'
+        processId:
+          $ref: "#/components/schemas/processIdType"
+        processName:
+          $ref: "#/components/schemas/processNameType"
+        processVersion:
+          $ref: '#/components/schemas/processVersionType'
+        processStatus:
+          $ref: "#/components/schemas/processStatusType"
+        subProcessName:
+          $ref: "#/components/schemas/subProcessNameType"
+        subProcessStatus:
+          $ref: "#/components/schemas/subProcessStatusType"
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - data
+        - processId
+        - processName
+        - processVersion
+        - subProcessName
+        - processStatus
+        - subProcessStatus
+        - eventReceiver
+        - eventSender
+        - userAgent
+        - licenceKey
+      additionalProperties: false
+    claimsExperienceNlpiErrorType:
+      type: array
+      minItems: 1
+      items:
+        $id: claimsExperienceNlpiErrorItemType
+        type: object
+        properties:
+          errorCode:
+            $id: ClaimsExperienceNlpiErrorCodeEnum
+            description: The code best describing the occured error.
+            minLength: 3
+            type: string
+            enum:
+              - contract-not-cancelable
+              - data-protection-violation
+              - contract-inactive
+              - lob-not-insured
+              - contract-not-found
+              - customer-not-found
+              - no-mandate
               - other
           errorMessage:
             description: Error message
@@ -2289,6 +2387,19 @@ components:
       summary: Events that are used to send business errors, i.e. errors that are related to the transmitted business data.
       payload:
         $ref: '#/components/schemas/OfferNLPIErrorEventType'
+      bindings:
+        kafka:
+          key:
+            $ref: '#/components/schemas/SAFKeyType'
+          schemaIdLocation: 'payload'
+          schemaIdPayloadEncoding: 'confluent'
+          bindingVersion: '0.4.0'
+    claimsExperienceNlpiErrorEvent:
+      name: claimsExperienceNlpiErrorEvent
+      title: Claims Experience NLPI Business Error Event
+      summary: Events that are used to send business errors, i.e. errors that are related to the transmitted business data.
+      payload:
+        $ref: '#/components/schemas/ClaimsExperienceNlpiErrorEventType'
       bindings:
         kafka:
           key:

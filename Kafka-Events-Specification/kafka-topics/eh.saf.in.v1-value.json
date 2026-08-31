@@ -17,6 +17,9 @@
     },
     {
       "$ref": "../eventType-standard-error/OfferNLPIErrorEventType.json"
+    },
+    {
+      "$ref": "../eventType-standard-error/ClaimsExperienceNlpiErrorEventType.json"
     }
   ]
 }
