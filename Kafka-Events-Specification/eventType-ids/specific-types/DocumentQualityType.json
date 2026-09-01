@@ -1,5 +1,12 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Overall assessment of document quality for processing",
   "type": "string",
-  "enum": ["excellent", "high", "medium", "low", "poor"]
+  "enum": [
+    "excellent",
+    "high",
+    "medium",
+    "low",
+    "poor"
+  ]
 }

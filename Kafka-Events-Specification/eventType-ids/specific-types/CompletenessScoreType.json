@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Percentage of expected/required fields that were successfully extracted (0-1)",
   "type": "number",
   "minimum": 0,

@@ -4,13 +4,13 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../CloudEventsType.json#/definitions/iddef"
+      "$ref": "../CloudEventsType.json#/$defs/iddef"
     },
     "source": {
-      "$ref": "../CloudEventsType.json#/definitions/sourcedef"
+      "$ref": "../CloudEventsType.json#/$defs/sourcedef"
     },
     "specversion": {
-      "$ref": "../CloudEventsType.json#/definitions/specversiondef"
+      "$ref": "../CloudEventsType.json#/$defs/specversiondef"
     },
     "type": {
       "description": "Reverse DNS entry defining the Intelligent Data Structuring (IDS) SAF event type. Restricted to ch.ecohub.saf.ids for IDS events (member of EventType).",
@@ -18,16 +18,16 @@
       "enum": ["ch.ecohub.saf.ids"]
     },
     "datacontenttype": {
-      "$ref": "../CloudEventsType.json#/definitions/datacontenttypedef"
+      "$ref": "../CloudEventsType.json#/$defs/datacontenttypedef"
     },
     "dataschema": {
-      "$ref": "../CloudEventsType.json#/definitions/dataschemadef"
+      "$ref": "../CloudEventsType.json#/$defs/dataschemadef"
     },
     "subject": {
-      "$ref": "../CloudEventsType.json#/definitions/subjectdef"
+      "$ref": "../CloudEventsType.json#/$defs/subjectdef"
     },
     "time": {
-      "$ref": "../CloudEventsType.json#/definitions/timedef"
+      "$ref": "../CloudEventsType.json#/$defs/timedef"
     },
     "licenceKey": {
       "$ref": "../event-common-types/LicenceKeyType.json"

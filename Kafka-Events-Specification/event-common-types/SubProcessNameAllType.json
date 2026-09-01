@@ -1,8 +1,13 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "title": "All SubProcessName Types (Union)",
   "description": "Union of SubProcessNameType and GenericSubProcessNameType. Use only for contexts where any subprocess name must be accepted (e.g. SAFErrorEventType, which may originate from any event type). For specific event types use SubProcessNameType or GenericSubProcessNameType directly.",
   "anyOf": [
-    { "$ref": "SubProcessNameType.json" },
-    { "$ref": "GenericSubProcessNameType.json" }
+    {
+      "$ref": "SubProcessNameType.json"
+    },
+    {
+      "$ref": "GenericSubProcessNameType.json"
+    }
   ]
 }

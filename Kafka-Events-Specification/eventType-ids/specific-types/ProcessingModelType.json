@@ -1,5 +1,10 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Name of the AI model used for data extraction (e.g., 'Claude-3.5-Sonnet', 'GPT-4-Vision', 'Azure-Document-Intelligence')",
   "type": "string",
-  "examples": ["Claude-3.5-Sonnet", "GPT-4-Vision", "Azure-Document-Intelligence"]
+  "examples": [
+    "Claude-3.5-Sonnet",
+    "GPT-4-Vision",
+    "Azure-Document-Intelligence"
+  ]
 }

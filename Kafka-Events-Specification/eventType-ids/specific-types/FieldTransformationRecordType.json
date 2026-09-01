@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Log of value transformations and normalizations applied to extracted fields during processing.",
   "type": "array",
   "items": {
@@ -30,7 +31,14 @@
             "type": {
               "description": "Category of transformation applied.",
               "type": "string",
-              "enum": ["format-normalization", "year-expansion", "unit-conversion", "whitespace-trimming", "case-normalization", "custom"]
+              "enum": [
+                "format-normalization",
+                "year-expansion",
+                "unit-conversion",
+                "whitespace-trimming",
+                "case-normalization",
+                "custom"
+              ]
             },
             "from": {
               "description": "Source format or pattern.",
@@ -55,7 +63,12 @@
               "maximum": 1
             }
           },
-          "required": ["type", "reasoning", "isMeaningPreserving", "confidenceAfterTransform"],
+          "required": [
+            "type",
+            "reasoning",
+            "isMeaningPreserving",
+            "confidenceAfterTransform"
+          ],
           "additionalProperties": false
         }
       }

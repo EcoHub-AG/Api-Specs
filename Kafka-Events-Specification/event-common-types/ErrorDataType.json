@@ -32,6 +32,7 @@
       "type": "string"
     }
   },
+  "additionalProperties": false,
   "required": [
     "errorCode",
     "errorMessage",

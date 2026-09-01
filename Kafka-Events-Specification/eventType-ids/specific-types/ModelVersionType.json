@@ -1,5 +1,9 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Version identifier of the AI model used",
   "type": "string",
-  "examples": ["1.2.0", "4-turbo-2024-04-09"]
+  "examples": [
+    "1.2.0",
+    "4-turbo-2024-04-09"
+  ]
 }

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "UUID, that is used to associate multiple processes. The exact usage is specified in each data standard.",
   "type": "string",
   "format": "uuid"

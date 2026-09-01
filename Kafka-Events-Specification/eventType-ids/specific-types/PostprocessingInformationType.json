@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Postprocessing change information aligned with OAS PostProcessingInformation.",
   "type": "object",
   "properties": {
@@ -16,9 +17,14 @@
     },
     "newValue": {
       "description": "New value of the field after post-processing changes were applied. Null if the field was removed or not set.",
-      "type": "string"      
+      "type": "string"
     }
   },
-  "required": ["message", "field", "oldValue", "newValue"],
+  "required": [
+    "message",
+    "field",
+    "oldValue",
+    "newValue"
+  ],
   "additionalProperties": false
 }

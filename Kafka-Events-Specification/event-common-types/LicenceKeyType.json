@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "The license key for the requesting SC application.",
   "type": "string",
   "maxLength": 200,

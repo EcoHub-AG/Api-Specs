@@ -1,6 +1,7 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Document-level quality assessment that guides receiver review strategy and time budgets.",
-  "type": "object",
+  "type": ["object"],
   "properties": {
     "overallQuality": {
       "$ref": "./DocumentQualityType.json"
@@ -38,28 +39,26 @@
       "additionalProperties": false
     },
     "receiverRecommendedStrategy": {
-     
-          "type": "object",
-          "properties": {
-            "approachSuggested": {
-              "description": "Recommended review approach for the receiver based on document quality assessment.",
-              "$ref": "./ReviewStrategyType.json"
-            },
-            "reasoning": {
-              "description": "Explanation for the recommended strategy",
-              "type": "string"
-            },
-            "fieldsRequiringExtraAttention": {
-              "description": "List of field paths requiring extra scrutiny",
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "additionalProperties": false,
-          "nullable": true
+      "type": "object",
+      "properties": {
+        "approachSuggested": {
+          "description": "Recommended review approach for the receiver based on document quality assessment.",
+          "$ref": "./ReviewStrategyType.json"
+        },
+        "reasoning": {
+          "description": "Explanation for the recommended strategy",
+          "type": "string"
+        },
+        "fieldsRequiringExtraAttention": {
+          "description": "List of field paths requiring extra scrutiny",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "estimatedManualReviewMinutes": {
       "description": "Estimated time in minutes for manual review",

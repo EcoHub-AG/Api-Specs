@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "Detailed log of preprocessing operations applied to the document before AI extraction.",
   "type": "array",
   "items": {
@@ -12,7 +13,16 @@
       "operation": {
         "description": "Type of preprocessing operation applied.",
         "type": "string",
-        "enum": ["rotation", "deskew", "enhancement", "noise-reduction", "binarization", "contrast-adjustment", "sharpening", "custom"]
+        "enum": [
+          "rotation",
+          "deskew",
+          "enhancement",
+          "noise-reduction",
+          "binarization",
+          "contrast-adjustment",
+          "sharpening",
+          "custom"
+        ]
       },
       "parameters": {
         "description": "Operation-specific configuration parameters",
@@ -37,7 +47,11 @@
       "status": {
         "description": "Execution status of this preprocessing step.",
         "type": "string",
-        "enum": ["applied", "skipped", "failed"]
+        "enum": [
+          "applied",
+          "skipped",
+          "failed"
+        ]
       }
     },
     "additionalProperties": false
