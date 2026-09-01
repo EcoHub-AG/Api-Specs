@@ -2,7 +2,8 @@
   "$schema": "https://json-schema.org/draft/2019-09/schema",
   "description": "CloudEvents Specification JSON Schema",
   "type": "object",
-  "definitions": {
+  "additionalProperties": false,
+  "$defs": {
     "iddef": {
       "description": "Identifies the event. Producers MUST ensure that source + id is unique for each distinct event. If a duplicate event is re-sent (e.g. due to a network error) it MAY have the same id. Consumers MAY assume that Events with identical source and id are duplicates.",
       "examples": [

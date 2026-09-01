@@ -4,13 +4,13 @@
   "type": "object",
   "properties": {
     "id": {
-      "$ref": "../CloudEventsType.json#/definitions/iddef"
+      "$ref": "../CloudEventsType.json#/$defs/iddef"
     },
     "source": {
-      "$ref": "../CloudEventsType.json#/definitions/sourcedef"
+      "$ref": "../CloudEventsType.json#/$defs/sourcedef"
     },
     "specversion": {
-      "$ref": "../CloudEventsType.json#/definitions/specversiondef"
+      "$ref": "../CloudEventsType.json#/$defs/specversiondef"
     },
     "type": {
       "description": "Reverse DNS entry defining the Standard error SAF event type. Restricted to ch.ecohub.saf.standard-error for Standard process error events (member of EventType).",
@@ -18,16 +18,16 @@
       "enum": ["ch.ecohub.saf.standard-error"]
     },
     "datacontenttype": {
-      "$ref": "../CloudEventsType.json#/definitions/datacontenttypedef"
+      "$ref": "../CloudEventsType.json#/$defs/datacontenttypedef"
     },
     "dataschema": {
-      "$ref": "../CloudEventsType.json#/definitions/dataschemadef"
+      "$ref": "../CloudEventsType.json#/$defs/dataschemadef"
     },
     "subject": {
-      "$ref": "../CloudEventsType.json#/definitions/subjectdef"
+      "$ref": "../CloudEventsType.json#/$defs/subjectdef"
     },
     "time": {
-      "$ref": "../CloudEventsType.json#/definitions/timedef"
+      "$ref": "../CloudEventsType.json#/$defs/timedef"
     },
     "licenceKey": {
       "$ref": "../event-common-types/LicenceKeyType.json"
@@ -36,7 +36,7 @@
       "$ref": "../event-common-types/UserAgentType.json"
     },
     "data": {
-      "$ref": "#/definitions/claimsExperienceNlpiErrorType"
+      "$ref": "#/$defs/claimsExperienceNlpiErrorType"
     },
     "eventReceiver": {
       "$ref": "../event-common-types/SenderReceiverType.json"
@@ -66,7 +66,7 @@
       "$ref": "../event-common-types/SubProcessStatusType.json"
     }
   },
-  "definitions": {
+  "$defs": {
     "claimsExperienceNlpiErrorType": {
       "type": "array",
       "minItems": 1,
