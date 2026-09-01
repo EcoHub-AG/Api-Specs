@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Reverse DNS entry to defines the type of event: data, inquiry, standard-error or saf-error",
+  "minLength": 1,
+  "type": "string",
+  "enum": [
+    "ch.ecohub.saf.data",
+    "ch.ecohub.saf.inquiry",
+    "ch.ecohub.saf.generic",
+    "ch.ecohub.saf.ids",
+    "ch.ecohub.saf.standard-error",
+    "ch.ecohub.saf.saf-error"
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Source document and OCR/extraction quality metrics aligned with OAS IdsDocumentQualityMetrics.",
+  "type": "object",
+  "properties": {
+    "documentType": {
+      "$ref": "./DocumentTypeType.json"
+    },
+    "sourceFormat": {
+      "$ref": "./SourceFormatType.json"
+    },
+    "pageCount": {
+      "$ref": "./PageCountType.json"
+    },
+    "pagesEvaluated": {
+      "$ref": "./PageCountType.json"
+    },
+    "ocrQuality": {
+      "$ref": "./OcrQualityType.json"
+    },
+    "agbExtraction": {
+      "type": "boolean",
+      "description": "Indicates whether the document is an AGB (Allgemeine Geschäftsbedingungen) which may require special handling."
+    },
+    "agbPagesRemoved": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "description": "List of page numbers removed from the document due to AGB extraction."
+    },
+    "postprocessingInformation": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "./PostprocessingInformationType.json"
+      },
+      "description": "Information about post-processing steps applied to the document after initial extraction, which may impact quality assessment."
+    },
+    "documentQuality": {
+      "$ref": "./DocumentQualityType.json"
+    },
+    "completenessScore": {
+      "$ref": "./CompletenessScoreType.json"
+    },
+    "sourceDocumentHash": {
+      "$ref": "./SourceDocumentHashType.json"
+    }
+  },
+  "additionalProperties": false
+}

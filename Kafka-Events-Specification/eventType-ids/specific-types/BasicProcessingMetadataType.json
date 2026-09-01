@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Fundamental IDS processing metadata aligned with OAS IdsBasicProcessingMetadata.",
+  "type": "object",
+  "properties": {
+    "processingModel": {
+      "$ref": "./ProcessingModelType.json"
+    },
+    "modelVersion": {
+      "$ref": "./ModelVersionType.json"
+    },
+    "extractionMode": {
+      "type": "string",
+      "description": "Mode of field extraction (e.g., 'zero-shot', 'few-shot', 'template-based')"
+    },
+    "llmCallCount": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "majorityVoting": {
+      "type": "boolean"
+    },
+    "promptRepetition": {
+      "type": "boolean"
+    },
+    "dpi": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "imageQuality": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "psm": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "ocrEngineMode": {
+      "type": "string"
+    },
+    "processingTimeMs": {
+      "$ref": "./ProcessingTimeMsType.json"
+    },
+    "postprocessingTimeMs": {
+      "$ref": "./ProcessingTimeMsType.json"
+    },
+    "llmResponseTimeMs": {
+      "$ref": "./ProcessingTimeMsType.json"
+    },
+    "confidenceScore": {
+      "$ref": "./ConfidenceScoreType.json"
+    }
+  },
+  "additionalProperties": false
+}

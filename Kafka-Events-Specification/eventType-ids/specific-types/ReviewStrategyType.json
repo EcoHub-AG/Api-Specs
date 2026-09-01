@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Recommended review approach for the receiver based on document quality assessment.",
+  "type": "string",
+  "enum": [
+    "full-review",
+    "targeted-review",
+    "spot-check",
+    "accept"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Detailed preprocessing, field extraction, and transformation data aligned with OAS IdsDetailedExtractionData.",
+  "type": "object",
+  "properties": {
+    "preprocessingPipeline": {
+      "$ref": "PreprocessingPipelineType.json",
+      "description": "Structured representation of the preprocessing steps applied to the document before field extraction."
+    },
+    "preprocessingImpactAnalysis": {
+      "$ref": "PreprocessingImpactAnalysisType.json",
+      "description": "Analysis of how preprocessing steps impacted field extraction outcomes."
+    },
+    "fieldExtractionDetails": {
+      "$ref": "FieldExtractionDetailsType.json",
+      "description": "Detailed information about the field extraction process."
+    },
+    "fieldTransformationRecord": {
+      "$ref": "FieldTransformationRecordType.json",
+      "description": "Record of field transformations applied during processing."
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Category or type of document being processed",
+  "type": "string",
+  "examples": [
+    "insurance-application",
+    "claim-form",
+    "policy-document",
+    "id-card"
+  ]
+}

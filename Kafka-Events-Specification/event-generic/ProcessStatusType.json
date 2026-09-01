@@ -1,8 +1,0 @@
-{
-  "description": "Defines status of the overall process.",
-  "type": "string",
-  "enum": [
-    "active",
-    "closed"
-  ]
-}

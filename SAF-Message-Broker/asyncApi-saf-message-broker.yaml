@@ -29,6 +29,12 @@ info:
         - Fix max.message.bytes of the `IN` topic to be 8388608 instead of 8338608
         - Optional CloudEvents attributes are no longer documented as explicitly nullable; if not set, they should be omitted
         - Normalized the `processId` format annotation to `uuid`
+      - Added `SAFIDSEvent` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
+      - Root-level scalar projections for Kafka-level filtering and routing: `confidenceScore`, `documentQuality`, `isValid`, `routingDecision`, `requiresHumanReview`, `reviewReason`
+      - `documentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
+      - `EventDataType` with fully typed component schemas for all IDS metadata groups: `basicProcessingMetadataType`, `documentQualityMetricsType`, `detailedExtractionDataType`, `documentQualityAssessmentType`, `receiverRecommendationsType`, `validationResultsType`, `fieldExtractionAuditType` and their supporting sub-types
+      - `detailedExtractionData`, `documentQualityAssessment`, `receiverRecommendations`, and `fieldExtractionAudit` are nullable (optional processing output)
+      - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
     
     ### Changes in Version 1.1.0
       - Improved documentation
@@ -89,6 +95,8 @@ channels:
         $ref: '#/components/messages/safEvent'
       produceSAFGenericEvent:
         $ref: '#/components/messages/safGenericEvent'
+      produceSAFIDSEvent:
+        $ref: '#/components/messages/safIDSEvent'
       produceSAFInquiryEvent:
         $ref: '#/components/messages/safInquiryEvent'
       safErrorEvent:
@@ -249,6 +257,32 @@ channels:
         $ref: '#/components/messages/safInquiryEvent'
       safErrorEvent:
         $ref: '#/components/messages/safErrorEvent'
+  eh.saf.claimsExperience.nlpi.out.v1:
+    address: eh.saf.{ecohubId}.claimsExperience.nlpi.out.v1
+    bindings:
+      kafka:
+        topic: 'eh.saf.{ecohubId}.claimsExperience.nlpi.out.v1'
+        partitions: 3
+        replicas: 2
+        topicConfiguration:
+          cleanup.policy: [ "delete" ]
+          retention.ms: 604800000
+          retention.bytes: -1
+          delete.retention.ms: 86400000
+          max.message.bytes: 8388608
+        bindingVersion: '0.4.0'
+    parameters:
+      ecohubId:
+        description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
+              names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
+    messages:
+      consumeSAFEvent:
+        $ref: '#/components/messages/safEvent'
+      consumeSAFInquiryEvent:
+        $ref: '#/components/messages/safInquiryEvent'
+      safErrorEvent:
+        $ref: '#/components/messages/safErrorEvent'
+      
   eh.saf.generic.out.v1:
     address: eh.saf.{ecohubId}.generic.out.v1
     bindings:
@@ -274,11 +308,11 @@ channels:
         $ref: '#/components/messages/safInquiryEvent'
       safErrorEvent:
         $ref: '#/components/messages/safErrorEvent'
-  eh.saf.claimsExperience.nlpi.out.v1:
-    address: eh.saf.{ecohubId}.claimsExperience.nlpi.out.v1
+  eh.saf.ids.out.v1:
+    address: eh.saf.{ecohubId}.ids.out.v1
     bindings:
       kafka:
-        topic: 'eh.saf.{ecohubId}.claimsExperience.nlpi.out.v1'
+        topic: 'eh.saf.{ecohubId}.ids.out.v1'
         partitions: 3
         replicas: 2
         topicConfiguration:
@@ -293,10 +327,8 @@ channels:
         description: "The EcoHubId can be looked up in EcoHub on the SAF TechUser page. Check the kafka topic
           names, which follow the pattern 'eh.saf.{ecohubId}.{process}.out.{version}'."
     messages:
-      consumeSAFEvent:
-        $ref: '#/components/messages/safEvent'
-      consumeSAFInquiryEvent:
-        $ref: '#/components/messages/safInquiryEvent'
+      consumeSAFIDSEvent:
+        $ref: '#/components/messages/safIDSEvent'
       safErrorEvent:
         $ref: '#/components/messages/safErrorEvent'
       claimsExperienceNlpiErrorEvent:
@@ -384,19 +416,6 @@ operations:
         bindingVersion: '0.4.0'
     channel:
       $ref: "#/channels/eh.saf.claimsExperience.out.v1"
-  consumeGenericEvent:
-    action: receive
-    bindings:
-      kafka:
-        groupId:
-          type: string
-          pattern: ^CG-(\d{5,6})-IDP(\d{6})$
-        clientId:
-          type: string
-          format: uuid
-        bindingVersion: '0.4.0'
-    channel:
-      $ref: "#/channels/eh.saf.generic.out.v1"
   consumeClaimsExperienceNlpiEvent:
     action: receive
     bindings:
@@ -410,6 +429,32 @@ operations:
         bindingVersion: '0.4.0'
     channel:
       $ref: "#/channels/eh.saf.claimsExperience.nlpi.out.v1"
+  consumeGenericEvent:
+    action: receive
+    bindings:
+      kafka:
+        groupId:
+          type: string
+          pattern: ^CG-(\d{5,6})-IDP(\d{6})$
+        clientId:
+          type: string
+          format: uuid
+        bindingVersion: '0.4.0'
+    channel:
+      $ref: "#/channels/eh.saf.generic.out.v1"
+  consumeIDSEvent:
+    action: receive
+    bindings:
+      kafka:
+        groupId:
+          type: string
+          pattern: ^CG-(\d{5,6})-IDP(\d{6})$
+        clientId:
+          type: string
+          format: uuid
+        bindingVersion: '0.4.0'
+    channel:
+      $ref: "#/channels/eh.saf.ids.out.v1"
 components:
   securitySchemes:
     X509:
@@ -487,7 +532,7 @@ components:
         specversion:
           $ref: '#/components/schemas/cloudEvents/specversiondef'
         type:
-          description: Reverse DNS entry defining the Generic Exchange SAF event type..
+          description: Reverse DNS entry defining the Generic Exchange SAF event type.
           type: string
           enum:
             - ch.ecohub.saf.generic
@@ -545,8 +590,93 @@ components:
         - userAgent
         - licenceKey
         - businessDomain
+    SAFIDSEventType:
+      description: 'IDS event type for Intelligent Data Structuring events (ch.ecohub.saf.ids). Extends the base SAF event with root-level scalar projections for Kafka-level routing and quality gating: confidenceScore, documentQuality, isValid, routingDecision, requiresHumanReview, and reviewReason.'
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/cloudEvents/iddef'
+        source:
+          $ref: '#/components/schemas/cloudEvents/sourcedef'
+        specversion:
+          $ref: '#/components/schemas/cloudEvents/specversiondef'
+        type:
+          description: CloudEvents event type. Restricted to ch.ecohub.saf.ids for IDS events (member of EventType).
+          type: string
+          enum:
+            - ch.ecohub.saf.ids
+        datacontenttype:
+          $ref: '#/components/schemas/cloudEvents/datacontenttypedef'
+        dataschema:
+          $ref: '#/components/schemas/cloudEvents/dataschemadef'
+        subject:
+          $ref: '#/components/schemas/cloudEvents/subjectdef'
+        time:
+          $ref: '#/components/schemas/cloudEvents/timedef'
+        licenceKey:
+          $ref: '#/components/schemas/licenceKeyType'
+        userAgent:
+          $ref: '#/components/schemas/userAgentType'
+        eventReceiver:
+          $ref: '#/components/schemas/senderReceiverType'
+        eventSender:
+          $ref: '#/components/schemas/senderReceiverType'
+        data:
+          $ref: '#/components/schemas/idsEventDataType'
+        processGroupId:
+          $ref: '#/components/schemas/processGroupIdType'
+        processId:
+          $ref: '#/components/schemas/processIdType'
+        processName:
+          $ref: '#/components/schemas/processNameType'
+        processVersion:
+          $ref: '#/components/schemas/processVersionType'
+        processStatus:
+          $ref: '#/components/schemas/processStatusType'
+        subProcessName:
+          $ref: '#/components/schemas/genericSubProcessNameType'
+        subProcessStatus:
+          $ref: '#/components/schemas/subProcessStatusType'
+        confidenceScore:
+          description: Scalar projection of data.basicProcessingMetadata.confidenceScore for routing and quality gating.
+          $ref: '#/components/schemas/confidenceScoreType'
+        documentQuality:
+          description: Scalar projection of data.basicProcessingMetadata.documentQualityMetrics.documentQuality for routing and quality tier signals.
+          $ref: '#/components/schemas/documentQualityType'
+        isValid:
+          description: Scalar projection of data.validationResults.isValid for routing and filtering.
+          type: boolean
+        routingDecision:
+          description: Scalar projection of data.validationResults.routingDecision for routing and filtering.
+          type: string
+          enum:
+            - auto-approve
+            - manual-review
+            - reject
+            - re-process
+        requiresHumanReview:
+          description: Scalar projection of data.validationResults.requiresHumanReview for routing and filtering.
+          type: boolean
+        reviewReason:
+          description: Scalar projection of data.validationResults.reviewReason for search and operational triage.
+          type: string
+      additionalProperties: false
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - processId
+        - processName
+        - processVersion
+        - subProcessName
+        - processStatus
+        - subProcessStatus
+        - eventReceiver
+        - eventSender
+        - userAgent
+        - licenceKey
     SAFInquiryEventType:
-      $id: SAFInquiryEventType
       description: 'SAF inquiry event, i.e. an event containing a generic message.'
       type: object
       properties:
@@ -607,7 +737,6 @@ components:
         - userAgent
         - licenceKey
     SAFErrorEventType:
-      $id: SAFErrorEventType
       description: SAF error event, i.e. an event for errors which are unrelated to the event payload.
       type: object
       properties:
@@ -732,11 +861,9 @@ components:
       type: array
       minItems: 1
       items:
-        $id: offerNLPIErrorItemType
         type: object
         properties:
           errorCode:
-            $id: OfferNLPIErrorCodeEnum
             description: The code best describing the occured error.
             minLength: 3
             type: string
@@ -882,6 +1009,8 @@ components:
       type: string
       enum:
         - ch.ecohub.saf.data
+        - ch.ecohub.saf.ids
+        - ch.ecohub.saf.generic
         - ch.ecohub.saf.inquiry
         - ch.ecohub.saf.standard-error
         - ch.ecohub.saf.saf-error
@@ -930,7 +1059,6 @@ components:
       type: object
       properties:
         errorCode:
-          $id: SafErrorCodeEnum
           description: 'Categorizes the type of error'
           type: string
           minLength: 3
@@ -1008,7 +1136,6 @@ components:
       additionalProperties: false
       properties:
         category:
-          $id: SenderReceiverCategoryEnum
           description: The category of the organisation
           enum:
             - broker
@@ -1053,7 +1180,6 @@ components:
           type: string
         links:
           items:
-            $id: LinkType
             type: object
             properties:
               description:
@@ -1197,6 +1323,870 @@ components:
         specified in each data standard.
       type: string
       format: uuid
+    genericSubProcessNameType:
+      description: Sub process name, that is used to specify the sub process of the event. The exact usage is specified in each data standard.
+      type: string
+      enum: 
+        - "initiate"
+        - "provide"
+        - "review"
+        - "decide"
+        - "execute"
+        - "close"
+    idsEventDataType:
+      description: IDS event data payload. Contains the encrypted structured extraction result and optional IDS processing metadata grouped by function.
+      type: object
+      properties:
+        payload:
+          description: Base64 representation of the gzip-compressed and encrypted structured output from document processing.
+          type: string
+          minLength: 3
+        payloadSignature:
+          description: Digital signature for integrity verification of encrypted payload. ECDSA secp384r1/SHA-384, ASN.1 encoded, transmitted as Base64.
+          type: string
+          minLength: 3
+        encryptionKey:
+          description: Encrypted AES symmetric key. Encrypted with eventReceiver's public key using RSA/OAEP/SHA-256, transmitted as Base64.
+          type: string
+          minLength: 3
+        publicKeyVersion:
+          description: Version identifier of the recipient's public key used to encrypt the encryptionKey.
+          type: string
+        signatureKeyVersion:
+          description: Version identifier of the sender's signature key used to sign the payload.
+          type: string
+        basicProcessingMetadata:
+          description: Model, processing mode, timing and aggregate confidence score. Source of root projection confidenceScore.
+          $ref: '#/components/schemas/basicProcessingMetadataType'
+        documentQualityMetrics:
+          description: Source document properties, OCR quality, AGB handling, completeness, and document hash. Source of root projection documentQuality.
+          $ref: '#/components/schemas/documentQualityMetricsType'
+        detailedExtractionData:
+          description: Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.
+          $ref: '#/components/schemas/detailedExtractionDataType'
+          nullable: true
+        documentQualityAssessment:
+          description: Quality-factor breakdown and recommended review strategy.
+          $ref: '#/components/schemas/documentQualityAssessmentType'
+          nullable: true
+        receiverRecommendations:
+          description: Field-level, document-level, and decision-matrix recommendations.
+          $ref: '#/components/schemas/receiverRecommendationsType'
+          nullable: true
+        validationResults:
+          description: Validation result, routing decision, human-review flag, and business-rule results. Source of root projections isValid, routingDecision, requiresHumanReview, and reviewReason.
+          $ref: '#/components/schemas/validationResultsType'
+        fieldExtractionAudit:
+          description: Field provenance source audit trail.
+          $ref: '#/components/schemas/fieldExtractionAuditType'
+          nullable: true
+      required:
+        - payload
+        - payloadSignature
+        - encryptionKey
+        - publicKeyVersion
+        - signatureKeyVersion
+      additionalProperties: false
+    confidenceScoreType:
+      type: number
+      minimum: 0
+      maximum: 1
+      format: double
+      description: |
+        Overall confidence score indicating aggregate confidence in extraction results.
+        
+        **Range:** 0.0 (no confidence) to 1.0 (high confidence)
+        
+        **Calculation:** Derived from field-level confidence scores and document quality metrics:
+        - Accounts for OCR quality, document clarity, and field extraction confidence
+        - Provides single metric for receivers to assess extraction reliability
+        - Used by validation engine and receiver recommendations
+        
+        **Purpose:**
+        - Quick assessment of overall extraction quality
+        - Input for routing decisions (auto-approve vs. review vs. verify)
+        - Compliance and audit trail documentation
+        
+        **Mapping to SAFIDSEventType:** Maps to `confidenceScore` property in Kafka event
+      example: 0.87
+    documentQualityType:
+      description: Overall assessment of document quality for processing.
+      type: string
+      enum:
+        - excellent
+        - high
+        - medium
+        - low
+        - poor
+    postprocessingInformationType:
+      description: Postprocessing change applied to a field after AI extraction.
+      type: object
+      properties:
+        message:
+          type: string
+        field:
+          type: string
+        oldValue:
+          type: string
+          nullable: true
+        newValue:
+          type: string
+          nullable: true
+      required:
+        - message
+        - field
+        - oldValue
+        - newValue
+      additionalProperties: false
+    basicProcessingMetadataType:
+      description: Fundamental IDS processing metadata. Model, processing mode, timing and aggregate confidence score.
+      type: object
+      properties:
+        processingModel:
+          type: string
+          description: AI/ML model used to process the document (e.g., 'Claude-3.5-Sonnet', 'GPT-4-Vision', 'Azure-Document-Intelligence')
+        modelVersion:
+          type: string
+          description: Version identifier of the AI model
+        extractionMode:
+          type: string
+          nullable: true
+        llmCallCount:
+          type: integer
+          minimum: 0
+          format: int32
+          nullable: true
+        majorityVoting:
+          type: boolean
+          nullable: true
+        promptRepetition:
+          type: boolean
+          nullable: true
+        dpi:
+          type: integer
+          minimum: 0
+          format: int32
+          nullable: true
+        imageQuality:
+          type: integer
+          minimum: 0
+          format: int32
+          nullable: true
+        psm:
+          type: integer
+          minimum: 0
+          format: int32
+          nullable: true
+        ocrEngineMode:
+          type: string
+          nullable: true
+        processingTimeMs:
+          type: number
+          minimum: 0
+          format: double
+          nullable: true
+          description: Elapsed time for document processing in milliseconds
+        postprocessingTimeMs:
+          type: number
+          minimum: 0
+          format: double  
+          nullable: true
+        llmResponseTimeMs:
+          type: number
+          minimum: 0
+          format: double
+          nullable: true
+        confidenceScore:
+          type: number
+          minimum: 0
+          maximum: 1
+          format: double
+          nullable: true
+      additionalProperties: false
+    documentQualityMetricsType:
+      description: Source document and OCR/extraction quality metrics. Source document properties, OCR quality, AGB handling, completeness, and document hash.
+      type: object
+      properties:
+        documentType:
+          type: string
+          nullable: true
+          description: Document category (e.g., 'insurance-application', 'claim-form', 'policy-document')
+        sourceFormat:
+          type: string
+          nullable: true
+          description: Original document MIME type (e.g., 'application/pdf', 'image/jpeg', 'image/png')
+        pageCount:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Total number of pages in the document
+        pagesEvaluated:
+          type: integer
+          minimum: 0
+          nullable: true
+        ocrQuality:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+          description: Optical Character Recognition quality score (0.0 = illegible, 1.0 = perfect)
+        agbExtraction:
+          type: boolean
+        agbPagesRemoved:
+          type: array
+          nullable: true
+          items:
+            type: integer
+            minimum: 0
+        postprocessingInformation:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/postprocessingInformationType'
+        documentQuality:
+          $ref: '#/components/schemas/documentQualityType'
+        completenessScore:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+          description: Percentage of expected/required fields successfully extracted (0.0-1.0)
+        sourceDocumentHash:
+          type: string
+          pattern: '^[a-f0-9]{64}$'
+          nullable: true
+          description: SHA-256 cryptographic hash of original source document
+      additionalProperties: false
+    preprocessingPipelineType:
+      description: Detailed log of preprocessing operations applied to the document before AI extraction.
+      type: array
+      items:
+        type: object
+        properties:
+          sequence:
+            type: integer
+            minimum: 1
+            nullable: true
+          operation:
+            type: string
+            enum:
+              - rotation
+              - deskew
+              - enhancement
+              - noise-reduction
+              - binarization
+              - contrast-adjustment
+              - sharpening
+              - custom
+          parameters:
+            type: object
+            nullable: true
+            additionalProperties: true
+            description: Operation-specific configuration parameters
+          qualityBefore:
+            type: number
+            minimum: 0
+            maximum: 1
+            nullable: true
+            description: Document quality score before this operation
+          qualityAfter:
+            type: number
+            minimum: 0
+            maximum: 1
+            nullable: true
+            description: Document quality score after this operation
+          durationMs:
+            type: number
+            minimum: 0
+            nullable: true
+            description: Execution time for this step in milliseconds
+          status:
+            type: string
+            enum:
+              - applied
+              - skipped
+              - failed
+        additionalProperties: false
+    preprocessingImpactAnalysisType:
+      description: Summary analysis of the overall impact of preprocessing on document quality.
+      type: object
+      properties:
+        documentQualityBefore:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+        documentQualityAfter:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+        improvementFromPreprocessing:
+          type: number
+          minimum: 0
+          maximum: 1
+          nullable: true
+        mostImpactfulStep:
+          type: string
+          nullable: true
+        receiverNote:
+          type: string
+          nullable: true
+      additionalProperties: false
+    fieldExtractionDetailsType:
+      description: Per-field extraction metadata showing confidence, location, alternatives, and validation status for each extracted field.
+      type: array
+      items:
+        type: object
+        properties:
+          fieldPath:
+            type: string
+            nullable: true
+          confidence:
+            type: number
+            minimum: 0
+            maximum: 1
+            nullable: true
+          confidenceBreakdown:
+            type: object
+            nullable: true
+            properties:
+              formatValidity:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+              modelCertainty:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+              contextAppropriateness:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+              readability:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+            additionalProperties: true
+          confidenceRationale:
+            type: string
+            nullable: true
+          receiverGuidance:
+            type: string
+            nullable: true
+          extractionMethod:
+            type: string
+            enum:
+              - extracted
+              - calculated
+              - default
+              - manual-input
+          sourceLocation:
+            type: object
+            nullable: true
+            properties:
+              page:
+                type: integer
+                minimum: 1
+                nullable: true
+              boundingBox:
+                type: array
+                nullable: true
+                items:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                minItems: 4
+                maxItems: 4
+              text:
+                type: string
+                nullable: true
+              contextAppropriateness:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+              readability:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+            additionalProperties: false
+          extractedValue: {}
+          alternatives:
+            type: array
+            nullable: true
+            items:
+              type: object
+              properties:
+                value:
+                  type: string
+                  nullable: true
+                confidence:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+                  nullable: true
+              additionalProperties: false
+          validationStatus:
+            type: string
+            enum:
+              - valid
+              - invalid
+              - warning
+              - not-validated
+          validationMessage:
+            type: string
+        additionalProperties: false
+    fieldTransformationRecordType:
+      description: Log of value transformations and normalizations applied to extracted fields during processing.
+      type: array
+      items:
+        type: object
+        properties:
+          fieldPath:
+            type: string
+          rawExtractedValue: {}
+          finalStoredValue: {}
+          originalConfidence:
+            type: number
+            minimum: 0
+            maximum: 1
+            nullable: true
+          transformationsApplied:
+            type: array
+            nullable: true
+            items:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - format-normalization
+                    - year-expansion
+                    - unit-conversion
+                    - whitespace-trimming
+                    - case-normalization
+                    - custom
+                from:
+                  type: string
+                to:
+                  type: string
+                reasoning:
+                  type: string
+                isMeaningPreserving:
+                  type: boolean
+                confidenceAfterTransform:
+                  type: number
+                  minimum: 0
+                  maximum: 1
+              required:
+                - type
+                - reasoning
+                - isMeaningPreserving
+                - confidenceAfterTransform
+              additionalProperties: false
+        additionalProperties: false
+    detailedExtractionDataType:
+      description: Preprocessing pipeline, preprocessing impact, field extraction details, and field transformations.
+      type: object
+      properties:
+        preprocessingPipeline:
+          $ref: '#/components/schemas/preprocessingPipelineType'
+          nullable: true
+        preprocessingImpactAnalysis:
+          $ref: '#/components/schemas/preprocessingImpactAnalysisType'
+          nullable: true
+        fieldExtractionDetails:
+          $ref: '#/components/schemas/fieldExtractionDetailsType'
+          nullable: true
+        fieldTransformationRecord:
+          $ref: '#/components/schemas/fieldTransformationRecordType'
+          nullable: true
+      additionalProperties: false
+    documentQualityAssessmentType:
+      description: Document-level quality assessment that guides receiver review strategy and time budgets.
+      type: object
+      properties:
+        overallQuality:
+          $ref: '#/components/schemas/documentQualityType'
+          nullable: true
+        qualityFactors:
+          type: object
+          nullable: true
+          properties:
+            documentReadability:
+              type: number
+              minimum: 0
+              maximum: 1
+              nullable: true
+              description: Document text legibility score
+            structureRecognition:
+              type: number
+              minimum: 0
+              maximum: 1
+              nullable: true
+              description: Form/table structure recognition score
+            handwritingPresence:
+              type: boolean
+              nullable: true
+            imageQuality:
+              type: number
+              minimum: 0
+              maximum: 1
+              nullable: true
+              description: Image quality score (for scanned documents)
+            ocrQuality:
+              type: number
+              minimum: 0
+              maximum: 1
+              nullable: true
+              description: OCR accuracy score
+          additionalProperties: false
+        receiverRecommendedStrategy:
+          type: object
+          nullable: true
+          properties:
+            approachSuggested:
+              type: string
+              nullable: true
+              enum:
+                - full-review
+                - targeted-review
+                - spot-check
+                - accept
+            reasoning:
+              type: string
+              nullable: true
+              description: Explanation for the recommended strategy
+            fieldsRequiringExtraAttention:
+              type: array
+              nullable: true
+              items:
+                type: string
+              description: List of field paths requiring extra scrutiny
+          additionalProperties: false
+        estimatedManualReviewMinutes:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Estimated time in minutes for manual review
+      additionalProperties: false
+    receiverDecisionGroupType:
+      description: A group of fields sharing the same receiver decision (accept, spot-check, or manual-verify).
+      type: object
+      nullable: true
+      properties:
+        count:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Number of fields in this group
+        action:
+          type: string
+          nullable: true
+          description: Recommended action for this group
+        estimatedMinutes:
+          type: integer
+          minimum: 0
+          nullable: true
+          description: Estimated time in minutes for this group
+        fields:
+          type: array
+          nullable: true
+          items:
+            type: string
+          description: List of field paths in this group
+      additionalProperties: false
+    receiverRecommendationsType:
+      description: Multi-level action recommendations for the receiver — field-level, document-level, and decision matrices.
+      type: object
+      properties:
+        summary:
+          type: object
+          nullable: true
+          properties:
+            fieldsCount:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Total number of fields extracted
+            fieldsAccept:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Number of high-confidence fields (ACCEPT)
+            fieldsReview:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Number of medium-confidence fields (REVIEW)
+            fieldsVerify:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Number of low-confidence fields (VERIFY)
+            documentLevelIssues:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Number of document-level issues detected
+            estimatedManualReviewMinutes:
+              type: integer
+              minimum: 0
+              nullable: true
+              description: Total estimated time for manual review
+            overallStrategy:
+              type: string
+              enum:
+                - accept
+                - spot-check
+                - targeted-review
+                - full-review
+          additionalProperties: false
+        fieldRecommendations:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              fieldPath:
+                type: string
+                nullable: true
+                description: JSON path to the field
+              recommendation:
+                type: string
+                enum:
+                  - ACCEPT
+                  - REVIEW
+                  - VERIFY
+                  - REJECT
+              priority:
+                type: integer
+                minimum: 1
+                nullable: true
+                description: Priority order (1 = highest, higher number = lower priority)
+              reasons:
+                type: array
+                nullable: true
+                items:
+                  type: string
+                description: Reasons for this recommendation
+              confidenceScore:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+                description: Current confidence score for this field
+              threshold:
+                type: number
+                minimum: 0
+                maximum: 1
+                nullable: true
+                description: Confidence threshold applicable to this field
+              whatToCheckFor:
+                type: string
+                nullable: true
+                description: Guidance on what to verify for this field
+              alternativeValues:
+                type: array
+                nullable: true
+                items:
+                  type: string
+                description: Alternative values that could replace the current value
+              estimatedTimeMinutes:
+                type: integer
+                minimum: 0
+                nullable: true
+                description: Estimated time in minutes to review this field
+            additionalProperties: false
+        documentLevelRecommendations:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              recommendation:
+                type: string
+                nullable: true
+                description: "Type of recommendation (e.g., 'HANDWRITING_DETECTED', 'LOW_OCR_QUALITY')"
+              affectedPages:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 1
+              affectedFields:
+                type: array
+                nullable: true
+                items:
+                  type: string
+                description: List of affected field paths
+              whatToDo:
+                type: string
+                nullable: true
+              estimatedTimeMinutes:
+                type: integer
+                minimum: 0
+                nullable: true
+                description: Estimated time in minutes to address this issue
+            additionalProperties: false
+        receiverDecisionMatrix:
+          type: object
+          nullable: true
+          properties:
+            acceptWithoutReview:
+              $ref: '#/components/schemas/receiverDecisionGroupType'
+            spotCheckRecommended:
+              $ref: '#/components/schemas/receiverDecisionGroupType'
+            manualVerificationRequired:
+              $ref: '#/components/schemas/receiverDecisionGroupType'
+          additionalProperties: false
+      additionalProperties: false
+    validationResultsType:
+      description: Validation outcomes including format validation, business rules, and routing decisions.
+      type: object
+      properties:
+        isValid:
+          description: Overall validation result for the extracted data.
+          type: boolean
+        validationErrors:
+          description: List of validation errors or warnings encountered.
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Field path where error occurred
+              errorType:
+                type: string
+                description: "Error type identifier (e.g., 'ENUM_MISMATCH', 'FORMAT_ERROR', 'TYPE_MISMATCH')"
+              message:
+                type: string
+              severity:
+                type: string
+                description: Impact level of this validation issue.
+                enum:
+                  - error
+                  - warning
+                  - info
+              suggestedFix:
+                type: string
+            required:
+              - message
+            additionalProperties: false
+        routingDecision:
+          description: Suggested routing or next action based on validation results.
+          type: string
+          enum:
+            - auto-approve
+            - manual-review
+            - reject
+            - re-process
+        requiresHumanReview:
+          description: Whether human review is recommended before proceeding.
+          type: boolean
+        reviewReason:
+          description: Explanation of why human review is needed.
+          type: string
+          nullable: true
+        businessRuleValidations:
+          description: Business rule validation results as ProblemDetails-style entries.
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                nullable: true
+              title:
+                type: string
+                nullable: true
+              status:
+                type: integer
+                minimum: 0
+                nullable: true
+              detail:
+                type: string
+                nullable: true
+              instance:
+                type: string
+                nullable: true
+            additionalProperties: false
+        dataCompletenessCheck:
+          type: object
+          nullable: true
+          properties:
+            requiredFieldsPresent:
+              type: integer
+              minimum: 0
+              nullable: true
+            requiredFieldsTotal:
+              type: integer
+              minimum: 0
+              nullable: true
+            missingRequiredFields:
+              type: array
+              nullable: true
+              items:
+                type: string
+            lowConfidenceFields:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  fieldPath:
+                    type: string
+                    nullable: true
+                  confidence:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                    nullable: true
+                additionalProperties: false
+          additionalProperties: false
+      required:
+        - isValid
+        - routingDecision
+        - requiresHumanReview
+      additionalProperties: false
+    fieldExtractionAuditType:
+      description: Field provenance audit entries.
+      type: array
+      items:
+        type: object
+        properties:
+          fieldName:
+            type: string
+          xPath:
+            type: string
+          sources:
+            type: array
+            items:
+              type: string
+              enum:
+                - ApiGenerated
+                - Generated
+                - DefaultValue
+                - LlmGenerated
+                - PostProcessed
+                - PostLlmCalculated
+          description:
+            type: string
+            nullable: true
+        required:
+          - fieldName
+          - xPath
+          - sources
+          - description
+        additionalProperties: false
   messages:
     safEvent:
       name: safEvent
@@ -1318,6 +2308,53 @@ components:
             subProcessName: provide
             subProcessStatus: Created
             businessDomain: insurance
+    safIDSEvent:
+      name: safIDSEvent
+      title: SAF Intelligent Data Structuring (IDS) Event
+      summary: Intelligent Data Structuring (IDS) event used to send unstructured business information (pdf, images, etc.) to the intelligent data structuring service. The IDS will return structured data based on the Broker and Insurer Standard definitions.
+      payload:
+        $ref: '#/components/schemas/SAFIDSEventType'
+      bindings:
+        kafka:
+          key:
+            $ref: '#/components/schemas/SAFKeyType'
+          schemaIdLocation: 'payload'
+          schemaIdPayloadEncoding: 'confluent'
+          bindingVersion: '0.4.0'
+      examples:
+        - name: idsEventWithPayloadExample
+          summary: Intelligent Data Structuring event with unstructured data payload
+          payload:
+            id: 044d2e50-12d6-43e4-bb1b-7b54841c9c82
+            source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
+            specversion: '1.0'
+            type: ch.ecohub.saf.ids
+            datacontenttype: application/json
+            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/heads/main/schemas/legacy/5.4.1/contractGeneric_V5.4.1.xsd
+            subject: ids transfer
+            time: '2023-08-17T14:15:22.000Z'
+            licenceKey: REcxZEVMZWV1UXFwOUZwaz...
+            userAgent:
+              name: BS1
+              version: '1.0'
+            eventReceiver:
+              category: insurer
+              id: IDP1234567
+            eventSender:
+              category: broker
+              id: IDP7654321
+            data:
+              payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZ...
+              payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
+              encryptionKey: urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...
+              publicKeyVersion: '1.1'
+              signatureKeyVersion: '1.3'
+            processId: ff9275bf-5b35-492e-bdd2-c217e151d335
+            processName: contract
+            processVersion: 1.0.0
+            processStatus: active
+            subProcessName: provide
+            subProcessStatus: Created
     safInquiryEvent:
       name: safInquiryEvent
       title: SAF Inquiry Event

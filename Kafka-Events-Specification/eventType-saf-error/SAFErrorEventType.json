@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "type": "object",
+  "description": "SAF error event, i.e. an event for errors which are unrelated to the event payload.",
+  "properties": {
+    "id": {
+    "$ref": "../CloudEventsType.json#/$defs/iddef"
+    },
+    "source": {
+      "$ref": "../CloudEventsType.json#/$defs/sourcedef"
+    },
+    "specversion": {
+      "$ref": "../CloudEventsType.json#/$defs/specversiondef"
+    },
+    "type": {
+      "description": "Reverse DNS entry defining the SAF error SAF event type. Restricted to ch.ecohub.saf.saf-error for SAF Error events (member of EventType).",
+      "type": "string",
+      "enum": ["ch.ecohub.saf.saf-error"]
+    },
+    "datacontenttype": {
+      "$ref": "../CloudEventsType.json#/$defs/datacontenttypedef"
+    },
+    "dataschema": {
+      "$ref": "../CloudEventsType.json#/$defs/dataschemadef"
+    },
+    "subject": {
+      "$ref": "../CloudEventsType.json#/$defs/subjectdef"
+    },
+    "time": {
+      "$ref": "../CloudEventsType.json#/$defs/timedef"
+    },
+    "licenceKey": {
+      "$ref": "../event-common-types/LicenceKeyType.json"
+    },
+    "userAgent": {
+      "$ref": "../event-common-types/UserAgentType.json"
+    },
+    "data": {
+      "$ref": "../event-common-types/ErrorDataType.json"
+    },
+    "eventReceiver": {
+      "$ref": "../event-common-types/SenderReceiverType.json"
+    },
+    "eventSender": {
+      "$ref": "../event-common-types/SenderReceiverType.json"
+    },
+    "processGroupId": {
+      "$ref": "../event-common-types/ProcessGroupIdType.json"
+    },
+    "processId": {
+      "$ref": "../event-common-types/ProcessIdType.json"
+    },
+    "processName": {
+      "$ref": "../event-common-types/ProcessNameAllType.json"
+    },
+    "processVersion": {
+      "$ref": "../event-common-types/ProcessVersionType.json"
+    },
+    "processStatus": {
+      "$ref": "../event-common-types/ProcessStatusType.json"
+    },
+    "subProcessName": {
+      "$ref": "../event-common-types/SubProcessNameAllType.json"
+    },
+    "subProcessStatus": {
+      "$ref": "../event-common-types/SubProcessStatusType.json"
+    }
+  },
+  "required": [
+    "id",
+    "source",
+    "specversion",
+    "type",
+    "processId",
+    "processName",
+    "processVersion",
+    "subProcessName",
+    "processStatus",
+    "subProcessStatus",
+    "eventReceiver",
+    "eventSender",
+    "userAgent",
+    "licenceKey"
+  ],
+  "additionalProperties": false
+}

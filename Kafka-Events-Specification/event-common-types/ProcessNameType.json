@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Identifier of the core process",
+  "type": "string",
+  "enum": [
+    "offer.nlpi",
+    "invoice",
+    "commission",
+    "contract",
+    "mandate",
+    "claimsExperience",
+    "claimsExperience.nlpi"
+  ]
+}

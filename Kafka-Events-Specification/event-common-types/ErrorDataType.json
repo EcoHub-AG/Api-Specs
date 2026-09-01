@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "type": "object",
+  "description": "The error event payload.",
+  "properties": {
+    "errorCode": {
+      "description": "Categorizes the type of error",
+      "enum": [
+        "licenseKey-not-valid",
+        "sa-not-found",
+        "receiver-not-found",
+        "event-not-valid",
+        "pk-version-not-found",
+        "data-content-invalid",
+        "data-schema-invalid",
+        "data-not-readable",
+        "data-decryption-failed",
+        "data-decompression-failed",
+        "other"
+      ],
+      "minLength": 3,
+      "type": "string"
+    },
+    "errorDateTime": {
+      "description": "",
+      "format": "date-time",
+      "type": "string"
+    },
+    "errorMessage": {
+      "description": "",
+      "minLength": 3,
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "errorCode",
+    "errorMessage",
+    "errorDateTime"
+  ]
+}

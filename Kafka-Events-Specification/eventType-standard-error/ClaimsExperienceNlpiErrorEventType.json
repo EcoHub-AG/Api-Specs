@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Claims Experience NLPI error event, i.e. an event for business errors which are related to the event payload.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../CloudEventsType.json#/definitions/iddef"
+    },
+    "source": {
+      "$ref": "../CloudEventsType.json#/definitions/sourcedef"
+    },
+    "specversion": {
+      "$ref": "../CloudEventsType.json#/definitions/specversiondef"
+    },
+    "type": {
+      "description": "Reverse DNS entry defining the Standard error SAF event type. Restricted to ch.ecohub.saf.standard-error for Standard process error events (member of EventType).",
+      "type": "string",
+      "enum": ["ch.ecohub.saf.standard-error"]
+    },
+    "datacontenttype": {
+      "$ref": "../CloudEventsType.json#/definitions/datacontenttypedef"
+    },
+    "dataschema": {
+      "$ref": "../CloudEventsType.json#/definitions/dataschemadef"
+    },
+    "subject": {
+      "$ref": "../CloudEventsType.json#/definitions/subjectdef"
+    },
+    "time": {
+      "$ref": "../CloudEventsType.json#/definitions/timedef"
+    },
+    "licenceKey": {
+      "$ref": "../event-common-types/LicenceKeyType.json"
+    },
+    "userAgent": {
+      "$ref": "../event-common-types/UserAgentType.json"
+    },
+    "data": {
+      "$ref": "#/definitions/claimsExperienceNlpiErrorType"
+    },
+    "eventReceiver": {
+      "$ref": "../event-common-types/SenderReceiverType.json"
+    },
+    "eventSender": {
+      "$ref": "../event-common-types/SenderReceiverType.json"
+    },
+    "processGroupId": {
+      "$ref": "../event-common-types/ProcessGroupIdType.json"
+    },
+    "processId": {
+      "$ref": "../event-common-types/ProcessIdType.json"
+    },
+    "processName": {
+      "$ref": "../event-common-types/ProcessNameType.json"
+    },
+    "processVersion": {
+      "$ref": "../event-common-types/ProcessVersionType.json"
+    },
+    "processStatus": {
+      "$ref": "../event-common-types/ProcessStatusType.json"
+    },
+    "subProcessName": {
+      "$ref": "../event-common-types/SubProcessNameType.json"
+    },
+    "subProcessStatus": {
+      "$ref": "../event-common-types/SubProcessStatusType.json"
+    }
+  },
+  "definitions": {
+    "claimsExperienceNlpiErrorType": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "description": "The code best describing the occured error.",
+            "minLength": 3,
+            "type": "string",
+            "enum": [
+              "contract-not-cancelable",
+              "data-protection-violation",
+              "contract-inactive",
+              "lob-not-insured",
+              "contract-not-found",
+              "customer-not-found",
+              "no-mandate",
+              "other"
+            ]
+          },
+          "errorMessage": {
+            "description": "Error message",
+            "minLength": 3,
+            "type": "string"
+          },
+          "path": {
+            "description": "xPath or JsonPath to the property where the error occurred.",
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "errorCode",
+          "errorMessage"
+        ]
+      }
+    }
+  },
+  "required": [
+    "id",
+    "source",
+    "specversion",
+    "type",
+    "data",
+    "processId",
+    "processName",
+    "processVersion",
+    "subProcessName",
+    "processStatus",
+    "subProcessStatus",
+    "eventReceiver",
+    "eventSender",
+    "userAgent",
+    "licenceKey"
+  ],
+  "additionalProperties": false
+}

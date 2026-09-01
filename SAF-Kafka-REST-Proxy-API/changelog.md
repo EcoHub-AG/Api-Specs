@@ -13,6 +13,13 @@
     - Narrowed consume response schemas per topic type to match the events actually returned by each endpoint
     - removed unused 'typedef' schema
   - removed explicit definition of Content-Type header for requests to /in as the allowed values are already defined by `requestBody.content.<media-type>`
+  - Added `SAFIDSEventType` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
+  - Root-level scalar projections for Kafka-level filtering and routing: `idsconfidenceScore`, `idsdocumentQuality`, `idsisValid`, `idsroutingDecision`, `idsrequiresHumanReview`, `idsreviewReason`
+  - `idsdocumentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
+  - `idsdetailedExtractionData`, `idsdocumentQualityAssessment`, `idsreceiverRecommendations`, and `idsfieldExtractionAudit` are nullable (optional processing output)
+  - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `basicProcessingMetadataType`, `documentQualityMetricsType`, `detailedExtractionDataType`, `documentQualityAssessmentType`, `receiverRecommendationsType`, `validationResultsType`, `fieldExtractionAuditType` and their supporting sub-types
+  - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
+
 
 
 ### Version 1.1.1
