@@ -1022,7 +1022,10 @@ components:
         specversion:
           $ref: '#/components/schemas/specversiondef'
         type:
-          $ref: '#/components/schemas/EventType'
+          description: Reverse DNS entry defining the Standard process SAF data event type. Restricted to ch.ecohub.saf.data for Data events (member of EventType).
+          type: string
+          enum:
+            - ch.ecohub.saf.data
         datacontenttype:
           $ref: '#/components/schemas/datacontenttypedef'
         dataschema:
@@ -1237,7 +1240,10 @@ components:
         specversion:
           $ref: '#/components/schemas/specversiondef'
         type:
-          $ref: '#/components/schemas/EventType'
+          description: Reverse DNS entry defining the Standard process SAF inquiry event type. Restricted to ch.ecohub.saf.inquiry for Data Inquiry events (member of EventType).
+          type: string
+          enum:
+            - ch.ecohub.saf.inquiry
         datacontenttype:
           $ref: '#/components/schemas/datacontenttypedef'
         dataschema:
@@ -1500,6 +1506,12 @@ components:
         - information
         - customer
         - broker
+    ProcessNameAllType:
+      title: All ProcessName Types (Union)
+      description: Union of ProcessNameType and GenericProcessNameType. Use only for contexts where any process name must be accepted (e.g. SAFErrorEventType, which may originate from any process type). For specific event types use ProcessNameType or GenericProcessNameType directly.
+      anyOf:
+        - $ref: '#/components/schemas/ProcessNameType'
+        - $ref: '#/components/schemas/GenericProcessNameType'
     ProcessVersionType:
       description: Version of the used core process
       type: string
@@ -1694,7 +1706,10 @@ components:
         specversion:
           $ref: '#/components/schemas/specversiondef'
         type:
-          $ref: '#/components/schemas/EventType'
+          description: Reverse DNS entry defining the SAF error SAF event type. Restricted to ch.ecohub.saf.saf-error for SAF Error events (member of EventType).
+          type: string
+          enum:
+            - ch.ecohub.saf.saf-error
         datacontenttype:
           $ref: '#/components/schemas/datacontenttypedef'
         dataschema:
@@ -1718,13 +1733,13 @@ components:
         processId:
           $ref: '#/components/schemas/ProcessIdType'
         processName:
-          $ref: '#/components/schemas/ProcessNameType'
+          $ref: '#/components/schemas/ProcessNameAllType'
         processVersion:
           $ref: '#/components/schemas/ProcessVersionType'
         processStatus:
           $ref: '#/components/schemas/ProcessStatusType'
         subProcessName:
-          $ref: '#/components/schemas/SubProcessNameType'
+          $ref: '#/components/schemas/SubProcessNameAllType'
         subProcessStatus:
           $ref: '#/components/schemas/SubProcessStatusType'
       required:
@@ -1787,7 +1802,10 @@ components:
         specversion:
           $ref: '#/components/schemas/specversiondef'
         type:
-          $ref: '#/components/schemas/EventType'
+          description: Reverse DNS entry defining the Standard error SAF event type. Restricted to ch.ecohub.saf.standard-error for Standard process error events (member of EventType).
+          type: string
+          enum:
+            - ch.ecohub.saf.standard-error
         datacontenttype:
           $ref: '#/components/schemas/datacontenttypedef'
         dataschema:
@@ -1872,7 +1890,10 @@ components:
         specversion:
           $ref: '#/components/schemas/specversiondef'
         type:
-          $ref: '#/components/schemas/EventType'
+          description: Reverse DNS entry defining the Standard error SAF event type. Restricted to ch.ecohub.saf.standard-error for Standard process error events (member of EventType).
+          type: string
+          enum:
+            - ch.ecohub.saf.standard-error
         datacontenttype:
           $ref: '#/components/schemas/datacontenttypedef'
         dataschema:
@@ -2877,6 +2898,12 @@ components:
         - "decide"
         - "execute"
         - "close"
+    SubProcessNameAllType:
+      title: All SubProcessName Types (Union)
+      description: Union of SubProcessNameType and GenericSubProcessNameType. Use only for contexts where any subprocess name must be accepted (e.g. SAFErrorEventType, which may originate from any event type). For specific event types use SubProcessNameType or GenericSubProcessNameType directly.
+      anyOf:
+        - $ref: '#/components/schemas/SubProcessNameType'
+        - $ref: '#/components/schemas/GenericSubProcessNameType'
     IDSTopicResponseType:
       type: array
       items:
