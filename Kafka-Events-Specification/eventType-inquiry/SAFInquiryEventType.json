@@ -13,7 +13,7 @@
       "$ref": "../CloudEventsType.json#/$defs/specversiondef"
     },
     "type": {
-      "description": "Reverse DNS entry defining the Standard process SAF inquiry event type. Restricted to ch.ecohub.saf.data-inquiry for Data Inquiry events (member of EventType).",
+      "description": "Reverse DNS entry defining the Standard process SAF inquiry event type. Restricted to ch.ecohub.saf.inquiry for Data Inquiry events (member of EventType).",
       "type": "string",
       "enum": ["ch.ecohub.saf.inquiry"]
     },
