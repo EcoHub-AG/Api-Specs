@@ -3,7 +3,7 @@
 # No rights to use, implement, modify, reproduce, distribute, or create derivative works without prior written authorization.
 # Swiss law applies. Jurisdiction: Zurich.
 
-openapi: 3.0.1
+openap4: 3.0.1
 info:
   title: 'SAF Kafka REST Proxy API'
   version: 1.2.0
@@ -61,14 +61,14 @@ paths:
           description: The id of the schema which is used to serialize the event value
           schema:
             type: integer
-            enum: [ 100060 ]
+            enum: [ 100064 ]
           required: true
         - name: keySchemaVersionId
           in: header
           description: The id of the schema which is used to serialize the event key
           schema:
             type: integer
-            enum: [ 100021 ]
+            enum: [ 100064 ]
           required: true
       requestBody:
         description: The event to be produced. The maximum allowed event size is 8 MB.
