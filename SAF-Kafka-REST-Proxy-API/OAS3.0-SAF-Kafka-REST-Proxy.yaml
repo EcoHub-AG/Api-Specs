@@ -3,7 +3,7 @@
 # No rights to use, implement, modify, reproduce, distribute, or create derivative works without prior written authorization.
 # Swiss law applies. Jurisdiction: Zurich.
 
-openap4: 3.0.1
+openapi: 3.0.1
 info:
   title: 'SAF Kafka REST Proxy API'
   version: 1.2.0
