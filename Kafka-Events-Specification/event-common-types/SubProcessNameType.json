@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Identifier for the current subprocess / process step within the core process.",
+  "type": "string",
+  "enum": [
+    "request",
+    "offer",
+    "feedback",
+    "conclusionDecision",
+    "billing",
+    "reminder",
+    "contract",
+    "commission",
+    "submission",
+    "cancellation",
+    "claimsExperience"
+  ]
+}

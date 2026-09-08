@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "title": "All ProcessName Types (Union)",
+  "description": "Union of ProcessNameType and GenericProcessNameType. Use only for contexts where any process name must be accepted (e.g. SAFErrorEventType, which may originate from any process type). For specific event types use ProcessNameType or GenericProcessNameType directly.",
+  "anyOf": [
+    {
+      "$ref": "ProcessNameType.json"
+    },
+    {
+      "$ref": "GenericProcessNameType.json"
+    }
+  ]
+}

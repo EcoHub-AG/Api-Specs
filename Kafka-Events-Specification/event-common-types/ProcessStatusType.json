@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Defines status of the overall process.",
+  "type": "string",
+  "enum": [
+    "active",
+    "closed"
+  ]
+}

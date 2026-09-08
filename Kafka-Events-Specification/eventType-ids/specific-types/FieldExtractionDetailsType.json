@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Per-field extraction metadata showing confidence, location, alternatives, and validation status for each extracted field.",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "properties": {
+      "fieldPath": {
+        "description": "JSON path or identifier representing the field location in the structured output.",
+        "type": "string"
+      },
+      "confidence": {
+        "description": "Overall confidence score for this field extraction (0-1).",
+        "type": "number",
+        "minimum": 0,
+        "maximum": 1
+      },
+      "confidenceBreakdown": {
+        "description": "Decomposition of confidence into constituent factors. OAS v2.1 currently leaves this object under-specified, so additional factor names are allowed.",
+        "type": "object",
+        "properties": {
+          "formatValidity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "modelCertainty": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "contextAppropriateness": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "readability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "additionalProperties": true
+      },
+      "confidenceRationale": {
+        "description": "Explanation of why confidence is at this level.",
+        "type": "string"
+      },
+      "receiverGuidance": {
+        "description": "Actionable guidance for receiver if manual verification is needed.",
+        "type": "string"
+      },
+      "extractionMethod": {
+        "description": "Method used to obtain this field value.",
+        "type": "string",
+        "enum": [
+          "extracted",
+          "calculated",
+          "default",
+          "manual-input"
+        ]
+      },
+      "sourceLocation": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "description": "Page number in document where field appears, 1-indexed.",
+            "type": "integer",
+            "minimum": 1
+          },
+          "boundingBox": {
+            "description": "Normalized bounding box coordinates [x, y, width, height] as fractions of page dimensions.",
+            "type": "array",
+            "items": {
+              "type": [
+                "number"
+              ],
+              "minimum": 0,
+              "maximum": 1
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "text": {
+            "description": "Raw text extracted from this location before any transformation.",
+            "type": "string"
+          },
+          "contextAppropriateness": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "readability": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "additionalProperties": false
+      },
+      "extractedValue": {
+        "description": "The raw extracted value before transformations."
+      },
+      "alternatives": {
+        "description": "Alternative values considered by the AI model for this field.",
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "value": {
+              "description": "Alternative value candidate.",
+              "type": "string"
+            },
+            "confidence": {
+              "description": "Confidence score for this alternative.",
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "validationStatus": {
+        "description": "Validation result for this specific field.",
+        "type": "string",
+        "enum": [
+          "valid",
+          "invalid",
+          "warning",
+          "not-validated"
+        ]
+      },
+      "validationMessage": {
+        "description": "Details or explanation of validation status.",
+        "type": "string"
+      }
+    },
+    "additionalProperties": false
+  }
+}

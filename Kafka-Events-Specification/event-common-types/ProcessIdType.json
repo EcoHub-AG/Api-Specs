@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "UUID, that won't change during the offer processes. The UUID is set by the party, that starts the process.",
+  "type": "string",
+  "format": "uuid"
+}

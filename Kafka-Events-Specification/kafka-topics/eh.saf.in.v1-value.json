@@ -1,16 +1,26 @@
 {
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "anyOf": [
     {
-      "$ref": "SAFEventType.json"
+      "$ref": "../eventType-data/SAFEventType.json"
     },
     {
-      "$ref": "SAFInquiryEventType.json"
+      "$ref": "../eventType-generic-data/SAFGenericEventType.json"
     },
     {
-      "$ref": "SAFErrorEventType.json"
+      "$ref": "../eventType-ids/SAFIDSEventType.json"
     },
     {
-      "$ref": "OfferNLPIErrorEventType.json"
+      "$ref": "../eventType-inquiry/SAFInquiryEventType.json"
+    },
+    {
+      "$ref": "../eventType-saf-error/SAFErrorEventType.json"
+    },
+    {
+      "$ref": "../eventType-standard-error/OfferNLPIErrorEventType.json"
+    },
+    {
+      "$ref": "../eventType-standard-error/ClaimsExperienceNlpiErrorEventType.json"
     }
   ]
 }

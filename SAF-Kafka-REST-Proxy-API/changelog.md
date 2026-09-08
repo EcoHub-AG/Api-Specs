@@ -1,5 +1,30 @@
 # SAF Kafka REST Proxy API Changelog
 
+### Version 1.2.0
+  - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on /in
+  - Added endpoint to consume the generic OUT topic
+  - Added dedicated Generic Exchange processName schema
+  - Added BusinessDomainType
+  - ProcessNameType: added new value for claimsExperience.nlpi
+  - added endpoint to consume claimsExperience.nlpi topic
+  - Added ClaimsExperienceNlpiErrorEventType on /in and the claimsExperience.nlpi OUT topic
+  - Aligned API documentation with the actual implementation; this does not change API behavior
+    - Events produced to the `IN` topic can be `anyOf` instead of `oneOf` the specified schemas
+    - Narrowed consume response schemas per topic type to match the events actually returned by each endpoint
+    - removed unused 'typedef' schema
+  - removed explicit definition of Content-Type header for requests to /in as the allowed values are already defined by `requestBody.content.<media-type>`
+  - Added `SAFIDSEventType` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
+  - Root-level scalar projections for Kafka-level filtering and routing: `confidenceScore`, `documentQuality`, `isValid`, `routingDecision`, `requiresHumanReview`, `reviewReason`
+  - `documentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
+  - `detailedExtractionData`, `documentQualityAssessment`, `receiverRecommendations`, and `fieldExtractionAudit` are optional (processing output, omitted when not produced)
+  - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `BasicProcessingMetadataType`, `DocumentQualityMetricsType`, `DetailedExtractionDataType`, `DocumentQualityAssessmentType`, `ReceiverRecommendationsType`, `ValidationResultsType`, `FieldExtractionAuditType` and their supporting sub-types
+  - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
+  - `schemaVersionId` / `keySchemaVersionId` header values updated to the ids now current in production
+    (`100161` / `100164`). `keySchemaVersionId` moves to `SAFKeyType` v2, which makes `processId`
+    **required** and disallows additional properties on the message key
+
+
+
 ### Version 1.1.1
   - Fixed schemaVersionId header value (value in 1.1.0 was incorrect)
 

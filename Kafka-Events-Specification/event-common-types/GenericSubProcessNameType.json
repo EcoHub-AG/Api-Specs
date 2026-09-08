@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Identifier for the current subprocess step within the core process. For generic data events, use the generic subprocess names that represent the workflow stage (initiate, provide, review, decide, execute, close). For standard processes, use SubProcessNameType.",
+  "type": "string",
+  "enum": [
+    "initiate",
+    "provide",
+    "review",
+    "decide",
+    "execute",
+    "close"
+  ]
+}

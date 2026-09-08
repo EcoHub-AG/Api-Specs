@@ -1,3 +1,22 @@
+### Version 1.2.0
+  - Added support for Generic Exchange events (`ch.ecohub.saf.generic`) on the IN topic
+  - Added channel and operation to consume the generic OUT topic
+  - Added dedicated Generic Exchange processName schema
+  - Added BusinessDomainType
+  - ProcessNameType: added new value for claimsExperience.nlpi
+  - Added channel and operation to consume the claimsExperience.nlpi OUT topic
+  - Added ClaimsExperienceNlpiErrorEventType on the IN topic and the claimsExperience.nlpi OUT topic
+  - Aligned schema documentation with the actual implementation; this does not change the SAF Message Broker API behavior
+    - Fix max.message.bytes of the `IN` topic to be 8388608 instead of 8338608
+    - Optional CloudEvents attributes are no longer documented as explicitly nullable; if not set, they should be omitted
+    - Normalized the `processId` format annotation to `uuid`
+  - Added `SAFIDSEventType` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
+  - Root-level scalar projections for Kafka-level filtering and routing: `confidenceScore`, `documentQuality`, `isValid`, `routingDecision`, `requiresHumanReview`, `reviewReason`
+  - `documentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
+  - `idsEventDataType` with fully typed component schemas for all IDS metadata groups: `BasicProcessingMetadataType`, `DocumentQualityMetricsType`, `DetailedExtractionDataType`, `DocumentQualityAssessmentType`, `ReceiverRecommendationsType`, `ValidationResultsType`, `FieldExtractionAuditType` and their supporting sub-types
+  - `detailedExtractionData`, `documentQualityAssessment`, `receiverRecommendations`, and `fieldExtractionAudit` are optional (processing output, omitted when not produced)
+  - Added channel and operation to consume the IDS OUT topic
+
 ### Version 1.1.0
   - Improved documentation
   - increased max.message.bytes to 8388608 bytes (8MB) for all topics

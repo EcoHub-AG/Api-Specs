@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "description": "Identifier of the generic exchange business process.",
+  "type": "string",
+  "enum": [
+    "offer",
+    "invoice",
+    "commission",
+    "contract",
+    "mandate",
+    "claimsExperience",
+    "claims",
+    "information",
+    "customer",
+    "broker"
+  ]
+}
