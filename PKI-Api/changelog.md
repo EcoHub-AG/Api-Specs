@@ -1,9 +1,9 @@
 ## Changelog
 
-### Version 2.1.0
+### Version 3.0.0
   - Adjusted url path segment from /v2 to /v3
   - Added `generic` to `supportedProcesses` to indicate support for Generic Exchange events.
-  - Added `informationService.nlpi` to `supportedProcesses` to indicate support for the information service NLPI standard..
+  - Added `claimsExperience.nlpi` to `supportedProcesses` to indicate support for the claims experience NLPI standard.
 
 ### Version 2.0.0
   - Adjusted url path segment from /v1 to /v2
