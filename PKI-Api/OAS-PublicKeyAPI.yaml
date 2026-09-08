@@ -20,6 +20,7 @@ info:
       - Adjusted url path segment from /v2 to /v3
       - Added `generic` to `supportedProcesses` to indicate support for Generic Exchange events.
       - Added `claimsExperience.nlpi` to `supportedProcesses` to indicate support for the claims experience NLPI standard.
+      - Added `ids` to `supportedProcesses` to indicate support for Intelligent Data Structuring events.
 
     
     *changes in previous versions are available in the changelog file in GitHub*
@@ -740,6 +741,7 @@ components:
         be used for any process. When retrieving a key for encryption / checking a
         signature, make sure that the key matches the processName and processVersion of the event. For Generic
         Exchange, the key with support for `generic` needs to be used rather than the one indicated by the processName.
+        For Intelligent Data Structuring, the key with support for `ids` needs to be used in the same way.
       type: array
       minItems: 1
       items:
@@ -756,7 +758,8 @@ components:
           - processName
         additionalProperties: false
     ProcessNameType:
-      description: Identifier of the SAF core process.
+      description: Identifier of the SAF core process. `generic` and `ids` are not used as an
+        event's `processName`.
       type: string
       enum:
         - offer.nlpi
@@ -767,3 +770,4 @@ components:
         - claimsExperience
         - generic
         - claimsExperience.nlpi
+        - ids
