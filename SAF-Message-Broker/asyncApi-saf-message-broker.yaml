@@ -29,12 +29,12 @@ info:
         - Fix max.message.bytes of the `IN` topic to be 8388608 instead of 8338608
         - Optional CloudEvents attributes are no longer documented as explicitly nullable; if not set, they should be omitted
         - Normalized the `processId` format annotation to `uuid`
-      - Added `SAFIDSEvent` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
+      - Added `SAFIDSEventType` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
       - Root-level scalar projections for Kafka-level filtering and routing: `confidenceScore`, `documentQuality`, `isValid`, `routingDecision`, `requiresHumanReview`, `reviewReason`
       - `documentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
-      - `EventDataType` with fully typed component schemas for all IDS metadata groups: `basicProcessingMetadataType`, `documentQualityMetricsType`, `detailedExtractionDataType`, `documentQualityAssessmentType`, `receiverRecommendationsType`, `validationResultsType`, `fieldExtractionAuditType` and their supporting sub-types
-      - `detailedExtractionData`, `documentQualityAssessment`, `receiverRecommendations`, and `fieldExtractionAudit` are nullable (optional processing output)
-      - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
+      - `idsEventDataType` with fully typed component schemas for all IDS metadata groups: `basicProcessingMetadataType`, `documentQualityMetricsType`, `detailedExtractionDataType`, `documentQualityAssessmentType`, `receiverRecommendationsType`, `validationResultsType`, `fieldExtractionAuditType` and their supporting sub-types
+      - `detailedExtractionData`, `documentQualityAssessment`, `receiverRecommendations`, and `fieldExtractionAudit` are optional (processing output, omitted when not produced)
+      - Added channel and operation to consume the IDS OUT topic
     
     ### Changes in Version 1.1.0
       - Improved documentation

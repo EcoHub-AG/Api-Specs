@@ -13,7 +13,7 @@
   - Added `SAFIDSEventType` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
   - Root-level scalar projections for Kafka-level filtering and routing: `confidenceScore`, `documentQuality`, `isValid`, `routingDecision`, `requiresHumanReview`, `reviewReason`
   - `documentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
-  - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `BasicProcessingMetadataType`, `DocumentQualityMetricsType`, `DetailedExtractionDataType`, `DocumentQualityAssessmentType`, `ReceiverRecommendationsType`, `ValidationResultsType`, `FieldExtractionAuditType` and their supporting sub-types
+  - `idsEventDataType` with fully typed component schemas for all IDS metadata groups: `BasicProcessingMetadataType`, `DocumentQualityMetricsType`, `DetailedExtractionDataType`, `DocumentQualityAssessmentType`, `ReceiverRecommendationsType`, `ValidationResultsType`, `FieldExtractionAuditType` and their supporting sub-types
   - `detailedExtractionData`, `documentQualityAssessment`, `receiverRecommendations`, and `fieldExtractionAudit` are optional (processing output, omitted when not produced)
   - Added channel and operation to consume the IDS OUT topic
 
