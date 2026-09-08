@@ -14,8 +14,8 @@
   - Root-level scalar projections for Kafka-level filtering and routing: `confidenceScore`, `documentQuality`, `isValid`, `routingDecision`, `requiresHumanReview`, `reviewReason`
   - `documentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
   - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `BasicProcessingMetadataType`, `DocumentQualityMetricsType`, `DetailedExtractionDataType`, `DocumentQualityAssessmentType`, `ReceiverRecommendationsType`, `ValidationResultsType`, `FieldExtractionAuditType` and their supporting sub-types
-  - `idsdetailedExtractionData`, `idsdocumentQualityAssessment`, `idsreceiverRecommendations`, and `idsfieldExtractionAudit` are nullable (optional processing output)
-  - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
+  - `detailedExtractionData`, `documentQualityAssessment`, `receiverRecommendations`, and `fieldExtractionAudit` are optional (processing output, omitted when not produced)
+  - Added channel and operation to consume the IDS OUT topic
 
 ### Version 1.1.0
   - Improved documentation

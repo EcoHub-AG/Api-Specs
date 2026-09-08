@@ -14,10 +14,10 @@
     - removed unused 'typedef' schema
   - removed explicit definition of Content-Type header for requests to /in as the allowed values are already defined by `requestBody.content.<media-type>`
   - Added `SAFIDSEventType` (`ch.ecohub.saf.ids`) for Intelligent Data Structuring events
-  - Root-level scalar projections for Kafka-level filtering and routing: `idsconfidenceScore`, `idsdocumentQuality`, `idsisValid`, `idsroutingDecision`, `idsrequiresHumanReview`, `idsreviewReason`
-  - `idsdocumentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
-  - `idsdetailedExtractionData`, `idsdocumentQualityAssessment`, `idsreceiverRecommendations`, and `idsfieldExtractionAudit` are nullable (optional processing output)
-  - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `basicProcessingMetadataType`, `documentQualityMetricsType`, `detailedExtractionDataType`, `documentQualityAssessmentType`, `receiverRecommendationsType`, `validationResultsType`, `fieldExtractionAuditType` and their supporting sub-types
+  - Root-level scalar projections for Kafka-level filtering and routing: `confidenceScore`, `documentQuality`, `isValid`, `routingDecision`, `requiresHumanReview`, `reviewReason`
+  - `documentQuality` enum: `excellent`, `high`, `medium`, `low`, `poor`
+  - `detailedExtractionData`, `documentQualityAssessment`, `receiverRecommendations`, and `fieldExtractionAudit` are optional (processing output, omitted when not produced)
+  - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `BasicProcessingMetadataType`, `DocumentQualityMetricsType`, `DetailedExtractionDataType`, `DocumentQualityAssessmentType`, `ReceiverRecommendationsType`, `ValidationResultsType`, `FieldExtractionAuditType` and their supporting sub-types
   - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
   - `schemaVersionId` / `keySchemaVersionId` header values updated to the ids now current in production
     (`100161` / `100164`). `keySchemaVersionId` moves to `SAFKeyType` v2, which makes `processId`
