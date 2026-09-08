@@ -19,6 +19,9 @@
   - `idsdetailedExtractionData`, `idsdocumentQualityAssessment`, `idsreceiverRecommendations`, and `idsfieldExtractionAudit` are nullable (optional processing output)
   - `IDSEventDataType` with fully typed component schemas for all IDS metadata groups: `basicProcessingMetadataType`, `documentQualityMetricsType`, `detailedExtractionDataType`, `documentQualityAssessmentType`, `receiverRecommendationsType`, `validationResultsType`, `fieldExtractionAuditType` and their supporting sub-types
   - Added endpoint to consume the IDS OUT topic (`/{ecohubId}/ids/out`)
+  - `schemaVersionId` / `keySchemaVersionId` header values updated to the ids now current in production
+    (`100161` / `100164`). `keySchemaVersionId` moves to `SAFKeyType` v2, which makes `processId`
+    **required** and disallows additional properties on the message key
 
 
 

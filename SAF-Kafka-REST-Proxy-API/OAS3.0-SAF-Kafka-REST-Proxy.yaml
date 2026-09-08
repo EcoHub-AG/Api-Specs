@@ -68,7 +68,7 @@ paths:
           description: The id of the schema which is used to serialize the event key
           schema:
             type: integer
-            enum: [ 100021 ]
+            enum: [ 100164 ]
           required: true
       requestBody:
         description: The event to be produced. The maximum allowed event size is 8 MB.
