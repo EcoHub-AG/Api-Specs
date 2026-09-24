@@ -1229,6 +1229,77 @@ components:
         - userAgent
         - licenceKey
         - businessDomain
+    SAFProvisioningEventType:
+      description: Provisioning SAF event used to manage user, member and organisation provisioning steps.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/iddef'
+        source:
+          $ref: '#/components/schemas/sourcedef'
+        specversion:
+          $ref: '#/components/schemas/specversiondef'
+        type:
+          description: Reverse DNS entry defining the provisioning SAF event type.
+          type: string
+          enum:
+            - ch.ecohub.saf.provisioning
+        datacontenttype:
+          $ref: '#/components/schemas/datacontenttypedef'
+        dataschema:
+          $ref: '#/components/schemas/dataschemadef'
+        subject:
+          $ref: '#/components/schemas/subjectdef'
+        time:
+          $ref: '#/components/schemas/timedef'
+        licenceKey:
+          $ref: '#/components/schemas/LicenceKeyType'
+        userAgent:
+          $ref: '#/components/schemas/UserAgentType'
+        eventReceiver:
+          $ref: '#/components/schemas/SenderReceiverType'
+        eventSender:
+          $ref: '#/components/schemas/SenderReceiverType'
+        data:
+          $ref: '#/components/schemas/EventDataType'
+        processGroupId:
+          $ref: '#/components/schemas/ProcessGroupIdType'
+        processId:
+          $ref: '#/components/schemas/ProcessIdType'
+        processName:
+          description: Identifier of the provisioning process.
+          type: string
+          enum:
+            - provisioning
+        processVersion:
+          $ref: '#/components/schemas/ProcessVersionType'
+        processStatus:
+          $ref: '#/components/schemas/ProcessStatusType'
+        subProcessName:
+          description: Identifier of the provisioning subprocess step.
+          type: string
+          enum:
+            - userProvisioning
+            - memberProvisioning
+            - orgProvisioning
+        subProcessStatus:
+          $ref: '#/components/schemas/SubProcessStatusType'
+      additionalProperties: false
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - processId
+        - processName
+        - processVersion
+        - subProcessName
+        - processStatus
+        - subProcessStatus
+        - eventReceiver
+        - eventSender
+        - userAgent
+        - licenceKey
     SAFInquiryEventType:
       description: 'SAF inquiry event, i.e. an event containing a generic message.'
       type: object
@@ -1467,6 +1538,7 @@ components:
         - ch.ecohub.saf.data
         - ch.ecohub.saf.inquiry
         - ch.ecohub.saf.generic
+        - ch.ecohub.saf.provisioning
         - ch.ecohub.saf.ids
         - ch.ecohub.saf.standard-error
         - ch.ecohub.saf.saf-error
@@ -1506,6 +1578,7 @@ components:
         - information
         - customer
         - broker
+        - provisioning
     ProcessNameAllType:
       title: All ProcessName Types (Union)
       description: Union of ProcessNameType and GenericProcessNameType. Use only for contexts where any process name must be accepted (e.g. SAFErrorEventType, which may originate from any process type). For specific event types use ProcessNameType or GenericProcessNameType directly.
@@ -1569,6 +1642,8 @@ components:
       enum:
         - Created
         - Received
+        - Confirmed
+        - Rejected
         - InProgress
         - Responded
         - Updated
@@ -2898,6 +2973,9 @@ components:
         - "decide"
         - "execute"
         - "close"
+        - "userProvisioning"
+        - "memberProvisioning"
+        - "orgProvisioning"
     SubProcessNameAllType:
       title: All SubProcessName Types (Union)
       description: Union of SubProcessNameType and GenericSubProcessNameType. Use only for contexts where any subprocess name must be accepted (e.g. SAFErrorEventType, which may originate from any event type). For specific event types use SubProcessNameType or GenericSubProcessNameType directly.

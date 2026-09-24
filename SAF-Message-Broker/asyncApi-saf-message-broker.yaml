@@ -593,6 +593,77 @@ components:
         - userAgent
         - licenceKey
         - businessDomain
+    SAFProvisioningEventType:
+      description: Provisioning SAF event used to manage user, member and organisation provisioning steps.
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/cloudEvents/iddef'
+        source:
+          $ref: '#/components/schemas/cloudEvents/sourcedef'
+        specversion:
+          $ref: '#/components/schemas/cloudEvents/specversiondef'
+        type:
+          description: Reverse DNS entry defining the provisioning SAF event type.
+          type: string
+          enum:
+            - ch.ecohub.saf.provisioning
+        datacontenttype:
+          $ref: '#/components/schemas/cloudEvents/datacontenttypedef'
+        dataschema:
+          $ref: '#/components/schemas/cloudEvents/dataschemadef'
+        subject:
+          $ref: '#/components/schemas/cloudEvents/subjectdef'
+        time:
+          $ref: '#/components/schemas/cloudEvents/timedef'
+        licenceKey:
+          $ref: '#/components/schemas/licenceKeyType'
+        userAgent:
+          $ref: '#/components/schemas/userAgentType'
+        eventReceiver:
+          $ref: '#/components/schemas/senderReceiverType'
+        eventSender:
+          $ref: '#/components/schemas/senderReceiverType'
+        data:
+          $ref: '#/components/schemas/eventDataType'
+        processGroupId:
+          $ref: '#/components/schemas/processGroupIdType'
+        processId:
+          $ref: '#/components/schemas/processIdType'
+        processName:
+          description: Identifier of the provisioning process.
+          type: string
+          enum:
+            - provisioning
+        processVersion:
+          $ref: '#/components/schemas/processVersionType'
+        processStatus:
+          $ref: '#/components/schemas/processStatusType'
+        subProcessName:
+          description: Identifier of the provisioning subprocess step.
+          type: string
+          enum:
+            - userProvisioning
+            - memberProvisioning
+            - orgProvisioning
+        subProcessStatus:
+          $ref: '#/components/schemas/subProcessStatusType'
+      additionalProperties: false
+      required:
+        - id
+        - source
+        - specversion
+        - type
+        - processId
+        - processName
+        - processVersion
+        - subProcessName
+        - processStatus
+        - subProcessStatus
+        - eventReceiver
+        - eventSender
+        - userAgent
+        - licenceKey
     SAFIDSEventType:
       description: 'IDS event type for Intelligent Data Structuring events (ch.ecohub.saf.ids). Extends the base SAF event with root-level scalar projections for Kafka-level routing and quality gating: confidenceScore, documentQuality, isValid, routingDecision, requiresHumanReview, and reviewReason.'
       type: object
@@ -1013,6 +1084,7 @@ components:
         - information
         - customer
         - broker
+        - provisioning
     processNameAllType:
       title: All ProcessName Types (Union)
       description: Union of processNameType and genericProcessNameType. Use only for contexts where any process name must be accepted (e.g. SAFErrorEventType, which may originate from any process type). For specific event types use processNameType or genericProcessNameType directly.
@@ -1032,6 +1104,7 @@ components:
         - ch.ecohub.saf.data
         - ch.ecohub.saf.ids
         - ch.ecohub.saf.generic
+        - ch.ecohub.saf.provisioning
         - ch.ecohub.saf.inquiry
         - ch.ecohub.saf.standard-error
         - ch.ecohub.saf.saf-error
@@ -1129,6 +1202,8 @@ components:
       enum:
         - Created
         - Received
+        - Confirmed
+        - Rejected
         - InProgress
         - Responded
         - Updated
@@ -1354,6 +1429,9 @@ components:
         - "decide"
         - "execute"
         - "close"
+        - "userProvisioning"
+        - "memberProvisioning"
+        - "orgProvisioning"
     subProcessNameAllType:
       title: All SubProcessName Types (Union)
       description: Union of subProcessNameType and genericSubProcessNameType. Use only for contexts where any subprocess name must be accepted (e.g. SAFErrorEventType, which may originate from any event type). For specific event types use subProcessNameType or genericSubProcessNameType directly.
@@ -2335,6 +2413,53 @@ components:
             subProcessName: provide
             subProcessStatus: Created
             businessDomain: insurance
+    safProvisioningEvent:
+      name: safProvisioningEvent
+      title: SAF Provisioning Event
+      summary: Provisioning event used to manage user, member and organisation provisioning steps.
+      payload:
+        $ref: '#/components/schemas/SAFProvisioningEventType'
+      bindings:
+        kafka:
+          key:
+            $ref: '#/components/schemas/SAFKeyType'
+          schemaIdLocation: 'payload'
+          schemaIdPayloadEncoding: 'confluent'
+          bindingVersion: '0.4.0'
+      examples:
+        - name: provisioningEventWithPayloadExample
+          summary: Provisioning event with business payload
+          payload:
+            id: 044d2e50-12d6-43e4-bb1b-7b54841c9c82
+            source: http://www.myecohub.ch/ecoHub-mock-broker-producer1
+            specversion: '1.0'
+            type: ch.ecohub.saf.provisioning
+            datacontenttype: application/json
+            dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Provisioning_v1.0.0/schemas/Provisioning/Provisioning.json
+            subject: user provisioning
+            time: '2023-08-17T14:15:22.000Z'
+            licenceKey: REcxZEVMZWV1UXFwOUZwaz...
+            userAgent:
+              name: BS1
+              version: '1.0'
+            eventReceiver:
+              category: insurer
+              id: IDP1234567
+            eventSender:
+              category: broker
+              id: IDP7654321
+            data:
+              payload: V2UgZGlkbid0IGluY2x1ZGUgdGhlIGZ1bGwgcGF5bG9hZCBoZ...
+              payloadSignature: MEYCIQD76gKbAynmvE5Ndq+Tnnf/aBziZlryXkP
+              encryptionKey: urpx9D/0MwvQoCz3nNcQyMpEh2VEW6X7TiMmIfH...
+              publicKeyVersion: '1.1'
+              signatureKeyVersion: '1.3'
+            processId: ff9275bf-5b35-492e-bdd2-c217e151d335
+            processName: provisioning
+            processVersion: 1.0.0
+            processStatus: active
+            subProcessName: userProvisioning
+            subProcessStatus: Created
     safIDSEvent:
       name: safIDSEvent
       title: SAF Intelligent Data Structuring (IDS) Event
