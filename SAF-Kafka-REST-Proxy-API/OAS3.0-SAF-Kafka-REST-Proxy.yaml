@@ -1578,7 +1578,6 @@ components:
         - information
         - customer
         - broker
-        - provisioning
     ProcessNameAllType:
       title: All ProcessName Types (Union)
       description: Union of ProcessNameType and GenericProcessNameType. Use only for contexts where any process name must be accepted (e.g. SAFErrorEventType, which may originate from any process type). For specific event types use ProcessNameType or GenericProcessNameType directly.
@@ -2973,9 +2972,6 @@ components:
         - "decide"
         - "execute"
         - "close"
-        - "userProvisioning"
-        - "memberProvisioning"
-        - "orgProvisioning"
     SubProcessNameAllType:
       title: All SubProcessName Types (Union)
       description: Union of SubProcessNameType and GenericSubProcessNameType. Use only for contexts where any subprocess name must be accepted (e.g. SAFErrorEventType, which may originate from any event type). For specific event types use SubProcessNameType or GenericSubProcessNameType directly.

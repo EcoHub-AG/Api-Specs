@@ -768,6 +768,7 @@ components:
         - contract
         - mandate
         - claimsExperience
-        - generic
         - claimsExperience.nlpi
+        - generic
+        - provisioning
         - ids

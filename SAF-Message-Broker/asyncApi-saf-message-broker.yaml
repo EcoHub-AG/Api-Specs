@@ -1070,6 +1070,8 @@ components:
         - mandate
         - claimsExperience
         - claimsExperience.nlpi
+        - provisioning
+        - ids
     genericProcessNameType:
       description: Identifier of the generic exchange business process.
       type: string
