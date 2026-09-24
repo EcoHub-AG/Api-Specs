@@ -1084,7 +1084,6 @@ components:
         - information
         - customer
         - broker
-        - provisioning
     processNameAllType:
       title: All ProcessName Types (Union)
       description: Union of processNameType and genericProcessNameType. Use only for contexts where any process name must be accepted (e.g. SAFErrorEventType, which may originate from any process type). For specific event types use processNameType or genericProcessNameType directly.
@@ -1429,9 +1428,6 @@ components:
         - "decide"
         - "execute"
         - "close"
-        - "userProvisioning"
-        - "memberProvisioning"
-        - "orgProvisioning"
     subProcessNameAllType:
       title: All SubProcessName Types (Union)
       description: Union of subProcessNameType and genericSubProcessNameType. Use only for contexts where any subprocess name must be accepted (e.g. SAFErrorEventType, which may originate from any event type). For specific event types use subProcessNameType or genericSubProcessNameType directly.
@@ -2436,7 +2432,7 @@ components:
             type: ch.ecohub.saf.provisioning
             datacontenttype: application/json
             dataschema: https://raw.githubusercontent.com/EcoHub-AG/Standards/refs/tags/Provisioning_v1.0.0/schemas/Provisioning/Provisioning.json
-            subject: user provisioning
+            subject: Provisioning of user IDP1234567
             time: '2023-08-17T14:15:22.000Z'
             licenceKey: REcxZEVMZWV1UXFwOUZwaz...
             userAgent:

@@ -4,6 +4,8 @@
   "enum": [
     "Created",
     "Received",
+    "Confirmed",
+    "Rejected",
     "InProgress",
     "Responded",
     "Updated",

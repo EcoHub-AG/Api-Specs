@@ -8,6 +8,9 @@
       "$ref": "../eventType-generic-data/SAFGenericEventType.json"
     },
     {
+      "$ref": "../eventType-provisioning/SAFProvisioningEventType.json"
+    },
+    {
       "$ref": "../eventType-ids/SAFIDSEventType.json"
     },
     {
